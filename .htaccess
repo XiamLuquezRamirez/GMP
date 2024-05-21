@@ -1,0 +1,61 @@
+Options +FollowSymLinks
+RewriteEngine On
+
+#Plan de Desarrollo
+
+RewriteRule ^Dimensiones/$ PlanDesarrollo/Dimensiones.php [L]
+RewriteRule ^Ejes_Estrategicos/$ PlanDesarrollo/Ejes.php [L]
+RewriteRule ^Programas/$ PlanDesarrollo/Componentes.php [L]
+RewriteRule ^SubProgramas/$ PlanDesarrollo/Programas.php [L]
+RewriteRule ^Metas/$ PlanDesarrollo/Metas.php [L]
+RewriteRule ^Plan_de_Desarrollo/$ PlanDesarrollo/AdminPlanDesarrollo.php [L]
+RewriteRule ^MetasProducto/$ PlanDesarrollo/Metas_Productos.php [L]
+
+#Proyectos
+RewriteRule ^Proyectos/$ Proyecto/Proyectos.php [L]
+RewriteRule ^Contratos/$ Proyecto/Contratos.php [L]
+RewriteRule ^Medir_Indicadores/$ Proyecto/MedIndicadores.php [L]
+
+#Proyectos Exprez
+RewriteRule ^ProyectosExpres/$ Proyecto/ProyectosExpres.php [L]
+RewriteRule ^ConsultasExpres/$ Informes/ConsultasExpres.php [L]
+
+#Avances
+RewriteRule ^Avance_Proyectos/$ Proyecto/AvanProyect.php [L]
+RewriteRule ^Avance_Contratos/$ Proyecto/AvanContra.php [L]
+
+#Informes
+RewriteRule ^Informes_Proyectos/$ Informes/InfoProyectos.php [L]
+RewriteRule ^Reportes_Proyectos/$ Informes/ReporProyectos.php [L]
+
+#Evaluacion
+RewriteRule ^Evaluacion_Contratista/$ Administracion/EvalContratistas.php [L]
+
+#Parametros Generales
+RewriteRule ^Datos_compania/$ Administracion/DatosEmpresa.php [L]
+RewriteRule ^Dependencias/$ Administracion/GestionDependencia.php [L]
+RewriteRule ^Responsables/$ Administracion/GestionResponsable.php [L]
+RewriteRule ^Supervisores/$ Administracion/GestionSupervisores.php [L]
+RewriteRule ^Interventores/$ Administracion/GestionInterventores.php [L]
+RewriteRule ^Contratistas/$ Administracion/GestionContratistas.php [L]
+RewriteRule ^Secretarias/$ Administracion/GestionSecretarias.php [L]
+RewriteRule ^Tipologia_Proyectos/$ Administracion/GestionTipologia.php [L]
+RewriteRule ^Tipologia_Contratos/$ Administracion/GestionTipologiaContrato.php [L]
+RewriteRule ^Consecutivos/$ Administracion/GestionConse.php [L]
+RewriteRule ^Menu_Parametros_Generales/$ Administracion/AdminParametros.php [L]
+RewriteRule ^Alertas/$ Administracion/GestionAlertas.php [L]
+RewriteRule ^FuentesFinanciacion/$ Administracion/GestionFuentes.php [L]
+RewriteRule ^Fuentes/$ Administracion/GestionFuentesInformacion.php [L]
+
+RewriteRule ^Presupuesto/$ Administracion/GestionPresupuesto.php [L]
+
+#Usuarios
+RewriteRule ^Usuarios/$ Administracion/GestionUsuarios.php [L]
+RewriteRule ^Perfiles/$ Administracion/GestionPerfiles.php [L]
+
+
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
+Options All -Indexes
+
