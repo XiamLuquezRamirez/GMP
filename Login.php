@@ -78,14 +78,20 @@ if ($_POST['opc'] == "vercompa") {
                              <i class='fa fa-angle-left'></i>
                          </a>
                      </li>
-                     <li class='dropdown dropdown-user'>
-                         <a class='dropdown-toggle'>
+                     <li class='dropdown dropdown-user' >
+                         <a class='dropdown-toggle' data-toggle='dropdown' data-hover='dropdown' data-close-others='true'>
                              <img class='img-circle' src='Img/User.png' alt=''/>
                              <span class='username'>
                                 " . $_SESSION['ses_nombre'] . "
                             </span>
                              <i class='fa fa-angle-left'></i>
                          </a>
+                         <ul class='dropdown-menu'>
+							<li><a href='extra_profile.html'><i class='icon-user'></i> My Profile</a></li>
+							<li class='divider'></li>
+							<li><a href='javascript:;' id='trigger_fullscreen'><i class='icon-move'></i> Full Screen</a></li>
+							<li><a href='login.html'><i class='icon-key'></i> Log Out</a></li>
+						</ul>
                      </li>
 
                      <li class='dropdown dropdown-user'>
@@ -115,14 +121,20 @@ if ($_POST['opc'] == "vercompa") {
                              <i class='fa fa-angle-left'></i>
                          </a>
                      </li>
-                    <li class='dropdown dropdown-user'>
-                         <a class='dropdown-toggle'>
-                             <img class='img-circle' src='../Img/User.png' alt=''/>
+                     <li class='dropdown dropdown-user' >
+                         <a class='dropdown-toggle' data-toggle='dropdown' data-hover='dropdown' data-close-others='true'>
+                             <img class='img-circle' src='Img/User.png' alt=''/>
                              <span class='username'>
                                 " . $_SESSION['ses_nombre'] . "
                             </span>
                              <i class='fa fa-angle-left'></i>
                          </a>
+                         <ul class='dropdown-menu'>
+							<li><a href='extra_profile.html'><i class='icon-user'></i> My Profile</a></li>
+							<li class='divider'></li>
+							<li><a href='javascript:;' id='trigger_fullscreen'><i class='icon-move'></i> Full Screen</a></li>
+							<li><a href='login.html'><i class='icon-key'></i> Log Out</a></li>
+						</ul>
                      </li>
 
                      <li class='dropdown dropdown-user'>
@@ -683,15 +695,21 @@ Mostrar Contratos</a>
                          </a>";
 
             $User_Login = $User_Login . "</li>
-<li class='dropdown dropdown-user'>
-                         <a class='dropdown-toggle'>
-                             <img class='img-circle' src='Img/User.png' alt=''/>
-                             <span class='username'>
-                                " . $_SESSION['ses_nombre'] . "
-                            </span>
-                             <i class='fa fa-angle-left'></i>
-                         </a>
-                     </li>
+            <li class='dropdown dropdown-user' >
+            <a class='dropdown-toggle' data-toggle='dropdown' data-hover='dropdown' data-close-others='true'>
+                <img class='img-circle' src='Img/User.png' alt=''/>
+                <span class='username'>
+                   " . $_SESSION['ses_nombre'] . "
+               </span>
+                <i class='fa fa-angle-left'></i>
+            </a>
+            <ul class='dropdown-menu'>
+               <li><a href='extra_profile.html'><i class='icon-user'></i> My Profile</a></li>
+               <li class='divider'></li>
+               <li><a href='javascript:;' id='trigger_fullscreen'><i class='icon-move'></i> Full Screen</a></li>
+               <li><a href='login.html'><i class='icon-key'></i> Log Out</a></li>
+           </ul>
+        </li>
 
                      <li class='dropdown dropdown-user'>
                          <a href='cerrar.php' class='dropdown-toggle'>
@@ -758,15 +776,21 @@ Mostrar Contratos</a>
                          </a>";
 
             $User_SubLogin = $User_SubLogin . "</li>
-<li class='dropdown dropdown-user'>
-                         <a class='dropdown-toggle'>
-                             <img class='img-circle' src='../Img/User.png' alt=''/>
-                             <span class='username'>
-                                " . $_SESSION['ses_nombre'] . "
-                            </span>
-                             <i class='fa fa-angle-left'></i>
-                         </a>
-                     </li>
+            <li class='dropdown dropdown-user' >
+            <a class='dropdown-toggle' data-toggle='dropdown' data-hover='dropdown' data-close-others='true'>
+                <img class='img-circle' src='Img/User.png' alt=''/>
+                <span class='username'>
+                   " . $_SESSION['ses_nombre'] . "
+               </span>
+                <i class='fa fa-angle-left'></i>
+            </a>
+            <ul class='dropdown-menu'>
+               <li><a href='extra_profile.html'><i class='icon-user'></i> My Profile</a></li>
+               <li class='divider'></li>
+               <li><a href='javascript:;' id='trigger_fullscreen'><i class='icon-move'></i> Full Screen</a></li>
+               <li><a href='login.html'><i class='icon-key'></i> Log Out</a></li>
+           </ul>
+        </li>
 
                      <li class='dropdown dropdown-user'>
                          <a href='../cerrar.php' class='dropdown-toggle'>

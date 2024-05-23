@@ -669,7 +669,8 @@ $link = conectar();
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <center><h4 class='form-section'></h4></center>
+                                                        <h4 class='form-section'></h4>
+                                                        
 
                                                     </div>
 
@@ -690,7 +691,7 @@ $link = conectar();
                             <div class="portlet box purple-intense">
                                 <div class="portlet-title">
                                     <div class="caption">
-                                        <i class="fa fa-angle-right"></i>Informacion del Proyecto
+                                        <i class="fa fa-angle-right"></i>Información del Proyecto
                                     </div>
                                     <div class="tools">
                                         <a href="javascript:;" class="collapse"></a>

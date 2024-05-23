@@ -6,25 +6,24 @@ include("../Conectar.php");
 $success = 1;
 $error = "";
 $link = conectar();
-mysql_query("BEGIN");
-
+mysqli_query($link, "BEGIN");
 
 
 if ($_POST['acc'] == "1") {
-    $consulta = "INSERT INTO rubro_presupestal VALUES(null,'" . $_POST['cod'] . "','" . $_POST['des'] . "',"
-            . "'" . $_POST['rub'] . "','" . $_POST['obs'] . "','ACTIVO')";
+    $consulta = "INSERT INTO presupuesto_total VALUES(null,'" . $_POST['fuente'] . "','" . $_POST['txt_PresTotal'] . "',"
+            . "'" . $_POST['txtFecRegistro'] . "','" . trim($_POST['CbPeriodoI']) . "','" . trim($_POST['CbPeriodoF']) . "','" . $_POST['txt_obser'] . "','ACTIVO')";
 } else if ($_POST['acc'] == "2") {
-    $consulta = "UPDATE  rubro_presupestal SET cod_rubro='" . $_POST['cod'] . "',nom_rubro='" . $_POST['des'] . "',"
-            . "monto_rubro='" . $_POST['rub'] . "',obs_rubro='" . $_POST['obs'] . "' "
-            . "WHERE id_rubro='" . $_POST['id'] . "'";
+    $consulta = "UPDATE  presupuesto_total SET fuente='" . $_POST['fuente'] . "',valor='" . $_POST['txt_PresTotal'] . "',"
+            . "observacion='" . $_POST['txt_obser'] . "',fecha_recepcion='" . trim($_POST['txtFecRegistro']) . "',periodo_ini='" . trim($_POST['CbPeriodoI']) . "',periodo_fin='" . $_POST['CbPeriodoF'] . "' "
+            . "WHERE id='" . $_POST['id'] . "'";
 } else {
-    $consulta = "UPDATE rubro_presupestal SET estado='ELIMINADO' WHERE id_rubro='" . $_POST['cod'] . "' ";
+    $consulta = "UPDATE presupuesto_total SET estado='ELIMINADO' WHERE id='" . $_POST['id'] . "' ";
 }
 
 // echo $consulta;
-$qc = mysql_query($consulta, $link);
+$qc = mysqli_query($link,$consulta);
 
-if (($qc == false) || (mysql_affected_rows($link) == -1) || mysql_errno($link) != 0) {
+if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
     $success = 0;
     $error = 1;
 }
@@ -33,12 +32,12 @@ if ($_POST['acc'] == "1") {
     $consulta = "INSERT INTO logs (usuario_id, log_direccion, log_fecha,
             log_hora, log_accion, log_tipo, log_interfaz) VALUES
             ('" . $_SESSION['ses_user'] . "','" . $_SERVER['REMOTE_ADDR'] . "',CURRENT_DATE(),
-            NOW(),'Registro de Rubro Presupuestal " . $_POST['des'] . "' ,'INSERCION', 'GestionRubroPresupuestal.php')";
+            NOW(),'Registro de Rubro Presupuestal " . $_POST['fuente'] . "' ,'INSERCION', 'GestionRubroPresupuestal.php')";
 } else if ($_POST['acc'] == "2") {
     $consulta = "INSERT INTO logs (usuario_id, log_direccion, log_fecha,
             log_hora, log_accion, log_tipo, log_interfaz) VALUES
             ('" . $_SESSION['ses_user'] . "','" . $_SERVER['REMOTE_ADDR'] . "',CURRENT_DATE(),
-            NOW(),'Actualizacion de Rubro Presupuestal " . $_POST['iden'] . "' ,'ACTUALIZACION', 'GestionRubroPresupuestal.php')";
+            NOW(),'Actualizacion de Rubro Presupuestal " . $_POST['id'] . "' ,'ACTUALIZACION', 'GestionRubroPresupuestal.php')";
 } else {
     $consulta = "INSERT INTO logs (usuario_id, log_direccion, log_fecha,
             log_hora, log_accion, log_tipo, log_interfaz) VALUES
@@ -47,20 +46,20 @@ if ($_POST['acc'] == "1") {
             " . $_POST['id'] . "' ,'ELIMINACION', 'GestionRubroPresupuestal.php')";
 }
 
-$qc = mysql_query($consulta, $link);
-if (($qc == false) || (mysql_affected_rows($link) == -1) || mysql_errno($link) != 0) {
+$qc = mysqli_query($link,$consulta);
+if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
     $success = 0;
     $error = 2;
 }
 
 if ($success == 0) {
-    mysql_query("ROLLBACK");
+    mysqli_query($link,"ROLLBACK");
     echo $error;
     echo $consulta;
 } else {
-    mysql_query("COMMIT");
+    mysqli_query($link,"COMMIT");
     echo "bien";
 }
 
-mysql_close();
+mysqli_close($link);
 ?>

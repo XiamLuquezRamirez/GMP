@@ -235,12 +235,12 @@ $(document).ready(function () {
                             var colores = ['success', 'info', 'warning', 'danger'];
                             var color = colores[Math.floor(Math.random() * colores.length)];
                             ContSecr += ' <div class="row">'
-                                    + '     <div class="col-md-6">'
-                                    + '         <label>' + itemPre.Desc + '</label>'
+                                    + '     <div class="col-md-7">'
+                                    + '         <label>' + $.capitalizeWords(itemPre.Desc) + '</label>'
                                     + '     </div>'
-                                    + '     <div class="col-md-6">'
+                                    + '     <div class="col-md-5">'
                                     + '         <div class="progress progress-striped  active">'
-                                    + '           <div class="progress-bar progress-bar-' + color + ' active" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: ' + itemPre.PorGat + '%">' + itemPre.PorGat + '%</div>'
+                                    + '           <div class="progress-bar progress-bar-' + color + ' active" role="progressbar" aria-valuenow="40" aria-valuemin="0" title="'+itemPre.PorGat+'%" aria-valuemax="100" style="width: ' + itemPre.PorGat + '%">' + itemPre.PorGat + '%</div>'
                                     + '         </div>'
                                     + '     </div>'
                                     + ' </div>';
@@ -328,6 +328,11 @@ $(document).ready(function () {
                 error: function (error_messages) {
                     alert('HA OCURRIDO UN ERROR');
                 }
+            });
+        },
+        capitalizeWords: function (secre) {
+            return secre.toLowerCase().replace(/\b\w/g, function(char) {
+                return char.toUpperCase();
             });
         },
         llenarCirculos: function (ValorFinal, caja, activeBorder, degs, tipo) {

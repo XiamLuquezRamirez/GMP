@@ -1224,7 +1224,7 @@ $link = conectar();
                                                                             </select>
                                                                             <span class="input-group-btn">
                                                                                 <button type="button" id="btn_new_resp" onclick="$.NewTipo();" title="Crear Nueva Tipologia" class="btn green-meadow">
-                                                                                    <i class="fa fa-plus"/></i>
+                                                                                    <i class="fa fa-plus"></i>
                                                                                 </button>
                                                                             </span>
 
@@ -1250,7 +1250,7 @@ $link = conectar();
                                                                             </select>
                                                                             <span class="input-group-btn">
                                                                                 <button type="button" id="btn_new_resp" onclick="$.NewContra();" title="Crear Nueva Tipologia" class="btn green-meadow">
-                                                                                    <i class="fa fa-plus"/></i>
+                                                                                    <i class="fa fa-plus"></i>
                                                                                 </button>
                                                                             </span>
 
@@ -1267,7 +1267,7 @@ $link = conectar();
                                                                             </select>
                                                                             <span class="input-group-btn">
                                                                                 <button type="button" id="btn_new_resp" onclick="$.NewSuper();" title="Crear Nueva Tipologia" class="btn green-meadow">
-                                                                                    <i class="fa fa-plus"/></i>
+                                                                                    <i class="fa fa-plus"></i>
                                                                                 </button>
                                                                             </span>
 
@@ -1284,7 +1284,7 @@ $link = conectar();
                                                                             </select>
                                                                             <span class="input-group-btn">
                                                                                 <button type="button" id="btn_new_resp" onclick="$.NewInter();" title="Crear Nueva Tipologia" class="btn green-meadow">
-                                                                                    <i class="fa fa-plus"/></i>
+                                                                                    <i class="fa fa-plus"></i>
                                                                                 </button>
                                                                             </span>
 
@@ -1436,7 +1436,7 @@ $link = conectar();
                                                                         <input type='text' id='txt_PorEqui' disabled  value='0' class='form-control'/>
                                                                         <span class="input-group-btn">
                                                                             <button type="button" id="btn_new_resp" onclick="$.UpdPorc();" title="Assignar Porcentaje en Proyecto" class="btn blue">
-                                                                                <i class="fa fa-plus"/></i>
+                                                                                <i class="fa fa-plus"></i>
                                                                             </button>
                                                                         </span>
 

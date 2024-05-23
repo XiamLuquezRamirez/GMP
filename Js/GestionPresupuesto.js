@@ -5,15 +5,32 @@ $(document).ready(function () {
   var Op_Validar = [];
   var Op_Vali = "Ok";
 
+  $("#CbPeriodoI,#CbPeriodoF").datepicker({
+    autoclose: true,
+    format: " yyyy",
+    viewMode: "years",
+    minViewMode: "years",
+  });
+
+  $("#txtFecRegistro").datepicker({
+    format: "yyyy-mm-dd",
+    autoclose: true,
+    todayBtn: "linked",
+    todayHighlight: true,
+    language: "es",
+  });
+
+  $("#CbGenero").selectpicker();
+
+  const fechaActual = new Date();
+  const anoActual = fechaActual.getFullYear();
   $.extend({
-    Presupuesto: function () {
+    Presupuesto: function (val) {
       var datos = {
-        pag: "1",
-        op: "1",
-        bus: "",
-        rus: "n",
-        nreg: $("#nreg").val(),
+        bus: val
       };
+
+      console.log(datos);
 
       $.ajax({
         type: "POST",
@@ -22,25 +39,20 @@ $(document).ready(function () {
         dataType: "JSON",
         success: function (data) {
           $("#tab_Presupuesto").html(data["cad"]);
-          $("#bot_Presupuesto").html(data["cad2"]);
-          $("#cobpag").html(data["cbp"]);
         },
         error: function (error_messages) {
           alert("HA OCURRIDO UN ERROR");
         },
       });
     },
-    busqDepen: function (val) {
+    busqPresu: function (val) {
       var datos = {
-        bus: val,
-        pag: "1",
-        op: "1",
-        nreg: $("#nreg").val(),
+        bus: val
       };
 
       $.ajax({
         type: "POST",
-        url: "../Paginadores/PagDependencia.php",
+        url: "../Paginadores/PagPresupuesto.php",
         data: datos,
         dataType: "JSON",
         success: function (data) {
@@ -161,94 +173,57 @@ $(document).ready(function () {
         });
       }
     },
-    paginador: function (pag) {
-      var datos = {
-        pag: pag,
-        bus: $("#busq_centro").val(),
-        nreg: $("#nreg").val(),
-      };
-
-      $.ajax({
-        type: "POST",
-        url: "../Paginadores/PagDependencia.php",
-        data: datos,
-        dataType: "JSON",
-        success: function (data) {
-          $("#tab_Dependencia").html(data["cad"]);
-          $("#bot_Dependencia").html(data["cad2"]);
-          $("#cobpag").html(data["cbp"]);
-        },
-        error: function (error_messages) {
-          alert("HA OCURRIDO UN ERROR");
-        },
-      });
-    },
-    combopag: function (pag) {
-      var datos = {
-        pag: pag,
-        bus: $("#busq_centro").val(),
-        nreg: $("#nreg").val(),
-      };
-
-      $.ajax({
-        type: "POST",
-        url: "../Paginadores/PagDependencia.php",
-        data: datos,
-        dataType: "JSON",
-        success: function (data) {
-          $("#tab_Dependencia").html(data["cad"]);
-          $("#bot_Dependencia").html(data["cad2"]);
-          $("#cobpag").html(data["cbp"]);
-        },
-        error: function (error_messages) {
-          alert("HA OCURRIDO UN ERROR");
-        },
-      });
-    },
-    combopag2: function (nre) {
-      var datos = {
-        nreg: nre,
-        bus: $("#busq_centro").val(),
-        pag: $("#selectpag").val(),
-      };
-
-      $.ajax({
-        type: "POST",
-        url: "../Paginadores/PagDependencia.php",
-        data: datos,
-        dataType: "JSON",
-        success: function (data) {
-          $("#tab_Dependencia").html(data["cad"]);
-          $("#bot_Dependencia").html(data["cad2"]);
-          $("#cobpag").html(data["cbp"]);
-        },
-        error: function (error_messages) {
-          alert("HA OCURRIDO UN ERROR");
-        },
-      });
-    },
+   
     Validar: function () {
       var Id = "",
         Value = "";
       Op_Vali = "Ok";
 
-      Id = "#txt_Cod";
+      Id = "#fuente";
       Value = $(Id).val();
       if (Value === "" || Value === " ") {
         Op_Validar.push("Fail");
-        $("#From_Codigo").addClass("has-error");
+        $("#From_Fuente").addClass("has-error");
       } else {
-        $("#From_Codigo").removeClass("has-error");
+        $("#From_Fuente").removeClass("has-error");
         Op_Validar.push("Ok");
       }
 
-      Id = "#txt_Desc";
+      Id = "#txt_PresTotal";
+      Value = $(Id).val();
+      if (Value === "$ 0,00") {
+        Op_Validar.push("Fail");
+        $("#formValor").addClass("has-error");
+      } else {
+        $("#formValor").removeClass("has-error");
+        Op_Validar.push("Ok");
+      }
+
+      Id = "#txtFecRegistro";
       Value = $(Id).val();
       if (Value === "" || Value === " ") {
         Op_Validar.push("Fail");
-        $("#From_Descripcion").addClass("has-error");
+        $("#formFecReg").addClass("has-error");
       } else {
-        $("#From_Descripcion").removeClass("has-error");
+        $("#formFecReg").removeClass("has-error");
+        Op_Validar.push("Ok");
+      }
+      Id = "#CbPeriodoI";
+      Value = $(Id).val();
+      if (Value === "" || Value === " ") {
+        Op_Validar.push("Fail");
+        $("#From_VigenciaI").addClass("has-error");
+      } else {
+        $("#From_VigenciaI").removeClass("has-error");
+        Op_Validar.push("Ok");
+      }
+      Id = "#CbPeriodoF";
+      Value = $(Id).val();
+      if (Value === "" || Value === " ") {
+        Op_Validar.push("Fail");
+        $("#From_VigenciaF").addClass("has-error");
+      } else {
+        $("#From_VigenciaF").removeClass("has-error");
         Op_Validar.push("Ok");
       }
 
@@ -273,145 +248,45 @@ $(document).ready(function () {
         icon: ico, // put icon before the message [ "" , warning, check, user]
       });
     },
-    AddBolsa: function () {
-      var txt_DescBolsa = $("#txt_DescBolsa").val();
-      var txt_ValBolsa = $("#txt_ValBolsa").val();
-
-      contBolsa = $("#contBolsa").val();
-      contBolsa++;
-
-      var txt_finan = txt_ValBolsa.split(" ");
-
-      var valPres = parseFloat(
-        txt_finan[1]
-          .replace(".", "")
-          .replace(".", "")
-          .replace(".", "")
-          .replace(",", ".")
-      );
-      var Presupuesto = parseFloat($("#txt_PresTotalTotal").val()) + valPres;
-
-      var fila = '<tr class="selected" id="Bolsa' + contBolsa + '" >';
-
-      fila += "<td>" + contBolsa + "</td>";
-      fila += "<td>" + txt_DescBolsa + "</td>";
-      fila += "<td>" + "$ " + number_format2(valPres, 2, ",", ".") + "</td>";
-      fila +=
-        "<td><input type='hidden' id='idDesBolsa" +
-        contBolsa +
-        "' name='txt_DesBolsa[]' value='" +
-        txt_DescBolsa +
-        "' /><input type='hidden' id='idvalor" +
-        contBolsa +
-        "' name='txt_valor[]' value='" +
-        valPres +
-        "' /><a onclick='$.QuitarBolsa(" +
-        contBolsa +
-        ")' class='btn default btn-xs red'>" +
-        '<i class="fa fa-trash-o"></i> Quitar</a></td></tr>';
-      $("#tb_Bolsas").append(fila);
-
-      $("#contBolsa").val(contBolsa);
-
-      $("#txt_PresTotalTotal").val(Presupuesto);
-      $("#txt_PresTotal").val("$ " + number_format2(Presupuesto, 2, ",", "."));
-
-      $("#txt_DescBolsa").val("");
-      $("#txt_ValBolsa").val("0,00");
+    cambioFormato: function (id) {
+      var numero = $("#" + id).val();
+      $("#txt_PresTotal").val(numero);
+      var formatoMoneda = formatCurrency(numero, "es-CO", "COP");
+      $("#" + id).val(formatoMoneda);
     },
+    nuevo: function (element) {
+      let id = element.getAttribute("id");
 
-    reordenarbolsa: function () {
-      var num = 1;
-      $("#tb_Bolsas tbody tr").each(function () {
-        $(this).find("td").eq(0).text(num);
-        num++;
-      });
-    },
+      
 
-    QuitarBolsa: function (id_fila) {
-      contBolsa = $("#contBolsa").val();
-      contBolsa = contBolsa - 1;
-      var txt_val = $("#idvalor" + id_fila).val();
-      $.reordenarbolsa();
-      var financi = $("#txt_PresTotalTotal").val() - txt_val;
-      $("#txt_PresTotalTotal").val(financi);
-      $("#txt_PresTotal").val("$ " + number_format2(financi, 2, ",", "."));
-      $("#Bolsa" + id_fila).remove();
-      $("#contBolsa").val(contBolsa);
+      if (id == "btn_nuevo1") {
+        $("#responsive").modal({ backdrop: "static", keyboard: false });
+        $("#mopc").show();
+      }
+
+      $("#acc").val("1");
+      $("#fuente").select2("val", " ");
+      $("#txt_PresTotalVis").val("$ 0,00");
+      $("#txtFecRegistro").val("");      
+      $("#CbPeriodoI").val(anoActual);
+      $("#CbPeriodoF").val(anoActual);
+      $("#txt_obser").val("");
+  
+      $("#btn_nuevo2").prop("disabled", true);
+      $("#btn_guardar").prop("disabled", false);
+
     },
   });
   //======FUNCIONES========\\
   $.Presupuesto();
 
-  //==============\\
-  $("#btn_nuevo1").on("click", function () {
-    $("#acc").val("1");
-    $("#txt_Cod").val("");
-    $("#txt_Desc").val("");
-    $("#txt_obser").val("");
-    $("#txt_Corre").val("");
-    $("#txt_Telf").val("");
-
-    $("#btn_nuevo2").prop("disabled", true);
-    $("#btn_guardar").prop("disabled", false);
-
-    $("#txt_Cod").prop("disabled", false);
-    $("#txt_Desc").prop("disabled", false);
-    $("#txt_obser").prop("disabled", false);
-    $("#txt_Telf").prop("disabled", false);
-    $("#txt_Corre").prop("disabled", false);
-
-    $("#responsive").modal({ backdrop: "static", keyboard: false });
-    $("#mopc").show();
-  });
-
-  $("#txt_Cod").on("change", function () {
-    var datos = {
-      ope: "verfDepend",
-      cod: $("#txt_Cod").val(),
-    };
-
-    $.ajax({
-      type: "POST",
-      url: "../All.php",
-      data: datos,
-      success: function (data) {
-        if (data === "1") {
-          $("#From_Codigo").addClass("has-error");
-          $.Alert(
-            "#msg",
-            "Este Código ya Esta Registrado...",
-            "warning",
-            "warning"
-          );
-          $("#txt_Cod").focus();
-          $("#txt_Cod").val("");
-        }
-      },
-      error: function (error_messages) {
-        alert("HA OCURRIDO UN ERROR");
-      },
-    });
-  });
-
-  $("#btn_nuevo2").on("click", function () {
-    $("#acc").val("1");
-
-    $("#txt_Cod").val("");
-    $("#txt_Desc").val("");
-    $("#txt_obser").val("");
-    $("#txt_Telf").val("");
-    $("#txt_Corre").val("");
-
-    $("#btn_nuevo2").prop("disabled", true);
-    $("#btn_guardar").prop("disabled", false);
-
-    $("#txt_Cod").prop("disabled", false);
-    $("#txt_Desc").prop("disabled", false);
-    $("#txt_obser").prop("disabled", false);
-    $("#txt_Telf").prop("disabled", false);
-    $("#txt_Corre").prop("disabled", false);
-  });
+  function formatCurrency(number, locale, currencySymbol) {
+    return new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: currencySymbol,
+      minimumFractionDigits: 2,
+    }).format(number);
+  }
 
   //BOTON GUARDAR-
   $("#btn_guardar").on("click", function () {
@@ -427,19 +302,19 @@ $(document).ready(function () {
       return;
     }
 
-    var datos = {
-      cod: $("#txt_Cod").val(),
-      des: $("#txt_Desc").val(),
-      cor: $("#txt_Corre").val(),
-      tel: $("#txt_Telf").val(),
-      obs: $("#txt_obser").val(),
-      acc: $("#acc").val(),
-      id: $("#txt_id").val(),
-    };
+    var form = $("#formGuardarPresupuesto");
+    var url = form.attr("action");
+    var token = $("#token").val();
+    $("#idtoken").remove();
+    form.append(
+      "<input type='hidden' id='idtoken' name='_token'  value='" + token + "'>"
+    );
+    var url = form.attr("action");
+    var datos = form.serialize();
 
     $.ajax({
       type: "POST",
-      url: "../Administracion/GuardarDependencia.php",
+      url: url,
       data: datos,
       success: function (data) {
         if (trimAll(data) === "bien") {
@@ -449,15 +324,9 @@ $(document).ready(function () {
             "success",
             "check"
           );
-          $.Depend();
+
           $("#btn_nuevo2").prop("disabled", false);
           $("#btn_guardar").prop("disabled", true);
-
-          $("#txt_Cod").prop("disabled", true);
-          $("#txt_Desc").prop("disabled", true);
-          $("#txt_Corre").prop("disabled", true);
-          $("#txt_Telf").prop("disabled", true);
-          $("#txt_obser").prop("disabled", true);
         }
       },
       error: function (error_messages) {

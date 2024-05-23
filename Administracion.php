@@ -85,6 +85,8 @@ include "Conectar.php";
                 linear-gradient(90deg, #A2ECFB 50%, transparent 50%); */
 
             }svg{width:50%;}
+
+            
         </style>
         <link href="Css/Global/css/components.min.css" rel="stylesheet" type="text/css"/>
         <link href="Css/Global/css/plugins.min.css" rel="stylesheet" type="text/css"/>
@@ -448,36 +450,36 @@ include "Conectar.php";
                                                     </div>
                                                     <div class='portlet-body form'>
                                                         <div class='form-body'>
-                                                            <div class="row" style="width:100%;height:255px;">
+                                                            <div class="row" style="width:100%;height:255px; display: flex; align-items: center; justify-content: space-between; ">
 
                                                                 <div class="col-md-4" style='text-align:center;'>
-                                                                    <center>
+                                                                  
                                                                         <div id="activeBorder1" class="active-border123">
                                                                             <div id="circle1" class="circle123">
                                                                                 <span class="prec123 " id="prec1" valor='5'></span>
                                                                             </div>
                                                                         </div>
-                                                                    </center>
+                                                                    
                                                                     <div class="desc" style='text-align:center;font-weight:bold;font-size:12px;margin-top: 10px;'>% Presupuesto Comprometido <br>(<i class='fa fa-dollar'></i> <label id="vprecomp"></label>)</div>
                                                                 </div>
                                                                 <div class="col-md-4" style='text-align:center;'>
-                                                                    <center>
+                                                                 
                                                                         <div id="activeBorder2" class="active-border123">
                                                                             <div id="circle2" class="circle123">
                                                                                 <span class="prec123 " id="prec2" valor='7'></span>
                                                                             </div>
                                                                         </div>
-                                                                    </center>
+                                                                
                                                                     <div class="desc" style='text-align:center;font-weight:bold;font-size:12px;margin-top: 10px;'>% Presupuesto Gastado <br>(<i class='fa fa-dollar'></i> <label id="vpregat"></label>)</div>
                                                                 </div>
                                                                 <div class="col-md-4" style='text-align:center;'>
-                                                                    <center>
+                                                              
                                                                         <div id="activeBorder3" class="active-border123">
                                                                             <div id="circle3" class="circle123">
                                                                                 <span class="prec123 " id="prec3" valor='8'></span>
                                                                             </div>
                                                                         </div>
-                                                                    </center>
+                                                               
                                                                     <div class="desc" style='text-align:center;font-weight:bold;font-size:12px;margin-top: 10px;'>% Presupuesto no Afectado <br>(<i class='fa fa-dollar'></i> <label id="vprenafec"></label>)</div>
                                                                 </div>
                                                             </div>
@@ -491,7 +493,7 @@ include "Conectar.php";
 
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-5">
                                                 <div class='portlet box blue'>
                                                     <div class='portlet-title'>
                                                         <div class='caption'>
@@ -504,7 +506,7 @@ include "Conectar.php";
                                                     <div class='portlet-body form'>
                                                         <div class='form-body'>
                                                             <div class="row">
-                                                                <div class='form-body' id='LisSecr'>
+                                                                <div class='form-body' id='LisSecr' style="height: 62vh; max-height: 62vh; overflow: auto;">
                                                                 </div>
                                                             </div>
 
@@ -514,7 +516,7 @@ include "Conectar.php";
 
 
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-7">
 
                                                 <div class='portlet box red-intense'>
                                                     <div class='portlet-title'>
@@ -529,7 +531,7 @@ include "Conectar.php";
                                                         <div class='form-body'>
                                                             <div class="row">
                                                                 <div class='form-body' >
-                                                                    <div id='ProyxEst' style="width: 100%;  height: 300px;">
+                                                                    <div id='ProyxEst' style="width: 100%;  height: 55vh;max-height: 55vh;overflow: auto;">
 
                                                                     </div>
                                                                 </div>
