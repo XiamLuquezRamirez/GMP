@@ -17,6 +17,7 @@ if ($_POST['acc'] == "1") {
             . "observacion='" . $_POST['txt_obser'] . "',fecha_recepcion='" . trim($_POST['txtFecRegistro']) . "',periodo_ini='" . trim($_POST['CbPeriodoI']) . "',periodo_fin='" . $_POST['CbPeriodoF'] . "' "
             . "WHERE id='" . $_POST['id'] . "'";
 } else {
+    
     $consulta = "UPDATE presupuesto_total SET estado='ELIMINADO' WHERE id='" . $_POST['id'] . "' ";
 }
 

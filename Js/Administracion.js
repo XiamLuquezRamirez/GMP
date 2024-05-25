@@ -181,7 +181,7 @@ $(document).ready(function () {
                         $("#Presupuesto").html("$ " + number_format2(data.PI, 2, ',', '.'));
 
                         //PRESUPUESTO COMPROMETIDO
-                        PresComprom = parseFloat(data.PresEjecucion) - parseFloat(data.TotContEje);
+                        PresComprom = parseFloat(data.TotProyPriori) + parseFloat(data.TotProyEjecucion);
                         $("#vprecomp").html(number_format2(PresComprom, 2, ',', '.'));
 
                         //PRESUPUESTO GASTADO

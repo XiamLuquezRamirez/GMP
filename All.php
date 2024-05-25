@@ -38,7 +38,7 @@ if ($_POST['ope'] == "CargarDatEmpresa") {
     }
 
 
-/// localizacion
+    /// localizacion
     $consulta = "SELECT
  dep.COD_DPTO coddep,
   CONCAT(dep.COD_DPTO,' - ',dep.NOM_DPTO) dedep,
@@ -59,33 +59,33 @@ FROM
     ON ubi.corr_ubic=corr.COD_CORREGI
     LEFT JOIN " . $_SESSION['ses_BDBase'] . ".barrios bar
     ON ubi.barr_ubic=bar.codigo" .
-            "  WHERE compa_ubi= '" . $companias_login . "' ";
+        "  WHERE compa_ubi= '" . $companias_login . "' ";
 
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Locali = " <thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Departamento\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Municipio\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Corregimiento\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Barrio\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody id='tb_Body_Loca' >\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Departamento\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Municipio\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Corregimiento\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Barrio\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody id='tb_Body_Loca' >\n";
 
     $contLocal = 0;
     if (mysqli_num_rows($resultado1) > 0) {
@@ -97,10 +97,10 @@ FROM
             $Tab_Locali .= "<td>" . $fila["decorr"] . "</td>";
             $Tab_Locali .= "<td>" . $fila["debar"] . "</td>";
             $Tab_Locali .= "<td><input type='hidden' id='Loca" . $contLocal . "' "
-                    . "name='terce' value='" . $fila["coddep"] . "//" . $fila["codmun"] . "//" . $fila["codcorre"] . "//" . $fila["codbar"] . "//" . $fila["lat"] . "//" . $fila["longi"] . "' />"
-                    . "<a onclick=\"$.QuitarLocal('filaLoca" . $contLocal . "')\" class=\"btn default btn-xs red\"><i class=\"fa fa-trash-o\"></i> Borrar</a>"
-                    . "<a onclick=\"$.VerLoca('" . $fila["lat"] . "//" . $fila["longi"] . "')\" class=\"btn default btn-xs blue\"><i class=\"fa fa-map-marker\"></i> Mostrar</a>"
-                    . "</td></tr>";
+                . "name='terce' value='" . $fila["coddep"] . "//" . $fila["codmun"] . "//" . $fila["codcorre"] . "//" . $fila["codbar"] . "//" . $fila["lat"] . "//" . $fila["longi"] . "' />"
+                . "<a onclick=\"$.QuitarLocal('filaLoca" . $contLocal . "')\" class=\"btn default btn-xs red\"><i class=\"fa fa-trash-o\"></i> Borrar</a>"
+                . "<a onclick=\"$.VerLoca('" . $fila["lat"] . "//" . $fila["longi"] . "')\" class=\"btn default btn-xs blue\"><i class=\"fa fa-map-marker\"></i> Mostrar</a>"
+                . "</td></tr>";
         }
     }
     $Tab_Locali .= "</tbody>";
@@ -112,7 +112,7 @@ FROM
     echo $myJSONDat;
 } else if ($_POST['ope'] == "CargUbica") {
     $myDat = new stdClass();
-/// localizacion
+    /// localizacion
     $consulta = "SELECT
  dep.COD_DPTO coddep,
   CONCAT(dep.COD_DPTO,' - ',dep.NOM_DPTO) dedep,
@@ -133,33 +133,33 @@ FROM
     ON ubi.corr_ubic=corr.COD_CORREGI
     LEFT JOIN " . $_SESSION['ses_BDBase'] . ".barrios bar
     ON ubi.barr_ubic=bar.codigo" .
-            "  WHERE compa_ubi= '" . $_SESSION['ses_complog'] . "' ";
+        "  WHERE compa_ubi= '" . $_SESSION['ses_complog'] . "' ";
     //echo $consulta;
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Locali = " <thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Departamento\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Municipio\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Corregimiento\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Barrio\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody id='tb_Body_Loca' >\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Departamento\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Municipio\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Corregimiento\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Barrio\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody id='tb_Body_Loca' >\n";
 
     $contLocal = 0;
     if (mysqli_num_rows($resultado1) > 0) {
@@ -171,10 +171,10 @@ FROM
             $Tab_Locali .= "<td>" . $fila["decorr"] . "</td>";
             $Tab_Locali .= "<td>" . $fila["debar"] . "</td>";
             $Tab_Locali .= "<td><input type='hidden' id='Loca" . $contLocal . "' "
-                    . "name='terce' value='" . $fila["coddep"] . "//" . $fila["codmun"] . "//" . $fila["codcorre"] . "//" . $fila["codbar"] . "//" . $fila["lat"] . "//" . $fila["longi"] . "' />"
-                    . "<a onclick=\"$.QuitarLocal('filaLoca" . $contLocal . "')\" class=\"btn default btn-xs red\"><i class=\"fa fa-trash-o\"></i> Borrar</a>"
-                    . "<a onclick=\"$.VerLoca('" . $fila["lat"] . "//" . $fila["longi"] . "')\" class=\"btn default btn-xs blue\"><i class=\"fa fa-map-marker\"></i> Mostrar</a>"
-                    . "</td></tr>";
+                . "name='terce' value='" . $fila["coddep"] . "//" . $fila["codmun"] . "//" . $fila["codcorre"] . "//" . $fila["codbar"] . "//" . $fila["lat"] . "//" . $fila["longi"] . "' />"
+                . "<a onclick=\"$.QuitarLocal('filaLoca" . $contLocal . "')\" class=\"btn default btn-xs red\"><i class=\"fa fa-trash-o\"></i> Borrar</a>"
+                . "<a onclick=\"$.VerLoca('" . $fila["lat"] . "//" . $fila["longi"] . "')\" class=\"btn default btn-xs blue\"><i class=\"fa fa-map-marker\"></i> Mostrar</a>"
+                . "</td></tr>";
         }
     }
     $Tab_Locali .= "</tbody>";
@@ -186,25 +186,25 @@ FROM
     echo $myJSONDat;
 } else if ($_POST['ope'] == "CargUsuarios") {
     $myDat = new stdClass();
-/// localizacion
+    /// localizacion
     $consulta = "SELECT id_usuario id, cue_nombres nombre FROM " . $_SESSION['ses_BDBase'] . ".usuarios";
     //echo $consulta;
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Usu = " <thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Nombre de Usuario\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody id='tb_Body_Loca' >\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Nombre de Usuario\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody id='tb_Body_Loca' >\n";
 
     $contUsu = 0;
     if (mysqli_num_rows($resultado1) > 0) {
@@ -213,9 +213,9 @@ FROM
             $Tab_Usu .= "<tr class='selected' id='filaUsu" . $contUsu . "' ><td>" . $contUsu . "</td>";
             $Tab_Usu .= "<td>" . $fila["nombre"] . "</td>";
             $Tab_Usu .= "<td><input type='hidden' id='Usu" . $contUsu . "' "
-                    . "name='terce' value='" . $fila["id"] . "' />"
-                    . "<a onclick=\"$.QuitarUsu('filaUsu" . $contUsu . "')\" class=\"btn default btn-xs red\"><i class=\"fa fa-trash-o\"></i> Quitar</a>"
-                    . "</td></tr>";
+                . "name='terce' value='" . $fila["id"] . "' />"
+                . "<a onclick=\"$.QuitarUsu('filaUsu" . $contUsu . "')\" class=\"btn default btn-xs red\"><i class=\"fa fa-trash-o\"></i> Quitar</a>"
+                . "</td></tr>";
         }
     }
     $Tab_Usu .= "</tbody>";
@@ -227,23 +227,23 @@ FROM
     echo $myJSONDat;
 } else if ($_POST['ope'] == "CargPorcCont") {
     $myDat = new stdClass();
-/// localizacion
+    /// localizacion
 
     $consulta = "select num_contrato, obj_contrato, porproy_contrato from contratos where idproy_contrato='" . $_POST['proy'] . "' group by num_contrato";
-//    echo $consulta;
+    //    echo $consulta;
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Porc = " <thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Contrato\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Porcentaje\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody id='tb_Body_Porc' >\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Contrato\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Porcentaje\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody id='tb_Body_Porc' >\n";
     $port = 0;
     $ContPor = 1;
     if (mysqli_num_rows($resultado1) > 0) {
@@ -251,22 +251,22 @@ FROM
             $port = $port + $fila['porproy_contrato'];
             $Tab_Porc .= "<tr class='selected' ><td title='" . $fila['obj_contrato'] . "'>" . $fila['num_contrato'] . "</td>";
             $Tab_Porc .= "<td style='text-align: right;'><div class='col-xs-3'><input type='text' name='PorCont[]' id='txt_PorEqui_" . $ContPor . "' data-id='" . $fila['num_contrato'] . "' onchange='$.updateporc(this.id);'  value='" . $fila['porproy_contrato'] . "' class='form-control'/></div><input type='hidden' id='Porc" . $ContPor . "' "
-                    . "name='terce' value='" . $fila['num_contrato'] . "//" . $fila["porproy_contrato"] . "' /></td>"
-                    . "</tr>";
+                . "name='terce' value='" . $fila['num_contrato'] . "//" . $fila["porproy_contrato"] . "' /></td>"
+                . "</tr>";
             $ContPor++;
         }
     }
     if ($_POST['acc'] == 1) {
         $Tab_Porc .= "<tr class='selected' ><td >" . $_POST['Cont'] . "</td>";
         $Tab_Porc .= "<td style='text-align: right;'><div class='col-xs-3'><input type='text' id='txt_PorEqui_" . $ContPor . "' data-id='" . $_POST['Cont'] . "'  name='PorCont[]' onchange='$.updateporc(this.id);'   value='" . $_POST['porequ'] . "' class='form-control'/></div><input type='hidden' id='Porc" . $ContPor . "' "
-                . "name='terce' value='' /></td>"
-                . "</tr>";
+            . "name='terce' value='' /></td>"
+            . "</tr>";
     }
 
 
     $Tab_Porc .= "<tr class='selected' style='text-align: right;'><td><b>Porcentaje Total:</b></td>";
     $Tab_Porc .= "<td ><div class='col-xs-3'><label id='Porc_Tot'>" . $port . "%</label></div></td>"
-            . "</tr>";
+        . "</tr>";
 
 
 
@@ -387,7 +387,7 @@ FROM
     $myDat = new stdClass();
 
     $consulta = "select * from responsables where id_responsable='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -408,7 +408,7 @@ FROM
     $myDat = new stdClass();
 
     $consulta = "select * from " . $_SESSION['ses_BDBase'] . ".perfiles where idperfil='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -564,7 +564,7 @@ FROM
     $myDat = new stdClass();
 
     $consulta = "select * from supervisores where id_supervisores='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -583,7 +583,7 @@ FROM
     $myDat = new stdClass();
 
     $consulta = "select * from interventores where id_interventores='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -602,7 +602,7 @@ FROM
     $myDat = new stdClass();
 
     $consulta = "select * from secretarias where idsecretarias='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -623,7 +623,7 @@ FROM
     $myDat = new stdClass();
 
     $consulta = "select * from procesos where id_proc='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -641,7 +641,7 @@ FROM
     $myDat = new stdClass();
 
     $consulta = "select * from tipologia_proyecto where id_tipolo='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -659,7 +659,7 @@ FROM
     $myDat = new stdClass();
 
     $consulta = "select * from tipo_contratacion where ID='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -676,7 +676,7 @@ FROM
     $myDat = new stdClass();
 
     $consulta = "select valor from metas_proyeccion where meta='" . $_POST["id"] . "' and anio='" . $_POST["anio"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -704,15 +704,15 @@ FROM
     ON im.meta = mi.id_meta 
   LEFT JOIN metas met ON mi.id_meta=met.id_meta
 WHERE im.indicador='" . $_POST["id"] . "' GROUP BY idmet";
-//    echo $consulta;
+    //    echo $consulta;
     $resultado = mysqli_query($link, $consulta);
 
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
 
             $Tab_Indicad .= "<div class='row'>"
-                    . " <div class='col-md-10'><h4 class='modal-titl'>" . $fila['desmeta'] . "</h4></div><input type='hidden' id='titu_met" . $fila['idmet'] . "' value='" . $fila['desmeta'] . "' class='form-control'  />"
-                    . " <div class='col-md-2'><div class='col-md-12' style='text-align: right'>
+                . " <div class='col-md-10'><h4 class='modal-titl'>" . $fila['desmeta'] . "</h4></div><input type='hidden' id='titu_met" . $fila['idmet'] . "' value='" . $fila['desmeta'] . "' class='form-control'  />"
+                . " <div class='col-md-2'><div class='col-md-12' style='text-align: right'>
                                             <div class='form-group' >
                                                 <label class='control-label'>&nbsp;</label>
                                                 <a onclick=\"$.Graficar(" . $fila['idmet'] . ")\" class='btn green-meadow'>
@@ -720,47 +720,47 @@ WHERE im.indicador='" . $_POST["id"] . "' GROUP BY idmet";
                                                 </a>
                                             </div>
                                         </div></div>"
-                    . "</div>";
+                . "</div>";
 
             $Tab_Indicad .= "<table class='table table-striped table-hover table-bordered' id='tab_HistIndi'><thead>";
             $Tab_Indicad .= "<td>\n" .
-                    "              <i ></i> Vigencia\n" .
-                    "          </td>\n";
+                "              <i ></i> Vigencia\n" .
+                "          </td>\n";
 
             $consulta2 = "SELECT * FROM titu_variable_med WHERE idmed='" . $fila['id'] . "' GROUP BY titu_var ORDER BY id ASC";
             $resultado2 = mysqli_query($link, $consulta2);
             while ($fila2 = mysqli_fetch_array($resultado2)) {
                 $Tab_Indicad .= "<td>\n" .
-                        "              <i ></i>" . $fila2['titu_var'] . " \n" .
-                        "          </td>\n";
+                    "              <i ></i>" . $fila2['titu_var'] . " \n" .
+                    "          </td>\n";
             }
 
             $Tab_Indicad .= "<td>\n" .
-                    "              <i ></i> Meta\n" .
-                    "          </td>\n" .
-                    "          <td>\n" .
-                    "              <i ></i> Indicador\n" .
-                    "          </td>\n" .
-                    "          <td>\n" .
-                    "              <i ></i> Frecuecia Medida\n" .
-                    "          </td>\n" .
-                    "          <td>\n" .
-                    "              <i ></i> Responsable\n" .
-                    "          </td>\n" .
-                    "          <td>\n" .
-                    "              <i></i> Evidencias\n" .
-                    "          </td>\n" .
-                    "          <td>\n" .
-                    "              <i></i> Estado\n" .
-                    "          </td>\n" .
-                    "          <td>\n" .
-                    "              <i></i> Plan de Mejora\n" .
-                    "          </td>\n" .
-                    "          <td>\n" .
-                    "              <i></i> Indicador Despues del Plan de Mejora\n" .
-                    "          </td>\n" .
-                    "      </tr>\n" .
-                    "  </thead>";
+                "              <i ></i> Meta\n" .
+                "          </td>\n" .
+                "          <td>\n" .
+                "              <i ></i> Indicador\n" .
+                "          </td>\n" .
+                "          <td>\n" .
+                "              <i ></i> Frecuecia Medida\n" .
+                "          </td>\n" .
+                "          <td>\n" .
+                "              <i ></i> Responsable\n" .
+                "          </td>\n" .
+                "          <td>\n" .
+                "              <i></i> Evidencias\n" .
+                "          </td>\n" .
+                "          <td>\n" .
+                "              <i></i> Estado\n" .
+                "          </td>\n" .
+                "          <td>\n" .
+                "              <i></i> Plan de Mejora\n" .
+                "          </td>\n" .
+                "          <td>\n" .
+                "              <i></i> Indicador Despues del Plan de Mejora\n" .
+                "          </td>\n" .
+                "      </tr>\n" .
+                "  </thead>";
 
             $Tab_Indicad .= "<tbody id='tb_Body_MedIndicadores'>";
 
@@ -807,7 +807,7 @@ WHERE im.indicador='" . $_POST["id"] . "' GROUP BY idmet";
                     $j = 1;
                     for ($i = 0; $i < $tamsrc; $i++) {
                         $evid .= "<a href='" . $parsrc[$i] . "' target='_blank' class=\"btn default btn-xs blue\">"
-                                . "<i class=\"fa fa-search\"></i> Evidencia " . $j . "</a>";
+                            . "<i class=\"fa fa-search\"></i> Evidencia " . $j . "</a>";
                         $j++;
                     }
                 }
@@ -841,7 +841,7 @@ WHERE im.indicador='" . $_POST["id"] . "' GROUP BY idmet";
 
 
     $Tab_Indicad .= "<tbody id='tb_Body_MedIndicadores'>";
-//    $Tab_Indicad .= "<tr class=\"selected\" id='filaIndicadores" . $contIndicad . "' ><td>" . $anio . "</td>";
+    //    $Tab_Indicad .= "<tr class=\"selected\" id='filaIndicadores" . $contIndicad . "' ><td>" . $anio . "</td>";
     $Tab_Indicad .= "</tbody></table>";
     $myDat->CadIndi = $Tab_Indicad;
 
@@ -862,7 +862,7 @@ FROM
   LEFT JOIN  proyectos proy
   ON med.proy_ori=proy.id_proyect
   WHERE med.id='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -889,7 +889,7 @@ FROM
         $j = 1;
         for ($i = 0; $i < $tamsrc; $i++) {
             $evid .= "<a href='" . $parsrc[$i] . "' target='_blank' class=\"btn default btn-xs blue\">"
-                    . "<i class=\"fa fa-search\"></i> Evidencia " . $j . "</a>";
+                . "<i class=\"fa fa-search\"></i> Evidencia " . $j . "</a>";
             $j++;
         }
     }
@@ -926,13 +926,13 @@ actividaplaneadadas act
                     </td>
                 </tr>
             </thead>"
-            . "   <tbody id='tb_Body_Indicadores'>\n";
+        . "   <tbody id='tb_Body_Indicadores'>\n";
 
     $contACt = 0;
 
     if (mysqli_num_rows($resultado1) > 0) {
         while ($fila = mysqli_fetch_array($resultado1)) {
-            $contACt ++;
+            $contACt++;
             $Tab_Act .= "<tr class=\"selected\" id='filaAct" . $contACt . "' ><td>" . $contACt . "</td>";
             $Tab_Act .= "<td>" . $fila["act"] . "</td>";
             $Tab_Act .= "<td>" . $fila["resp"] . "</td>";
@@ -955,7 +955,7 @@ FROM
   LEFT JOIN  proyectos proy
   ON med.proy_ori=proy.id_proyect
   WHERE med.id_medi='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -975,7 +975,7 @@ FROM
         $j = 1;
         for ($i = 0; $i < $tamsrc; $i++) {
             $evid2 .= "<a href='" . $parsrc[$i] . "' target='_blank' class=\"btn default btn-xs blue\">"
-                    . "<i class=\"fa fa-search\"></i> Evidencia " . $j . "</a>";
+                . "<i class=\"fa fa-search\"></i> Evidencia " . $j . "</a>";
             $j++;
         }
     }
@@ -990,7 +990,7 @@ FROM
     $myDat = new stdClass();
 
     $consulta = "select * from rubro_presupestal where id_rubro='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -1008,7 +1008,7 @@ FROM
     $myDat = new stdClass();
 
     $consulta = "select * from metas where id_meta='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -1062,7 +1062,7 @@ FROM
             $CadProy .= "<td>" . $fila["anio"] . "</td>";
             $CadProy .= "<td>" . $fila["valor"] . "</td>";
             $CadProy .= "<td><input type='hidden' id='idProy" . $cont . "' name='idProy' value='" . $fila["anio"] . "//" . $fila["valor"] . "' /><a onclick=\"$.QuitarProyecc('filaProyecc" . $cont . "')\" class=\"btn default btn-xs red\">"
-                    . "<i class=\"fa fa-trash-o\"></i> Quitar</a></td></tr>";
+                . "<i class=\"fa fa-trash-o\"></i> Quitar</a></td></tr>";
         }
     }
     $CadProy .= "</tbody>";
@@ -1073,7 +1073,7 @@ FROM
     ///////SEMAFORIZACION
 
     $consulta = "SELECT * FROM semaforizacion_metas where meta='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $unidMd = "";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -1116,55 +1116,55 @@ FROM
 FROM
   contratos
 WHERE num_contrato='" . $_POST['cod'] . "' ORDER BY id_contrato ASC ";
-//echo $consulta;
+    //echo $consulta;
     $resultado1 = mysqli_query($link, $consulta);
 
     $cad = "<table  class=\"table table-bordered table-striped table-condensed flip-content\" role=\"grid\">"
-            . "<thead>"
-            . "<tr>"
-            . "<th>"
-            . "<i ></i> <b>#</b>"
-            . "</th>"
-            . "<th>"
-            . "<i ></i> <b>V. Adicion</b>"
-            . "</th>"
-            . "<th>"
-            . "<i ></i> <b>V. Final</b>"
-            . "</th>"
-            . "<th>"
-            . "<i ></i> <b>V. Ejecutado</b>"
-            . "</th>"
-            . "<th>"
-            . "<i ></i> <b>Fec. Suspensión</b>"
-            . "</th>"
-            . "<th>"
-            . "<i ></i> <b>Fec. Reinicio</b>"
-            . "</th>"
-            . "<th>"
-            . "<i ></i> <b>Prorroga</b>"
-            . "</th>"
-            . "<th>"
-            . "<i ></i> <b>Fec. Finalización:</b>"
-            . "</th>"
-            . "<th>"
-            . "<i ></i> <b>Fec. Recibo:</b>"
-            . "</th>"
-            . "<th>"
-            . "<i ></i> <b>% Avance</b>"
-            . "</th>"
-            . "<th>"
-            . "<i ></i> <b>Estado</b>"
-            . "</th>"
-            . "<th>"
-            . "<i ></i> <b>Acci&oacute;n</b>"
-            . "</th>"
-            . "</tr>"
-            . "</thead>"
-            . "<tbody>";
+        . "<thead>"
+        . "<tr>"
+        . "<th>"
+        . "<i ></i> <b>#</b>"
+        . "</th>"
+        . "<th>"
+        . "<i ></i> <b>V. Adicion</b>"
+        . "</th>"
+        . "<th>"
+        . "<i ></i> <b>V. Final</b>"
+        . "</th>"
+        . "<th>"
+        . "<i ></i> <b>V. Ejecutado</b>"
+        . "</th>"
+        . "<th>"
+        . "<i ></i> <b>Fec. Suspensión</b>"
+        . "</th>"
+        . "<th>"
+        . "<i ></i> <b>Fec. Reinicio</b>"
+        . "</th>"
+        . "<th>"
+        . "<i ></i> <b>Prorroga</b>"
+        . "</th>"
+        . "<th>"
+        . "<i ></i> <b>Fec. Finalización:</b>"
+        . "</th>"
+        . "<th>"
+        . "<i ></i> <b>Fec. Recibo:</b>"
+        . "</th>"
+        . "<th>"
+        . "<i ></i> <b>% Avance</b>"
+        . "</th>"
+        . "<th>"
+        . "<i ></i> <b>Estado</b>"
+        . "</th>"
+        . "<th>"
+        . "<i ></i> <b>Acci&oacute;n</b>"
+        . "</th>"
+        . "</tr>"
+        . "</thead>"
+        . "<tbody>";
 
 
 
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     $contador = 0;
     if (mysqli_num_rows($resultado) > 0) {
@@ -1174,76 +1174,76 @@ WHERE num_contrato='" . $_POST['cod'] . "' ORDER BY id_contrato ASC ";
             $cod = $fila["id_contrato"];
             $contrato = $fila["num_contrato"] . " - " . $fila["obj_contrato"];
             $cad .= "<tr>"
-                    . "<td class=\"highlight\">"
-                    . $contador . " "
-                    . "</td>"
-                    . "<td class=\"highlight\">"
-                    . "$ " . number_format($fila["vadic_contrato"], 2, ",", ".") . ""
-                    . "</td>"
-                    . "<td class=\"highlight\">"
-                    . "$ " . number_format($fila["vfin_contrato"], 2, ",", ".") . ""
-                    . "</td>"
-                    . "<td class=\"highlight\">"
-                    . "$ " . number_format($fila["veje_contrato"], 2, ",", ".") . ""
-                    . "</td>"
-                    . "<td class=\"highlight\">"
-                    . $fila["fsusp_contrato"] . ""
-                    . "</td>"
-                    . "<td class=\"highlight\">"
-                    . $fila["frein_contrato"] . ""
-                    . "</td>"
-                    . "<td class=\"highlight\">"
-                    . $fila["prorg_contrato"] . ""
-                    . "</td>"
-                    . "<td class=\"highlight\">"
-                    . $fila["ffin_contrato"] . ""
-                    . "</td>"
-                    . "<td class=\"highlight\">"
-                    . $fila["frecb_contrato"] . ""
-                    . "</td>"
-                    . "<td class=\"highlight\">"
-                    . "<div class='progress progress-striped active'>"
-                    . "						<div class='progress-bar progress-bar-success' role='progressbar' aria-valuenow='40' aria-valuemin='0' aria-valuemax='100' style='width: " . $fila['porav_contrato'] . "'>"
-                    . "							<span >"
-                    . "							" . $fila['porav_contrato'] . " Completado (success) </span>"
-                    . "						</div>"
-                    . "					</div>"
-                    . "</td>"
-                    . "<td class=\"highlight\">"
-                    . $fila["estad_contrato"] . ""
-                    . "</td>"
-                    . "<td class=\"highlight\">"
-                    . "<table>"
-                    . "<tr>"
-                    . "<td>"
-                    . "<a onclick=\"$.VerHistContrat('" . $cod . "')\" class='btn default btn-xs blue'>" .
-                    "<i class='fa fa-search'></i> Ver "
-                    . "</a>"
-                    . "</td>";
+                . "<td class=\"highlight\">"
+                . $contador . " "
+                . "</td>"
+                . "<td class=\"highlight\">"
+                . "$ " . number_format($fila["vadic_contrato"], 2, ",", ".") . ""
+                . "</td>"
+                . "<td class=\"highlight\">"
+                . "$ " . number_format($fila["vfin_contrato"], 2, ",", ".") . ""
+                . "</td>"
+                . "<td class=\"highlight\">"
+                . "$ " . number_format($fila["veje_contrato"], 2, ",", ".") . ""
+                . "</td>"
+                . "<td class=\"highlight\">"
+                . $fila["fsusp_contrato"] . ""
+                . "</td>"
+                . "<td class=\"highlight\">"
+                . $fila["frein_contrato"] . ""
+                . "</td>"
+                . "<td class=\"highlight\">"
+                . $fila["prorg_contrato"] . ""
+                . "</td>"
+                . "<td class=\"highlight\">"
+                . $fila["ffin_contrato"] . ""
+                . "</td>"
+                . "<td class=\"highlight\">"
+                . $fila["frecb_contrato"] . ""
+                . "</td>"
+                . "<td class=\"highlight\">"
+                . "<div class='progress progress-striped active'>"
+                . "						<div class='progress-bar progress-bar-success' role='progressbar' aria-valuenow='40' aria-valuemin='0' aria-valuemax='100' style='width: " . $fila['porav_contrato'] . "'>"
+                . "							<span >"
+                . "							" . $fila['porav_contrato'] . " Completado (success) </span>"
+                . "						</div>"
+                . "					</div>"
+                . "</td>"
+                . "<td class=\"highlight\">"
+                . $fila["estad_contrato"] . ""
+                . "</td>"
+                . "<td class=\"highlight\">"
+                . "<table>"
+                . "<tr>"
+                . "<td>"
+                . "<a onclick=\"$.VerHistContrat('" . $cod . "')\" class='btn default btn-xs blue'>" .
+                "<i class='fa fa-search'></i> Ver "
+                . "</a>"
+                . "</td>";
             if ($cod == $_POST['id']) {
                 $cad .= "<td >"
-                        . "<a   onclick=\"$.AditAvaces('" . $cod . "')\" class='btn default btn-xs purple'>" .
-                        "<i class='fa fa-edit'></i> Editar"
-                        . "</a>"
-                        . "</td>"
-                        . "<td>"
-                        . "<a  onclick=\"$.deletHistContr('" . $cod . "')\" class='btn default btn-xs red'>" .
-                        "<i class='fa fa-trash-o'></i> Eliminar "
-                        . "</a>"
-                        . "</td>";
+                    . "<a   onclick=\"$.AditAvaces('" . $cod . "')\" class='btn default btn-xs purple'>" .
+                    "<i class='fa fa-edit'></i> Editar"
+                    . "</a>"
+                    . "</td>"
+                    . "<td>"
+                    . "<a  onclick=\"$.deletHistContr('" . $cod . "')\" class='btn default btn-xs red'>" .
+                    "<i class='fa fa-trash-o'></i> Eliminar "
+                    . "</a>"
+                    . "</td>";
             }
 
 
             $cad .= "</tr>"
-                    . "</table>"
-                    . "</td>"
-                    . "</tr>";
+                . "</table>"
+                . "</td>"
+                . "</tr>";
         }
     }
 
 
     $cad .= "</tbody>"
-            . "</table>";
+        . "</table>";
 
 
     $myDat->Cad = $cad;
@@ -1268,37 +1268,37 @@ FROM
   LEFT JOIN metas met
     ON promet.id_meta = met.id_meta
 WHERE cod_proy='" . $_POST['cod'] . "' ";
-// echo $consulta;
+    // echo $consulta;
     $resultado1 = mysqli_query($link, $consulta);
 
     $cad = "<table class=\"table table-striped table-bordered table-advance table-hover\">"
-            . "<thead>"
-            . "<tr>"
-            . "<th>"
-            . "<i ></i> <b>#</b>"
-            . "</th>"
-            . "<th>"
-            . "<i ></i> <b>Código</b>"
-            . "</th>"
-            . "<th>"
-            . "<i ></i> <b>Descripción</b>"
-            . "</th>"
-            . "<th>"
-            . "<i ></i> <b>Base</b>"
-            . "</th>"
-            . "<th>"
-            . "<i ></i> <b>Programa</b>"
-            . "</th>"
-            . "<th>"
-            . "<i ></i> <b>Acci&oacute;n</b>"
-            . "</th>"
-            . "</tr>"
-            . "</thead>"
-            . "<tbody>";
+        . "<thead>"
+        . "<tr>"
+        . "<th>"
+        . "<i ></i> <b>#</b>"
+        . "</th>"
+        . "<th>"
+        . "<i ></i> <b>Código</b>"
+        . "</th>"
+        . "<th>"
+        . "<i ></i> <b>Descripción</b>"
+        . "</th>"
+        . "<th>"
+        . "<i ></i> <b>Base</b>"
+        . "</th>"
+        . "<th>"
+        . "<i ></i> <b>Programa</b>"
+        . "</th>"
+        . "<th>"
+        . "<i ></i> <b>Acci&oacute;n</b>"
+        . "</th>"
+        . "</tr>"
+        . "</thead>"
+        . "<tbody>";
 
 
 
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     $contador = 0;
     $nproy = "";
@@ -1311,48 +1311,48 @@ WHERE cod_proy='" . $_POST['cod'] . "' ";
             $nproy = $fila["nproy"];
             $idproy = $fila["codproy"];
             $cad .= "<tr>"
-                    . "<td class=\"highlight\">"
-                    . $contador . " "
-                    . "</td>"
-                    . "<td class=\"highlight\">"
-                    . $fila["cod"] . " "
-                    . "</td>"
-                    . "<td class=\"highlight\">"
-                    . $fila["descr"] . "" . ""
-                    . "</td>"
-                    . "<td class=\"highlight\">"
-                    . $fila["base"] . ""
-                    . "</td>"
-                    . "<td class=\"highlight\">"
-                    . $fila["prog"] . ""
-                    . "</td>"
-                    . "<td class=\"highlight\">"
-                    . "<table>"
-                    . "<tr>";
+                . "<td class=\"highlight\">"
+                . $contador . " "
+                . "</td>"
+                . "<td class=\"highlight\">"
+                . $fila["cod"] . " "
+                . "</td>"
+                . "<td class=\"highlight\">"
+                . $fila["descr"] . "" . ""
+                . "</td>"
+                . "<td class=\"highlight\">"
+                . $fila["base"] . ""
+                . "</td>"
+                . "<td class=\"highlight\">"
+                . $fila["prog"] . ""
+                . "</td>"
+                . "<td class=\"highlight\">"
+                . "<table>"
+                . "<tr>";
             if ($_SESSION['GesProyAMe'] == "s") {
                 $cad .= "<td>"
-                        . "<a  onclick=\"$.MedirMeta('" . $cod . "')\" class='btn default btn-xs purple'>" .
-                        "<i class='fa fa-edit'></i> Medir"
-                        . "</a>"
-                        . "</td>";
+                    . "<a  onclick=\"$.MedirMeta('" . $cod . "')\" class='btn default btn-xs purple'>" .
+                    "<i class='fa fa-edit'></i> Medir"
+                    . "</a>"
+                    . "</td>";
             }
             if ($_SESSION['GesProyVMe'] == "s") {
                 $cad .= "<td>"
-                        . "<a onclick=\"$.VerDetMeta('" . $cod . "')\" class='btn default btn-xs blue'>" .
-                        "<i class='fa fa-search'></i> Ver "
-                        . "</a>"
-                        . "</td>";
+                    . "<a onclick=\"$.VerDetMeta('" . $cod . "')\" class='btn default btn-xs blue'>" .
+                    "<i class='fa fa-search'></i> Ver "
+                    . "</a>"
+                    . "</td>";
             }
             $cad .= "</tr>"
-                    . "</table>"
-                    . "</td>"
-                    . "</tr>";
+                . "</table>"
+                . "</td>"
+                . "</tr>";
         }
     }
 
 
     $cad .= "</tbody>"
-            . "</table>";
+        . "</table>";
 
 
     $myDat->Cad = $cad;
@@ -1362,13 +1362,13 @@ WHERE cod_proy='" . $_POST['cod'] . "' ";
     echo $myJSONDat;
 } else if ($_POST['ope'] == "GrafIndicadores") {
 
-// $myDat = new stdClass();
+    // $myDat = new stdClass();
 
     $Tab_Indicad = "";
     $i = 0;
 
     $consulta = "SELECT id,anio,meta,resulindi,frecuencia FROM mediindicador WHERE indicador='" . $_POST["id"] . "' and id_meta='" . $_POST["met"] . "'  order by anio ASC ";
-//echo $consulta;
+    //echo $consulta;
     $resultado1 = mysqli_query($link, $consulta);
     $rawdata = array(); //creamos un array
     if (mysqli_num_rows($resultado1) > 0) {
@@ -1379,7 +1379,7 @@ WHERE cod_proy='" . $_POST['cod'] . "' ";
             $fre = $fila['frecuencia'];
 
             $consulta2 = "SELECT * FROM mediindicador_plan WHERE id_medi='" . $fila["id"] . "'";
-//    echo $consulta2;
+            //    echo $consulta2;
             $resultado2 = mysqli_query($link, $consulta2);
             if (mysqli_num_rows($resultado2) > 0) {
                 while ($fila2 = mysqli_fetch_array($resultado2)) {
@@ -1399,8 +1399,8 @@ WHERE cod_proy='" . $_POST['cod'] . "' ";
         }
     }
     echo json_encode($rawdata);
-//   $myDat = json_encode($rawdata);
-//    echo $myDat;
+    //   $myDat = json_encode($rawdata);
+    //    echo $myDat;
 } else if ($_POST['ope'] == "SumaFecha") {
 
     $myDat = new stdClass();
@@ -1426,8 +1426,8 @@ WHERE cod_proy='" . $_POST['cod'] . "' ";
     echo $myJSONDat;
 } else if ($_POST['ope'] == "CambioVariables") {
 
-//    $id = $_POST['id'];
-//    $val = $_POST['val'];
+    //    $id = $_POST['id'];
+    //    $val = $_POST['val'];
 
     $myDat = new stdClass();
     $Formu = "";
@@ -1435,7 +1435,7 @@ WHERE cod_proy='" . $_POST['cod'] . "' ";
     if (isset($r[1])) {
         $r = explode(")", $r[1]);
         $myDat->Form = $r[0];
-// return $r[0];
+        // return $r[0];
     }
 
     $myJSONDat = json_encode($myDat);
@@ -1445,7 +1445,7 @@ WHERE cod_proy='" . $_POST['cod'] . "' ";
     $myDat = new stdClass();
 
     $consulta = "SELECT * FROM metas where id_meta='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $unidMd = "";
     $carg = "";
     $resultado = mysqli_query($link, $consulta);
@@ -1493,7 +1493,7 @@ WHERE cod_proy='" . $_POST['cod'] . "' ";
     $consulta2 = "SELECT SUM(PT) totpr FROM( SELECT IFNULL(SUM(pp.total),'0') PT FROM 
     proyectos proy LEFT JOIN banco_proyec_presupuesto pp ON proy.id_proyect = pp.id_proyect
     WHERE proy.secretaria_proyect='" . $_POST["sec"] . "' AND proy.estado='ACTIVO' GROUP BY proy.cod_proyect) AS t";
-    
+
     $resultado2 = mysqli_query($link, $consulta2);
     if (mysqli_num_rows($resultado2) > 0) {
         while ($fila2 = mysqli_fetch_array($resultado2)) {
@@ -1508,7 +1508,7 @@ WHERE cod_proy='" . $_POST['cod'] . "' ";
     $myDat = new stdClass();
 
     $consulta = "SELECT * FROM metas where id_meta='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $unidMd = "";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -1595,7 +1595,7 @@ WHERE cod_proy='" . $_POST['cod'] . "' ";
             $CadMedi .= "<td>" . $parcont[0] . "</td>";
 
             $CadMedi .= "<td><input type='hidden' id='Medi" . $cont . "' name='idProy' value='" . $fila["fmed_indmeta"] . "//" . $fila["base_indmeta"] . "//" . $fila["tend_indmeta"] . "//" . $fila["med_indmeta"] . "//" . $fila["resul_indmeta"] . "//" . $fila["origen_indmeta"] . "//" . $fila["desc_origen"] . "' /><a onclick=\"$.QuitarMedi('filaMedi" . $cont . "')\" class=\"btn default btn-xs red\">"
-                    . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
+                . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
         }
     }
     $CadMedi .= "</tbody>";
@@ -1612,7 +1612,7 @@ WHERE cod_proy='" . $_POST['cod'] . "' ";
     $myDat = new stdClass();
 
     $consulta = "SELECT * FROM metas where id_meta='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $unidMd = "";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -1633,7 +1633,7 @@ WHERE cod_proy='" . $_POST['cod'] . "' ";
 
 
     $consulta2 = "SELECT des_dependencia FROM dependencias WHERE iddependencias IN (" . $resp_Meta . ")";
-//  echo $consulta2;
+    //  echo $consulta2;
     $resultado2 = mysqli_query($consulta2, $link);
     if (mysqli_num_rows($resultado2) > 0) {
         while ($fila2 = mysqli_fetch_array($resultado2)) {
@@ -1754,7 +1754,7 @@ FROM
                 FROM
                   contratos
                 GROUP BY num_contrato)";
-//     echo $consulta;
+    //     echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -1768,7 +1768,7 @@ FROM
             $CadProy .= "<td>" . $fila["secr"] . "</td>";
             $CadProy .= "<td>" . $fila["esta"] . "</td>";
             $CadProy .= "<td><a onclick=\"$.ListGrafica('" . $fila["id"] . "')\" class=\"btn default btn-xs purple\">"
-                    . "<i class=\"fa fa-pie-chart\"></i> Graficar</a></td></tr>";
+                . "<i class=\"fa fa-pie-chart\"></i> Graficar</a></td></tr>";
         }
     }
     $CadProy .= "</tbody>";
@@ -1785,7 +1785,7 @@ FROM
     $myDat = new stdClass();
 
     $consulta = "select * from  proyectos where id_proyect='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -1819,25 +1819,25 @@ FROM
     }
 
 
-////CAUSAS
+    ////CAUSAS
     $contCaus = 0;
     $consulta = "SELECT * FROM banco_proyec_causas WHERE id_proyect='" . $_POST["cod"] . "'";
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Causa = "<thead>\n" .
-            "     <tr>\n" .
-            "         <td>\n" .
-            "             <i ></i> #\n" .
-            "         </td>\n" .
-            "         <td>\n" .
-            "             <i class='fa fa-angle-right'></i> Descripci&oacute;n\n" .
-            "         </td>\n" .
-            "         <td>\n" .
-            "             <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "         </td>\n" .
-            "     </tr>\n" .
-            " </thead>"
-            . "   <tbody >\n";
+        "     <tr>\n" .
+        "         <td>\n" .
+        "             <i ></i> #\n" .
+        "         </td>\n" .
+        "         <td>\n" .
+        "             <i class='fa fa-angle-right'></i> Descripci&oacute;n\n" .
+        "         </td>\n" .
+        "         <td>\n" .
+        "             <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "         </td>\n" .
+        "     </tr>\n" .
+        " </thead>"
+        . "   <tbody >\n";
 
 
     if (mysqli_num_rows($resultado1) > 0) {
@@ -1846,7 +1846,7 @@ FROM
             $Tab_Causa .= "<tr class='selected' id='filaCaus" . $contCaus . "' ><td>" . $contCaus . "</td>";
             $Tab_Causa .= "<td>" . $fila["desc"] . "</td>";
             $Tab_Causa .= "<td><input type='hidden' id='idCausa" . $contCaus . "' name='terce' value='" . $fila["desc"] . "' /><a onclick=\"$.QuitarCausa('filaCaus" . $contCaus . "')\" class=\"btn default btn-xs red\">"
-                    . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
+                . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
         }
     }
     $Tab_Causa .= "</tbody>";
@@ -1856,23 +1856,23 @@ FROM
     $myDat->contCaus = $contCaus;
 
 
-///EFECTOS
+    ///EFECTOS
     $consulta = "SELECT * FROM banco_proyec_efectos  WHERE id_proyect='" . $_POST["cod"] . "'";
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Efectos = "<thead>\n" .
-            "     <tr>\n" .
-            "         <td>\n" .
-            "             <i class='fa fa-angle-right'></i> #\n" .
-            "         </td>\n" .
-            "         <td>\n" .
-            "             <i class='fa fa-angle-right'></i> Descripci&oacute;n\n" .
-            "         </td>\n" .
-            "         <td>\n" .
-            "             <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "         </td>\n" .
-            "     </tr>\n" .
-            " </thead>" . "   <tbody >\n";
+        "     <tr>\n" .
+        "         <td>\n" .
+        "             <i class='fa fa-angle-right'></i> #\n" .
+        "         </td>\n" .
+        "         <td>\n" .
+        "             <i class='fa fa-angle-right'></i> Descripci&oacute;n\n" .
+        "         </td>\n" .
+        "         <td>\n" .
+        "             <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "         </td>\n" .
+        "     </tr>\n" .
+        " </thead>" . "   <tbody >\n";
 
     $contEfectos = 0;
     if (mysqli_num_rows($resultado1) > 0) {
@@ -1889,23 +1889,23 @@ FROM
     $myDat->contEfectos = $contEfectos;
 
 
-///Objetivos EspecÃ­ficos
+    ///Objetivos EspecÃ­ficos
     $consulta = "SELECT * FROM banco_proyec_objespec WHERE id_proyect='" . $_POST["cod"] . "'";
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_ObjEspec = "<thead>\n" .
-            "     <tr>\n" .
-            "         <td>\n" .
-            "             <i class='fa fa-angle-right'></i> #\n" .
-            "         </td>\n" .
-            "         <td>\n" .
-            "             <i class='fa fa-angle-right'></i> Descripci&oacute;n\n" .
-            "         </td>\n" .
-            "         <td>\n" .
-            "             <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "         </td>\n" .
-            "     </tr>\n" .
-            " </thead>" . "   <tbody >\n";
+        "     <tr>\n" .
+        "         <td>\n" .
+        "             <i class='fa fa-angle-right'></i> #\n" .
+        "         </td>\n" .
+        "         <td>\n" .
+        "             <i class='fa fa-angle-right'></i> Descripci&oacute;n\n" .
+        "         </td>\n" .
+        "         <td>\n" .
+        "             <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "         </td>\n" .
+        "     </tr>\n" .
+        " </thead>" . "   <tbody >\n";
 
     $contObjEspec = 0;
     if (mysqli_num_rows($resultado1) > 0) {
@@ -1922,39 +1922,39 @@ FROM
     $myDat->contObjEspec = $contObjEspec;
 
 
-///productos
+    ///productos
     $consulta = "SELECT \n" .
-            "  prod.producto prod,\n" .
-            "  prod.indicador ind,\n" .
-            "  prod.anio anio,\n" .
-            "  prod.meta met\n" .
-            "FROM\n" .
-            "  banco_proyec_productos prod \n" .
-            "WHERE id_proyect = '" . $_POST["cod"] . "' ";
+        "  prod.producto prod,\n" .
+        "  prod.indicador ind,\n" .
+        "  prod.anio anio,\n" .
+        "  prod.meta met\n" .
+        "FROM\n" .
+        "  banco_proyec_productos prod \n" .
+        "WHERE id_proyect = '" . $_POST["cod"] . "' ";
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Productos = "<thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Producto\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Indicador\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> A&ntilde;o\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Meta\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>" . "   <tbody >\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Producto\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Indicador\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> A&ntilde;o\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Meta\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>" . "   <tbody >\n";
 
     $contProductos = 0;
     if (mysqli_num_rows($resultado1) > 0) {
@@ -1973,13 +1973,13 @@ FROM
     $myDat->Tab_Productos = $Tab_Productos;
     $myDat->contProductos = $contProductos;
 
-///poblacion
+    ///poblacion
     $consulta = "SELECT *  FROM banco_proyec_pobla WHERE id_proyect = '" . $_POST["cod"] . "' ";
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Poblacion = "<thead>\n" .
-            "                <tr>\n" .
-            "                               <td>
+        "                <tr>\n" .
+        "                               <td>
                     <i class='fa fa-angle-right'></i> #
                 </td>
                 <td>
@@ -2000,8 +2000,8 @@ FROM
                 <td>
                     <i class='fa fa-angle-right'></i> Acción
                 </td>\n" .
-            "                           </tr>\n" .
-            "                       </thead>" . "   <tbody >\n";
+        "                           </tr>\n" .
+        "                       </thead>" . "   <tbody >\n";
 
     $contPoblacion = 0;
     if (mysqli_num_rows($resultado1) > 0) {
@@ -2021,40 +2021,40 @@ FROM
     $myDat->Tab_Poblacion = $Tab_Poblacion;
     $myDat->contPoblacion = $contPoblacion;
 
-///costos asociados
+    ///costos asociados
     $consulta = "SELECT \n" .
-            "  cost.identifi iden,\n" .
-            "  cost.nombre nom,\n" .
-            "  cost.cargo car,\n" .
-            "  cost.horaxsemana hor \n" .
-            "FROM\n" .
-            "  banco_proyec_costos cost \n" .
-            "WHERE cost.id_proyect= '" . $_POST["cod"] . "' ";
+        "  cost.identifi iden,\n" .
+        "  cost.nombre nom,\n" .
+        "  cost.cargo car,\n" .
+        "  cost.horaxsemana hor \n" .
+        "FROM\n" .
+        "  banco_proyec_costos cost \n" .
+        "WHERE cost.id_proyect= '" . $_POST["cod"] . "' ";
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_CostAsoc = " <thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Identificaci&oacute;n\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Nombre\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Cargo\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Horas Semanales\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody >\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Identificaci&oacute;n\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Nombre\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Cargo\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Horas Semanales\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody >\n";
 
     $contCostAsoc = 0;
     if (mysqli_num_rows($resultado1) > 0) {
@@ -2073,38 +2073,38 @@ FROM
     $myDat->contCostAsoc = $contCostAsoc;
 
 
-/// estudios
+    /// estudios
     $consulta = "SELECT * FROM\n" .
-            "  banco_proyec_estudios  \n" .
-            "  WHERE id_proyect= '" . $_POST["cod"] . "' ";
+        "  banco_proyec_estudios  \n" .
+        "  WHERE id_proyect= '" . $_POST["cod"] . "' ";
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Estudios = " <thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Titulo\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Autor\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Entidad\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Fecha\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Observaciones\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody >\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Titulo\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Autor\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Entidad\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Fecha\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Observaciones\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody >\n";
 
     $contEstudios = 0;
     if (mysqli_num_rows($resultado1) > 0) {
@@ -2117,8 +2117,8 @@ FROM
             $Tab_Estudios .= "<td>" . $fila["fecha"] . "</td>";
             $Tab_Estudios .= "<td>" . $fila["observa"] . "</td>";
             $Tab_Estudios .= "<td><input type='hidden' id='idEstudios" . $contEstudios . "' "
-                    . "name='terce' value='" . $fila["titulo"] . "//" . $fila["autor"] . "//" . $fila["entidad"] . "//" . $fila["fecha"] . "//" . $fila["observa"] . "' /><a onclick=\"$.QuitarEstudios('filaEstudios" . $contEstudios . "')\" class=\"btn default btn-xs red\">"
-                    . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
+                . "name='terce' value='" . $fila["titulo"] . "//" . $fila["autor"] . "//" . $fila["entidad"] . "//" . $fila["fecha"] . "//" . $fila["observa"] . "' /><a onclick=\"$.QuitarEstudios('filaEstudios" . $contEstudios . "')\" class=\"btn default btn-xs red\">"
+                . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
         }
     }
     $Tab_Estudios .= "</tbody>";
@@ -2127,64 +2127,64 @@ FROM
 
 
 
-///costos actividades
+    ///costos actividades
     $consulta = "SELECT \n"
-            . "  conact.metas met,\n"
-            . "  conact.actividades desact,\n"
-            . "  conact.respo_activ idres,\n"
-            . "  CONCAT(resp.cod_responsable,' - ',resp.nom_responsable) terc,\n"
-            . "  conact.estado_activ est,\n"
-            . "  conact.costo_activ cost,\n"
-            . "  conact.fini_activ fini,\n"
-            . "  conact.hini_activ hini,\n"
-            . "  conact.ffin_activ ffin,\n"
-            . "  conact.hfin_activ hfin\n"
-            . "  \n"
-            . "FROM\n"
-            . "  banco_proyec_actividades conact \n"
-            . "  LEFT JOIN responsables resp \n"
-            . "    ON conact.respo_activ = resp.id_responsable \n"
-            . "  where conact.id_proyecto='" . $_POST["cod"] . "'";
+        . "  conact.metas met,\n"
+        . "  conact.actividades desact,\n"
+        . "  conact.respo_activ idres,\n"
+        . "  CONCAT(resp.cod_responsable,' - ',resp.nom_responsable) terc,\n"
+        . "  conact.estado_activ est,\n"
+        . "  conact.costo_activ cost,\n"
+        . "  conact.fini_activ fini,\n"
+        . "  conact.hini_activ hini,\n"
+        . "  conact.ffin_activ ffin,\n"
+        . "  conact.hfin_activ hfin\n"
+        . "  \n"
+        . "FROM\n"
+        . "  banco_proyec_actividades conact \n"
+        . "  LEFT JOIN responsables resp \n"
+        . "    ON conact.respo_activ = resp.id_responsable \n"
+        . "  where conact.id_proyecto='" . $_POST["cod"] . "'";
     $resultado1 = mysqli_query($link, $consulta);
-// echo $consulta;
+    // echo $consulta;
     $Tab_Activ = "<thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i ></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i ></i> Meta" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i ></i> Actividad" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i ></i> Responsable\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i ></i> Costo\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i ></i> Estado\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i ></i> Fec. Inicio\n" .
-            "          </td>                                                                                 \n" .
-            "          <td>\n" .
-            "              <i ></i> H. Inicio\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i></i> Fec. Final\n" .
-            "          </td>                                                                                 \n" .
-            "          <td>\n" .
-            "              <i ></i> H. Final\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i ></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody >\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i ></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i ></i> Meta" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i ></i> Actividad" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i ></i> Responsable\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i ></i> Costo\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i ></i> Estado\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i ></i> Fec. Inicio\n" .
+        "          </td>                                                                                 \n" .
+        "          <td>\n" .
+        "              <i ></i> H. Inicio\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i></i> Fec. Final\n" .
+        "          </td>                                                                                 \n" .
+        "          <td>\n" .
+        "              <i ></i> H. Final\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i ></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody >\n";
 
     $contActiv = 0;
     $totcost = 0;
@@ -2204,7 +2204,7 @@ FROM
             $Tab_Activ .= "<td>" . $fila["ffin"] . "</td>";
             $Tab_Activ .= "<td>" . $fila["hfin"] . "</td>";
             $Tab_Activ .= "<td><input type='hidden' id='Acti" . $contActiv . "' name='actividades' value='" . $fila["met"] . "//" . $fila["desact"] . "//" . $fila["idres"] . "//" . $fila["cost"] . "//" . $fila["fini"] . "//" . $fila["hini"] . "//" . $fila["ffin"] . "//" . $fila["hfin"] . "//" . $fila["est"]  . "' /><a onclick=\"$.QuitarActi('filaAct" . $contActiv . "')\" class=\"btn default btn-xs red\">"
-                    . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
+                . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
         }
     }
 
@@ -2219,32 +2219,27 @@ FROM
     $myDat->totcost = $totcost;
 
 
-////financiacion
+    ////financiacion
 
-    $consulta = "SELECT * FROM\n" .
-            "  banco_proyec_financiacion  \n" .
-            "WHERE id_proyect = '" . $_POST["cod"] . "' ";
+    $consulta = "SELECT bf.origen,fuen.nombre,bf.valor FROM banco_proyec_financiacion bf LEFT JOIN fuentes fuen ON  bf.origen = fuen.id  WHERE bf.id_proyect = '" . $_POST["cod"] . "' ";
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Financia = "<thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Origen de la Financiaci&oacute;n\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Descripción\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Valor\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>" . "   <tbody >\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Origen de la Financiaci&oacute;n\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Valor\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>" . "   <tbody >\n";
 
     $contFinancia = 0;
     $TotFinancia = 0;
@@ -2254,10 +2249,9 @@ FROM
             $valor = '$ ' . number_format($fila["valor"], 2, ",", ".");
             $TotFinancia = $TotFinancia + $fila["valor"];
             $Tab_Financia .= "<tr class='selected' id='filaFinancia" . $contFinancia . "' ><td>" . $contFinancia . "</td>";
-            $Tab_Financia .= "<td>" . $fila["origen"] . "</td>";
-            $Tab_Financia .= "<td>" . $fila["descripcion"] . "</td>";
+            $Tab_Financia .= "<td>" . $fila["nombre"] . "</td>";
             $Tab_Financia .= "<td>" . $valor . "</td>";
-            $Tab_Financia .= "<td><input type='hidden' id='idFinancia" . $contFinancia . "' name='terce' value='" . $fila["origen"] . "//" . $fila["valor"] . "//" . $fila["descripcion"] . "' /><a onclick=\"$.QuitarFinancia('filaFinancia" . $contFinancia . "//" . $valor . "')\" class=\"btn default btn-xs red\">" . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
+            $Tab_Financia .= "<td><input type='hidden' id='idFinancia" . $contFinancia . "' name='terce' value='" . $fila["origen"] . "//" . $fila["valor"] . "' /><a onclick=\"$.QuitarFinancia('filaFinancia" . $contFinancia . "//" .  $fila["valor"] . "')\" class=\"btn default btn-xs red\">" . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
         }
     }
     $Tab_Financia .= "</tbody><tfoot>
@@ -2268,30 +2262,22 @@ FROM
   </tfoot>";
     $myDat->Tab_Financia = $Tab_Financia;
     $myDat->contFinancia = $contFinancia;
-    $myDat->TotFinancia = round($TotFinancia, 2);
+    $myDat->TotFinancia = $TotFinancia;
 
 
-///presupuesto
+    ///presupuesto
     $consulta = "SELECT * FROM \n" .
-            "  banco_proyec_presupuesto  \n" .
-            "WHERE id_proyect = '" . $_POST["cod"] . "' ";
+        "  banco_proyec_presupuesto  \n" .
+        "WHERE id_proyect = '" . $_POST["cod"] . "' ";
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Presupuesto = "<thead>
                     <tr>
-                        <th rowspan='2' style='vertical-align: middle; text-align:center;'>#</th>
-                        <th rowspan='2' style='vertical-align: middle; text-align:center;'><i class='fa fa-angle-right'></i>Descripción</th>
-                        <th rowspan='2' style='vertical-align: middle; text-align:center;'><i class='fa fa-angle-right'></i>Cantidad, Item</th>
-                        <th rowspan='2' style='vertical-align: middle; text-align:center;'><i class='fa fa-angle-right'></i>Unidad<br>de medida</th>
-                        <th colspan='2' style='vertical-align: middle; text-align:center;'></i>Valor,Proyecto ($ miles corrientes)</th>
-                        <th rowspan='2' style='vertical-align: middle; text-align:center;'><i class='fa fa-angle-right'></i>Accion</th>
+                    <th style='vertical-align: middle; text-align:center;'>#</th>
+                    <th style='vertical-align: middle; text-align:left;'>Descripción</th>
+                    <th style='vertical-align: middle; text-align:left;'>Valor</th>
+                    <th style='vertical-align: middle; text-align:left;'>Accion</th>
                     </tr>
-                    <tr>
-
-                    <td><i class='fa fa-angle-right'></i>Vigencia Actual</td>
-                    <td> <i class='fa fa-angle-right'></i>Total</td>
-
-                </tr>
             </thead><tbody >\n";
 
     $contPresupuesto = 0;
@@ -2300,21 +2286,16 @@ FROM
     if (mysqli_num_rows($resultado1) > 0) {
         while ($fila = mysqli_fetch_array($resultado1)) {
             $contPresupuesto++;
-            $TotVige = $TotVige + $fila["val_vi"];
             $Total = $Total + $fila["total"];
             $Tab_Presupuesto .= "<tr class='selected' id='filaPresup" . $contPresupuesto . "' ><td>" . $contPresupuesto . "</td>";
             $Tab_Presupuesto .= "<td>" . $fila["desc"] . "</td>";
-            $Tab_Presupuesto .= "<td>" . $fila["cantidad"] . "</td>";
-            $Tab_Presupuesto .= "<td>" . $fila["unid_med"] . "</td>";
-            $Tab_Presupuesto .= "<td>$ " . number_format($fila["val_vi"], 2, ",", ".") . "</td>";
             $Tab_Presupuesto .= "<td>$ " . number_format($fila["total"], 2, ",", ".") . "</td>";
-            $Tab_Presupuesto .= "<td><input type='hidden' id='idPresup" . $contPresupuesto . "' name='terce' value='" . $fila["desc"] . "//" . $fila["cantidad"] . "//" . $fila["unid_med"] . "//" . $fila["val_vi"] . "//" . $fila["total"] . "' /><a onclick=\"$.QuitarPresup('filaPresup" . $contPresupuesto . "//" . $fila["val_vi"] . "//" . $fila["total"] . "')\" class=\"btn default btn-xs red\">" . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
+            $Tab_Presupuesto .= "<td><input type='hidden' id='idPresup" . $contPresupuesto . "' name='terce' value='" . $fila["desc"] . "//" . $fila["total"] . "' /><a onclick=\"$.QuitarPresup('filaPresup" . $contPresupuesto . "//" . $fila["total"] . "')\" class=\"btn default btn-xs red\">" . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
         }
     }
     $Tab_Presupuesto .= "</tbody><tfoot>
     <tr>
-        <th colspan='4' style='text-align: right;'>Total:</th>
-        <th colspan='1'><label id='gtotalPresVigAct' style='font-weight: bold;'>$ " . number_format($TotVige, 2, ",", ".") . "</label></th>
+        <th colspan='2' style='text-align: right;'>Total Proyecto:</th>
         <th colspan='1'><label id='gtotalPresTota' style='font-weight: bold;'>$ " . number_format($Total, 2, ",", ".") . "</label></th>
     </tr>
   </tfoot>";
@@ -2322,40 +2303,39 @@ FROM
 
     $myDat->Tab_Presupuesto = $Tab_Presupuesto;
     $myDat->contPresupuesto = $contPresupuesto;
-    $myDat->TotVige = $TotVige;
     $myDat->Total = $Total;
 
 
-////ingresos
+    ////ingresos
 
     $consulta = "SELECT * FROM\n" .
-            "  banco_proyec_ingresos  \n" .
-            "WHERE id_proyect = '" . $_POST["cod"] . "' ";
+        "  banco_proyec_ingresos  \n" .
+        "WHERE id_proyect = '" . $_POST["cod"] . "' ";
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Ingresos = "<thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Descripci&oacute;n\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Cantidad\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Valor Unidad\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Total\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody >\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Descripci&oacute;n\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Cantidad\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Valor Unidad\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Total\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody >\n";
 
     $contIngresos = 0;
     $total = 0;
@@ -2369,7 +2349,7 @@ FROM
             $Tab_Ingresos .= "<td>" . number_format($fila["valor"], 2, ",", ".") . "</td>";
             $Tab_Ingresos .= "<td>$ " . $total . "</td>";
             $Tab_Ingresos .= "<td><input type='hidden' id='idIngPre" . $contIngresos . "' name='terce' value='" . $fila["desc"] . "//" . $fila["cantidad"] . "//" . $fila["valor"] . "' /><a onclick=\"$.QuitarFinancia('filaIngPres" . $contIngresos . "')\" class=\"btn default btn-xs red\">"
-                    . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
+                . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
         }
     }
     $Tab_Ingresos .= "</tbody>";
@@ -2377,30 +2357,30 @@ FROM
     $myDat->contIngresos = $contIngresos;
 
 
-////ANEXOS
+    ////ANEXOS
 
     $consulta = "SELECT * FROM\n" .
-            "  banco_proyec_anexos  \n" .
-            "WHERE id_proyect = '" . $_POST["cod"] . "' ";
+        "  banco_proyec_anexos  \n" .
+        "WHERE id_proyect = '" . $_POST["cod"] . "' ";
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Anexos = "<thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Descripci&oacute;n\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Nombre Del Archivo\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody >\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Descripci&oacute;n\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Nombre Del Archivo\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody >\n";
 
     $contAnexos = 0;
 
@@ -2411,9 +2391,9 @@ FROM
             $Tab_Anexos .= "<td>" . $fila["desc"] . "</td>";
             $Tab_Anexos .= "<td>" . $fila["nombre_arch"] . "</td>";
             $Tab_Anexos .= "<td><a href='" . "../Proyecto/AnexosProyecto/" . $_SESSION['ses_complog'] . "/" . $cod_proyect . "/" . $fila["src_arch"] . "' target='_blank' class=\"btn default btn-xs blue\">"
-                    . "<i class=\"fa fa-search\"></i> Ver</a>";
+                . "<i class=\"fa fa-search\"></i> Ver</a>";
             $Tab_Anexos .= "<input type='hidden' id='idAnexo" . $contAnexos . "' name='idAnexo' value='" . $fila["desc"] . "///" . $fila["nombre_arch"] . "///" . $fila["src_arch"] . "' /><a onclick=\"$.QuitarAnexo('filaAnexo" . $contAnexos . "')\" class=\"btn default btn-xs red\">"
-                    . "<i class=\"fa fa-trash-o\"></i> Quitar</a></td></tr>";
+                . "<i class=\"fa fa-trash-o\"></i> Quitar</a></td></tr>";
         }
     }
     $Tab_Anexos .= "</tbody>";
@@ -2422,7 +2402,7 @@ FROM
 
 
 
-/// localizacion
+    /// localizacion
     $consulta = "SELECT
  dep.COD_DPTO coddep,
   CONCAT(dep.COD_DPTO,' - ',dep.NOM_DPTO) dedep,
@@ -2439,33 +2419,33 @@ FROM
     ON ubi.muni_ubic=mun.COD_MUNI
     LEFT JOIN " . $_SESSION['ses_BDBase'] . ".corregi corr
     ON ubi.corr_ubic=corr.COD_CORREGI" .
-            "  WHERE proyect_ubi= '" . $_POST["cod"] . "' ";
+        "  WHERE proyect_ubi= '" . $_POST["cod"] . "' ";
 
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Locali = " <thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Departamento\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Municipio\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Corregimiento\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Otra Ubicación\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody id='tb_Body_Loca' >\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Departamento\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Municipio\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Corregimiento\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Otra Ubicación\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody id='tb_Body_Loca' >\n";
 
     $contLocal = 0;
     if (mysqli_num_rows($resultado1) > 0) {
@@ -2477,42 +2457,42 @@ FROM
             $Tab_Locali .= "<td>" . $fila["decorr"] . "</td>";
             $Tab_Locali .= "<td>" . $fila["otrub"] . "</td>";
             $Tab_Locali .= "<td><input type='hidden' id='Loca" . $contLocal . "' "
-                    . "name='terce' value='" . $fila["coddep"] . "//" . $fila["codmun"] . "//" . $fila["codcorre"] . "//" . $fila["otrub"] . "//" . $fila["lat"] . "//" . $fila["longi"] . "' />"
-                    . "<a onclick=\"$.QuitarLocal('filaLoca" . $contLocal . "')\" class=\"btn default btn-xs red\"><i class=\"fa fa-trash-o\"></i> Borrar</a>"
-                    . "<a onclick=\"$.VerLoca('" . $fila["lat"] . "//" . $fila["longi"] . "')\" class=\"btn default btn-xs blue\"><i class=\"fa fa-map-marker\"></i> Mostrar</a>"
-                    . "</td></tr>";
+                . "name='terce' value='" . $fila["coddep"] . "//" . $fila["codmun"] . "//" . $fila["codcorre"] . "//" . $fila["otrub"] . "//" . $fila["lat"] . "//" . $fila["longi"] . "' />"
+                . "<a onclick=\"$.QuitarLocal('filaLoca" . $contLocal . "')\" class=\"btn default btn-xs red\"><i class=\"fa fa-trash-o\"></i> Borrar</a>"
+                . "<a onclick=\"$.VerLoca('" . $fila["lat"] . "//" . $fila["longi"] . "')\" class=\"btn default btn-xs blue\"><i class=\"fa fa-map-marker\"></i> Mostrar</a>"
+                . "</td></tr>";
         }
     }
     $Tab_Locali .= "</tbody>";
     $myDat->Tab_Locali = $Tab_Locali;
     $myDat->contLocal = $contLocal;
 
-//galeria de imagenes
+    //galeria de imagenes
 
     $consulta = "SELECT * FROM proyecto_galeria WHERE proyect_galeria= '" . $_POST["cod"] . "' ";
 
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Img = " <thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Nombre\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i>  Imagenes de\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i>  Fecha\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody id='tb_Body_Loca' >\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Nombre\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i>  Imagenes de\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i>  Fecha\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody id='tb_Body_Loca' >\n";
 
     $contImg = 0;
     if (mysqli_num_rows($resultado1) > 0) {
@@ -2523,48 +2503,48 @@ FROM
             $Tab_Img .= "<td>" . $fila["tip_galeria"] . "</td>";
             $Tab_Img .= "<td>" . $fila["fecha"] . "</td>";
             $Tab_Img .= "<td><input type='hidden' id='idImg" . $contImg . "' "
-                    . "name='terce' value='" . $fila["tip_galeria"] . "//" . $fila["img_galeria"] . "//" . $fila["formato_galeria"] . "//" . $fila["fecha"] . "' />"
-                    . "<a onclick=\"$.QuitarImg('filaImg" . $contImg . "')\" class=\"btn default btn-xs red\"><i class=\"fa fa-trash-o\"></i> Quitar</a>"
-                    . "<a onclick=\"$.VerImg('../Proyecto/GaleriaProyecto/" . $_SESSION['ses_complog'] . "/" . $cod_proyect . "/" . $fila["img_galeria"] . "*" . $fila["formato_galeria"] . "')\" class=\"btn default btn-xs blue\"><i class=\"fa fa-search\"></i> Ver</a>"
-                    . "</td></tr>";
+                . "name='terce' value='" . $fila["tip_galeria"] . "//" . $fila["img_galeria"] . "//" . $fila["formato_galeria"] . "//" . $fila["fecha"] . "' />"
+                . "<a onclick=\"$.QuitarImg('filaImg" . $contImg . "')\" class=\"btn default btn-xs red\"><i class=\"fa fa-trash-o\"></i> Quitar</a>"
+                . "<a onclick=\"$.VerImg('../Proyecto/GaleriaProyecto/" . $_SESSION['ses_complog'] . "/" . $cod_proyect . "/" . $fila["img_galeria"] . "*" . $fila["formato_galeria"] . "')\" class=\"btn default btn-xs blue\"><i class=\"fa fa-search\"></i> Ver</a>"
+                . "</td></tr>";
         }
     }
     $Tab_Img .= "</tbody>";
     $myDat->Tab_Img = $Tab_Img;
     $myDat->contImg = $contImg;
 
-///metas
+    ///metas
 
     $consulta = "SELECT * FROM proyect_metas where cod_proy='" . $_POST["cod"] . "'";
-//    echo $consulta;
+    //    echo $consulta;
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Meta = "<thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Código\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Nombre de la Meta \n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Meta Generada \n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody id='tb_Body_Meta'>\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Código\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Nombre de la Meta \n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Meta Generada \n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody id='tb_Body_Meta'>\n";
 
     $contMeta = 0;
 
     if (mysqli_num_rows($resultado1) > 0) {
         while ($fila = mysqli_fetch_array($resultado1)) {
-            $contMeta ++;
+            $contMeta++;
             $Tab_Meta .= "<tr class=\"selected\" id='filaMeta" . $contMeta . "' ><td>" . $contMeta . "</td>";
             $Tab_Meta .= "<td>" . $fila["cod_met"] . "</td>";
             $Tab_Meta .= "<td>" . $fila["desc_met"] . "</td>";
@@ -2578,47 +2558,47 @@ FROM
     $myDat->contMeta = $contMeta;
 
 
-///metas producto
+    ///metas producto
 
     $consulta = "SELECT * FROM proyect_metasproducto where cod_proy='" . $_POST["cod"] . "'";
-//    echo $consulta;
+    //    echo $consulta;
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_MetaP = "<thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Código\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Nombre de la Meta \n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Objetivo de la Meta \n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Meta Generada \n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody id='tb_Body_MetaP'>\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Código\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Nombre de la Meta \n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Objetivo de la Meta \n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Meta Generada \n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody id='tb_Body_MetaP'>\n";
 
     $contMetaP = 0;
 
     if (mysqli_num_rows($resultado1) > 0) {
         while ($fila = mysqli_fetch_array($resultado1)) {
-            $contMeta ++;
+            $contMeta++;
             $Tab_MetaP .= "<tr class=\"selected\" id='filaMetaP" . $contMeta . "' ><td>" . $contMeta . "</td>";
             $Tab_MetaP .= "<td>" . $fila["cod_met"] . "</td>";
             $Tab_MetaP .= "<td>" . $fila["desc_met"] . "</td>";
             $Tab_MetaP .= "<td>" . $fila["met_objetivo"] . "</td>";
             $Tab_MetaP .= "<td>" . $fila["met_generada"] . "</td>";
-            $Tab_MetaP .= "<td><input type='hidden' id='idMetasP" . $contMeta . "' " . "name='actividades' value='" . $fila["id_meta"] . "//" . $fila["cod_met"] . "//" . $fila["desc_met"]. "//" . $fila["met_objetivo"]. "//" . $fila["met_generada"] . "' /><a onclick=\"$.QuitarMetaP('filaMetaP" . $contMeta . "')\" class=\"btn default btn-xs red\">" . "<i class=\"fa fa-trash-o\"></i> Quitar</a></td></tr>";
+            $Tab_MetaP .= "<td><input type='hidden' id='idMetasP" . $contMeta . "' " . "name='actividades' value='" . $fila["id_meta"] . "//" . $fila["cod_met"] . "//" . $fila["desc_met"] . "//" . $fila["met_objetivo"] . "//" . $fila["met_generada"] . "' /><a onclick=\"$.QuitarMetaP('filaMetaP" . $contMeta . "')\" class=\"btn default btn-xs red\">" . "<i class=\"fa fa-trash-o\"></i> Quitar</a></td></tr>";
         }
     }
 
@@ -2627,32 +2607,32 @@ FROM
     $myDat->contMetaP = $contMetaP;
 
 
-///usuarios
+    ///usuarios
 
     $consulta = "SELECT upr.usuario idu, usu.cue_nombres nom FROM usu_proyect upr LEFT JOIN " . $_SESSION['ses_BDBase'] . ".usuarios usu ON upr.usuario=usu.id_usuario
 WHERE upr.proyect='" . $_POST["cod"] . "'";
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Usu = "<thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Nombre de Usuario\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody id='tb_Body_Usuarios'>\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Nombre de Usuario\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody id='tb_Body_Usuarios'>\n";
 
     $contUsu = 0;
 
     if (mysqli_num_rows($resultado1) > 0) {
         while ($fila = mysqli_fetch_array($resultado1)) {
-            $contUsu ++;
+            $contUsu++;
             $Tab_Usu .= "<tr class=\"selected\" id='filaUsu" . $contUsu . "' ><td>" . $contUsu . "</td>";
             $Tab_Usu .= "<td>" . $fila["nom"] . "</td>";
             $Tab_Usu .= "<td><input type='hidden' id='Usu" . $contUsu . "' " . "name='actividades' value='" . $fila["idu"] . "' /><a onclick=\"$.QuitarUsu('filaUsu" . $contUsu . "')\" class=\"btn default btn-xs red\">" . "<i class=\"fa fa-trash-o\"></i> Quitar</a></td></tr>";
@@ -2670,7 +2650,7 @@ WHERE upr.proyect='" . $_POST["cod"] . "'";
     $myDat = new stdClass();
 
     $consulta = "select * from  contratos where id_contrato='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -2718,25 +2698,25 @@ WHERE upr.proyect='" . $_POST["cod"] . "'";
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Img = " <thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Nombre\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i>  Imagenes de\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i>  Fecha\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody id='tb_Body_Loca' >\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Nombre\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i>  Imagenes de\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i>  Fecha\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody id='tb_Body_Loca' >\n";
 
     $contImg = 0;
     if (mysqli_num_rows($resultado1) > 0) {
@@ -2747,10 +2727,10 @@ WHERE upr.proyect='" . $_POST["cod"] . "'";
             $Tab_Img .= "<td>" . $fila["tip_galeria"] . "</td>";
             $Tab_Img .= "<td>" . $fila["fecha"] . "</td>";
             $Tab_Img .= "<td><input type='hidden' id='idImg" . $contImg . "' "
-                    . "name='terce' value='" . $fila["tip_galeria"] . "//" . $fila["img_galeria"] . "//" . $fila["formato_galeria"] . "//" . $fila["fecha"] . "' />"
-                    . "<a onclick=\"$.QuitarImg('filaImg" . $contImg . "')\" class=\"btn default btn-xs red\"><i class=\"fa fa-trash-o\"></i> Borrar</a>"
-                    . "<a onclick=\"$.VerImg('../Proyecto/Galeria/" . $_SESSION['ses_complog'] . "/" . $num_contrato . "/" . $fila["img_galeria"] . "*" . $fila["formato_galeria"] . "')\" class=\"btn default btn-xs blue\"><i class=\"fa fa-search\"></i> Ver</a>"
-                    . "</td></tr>";
+                . "name='terce' value='" . $fila["tip_galeria"] . "//" . $fila["img_galeria"] . "//" . $fila["formato_galeria"] . "//" . $fila["fecha"] . "' />"
+                . "<a onclick=\"$.QuitarImg('filaImg" . $contImg . "')\" class=\"btn default btn-xs red\"><i class=\"fa fa-trash-o\"></i> Borrar</a>"
+                . "<a onclick=\"$.VerImg('../Proyecto/Galeria/" . $_SESSION['ses_complog'] . "/" . $num_contrato . "/" . $fila["img_galeria"] . "*" . $fila["formato_galeria"] . "')\" class=\"btn default btn-xs blue\"><i class=\"fa fa-search\"></i> Ver</a>"
+                . "</td></tr>";
         }
     }
     $Tab_Img .= "</tbody>";
@@ -2780,28 +2760,28 @@ WHERE upr.proyect='" . $_POST["cod"] . "'";
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Loca = " <thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Departamanto\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i>  Municipio\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i>  Corregimiento\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i>  Otra Ubicación \n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acción\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody id='tb_Body_Loca' >\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Departamanto\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i>  Municipio\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i>  Corregimiento\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i>  Otra Ubicación \n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acción\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody id='tb_Body_Loca' >\n";
 
     $contUbi = 0;
     if (mysqli_num_rows($resultado1) > 0) {
@@ -2813,10 +2793,10 @@ WHERE upr.proyect='" . $_POST["cod"] . "'";
             $Tab_Loca .= "<td>" . $fila["correg"] . "</td>";
             $Tab_Loca .= "<td>" . $fila["otrub"] . "</td>";
             $Tab_Loca .= "<td><input type='hidden' id='Loca" . $contUbi . "' "
-                    . "name='Loca' value='" . $fila["coddep"] . "//" . $fila["codmuni"] . "//" . $fila["codcorr"] . "//" . $fila["otrub"] . "//" . $fila["lat"] . "//" . $fila["lon"] . "' />"
-                    . "<a onclick=\"$.QuitarLocal('filaLoca" . $contUbi . "')\" class=\"btn default btn-xs red\"><i class=\"fa fa-trash-o\"></i> Borrar</a>"
-                    . "<a onclick=\"$.VerLoca('" . $fila["lat"] . "//" . $fila["lon"] . "')\" class=\"btn default btn-xs blue\"><i class=\"fa fa-map-marker\"></i> Mostrar</a>"
-                    . "</td></tr>";
+                . "name='Loca' value='" . $fila["coddep"] . "//" . $fila["codmuni"] . "//" . $fila["codcorr"] . "//" . $fila["otrub"] . "//" . $fila["lat"] . "//" . $fila["lon"] . "' />"
+                . "<a onclick=\"$.QuitarLocal('filaLoca" . $contUbi . "')\" class=\"btn default btn-xs red\"><i class=\"fa fa-trash-o\"></i> Borrar</a>"
+                . "<a onclick=\"$.VerLoca('" . $fila["lat"] . "//" . $fila["lon"] . "')\" class=\"btn default btn-xs blue\"><i class=\"fa fa-map-marker\"></i> Mostrar</a>"
+                . "</td></tr>";
         }
     }
     $Tab_Loca .= "</tbody>";
@@ -2830,7 +2810,7 @@ WHERE upr.proyect='" . $_POST["cod"] . "'";
     $myDat = new stdClass();
 
     $consulta = "select * from  contratos where id_contrato='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -2872,7 +2852,7 @@ WHERE upr.proyect='" . $_POST["cod"] . "'";
         $j = 1;
         for ($i = 0; $i < $tamsrc; $i++) {
             $evid2 .= "<a href='" . $parsrc[$i] . "' style='padding-right:5px;' target='_blank' class=\"btn default btn-xs blue\">"
-                    . "<i class=\"fa fa-search\"></i> Evidencia " . $j . "</a>";
+                . "<i class=\"fa fa-search\"></i> Evidencia " . $j . "</a>";
             $j++;
         }
     }
@@ -2889,7 +2869,7 @@ WHERE upr.proyect='" . $_POST["cod"] . "'";
     $myDat = new stdClass();
 
     $consulta = "select * from  contratos_expres where id_contrato='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -2930,7 +2910,7 @@ WHERE upr.proyect='" . $_POST["cod"] . "'";
     $myDat = new stdClass();
 
     $consulta = "select * from  proyectos_expres where id='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -2968,7 +2948,7 @@ WHERE upr.proyect='" . $_POST["cod"] . "'";
     contratos
   GROUP BY num_contrato)
 ORDER BY id_contrato";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -3001,45 +2981,45 @@ ORDER BY id_contrato";
     }
 
 
-//    $consulta = "SELECT * FROM contrato_galeria WHERE contr_galeria= '" . $_POST["cod"] . "' ";
-//
-//    $resultado1 = mysqli_query($link,$consulta);
-//
-//    $Tab_Img = " <thead>\n" .
-//            "      <tr>\n" .
-//            "          <td>\n" .
-//            "              <i class='fa fa-angle-right'></i> #\n" .
-//            "          </td>\n" .
-//            "          <td>\n" .
-//            "              <i class='fa fa-angle-right'></i> Nombre\n" .
-//            "          </td>\n" .
-//            "          <td>\n" .
-//            "              <i class='fa fa-angle-right'></i>  Imagenes de\n" .
-//            "          </td>\n" .
-//            "          <td>\n" .
-//            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-//            "          </td>\n" .
-//            "      </tr>\n" .
-//            "  </thead>"
-//            . "   <tbody id='tb_Body_Loca' >\n";
-//
-//    $contImg = 0;
-//    if (mysqli_num_rows($resultado1) > 0) {
-//        while ($fila = mysqli_fetch_array($resultado1)) {
-//            $contImg++;
-//            $Tab_Img .= "<tr class='selected' id='filaImg" . $contImg . "' ><td>" . $contImg . "</td>";
-//            $Tab_Img .= "<td>" . $fila["img_galeria"] . "</td>";
-//            $Tab_Img .= "<td>" . $fila["tip_galeria"] . "</td>";
-//            $Tab_Img .= "<td><input type='hidden' id='idImg" . $contImg . "' "
-//                    . "name='terce' value='" . $fila["tip_galeria"] . "//" . $fila["img_galeria"] . "//" . $fila["formato_galeria"] . "' />"
-//                    . "<a onclick=\"$.QuitarImg('filaImg" . $contLocal . "')\" class=\"btn default btn-xs red\"><i class=\"fa fa-trash-o\"></i> Borrar</a>"
-//                    . "<a onclick=\"$.VerImg('Galeria/" . $_SESSION['ses_complog'] . "/" . $num_contrato . "/" . $fila["img_galeria"] . "*" . $fila["formato_galeria"] . "')\" class=\"btn default btn-xs blue\"><i class=\"fa fa-search\"></i> Ver</a>"
-//                    . "</td></tr>";
-//        }
-//    }
-//    $Tab_Img .= "</tbody>";
-//    $myDat->Tab_Img = $Tab_Img;
-//    $myDat->contImg = $contImg;
+    //    $consulta = "SELECT * FROM contrato_galeria WHERE contr_galeria= '" . $_POST["cod"] . "' ";
+    //
+    //    $resultado1 = mysqli_query($link,$consulta);
+    //
+    //    $Tab_Img = " <thead>\n" .
+    //            "      <tr>\n" .
+    //            "          <td>\n" .
+    //            "              <i class='fa fa-angle-right'></i> #\n" .
+    //            "          </td>\n" .
+    //            "          <td>\n" .
+    //            "              <i class='fa fa-angle-right'></i> Nombre\n" .
+    //            "          </td>\n" .
+    //            "          <td>\n" .
+    //            "              <i class='fa fa-angle-right'></i>  Imagenes de\n" .
+    //            "          </td>\n" .
+    //            "          <td>\n" .
+    //            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+    //            "          </td>\n" .
+    //            "      </tr>\n" .
+    //            "  </thead>"
+    //            . "   <tbody id='tb_Body_Loca' >\n";
+    //
+    //    $contImg = 0;
+    //    if (mysqli_num_rows($resultado1) > 0) {
+    //        while ($fila = mysqli_fetch_array($resultado1)) {
+    //            $contImg++;
+    //            $Tab_Img .= "<tr class='selected' id='filaImg" . $contImg . "' ><td>" . $contImg . "</td>";
+    //            $Tab_Img .= "<td>" . $fila["img_galeria"] . "</td>";
+    //            $Tab_Img .= "<td>" . $fila["tip_galeria"] . "</td>";
+    //            $Tab_Img .= "<td><input type='hidden' id='idImg" . $contImg . "' "
+    //                    . "name='terce' value='" . $fila["tip_galeria"] . "//" . $fila["img_galeria"] . "//" . $fila["formato_galeria"] . "' />"
+    //                    . "<a onclick=\"$.QuitarImg('filaImg" . $contLocal . "')\" class=\"btn default btn-xs red\"><i class=\"fa fa-trash-o\"></i> Borrar</a>"
+    //                    . "<a onclick=\"$.VerImg('Galeria/" . $_SESSION['ses_complog'] . "/" . $num_contrato . "/" . $fila["img_galeria"] . "*" . $fila["formato_galeria"] . "')\" class=\"btn default btn-xs blue\"><i class=\"fa fa-search\"></i> Ver</a>"
+    //                    . "</td></tr>";
+    //        }
+    //    }
+    //    $Tab_Img .= "</tbody>";
+    //    $myDat->Tab_Img = $Tab_Img;
+    //    $myDat->contImg = $contImg;
 
 
     $myJSONDat = json_encode($myDat);
@@ -3049,7 +3029,7 @@ ORDER BY id_contrato";
     $myDat = new stdClass();
 
     $consulta = "select * from  proyectos where cod_proyect='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -3068,22 +3048,22 @@ ORDER BY id_contrato";
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Cont = " <thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Código\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i>  Objeto\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Tipologia\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody id='tb_Body_Contratos' >\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Código\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i>  Objeto\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Tipologia\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody id='tb_Body_Contratos' >\n";
 
     $contCont = 0;
     if (mysqli_num_rows($resultado1) > 0) {
@@ -3103,25 +3083,25 @@ ORDER BY id_contrato";
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_MetaT = " <thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Descripción Meta\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i>  Unidad Medida\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Base\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Meta\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody id='tb_Body_Contratos' >\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Descripción Meta\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i>  Unidad Medida\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Base\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Meta\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody id='tb_Body_Contratos' >\n";
 
     $contCont = 0;
     if (mysqli_num_rows($resultado1) > 0) {
@@ -3142,22 +3122,22 @@ ORDER BY id_contrato";
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_MetaP = " <thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Descripción Meta\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i>  Meta\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Meta Generada\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody id='tb_Body_Contratos' >\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Descripción Meta\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i>  Meta\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Meta Generada\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody id='tb_Body_Contratos' >\n";
 
     $contCont = 0;
     if (mysqli_num_rows($resultado1) > 0) {
@@ -3181,7 +3161,7 @@ ORDER BY id_contrato";
     $idCont = "";
 
     $consulta = "select * from  eval_contratista where id_evaluacion='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -3379,7 +3359,7 @@ ORDER BY id_contrato";
             $CadClasif .= "<td>" . $fila["cod_clasif"] . "</td>";
             $CadClasif .= "<td>" . $fila["desc"] . "</td>";
             $CadClasif .= "<td><input type='hidden' id='idClasif" . $cont . "' name='idIndi' value='" . $fila["indicador"] . "' /><a onclick=\"$.QuitarClasif('" . $fila["id"] . "')\" class=\"btn default btn-xs red\">"
-                    . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
+                . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
         }
     }
     $CadClasif .= "</tbody>";
@@ -3422,7 +3402,7 @@ ORDER BY id_contrato";
             $Procesos .= "<td>" . $fila["descripcion"] . "</td>";
             $Procesos .= "<td>" . $fila["clase"] . "</td>";
             $Procesos .= "<td><a onclick=\"$.QuitarProceso('" . $Cod . "')\" class=\"btn default btn-xs red\">"
-                    . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
+                . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
         }
     }
     $Procesos .= "</tbody>";
@@ -3435,7 +3415,7 @@ ORDER BY id_contrato";
     $myDat = new stdClass();
 
     $consulta = "select * from dependencias where iddependencias='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -3449,12 +3429,32 @@ ORDER BY id_contrato";
 
     $myJSONDat = json_encode($myDat);
     echo $myJSONDat;
+} else if ($_POST['ope'] == "BusqEditPresupuesto") {
+
+    $myDat = new stdClass();
+
+    $consulta = "select * from presupuesto_total where id='" . $_POST["cod"] . "'";
+    //echo $consulta;
+    $resultado = mysqli_query($link, $consulta);
+    if (mysqli_num_rows($resultado) > 0) {
+        while ($fila = mysqli_fetch_array($resultado)) {
+            $myDat->fuente = $fila["fuente"];
+            $myDat->valor = $fila["valor"];
+            $myDat->fecha_recepcion = $fila["fecha_recepcion"];
+            $myDat->periodo_ini = $fila["periodo_ini"];
+            $myDat->periodo_fin = $fila["periodo_fin"];
+            $myDat->observacion = $fila["observacion"];
+        }
+    }
+
+    $myJSONDat = json_encode($myDat);
+    echo $myJSONDat;
 } else if ($_POST['ope'] == "BusqEditfuenteInf") {
 
     $myDat = new stdClass();
 
     $consulta = "select * from fuente_informacion where id='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -3539,32 +3539,32 @@ ORDER BY id_contrato";
     $myDat = new stdClass();
 
 
-//galeria de imagenes
+    //galeria de imagenes
 
     $consulta = "SELECT * FROM proyecto_galeria WHERE proyect_galeria= '" . $_POST["cod"] . "' ";
 
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Img = " <thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Nombre\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i>  Imagenes de\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i>  Fecha\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody id='tb_Body_Loca' >\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Nombre\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i>  Imagenes de\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i>  Fecha\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody id='tb_Body_Loca' >\n";
 
     $contImg = 0;
     if (mysqli_num_rows($resultado1) > 0) {
@@ -3575,10 +3575,10 @@ ORDER BY id_contrato";
             $Tab_Img .= "<td>" . $fila["tip_galeria"] . "</td>";
             $Tab_Img .= "<td>" . $fila["fecha"] . "</td>";
             $Tab_Img .= "<td><input type='hidden' id='idImg" . $contImg . "' "
-                    . "name='terce' value='" . $fila["tip_galeria"] . "//" . $fila["img_galeria"] . "//" . $fila["formato_galeria"] . "//" . $fila["fecha"] . "' />"
-                    . "<a onclick=\"$.QuitarImg('" . $fila["id_galeria"] . "')\" class=\"btn default btn-xs red\"><i class=\"fa fa-trash-o\"></i> Quitar</a>"
-                    . "<a onclick=\"$.VerImg('../Proyecto/GaleriaProyecto/" . $_SESSION['ses_complog'] . "/" . $fila["num_proyect_galeria"] . "/" . $fila["img_galeria"] . "*" . $fila["formato_galeria"] . "')\" class=\"btn default btn-xs blue\"><i class=\"fa fa-search\"></i> Ver</a>"
-                    . "</td></tr>";
+                . "name='terce' value='" . $fila["tip_galeria"] . "//" . $fila["img_galeria"] . "//" . $fila["formato_galeria"] . "//" . $fila["fecha"] . "' />"
+                . "<a onclick=\"$.QuitarImg('" . $fila["id_galeria"] . "')\" class=\"btn default btn-xs red\"><i class=\"fa fa-trash-o\"></i> Quitar</a>"
+                . "<a onclick=\"$.VerImg('../Proyecto/GaleriaProyecto/" . $_SESSION['ses_complog'] . "/" . $fila["num_proyect_galeria"] . "/" . $fila["img_galeria"] . "*" . $fila["formato_galeria"] . "')\" class=\"btn default btn-xs blue\"><i class=\"fa fa-search\"></i> Ver</a>"
+                . "</td></tr>";
         }
     }
     $Tab_Img .= "</tbody>";
@@ -3592,32 +3592,32 @@ ORDER BY id_contrato";
     $myDat = new stdClass();
 
 
-//galeria de imagenes
+    //galeria de imagenes
 
     $consulta = "SELECT * FROM contrato_galeria WHERE num_contrato_galeria= '" . $_POST["cod"] . "' ";
 
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Img = " <thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Nombre\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i>  Imagenes de\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i>  Fecha\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody id='tb_Body_Loca' >\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Nombre\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i>  Imagenes de\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i>  Fecha\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody id='tb_Body_Loca' >\n";
 
     $contImg = 0;
     if (mysqli_num_rows($resultado1) > 0) {
@@ -3628,10 +3628,10 @@ ORDER BY id_contrato";
             $Tab_Img .= "<td>" . $fila["tip_galeria"] . "</td>";
             $Tab_Img .= "<td>" . $fila["fecha"] . "</td>";
             $Tab_Img .= "<td><input type='hidden' id='idImg" . $contImg . "' "
-                    . "name='terce' value='" . $fila["tip_galeria"] . "//" . $fila["img_galeria"] . "//" . $fila["formato_galeria"] . "//" . $fila["fecha"] . "' />"
-                    . "<a onclick=\"$.QuitarImg('" . $fila["id_galeria"] . "')\" class=\"btn default btn-xs red\"><i class=\"fa fa-trash-o\"></i> Quitar</a>"
-                    . "<a onclick=\"$.VerImg('../Proyecto/Galeria/" . $_SESSION['ses_complog'] . "/" . $fila["num_contrato_galeria"] . "/" . $fila["img_galeria"] . "*" . $fila["formato_galeria"] . "')\" class=\"btn default btn-xs blue\"><i class=\"fa fa-search\"></i> Ver</a>"
-                    . "</td></tr>";
+                . "name='terce' value='" . $fila["tip_galeria"] . "//" . $fila["img_galeria"] . "//" . $fila["formato_galeria"] . "//" . $fila["fecha"] . "' />"
+                . "<a onclick=\"$.QuitarImg('" . $fila["id_galeria"] . "')\" class=\"btn default btn-xs red\"><i class=\"fa fa-trash-o\"></i> Quitar</a>"
+                . "<a onclick=\"$.VerImg('../Proyecto/Galeria/" . $_SESSION['ses_complog'] . "/" . $fila["num_contrato_galeria"] . "/" . $fila["img_galeria"] . "*" . $fila["formato_galeria"] . "')\" class=\"btn default btn-xs blue\"><i class=\"fa fa-search\"></i> Ver</a>"
+                . "</td></tr>";
         }
     }
     $Tab_Img .= "</tbody>";
@@ -3645,7 +3645,7 @@ ORDER BY id_contrato";
     $myDat = new stdClass();
 
     $consulta = "select * from contratistas where id_contratis='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -3680,7 +3680,7 @@ ORDER BY id_contrato";
     $clasif = "<option value='NO APLICA'>NO APLICA...</option>";
     $DerFund = "<option value='NO APLICA'>NO APLICA...</option>";
 
-//////////////////////CONSULTAR DEPENDENCIAS
+    //////////////////////CONSULTAR DEPENDENCIAS
     $consulta = "select * from dependencias where estado='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -3689,7 +3689,7 @@ ORDER BY id_contrato";
         }
     }
 
-//////////////////////CONSULTAR FUENTE
+    //////////////////////CONSULTAR FUENTE
     $consulta = "select * from fuente_informacion where estado='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -3697,7 +3697,7 @@ ORDER BY id_contrato";
             $fuente .= "<option value='" . $fila["id"] . "'>" . $fila["nombre"] . "</option>";
         }
     }
-/////////////////////CONSULTAR EJES
+    /////////////////////CONSULTAR EJES
     $consulta = "select * from ejes where ESTADO='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -3705,7 +3705,7 @@ ORDER BY id_contrato";
             $ejes .= "<option value='" . $fila["ID"] . "'>" . $fila["CODIGO"] . " - " . $fila["NOMBRE"] . "</option>";
         }
     }
-/////////////////////CONSULTAR CLASIFICACION INTEGRAL
+    /////////////////////CONSULTAR CLASIFICACION INTEGRAL
     $consulta = "select * from clasif_integral where estado='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -3713,7 +3713,7 @@ ORDER BY id_contrato";
             $clasif .= "<option value='" . $fila["id"] . "'>" . $fila["descripcion"] . "</option>";
         }
     }
-/////////////////////CONSULTAR DERECHO FUNDAMENTAL
+    /////////////////////CONSULTAR DERECHO FUNDAMENTAL
     $consulta = "select * from derecho_fundamental where estado='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -3737,7 +3737,7 @@ ORDER BY id_contrato";
     $Dime = "<option value=' '>Seleccione...</option>";
 
 
-//////////////////////CONSULTAR DIMENSIONES
+    //////////////////////CONSULTAR DIMENSIONES
     $consulta = "select * from dimensiones where estado='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -3757,7 +3757,7 @@ ORDER BY id_contrato";
     $depend = "<option value=' '>Seleccione...</option>";
 
 
-//////////////////////CONSULTAR DEPENDENCIAS
+    //////////////////////CONSULTAR DEPENDENCIAS
     $consulta = "select * from dependencias where estado='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -3793,7 +3793,7 @@ LEFT JOIN proyect_metas proymet
 WHERE IFNULL(proy.secretaria_proyect, '') = '" . $_POST['Secre'] . "'
   AND proy.estado='ACTIVO'  
 GROUP BY id_proyect) AS t GROUP BY estado_proyect";
-//    echo $consulta;
+    //    echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     $rawdata = array(); //creamos un array
     if (mysqli_num_rows($resultado) > 0) {
@@ -3809,7 +3809,7 @@ GROUP BY id_proyect) AS t GROUP BY estado_proyect";
     }
     $myDat->rawdata = $rawdata;
 
-//////////////CONSULTA DE METAS TRAZADORAS    
+    //////////////CONSULTA DE METAS TRAZADORAS    
 
     $consulta = "SELECT 
     proy.id_proyect idproy,  CONCAT(cod_proyect,' - ',nombre_proyect) nombre,  proy.estado_proyect estado
@@ -3820,7 +3820,7 @@ GROUP BY id_proyect) AS t GROUP BY estado_proyect";
      WHERE proy.secretaria_proyect = '" . $_POST['Secre'] . "' AND proy.estado='ACTIVO' GROUP BY idproy
      ORDER BY cod_proy";
 
-//   echo $consulta;
+    //   echo $consulta;
     $RawProyM = array(); //creamos un array
     $RawMet = array(); //creamos un array
     $resultado = mysqli_query($link, $consulta);
@@ -3835,7 +3835,7 @@ GROUP BY id_proyect) AS t GROUP BY estado_proyect";
               ON proy.id_proyect=pm.cod_proy 
             WHERE proy.secretaria_proyect = '" . $_POST['Secre'] . "' AND proy.estado='ACTIVO' AND proy.id_proyect='" . $fila['idproy'] . "'
             ORDER BY cod_proy";
-//            echo $consulta;
+            //            echo $consulta;
             $contMet = 1;
             $resultado2 = mysqli_query($link, $consulta);
             if (mysqli_num_rows($resultado2) > 0) {
@@ -3878,7 +3878,7 @@ FROM
 WHERE IFNULL(proy.secretaria_proyect, '') = '" . $_POST['Secre'] . "' AND estado='ACTIVO'
 GROUP BY codproy 
 ORDER BY nomb DESC";
-//echo $consulta;
+    //echo $consulta;
     $proyect = array();
     $Contrat = array();
 
@@ -3960,7 +3960,7 @@ AND contr.id_contrato IN
        where ideje_metas like '" . $_POST['CbEjes'] . "%' 
          and idcomp_metas like '" . $_POST['CbProg'] . "%'
          and idprog_metas like '" . $_POST['CbSubProg'] . "%'";
-//echo $consulta;
+        //echo $consulta;
         $Cumpl = 0;
         $Totporc = 0;
         $porcApo = 0;
@@ -3970,7 +3970,7 @@ AND contr.id_contrato IN
                 $TotCumpl = 0;
                 $MedMetProy = array();
                 $consulta = "SELECT pm.cod_proy proy, pm.id_meta met, pm.aport_proy aport  "
-                        . "FROM proyect_metas pm LEFT JOIN metas met ON pm.id_meta=met.id_meta WHERE pm.id_meta='" . $fila1['idmet'] . "'";
+                    . "FROM proyect_metas pm LEFT JOIN metas met ON pm.id_meta=met.id_meta WHERE pm.id_meta='" . $fila1['idmet'] . "'";
 
                 $resultado2 = mysqli_query($link, $consulta);
                 if (mysqli_num_rows($resultado2) > 0) {
@@ -3986,10 +3986,10 @@ FROM
       ON med.proy_ori = proy.id_proyect 
     LEFT JOIN secretarias sec 
       ON proy.secretaria_proyect = sec.idsecretarias  WHERE "
-                                . "med.id_meta='" . $fila2['met'] . "' and  med.proy_ori='" . $fila2['proy'] . "' "
-                                . "AND med.id=(SELECT MAX(id) FROM mediindicador where id_meta='" . $fila2['met'] . "' "
-                                . "and  proy_ori='" . $fila2['proy'] . "')";
-//                        echo $consulta;
+                            . "med.id_meta='" . $fila2['met'] . "' and  med.proy_ori='" . $fila2['proy'] . "' "
+                            . "AND med.id=(SELECT MAX(id) FROM mediindicador where id_meta='" . $fila2['met'] . "' "
+                            . "and  proy_ori='" . $fila2['proy'] . "')";
+                        //                        echo $consulta;
                         $resultado3 = mysqli_query($link, $consulta);
                         if (mysqli_num_rows($resultado3) > 0) {
                             while ($fila3 = mysqli_fetch_array($resultado3)) {
@@ -4040,7 +4040,6 @@ FROM
             }
         }
     } else {
-        
     }
 
     $myDat->ResumMetas = $ResumMetas;
@@ -4064,7 +4063,7 @@ FROM
 WHERE proy.estado_proyect = 'En Ejecucion' 
   AND proy.secretaria_proyect LIKE '" . $_POST['Secre'] . "%' GROUP BY idsecr";
 
-//    echo $consulta;
+    //    echo $consulta;
 
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -4125,29 +4124,29 @@ GROUP BY idproy ";
                     $resultado3 = mysqli_query($link, $consulta);
 
                     $Cont .= "<table class='table table-bordered table-hover' style='border: 1; font-size: 9px; padding-top: 10px;'>" .
-                            "<thead>\n" .
-                            "      <tr>\n" .
-                            "          <td>\n" .
-                            "              <b> Número Contrato</b>\n" .
-                            "          </td>\n" .
-                            "          <td>\n" .
-                            "              <b> Objeto del Contrato</b>\n" .
-                            "          </td>\n" .
-                            "          <td>\n" .
-                            "              <b> Contratista</b>\n" .
-                            "          </td>\n" .
-                            "          <td>\n" .
-                            "              <b> Valor Contrato</b>\n" .
-                            "          </td>\n" .
-                            "          <td>\n" .
-                            "              <b> Estado</b>\n" .
-                            "          </td>\n" .
-                            "          <td>\n" .
-                            "              <b> % de Avance</b>\n" .
-                            "          </td>\n" .
-                            "      </tr>\n" .
-                            "  </thead>"
-                            . " <tbody >";
+                        "<thead>\n" .
+                        "      <tr>\n" .
+                        "          <td>\n" .
+                        "              <b> Número Contrato</b>\n" .
+                        "          </td>\n" .
+                        "          <td>\n" .
+                        "              <b> Objeto del Contrato</b>\n" .
+                        "          </td>\n" .
+                        "          <td>\n" .
+                        "              <b> Contratista</b>\n" .
+                        "          </td>\n" .
+                        "          <td>\n" .
+                        "              <b> Valor Contrato</b>\n" .
+                        "          </td>\n" .
+                        "          <td>\n" .
+                        "              <b> Estado</b>\n" .
+                        "          </td>\n" .
+                        "          <td>\n" .
+                        "              <b> % de Avance</b>\n" .
+                        "          </td>\n" .
+                        "      </tr>\n" .
+                        "  </thead>"
+                        . " <tbody >";
 
                     if (mysqli_num_rows($resultado3) > 0) {
                         while ($fila3 = mysqli_fetch_array($resultado3)) {
@@ -4180,7 +4179,7 @@ GROUP BY idproy ";
             $porcinv = ($totalInv * 100) / $totalpre;
 
             $cad .= "DEL PRESUPUESTO ASIGNADO DE $ " . number_format($totalpre, 2, ",", ".") . " A LA " . $fila['dessec'] . " SE HAN "
-                    . "GASTADO UN TOTAL DE $ " . number_format($totalInv, 2, ",", ".") . " QUE EQUIVALE A UN " . round($porcinv, 2) . "% DEL PRESUPUESTO DE LA SECRETARIA.";
+                . "GASTADO UN TOTAL DE $ " . number_format($totalInv, 2, ",", ".") . " QUE EQUIVALE A UN " . round($porcinv, 2) . "% DEL PRESUPUESTO DE LA SECRETARIA.";
         }
     } else {
         $cad .= "  <div class='col-md-12' ><h4>NO EXISTEN PROYECTOS RELACIONADOS A ESTOS PARAMETROS DE BUSQUEDA </h4></div>";
@@ -4195,7 +4194,7 @@ GROUP BY idproy ";
     $myDat = new stdClass();
 
     $cad = "";
-//
+    //
     $consulta = "TRUNCATE TABLE aux_inf_atra_sup";
     mysqli_query($link, $consulta);
 
@@ -4342,29 +4341,29 @@ AND contr.id_contrato IN
                 $resultado3 = mysqli_query($link, $consulta);
 
                 $Cont .= "<table class='table table-bordered table-hover' style='border: 1; font-size: 9px; padding-top: 10px;'>" .
-                        "<thead>\n" .
-                        "      <tr>\n" .
-                        "          <td>\n" .
-                        "              <b> Número Contrato</b>\n" .
-                        "          </td>\n" .
-                        "          <td>\n" .
-                        "              <b> Objeto del Contrato</b>\n" .
-                        "          </td>\n" .
-                        "          <td>\n" .
-                        "              <b> Contratista</b>\n" .
-                        "          </td>\n" .
-                        "          <td>\n" .
-                        "              <b> Valor Contrato</b>\n" .
-                        "          </td>\n" .
-                        "          <td>\n" .
-                        "              <b> % de Avance</b>\n" .
-                        "          </td>\n" .
-                        "          <td>\n" .
-                        "              <b> Justificación</b>\n" .
-                        "          </td>\n" .
-                        "      </tr>\n" .
-                        "  </thead>"
-                        . " <tbody >";
+                    "<thead>\n" .
+                    "      <tr>\n" .
+                    "          <td>\n" .
+                    "              <b> Número Contrato</b>\n" .
+                    "          </td>\n" .
+                    "          <td>\n" .
+                    "              <b> Objeto del Contrato</b>\n" .
+                    "          </td>\n" .
+                    "          <td>\n" .
+                    "              <b> Contratista</b>\n" .
+                    "          </td>\n" .
+                    "          <td>\n" .
+                    "              <b> Valor Contrato</b>\n" .
+                    "          </td>\n" .
+                    "          <td>\n" .
+                    "              <b> % de Avance</b>\n" .
+                    "          </td>\n" .
+                    "          <td>\n" .
+                    "              <b> Justificación</b>\n" .
+                    "          </td>\n" .
+                    "      </tr>\n" .
+                    "  </thead>"
+                    . " <tbody >";
 
 
 
@@ -4440,7 +4439,7 @@ AND contr.id_contrato IN
             $porcinv = ($totalInv * 100) / $totalpre;
 
             $cad .= "<h6 style='font-style: italic;'>LA " . $fila['dsec'] . " POSEE " . $ncontAtr . " CONTRATO ATRASADO(S) Y " . $ncontSus . " SUSPENDIDO(S) LO CUAL REPRESENTAN "
-                    . "EL <b>" . round($porcinv, 2) . "%</b> ($ " . number_format($totalInv, 2, ",", ".") . ") DEL PRESUPUESTO GENERAL ($ " . number_format($totalpre, 2, ",", ".") . ")</h6>";
+                . "EL <b>" . round($porcinv, 2) . "%</b> ($ " . number_format($totalInv, 2, ",", ".") . ") DEL PRESUPUESTO GENERAL ($ " . number_format($totalpre, 2, ",", ".") . ")</h6>";
             unset($RawCon);
             $is++;
         }
@@ -4500,7 +4499,7 @@ WHERE proy.estado_proyect = 'En Ejecucion'
               ON proy.secretaria_proyect = sec.idsecretarias 
           WHERE proy.estado_proyect = 'En Ejecucion' AND proy.secretaria_proyect='" . $fila['idsecr'] . "'
           GROUP BY idproy ";
-//            echo $consulta;
+            //            echo $consulta;
             $totalInv = 0;
             $resultado2 = mysqli_query($link, $consulta);
             if (mysqli_num_rows($resultado2) > 0) {
@@ -4559,7 +4558,7 @@ WHERE proy.estado_proyect = 'En Ejecucion'
                     $porcinv = ($totalInv * 100) / $totalpre;
 
                     $ResInv = "DEL PRESUPUESTO ASIGNADO DE $ " . number_format($totalpre, 2, ",", ".") . " A LA " . $fila['dessec'] . " SE HAN "
-                            . "GASTADO UN TOTAL DE $ " . number_format($totalInv, 2, ",", ".") . " QUE EQUIVALE A UN " . round($porcinv, 2) . "% DEL PRESUPUESTO DE LA SECRETARIA.";
+                        . "GASTADO UN TOTAL DE $ " . number_format($totalInv, 2, ",", ".") . " QUE EQUIVALE A UN " . round($porcinv, 2) . "% DEL PRESUPUESTO DE LA SECRETARIA.";
 
 
                     $RawSec[$is] = array(
@@ -4597,7 +4596,7 @@ FROM
     ON ev.nitcont_evaluacion = cttas.ident_contratis
   WHERE ev.ncont_evaluacion LIKE '" . $_POST['Ncont'] . "%' GROUP BY nomb ORDER BY nomb";
 
-//    echo $consulta;
+    //    echo $consulta;
 
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -4629,7 +4628,7 @@ FROM
              ON proy.secretaria_proyect=sec.idsecretarias
         WHERE ev.nitcont_evaluacion='" . $fila['idctta'] . "' and ev.ncont_evaluacion like '" . $_POST['Ncont'] . "%' AND 
           id_evaluacion IN (SELECT MAX(id_evaluacion) FROM eval_contratista WHERE estado_evaluacion='ACTIVO' AND nitcont_evaluacion = '" . $fila['idctta'] . "' AND ncont_evaluacion LIKE '" . $_POST['Ncont'] . "%')";
-//           echo $consulta2;
+            //           echo $consulta2;
             $totalInv = 0;
             $IdEval = "";
             $resultado2 = mysqli_query($link, $consulta2);
@@ -4640,39 +4639,39 @@ FROM
                     $Clasf = explode(" ", $fila2['clasf']);
                     if ($Clasf[0] == "1") {
                         $consultaF = "SELECT criterio_resul_contprestacion criterio, puntaje_resul_contprestacion punt, "
-                                . "tipocrit_resul_contprestacion tipcrit FROM resul_contprestacion WHERE "
-                                . "cont_resul_contprestacion='" . $fila2['idev'] . "' AND puntaje_resul_contprestacion>=4";
+                            . "tipocrit_resul_contprestacion tipcrit FROM resul_contprestacion WHERE "
+                            . "cont_resul_contprestacion='" . $fila2['idev'] . "' AND puntaje_resul_contprestacion>=4";
                         $consultaD = "SELECT criterio_resul_contprestacion criterio, puntaje_resul_contprestacion punt, "
-                                . "tipocrit_resul_contprestacion tipcrit FROM resul_contprestacion WHERE "
-                                . "cont_resul_contprestacion='" . $fila2['idev'] . "' AND puntaje_resul_contprestacion<3";
+                            . "tipocrit_resul_contprestacion tipcrit FROM resul_contprestacion WHERE "
+                            . "cont_resul_contprestacion='" . $fila2['idev'] . "' AND puntaje_resul_contprestacion<3";
                     } else if ($Clasf[0] == "2") {
                         $consultaF = "SELECT criterio_resulsuministro criterio, puntaje_resulsuministro punt, "
-                                . "tipocrit_resulsuministro tipcrit FROM resul_contsuministro "
-                                . "WHERE cont_resulsuministro='" . $fila2['idev'] . "' AND puntaje_resulsuministro>=4";
+                            . "tipocrit_resulsuministro tipcrit FROM resul_contsuministro "
+                            . "WHERE cont_resulsuministro='" . $fila2['idev'] . "' AND puntaje_resulsuministro>=4";
                         $consultaD = "SELECT criterio_resulsuministro criterio, puntaje_resulsuministro punt, "
-                                . "tipocrit_resulsuministro tipcrit FROM resul_contsuministro "
-                                . "WHERE cont_resulsuministro='" . $fila2['idev'] . "' AND puntaje_resulsuministro<3";
+                            . "tipocrit_resulsuministro tipcrit FROM resul_contsuministro "
+                            . "WHERE cont_resulsuministro='" . $fila2['idev'] . "' AND puntaje_resulsuministro<3";
                     } else if ($Clasf[0] == "3") {
                         $consultaF = "SELECT criterio_resul_contarrendam criterio, puntaje_resul_contarrendam punt, "
-                                . "tipocrit_resul_contarrendam tipcrit FROM resul_contarrendam WHERE "
-                                . "cont_resul_contarrendam='" . $fila2['idev'] . "' AND puntaje_resul_contarrendam>=4";
+                            . "tipocrit_resul_contarrendam tipcrit FROM resul_contarrendam WHERE "
+                            . "cont_resul_contarrendam='" . $fila2['idev'] . "' AND puntaje_resul_contarrendam>=4";
                         $consultaD = "SELECT criterio_resul_contarrendam criterio, puntaje_resul_contarrendam punt, "
-                                . "tipocrit_resul_contarrendam tipcrit FROM resul_contarrendam WHERE "
-                                . "cont_resul_contarrendam='" . $fila2['idev'] . "' AND puntaje_resul_contarrendam<3";
+                            . "tipocrit_resul_contarrendam tipcrit FROM resul_contarrendam WHERE "
+                            . "cont_resul_contarrendam='" . $fila2['idev'] . "' AND puntaje_resul_contarrendam<3";
                     } else if ($Clasf[0] == "4") {
                         $consultaF = "SELECT criterio_resul_contconsultoria criterio, puntaje_resul_contconsultoria punt, "
-                                . "tipocrit_resul_contconsultoria tipcrit FROM resul_contconsultoria WHERE "
-                                . "cont_resul_contconsultoria='" . $fila2['idev'] . "' AND puntaje_resul_contconsultoria>=4";
+                            . "tipocrit_resul_contconsultoria tipcrit FROM resul_contconsultoria WHERE "
+                            . "cont_resul_contconsultoria='" . $fila2['idev'] . "' AND puntaje_resul_contconsultoria>=4";
                         $consultaD = "SELECT criterio_resul_contconsultoria criterio, puntaje_resul_contconsultoria punt, "
-                                . "tipocrit_resul_contconsultoria tipcrit FROM resul_contconsultoria WHERE "
-                                . "cont_resul_contconsultoria='" . $fila2['idev'] . "' AND puntaje_resul_contconsultoria<3";
+                            . "tipocrit_resul_contconsultoria tipcrit FROM resul_contconsultoria WHERE "
+                            . "cont_resul_contconsultoria='" . $fila2['idev'] . "' AND puntaje_resul_contconsultoria<3";
                     } else {
                         $consultaF = "SELECT criterio_resul_contobra criterio, puntaje_resul_contobra punt, "
-                                . "tipocrit_resul_contobra tipcrit FROM resul_contobra WHERE "
-                                . "cont_resul_contobra='" . $fila2['idev'] . "' AND puntaje_resul_contobra>=4";
+                            . "tipocrit_resul_contobra tipcrit FROM resul_contobra WHERE "
+                            . "cont_resul_contobra='" . $fila2['idev'] . "' AND puntaje_resul_contobra>=4";
                         $consultaD = "SELECT criterio_resul_contobra criterio, puntaje_resul_contobra punt, "
-                                . "tipocrit_resul_contobra tipcrit FROM resul_contobra WHERE "
-                                . "cont_resul_contobra='" . $fila2['idev'] . "' AND puntaje_resul_contobra<3";
+                            . "tipocrit_resul_contobra tipcrit FROM resul_contobra WHERE "
+                            . "cont_resul_contobra='" . $fila2['idev'] . "' AND puntaje_resul_contobra<3";
                     }
 
                     //ALMACENAR FORTALEZAS
@@ -4798,7 +4797,7 @@ FROM
     ///ALMACENAR OTRAS EVALUACIONES
     $feval = "";
     $consulta = "SELECT * FROM eval_contratista WHERE estado_evaluacion='ACTIVO' AND id_evaluacion NOT IN('" . $IdEval . "')";
-//    echo $consulta;
+    //    echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -4927,7 +4926,7 @@ WHERE proy.id_proyect = '" . $_POST['Proy'] . "' GROUP BY cproy";
             }
             //////////////////METAS TRAZADORAS 
             $consultaMT = "SELECT met.desc_meta dmet, met.meta meta, pm.aport_proy metproy FROM proyect_metas pm "
-                    . "LEFT JOIN metas met ON pm.id_meta=met.id_meta WHERE pm.cod_proy='" . $fila['idproy'] . "'";
+                . "LEFT JOIN metas met ON pm.id_meta=met.id_meta WHERE pm.cod_proy='" . $fila['idproy'] . "'";
             $resultadoMT = mysqli_query($link, $consultaMT);
             $ContMT = 0;
             if (mysqli_num_rows($resultadoMT) > 0) {
@@ -4942,7 +4941,7 @@ WHERE proy.id_proyect = '" . $_POST['Proy'] . "' GROUP BY cproy";
             }
             //////////////////METAS DE PRODUCTO 
             $consultaMP = "SELECT mp.descripcion dmet, mp.objetivo met, pm.met_generada metproy FROM proyect_metasproducto pm "
-                    . "LEFT JOIN metas_productos mp ON pm.id_meta=mp.id WHERE pm.cod_proy='" . $fila['idproy'] . "'";
+                . "LEFT JOIN metas_productos mp ON pm.id_meta=mp.id WHERE pm.cod_proy='" . $fila['idproy'] . "'";
             $resultadoMP = mysqli_query($link, $consultaMP);
             $ContMP = 0;
             if (mysqli_num_rows($resultadoMP) > 0) {
@@ -4986,7 +4985,7 @@ WHERE proy.id_proyect = '" . $_POST['Proy'] . "' GROUP BY cproy";
                     if (mysqli_num_rows($resultado) > 0) {
                         while ($filaInd = mysqli_fetch_array($resultado)) {
                             $consultaMedI = "SELECT * FROM mediindicador med WHERE med.id_meta='" . $filaInd['id'] . "'";
-//                            echo $consultaMedI;
+                            //                            echo $consultaMedI;
                             $resultadoMedI = mysqli_query($link, $consultaMedI);
                             if (mysqli_num_rows($resultadoMedI) > 0) {
                                 while ($filaMedI = mysqli_fetch_array($resultadoMedI)) {
@@ -5102,7 +5101,7 @@ WHERE proy.id_proyect = '" . $_POST['Proy'] . "' GROUP BY cproy";
               GROUP BY num_contrato)";
 
             $resultadoC = mysqli_query($link, $consultaC);
-//            $sinImg = "Proyecto/Galeria/sin_imagen.jpg";
+            //            $sinImg = "Proyecto/Galeria/sin_imagen.jpg";
             $ulr = "Proyecto/Galeria/sin_imagen.jpg";
             $type = pathinfo($ulr, PATHINFO_EXTENSION);
             $data = file_get_contents($ulr);
@@ -5289,7 +5288,7 @@ FROM
     }
 
 
-//            $sinImg = "Proyecto/Galeria/sin_imagen.jpg";
+    //            $sinImg = "Proyecto/Galeria/sin_imagen.jpg";
     $ulr = "Proyecto/Galeria/sin_imagen.jpg";
     $type = pathinfo($ulr, PATHINFO_EXTENSION);
     $data = file_get_contents($ulr);
@@ -5373,7 +5372,7 @@ FROM
           WHERE num_contrato = '" . $_POST['Contr'] . "' 
         AND prorg_contrato <> ''
         GROUP BY num_contrato)";
-//    echo $consultaP; 
+    //    echo $consultaP; 
 
     $resultadoP = mysqli_query($link, $consultaP);
     if (mysqli_num_rows($resultadoP) > 0) {
@@ -5635,7 +5634,7 @@ AND contr.id_contrato IN
                     }
 
                     $ResInv = "LA " . $fila['dsec'] . " POSEE " . $ncontAtr . " CONTRATO ATRASADO(S) Y " . $ncontSus . "  SUSPENDIDO(S) LO CUAL REPRESENTAN "
-                            . "EL " . round($porcinv, 2) . "%($ " . number_format($totalInv, 2, ",", ".") . ") DEL PRESUPUESTO GENERAL ($ " . number_format($totalpre, 2, ",", ".") . ")";
+                        . "EL " . round($porcinv, 2) . "%($ " . number_format($totalInv, 2, ",", ".") . ") DEL PRESUPUESTO GENERAL ($ " . number_format($totalpre, 2, ",", ".") . ")";
 
                     $RawSec[$is] = array(
                         "dessec" => $fila['dsec'],
@@ -5771,25 +5770,25 @@ FROM
     //////////////CONSULTA DE METAS TRAZADORAS    
 
     $Tab_Proyectos = " <thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <b> Proyectos</b>\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <b> Decripción Meta</b>\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <b> Meta Esperada</b>\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <b> Meta Actual</b>\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <b> % Cumplimiento</b>\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody >";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <b> Proyectos</b>\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <b> Decripción Meta</b>\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <b> Meta Esperada</b>\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <b> Meta Actual</b>\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <b> % Cumplimiento</b>\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody >";
 
     if ($_POST['TipMet'] == "Trazadora") {
         $consulta = "SELECT 
@@ -5898,7 +5897,7 @@ FROM
             AND proy.estado = 'ACTIVO' 
             AND proy.estado_proyect = 'En Ejecucion' 
           GROUP BY pobl.id_proyect";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -5930,7 +5929,7 @@ AND contr.id_contrato IN
     WHERE estad_contrato='Ejecucion' OR estad_contrato='Terminado'
   GROUP BY num_contrato)
  GROUP BY pobl.id_proyect) t GROUP BY secre ";
-//    echo $consulta;
+    //    echo $consulta;
     $resultado = mysqli_query($link, $consulta);
 
     $RawSec = array(); //creamos un array
@@ -6003,7 +6002,7 @@ AND contr.id_contrato IN
                         contratos
                         WHERE estad_contrato='Ejecucion' OR estad_contrato='Terminado'
                       GROUP BY num_contrato)GROUP BY num_contrato ORDER BY total DESC";
-//                    echo $consulta;
+                    //                    echo $consulta;
                     $resultado3 = mysqli_query($link, $consulta);
                     if (mysqli_num_rows($resultado3) > 0) {
                         while ($fila3 = mysqli_fetch_array($resultado3)) {
@@ -6218,12 +6217,12 @@ AND contr.id_contrato IN
                 "Pers" => $fila["tpers"]
             );
 
-//            $detSec .= '<div class="well">
-//                    <b><h4>' . $fila["secre"] . '</h4></b>
-//                    El presupuesto asignado para esta secretaria es de ' . number_format($fila["presupuesto"], 2, ",", ".") . ', con una 
-//                        inversión de ' . number_format($fila["inv"], 2, ",", ".") . ' en Proyectos, que beneficiarán a ' . $fila["tpers"] . ' Personas de
-//                        ' . $_POST["InfInv"] . ' 
-//                    </div>';
+            //            $detSec .= '<div class="well">
+            //                    <b><h4>' . $fila["secre"] . '</h4></b>
+            //                    El presupuesto asignado para esta secretaria es de ' . number_format($fila["presupuesto"], 2, ",", ".") . ', con una 
+            //                        inversión de ' . number_format($fila["inv"], 2, ",", ".") . ' en Proyectos, que beneficiarán a ' . $fila["tpers"] . ' Personas de
+            //                        ' . $_POST["InfInv"] . ' 
+            //                    </div>';
         }
     }
     $myDat->DetSec = $rawproy;
@@ -6234,7 +6233,7 @@ AND contr.id_contrato IN
 
     $myDat = new stdClass();
     $Tipolog = "<option value=' '>Seleccione...</option>";
-//////////////////////CONSULTAR TIPOLOGIA
+    //////////////////////CONSULTAR TIPOLOGIA
     $consulta = "select * from tipologia_proyecto";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -6278,7 +6277,7 @@ FROM
     LEFT JOIN evaluacionindicador ev 
     ON mi.id=ev.id_med
     WHERE mi.id='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -6306,7 +6305,7 @@ FROM
         $j = 1;
         for ($i = 0; $i < $tamsrc; $i++) {
             $evid .= "<a href='" . $parsrc[$i] . "' target='_blank' class=\"btn default btn-xs blue\">"
-                    . "<i class=\"fa fa-search\"></i> Evidencia " . $j . "</a>";
+                . "<i class=\"fa fa-search\"></i> Evidencia " . $j . "</a>";
             $j++;
         }
     }
@@ -6372,13 +6371,13 @@ FROM
                     </td>
                 </tr>
             </thead>"
-            . "   <tbody id='tb_Body_Indicadores'>\n";
+        . "   <tbody id='tb_Body_Indicadores'>\n";
 
     $contACt = 0;
 
     if (mysqli_num_rows($resultado1) > 0) {
         while ($fila = mysqli_fetch_array($resultado1)) {
-            $contACt ++;
+            $contACt++;
             $Tab_Act .= "<tr class=\"selected\" id='filaAct" . $contACt . "' ><td>" . $contACt . "</td>";
             $Tab_Act .= "<td>" . $fila["act"] . "</td>";
             $Tab_Act .= "<td>" . $fila["resp"] . "</td>";
@@ -6398,10 +6397,10 @@ FROM
 
 
     $consulta = "SELECT ind.nomb_indi nom, ind.obj_indi obj, proc.descripcion nomproc, "
-            . "ind.frec_indi frec, ind.relmat_indi relmat,ind.fuent_indi ori,ind.resp_indi resp, "
-            . "ind.tip_indi tind "
-            . "FROM indicadores ind LEFT JOIN procesos proc ON ind.proc_indi=proc.id  "
-            . "where ind.id_indi='" . $_POST["idind"] . "'";
+        . "ind.frec_indi frec, ind.relmat_indi relmat,ind.fuent_indi ori,ind.resp_indi resp, "
+        . "ind.tip_indi tind "
+        . "FROM indicadores ind LEFT JOIN procesos proc ON ind.proc_indi=proc.id  "
+        . "where ind.id_indi='" . $_POST["idind"] . "'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -6422,25 +6421,25 @@ FROM
 
     if ($frec == "Mensual") {
         $freMedi = "<option value='Primer Mes'>Primer Mes</option>"
-                . "<option value='Segundo Mes'>Segundo Mes</option>"
-                . "<option value='Tercer Mes'>Tercer Mes</option>"
-                . "<option value='Cuarto Mes'>Cuarto Mes</option>"
-                . "<option value='Quinto Mes'>Quinto Mes</option>"
-                . "<option value='Sexto Mes'>Sexto Mes</option>"
-                . "<option value='Septimo Mes'>Septimo Mes</option>"
-                . "<option value='Octavo Mes'>Octavo Mes</option>"
-                . "<option value='Noveno Mes'>Noveno Mes</option>"
-                . "<option value='Decimo Mes'>Decimo Mes</option>"
-                . "<option value='Onceavo Mes'>Onceavo Mes</option>"
-                . "<option value='Doceavo Mes'>Doceavo Mes</option>";
+            . "<option value='Segundo Mes'>Segundo Mes</option>"
+            . "<option value='Tercer Mes'>Tercer Mes</option>"
+            . "<option value='Cuarto Mes'>Cuarto Mes</option>"
+            . "<option value='Quinto Mes'>Quinto Mes</option>"
+            . "<option value='Sexto Mes'>Sexto Mes</option>"
+            . "<option value='Septimo Mes'>Septimo Mes</option>"
+            . "<option value='Octavo Mes'>Octavo Mes</option>"
+            . "<option value='Noveno Mes'>Noveno Mes</option>"
+            . "<option value='Decimo Mes'>Decimo Mes</option>"
+            . "<option value='Onceavo Mes'>Onceavo Mes</option>"
+            . "<option value='Doceavo Mes'>Doceavo Mes</option>";
     } else if ($frec == "Trimestral") {
         $freMedi = "<option value='Primer Trimestre'>Primer Trimestre</option>"
-                . "<option value='Segundo Trimestre'>Segundo Trimestre</option>"
-                . "<option value='Tercer Trimestre'>Tercer Trimestre</option>"
-                . "<option value='Cuarto Trimestre'>Cuarto Trimestre</option>";
+            . "<option value='Segundo Trimestre'>Segundo Trimestre</option>"
+            . "<option value='Tercer Trimestre'>Tercer Trimestre</option>"
+            . "<option value='Cuarto Trimestre'>Cuarto Trimestre</option>";
     } else if ($frec == "Semestral") {
         $freMedi = "<option value='Primer Semestre'>Primer Semestre</option>"
-                . "<option value='Segundo Semestre'>Segundo Semestre</option>";
+            . "<option value='Segundo Semestre'>Segundo Semestre</option>";
     } else if ($frec == "Anual") {
         $freMedi = "<option value='No Aplica'>No Aplica</option>";
     }
@@ -6462,7 +6461,7 @@ FROM
     $myDat->variables = $rawdata;
     $respon = "";
     $consulta2 = "SELECT * FROM cargos WHERE id_cargo IN (" . $resp . ")";
-//  echo $consulta2;
+    //  echo $consulta2;
     $resultado2 = mysqli_query($link, $consulta2);
     if (mysqli_num_rows($resultado2) > 0) {
         while ($fila2 = mysqli_fetch_array($resultado2)) {
@@ -6492,7 +6491,7 @@ FROM
 
     $myDat = new stdClass();
     $Tipolog = "<option value=' '>Seleccione...</option>";
-//////////////////////CONSULTAR TIPOLOGIA
+    //////////////////////CONSULTAR TIPOLOGIA
     $consulta = "select * from tipo_contratacion";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -6547,7 +6546,7 @@ FROM
     $prog = "";
     $objet = "";
 
-//////////////////////CONSULTAR FUENTE INFORMACIÓN
+    //////////////////////CONSULTAR FUENTE INFORMACIÓN
     $consulta = "select * from fuente_informacion where estado='ACTIVO'";
 
     $resultado = mysqli_query($link, $consulta);
@@ -6557,7 +6556,7 @@ FROM
         }
     }
 
-//////////////////////CONSULTAR PROCESOS
+    //////////////////////CONSULTAR PROCESOS
     $consulta = "select * from procesos where estado='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -6566,7 +6565,7 @@ FROM
         }
     }
 
-//////////////////////CONSULTAR RESPONSABLES
+    //////////////////////CONSULTAR RESPONSABLES
     $consulta = "select * from responsables where estado='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -6586,7 +6585,7 @@ FROM
     $myDat = new stdClass();
     $respon = "<option value=' '>Seleccione...</option>";
 
-//////////////////////CONSULTAR RESPONSABLES
+    //////////////////////CONSULTAR RESPONSABLES
     $consulta = "select * from responsables where estado='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -6625,37 +6624,37 @@ FROM
 
 
     $consulta = "SELECT ixm.*, met.desc_meta desmet,met.cod_meta cod, met.id_meta id FROM indicadoresxmetas ixm left join metas met on ixm.meta=met.id_meta "
-            . " where ixm.indicador='" . $_POST["cod"] . "'";
+        . " where ixm.indicador='" . $_POST["cod"] . "'";
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Meta = "<thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Código\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Nombre de la Meta \n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody id='tb_Body_Meta'>\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Código\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Nombre de la Meta \n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody id='tb_Body_Meta'>\n";
 
     $contMeta = 0;
 
     if (mysqli_num_rows($resultado1) > 0) {
         while ($fila = mysqli_fetch_array($resultado1)) {
-            $contMeta ++;
+            $contMeta++;
             $Tab_Meta .= "<tr class=\"selected\" id='filaMeta" . $contMeta . "' ><td>" . $contMeta . "</td>";
             $Tab_Meta .= "<td>" . $fila["cod"] . "</td>";
             $Tab_Meta .= "<td>" . $fila["desmet"] . "</td>";
             $Tab_Meta .= "<td><input type='hidden' id='idMetas" . $contMeta . "' " . "name='actividades' value='" . $fila["id"] . "//" . $fila["cod"] . "//" . $fila["desmet"] . "' /><a onclick=\"$.QuitarMeta('filaMeta" . $contMeta . "')\" class=\"btn default btn-xs red\">"
-                    . "<i class=\"fa fa-trash-o\"></i> Quitar</a><a onclick=\"$.VerMeta('" . $fila["id"] . "')\" class='btn default btn-xs blue'><i class='fa fa-search'></i> Ver </a></td></tr>";
+                . "<i class=\"fa fa-trash-o\"></i> Quitar</a><a onclick=\"$.VerMeta('" . $fila["id"] . "')\" class='btn default btn-xs blue'><i class='fa fa-search'></i> Ver </a></td></tr>";
         }
     }
 
@@ -6667,25 +6666,25 @@ FROM
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Vari = "<thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Descripción Variable \n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody id='tb_BodyVar'>\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Descripción Variable \n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody id='tb_BodyVar'>\n";
 
     $contVaria = 0;
 
     if (mysqli_num_rows($resultado1) > 0) {
         while ($fila = mysqli_fetch_array($resultado1)) {
-            $contVaria ++;
+            $contVaria++;
             $Tab_Vari .= "<tr class=\"selected\" id='filaVari" . $contVaria . "' ><td style='cursor:pointer;' onclick=\"$.AddVarForm('idVariable" . $contVaria . "')\">" . $contVaria . "</td>";
             $Tab_Vari .= "<td style='cursor:pointer;' onclick=\"$.AddVarForm('idVariable" . $contVaria . "')\">" . $fila["variable"] . "</td>";
             $Tab_Vari .= "<td><input type='hidden' id='idVariable" . $contVaria . "' " . "name='idVariable' value='" . $fila["variable"] . "' /><a onclick=\"$.QuitarVari('filaVari" . $contVaria . "')\" class=\"btn default btn-xs red\">" . "<i class=\"fa fa-trash-o\"></i> Quitar</a></td></tr>";
@@ -6702,10 +6701,10 @@ FROM
 
     $myDat = new stdClass();
     $consulta = "SELECT ind.nomb_indi nom, ind.obj_indi obj, proc.descripcion nomproc, "
-            . "ind.frec_indi frec, ind.relmat_indi relmat,ind.fuent_indi ori,ind.resp_indi resp, "
-            . "ind.tip_indi tind "
-            . "FROM indicadores ind LEFT JOIN procesos proc ON ind.proc_indi=proc.id  "
-            . "where ind.id_indi='" . $_POST["cod"] . "'";
+        . "ind.frec_indi frec, ind.relmat_indi relmat,ind.fuent_indi ori,ind.resp_indi resp, "
+        . "ind.tip_indi tind "
+        . "FROM indicadores ind LEFT JOIN procesos proc ON ind.proc_indi=proc.id  "
+        . "where ind.id_indi='" . $_POST["cod"] . "'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -6726,25 +6725,25 @@ FROM
 
     if ($frec == "Mensual") {
         $freMedi = "<option value='Primer Mes'>Primer Mes</option>"
-                . "<option value='Segundo Mes'>Segundo Mes</option>"
-                . "<option value='Tercer Mes'>Tercer Mes</option>"
-                . "<option value='Cuarto Mes'>Cuarto Mes</option>"
-                . "<option value='Quinto Mes'>Quinto Mes</option>"
-                . "<option value='Sexto Mes'>Sexto Mes</option>"
-                . "<option value='Septimo Mes'>Septimo Mes</option>"
-                . "<option value='Octavo Mes'>Octavo Mes</option>"
-                . "<option value='Noveno Mes'>Noveno Mes</option>"
-                . "<option value='Decimo Mes'>Decimo Mes</option>"
-                . "<option value='Onceavo Mes'>Onceavo Mes</option>"
-                . "<option value='Doceavo Mes'>Doceavo Mes</option>";
+            . "<option value='Segundo Mes'>Segundo Mes</option>"
+            . "<option value='Tercer Mes'>Tercer Mes</option>"
+            . "<option value='Cuarto Mes'>Cuarto Mes</option>"
+            . "<option value='Quinto Mes'>Quinto Mes</option>"
+            . "<option value='Sexto Mes'>Sexto Mes</option>"
+            . "<option value='Septimo Mes'>Septimo Mes</option>"
+            . "<option value='Octavo Mes'>Octavo Mes</option>"
+            . "<option value='Noveno Mes'>Noveno Mes</option>"
+            . "<option value='Decimo Mes'>Decimo Mes</option>"
+            . "<option value='Onceavo Mes'>Onceavo Mes</option>"
+            . "<option value='Doceavo Mes'>Doceavo Mes</option>";
     } else if ($frec == "Trimestral") {
         $freMedi = "<option value='Primer Trimestre'>Primer Trimestre</option>"
-                . "<option value='Segundo Trimestre'>Segundo Trimestre</option>"
-                . "<option value='Tercer Trimestre'>Tercer Trimestre</option>"
-                . "<option value='Cuarto Trimestre'>Cuarto Trimestre</option>";
+            . "<option value='Segundo Trimestre'>Segundo Trimestre</option>"
+            . "<option value='Tercer Trimestre'>Tercer Trimestre</option>"
+            . "<option value='Cuarto Trimestre'>Cuarto Trimestre</option>";
     } else if ($frec == "Semestral") {
         $freMedi = "<option value='Primer Semestre'>Primer Semestre</option>"
-                . "<option value='Segundo Semestre'>Segundo Semestre</option>";
+            . "<option value='Segundo Semestre'>Segundo Semestre</option>";
     } else if ($frec == "Anual") {
         $freMedi = "<option value='No Aplica'>No Aplica</option>";
     }
@@ -6779,7 +6778,7 @@ FROM
     LEFT JOIN proyect_metas pm
     ON ixm.meta=pm.id_meta
 WHERE ixm.indicador='" . $_POST["cod"] . "' AND pm.cod_proy='" . $_POST["proy"] . "'";
-//echo $consulta2;
+    //echo $consulta2;
     $resultado = mysqli_query($link, $consulta2);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila2 = mysqli_fetch_array($resultado)) {
@@ -6790,7 +6789,7 @@ WHERE ixm.indicador='" . $_POST["cod"] . "' AND pm.cod_proy='" . $_POST["proy"] 
 
     $respon = "";
     $consulta2 = "SELECT * FROM cargos WHERE id_cargo IN (" . $resp . ")";
-//  echo $consulta2;
+    //  echo $consulta2;
     $resultado2 = mysqli_query($link, $consulta2);
     if (mysqli_num_rows($resultado2) > 0) {
         while ($fila2 = mysqli_fetch_array($resultado2)) {
@@ -6847,7 +6846,7 @@ FROM
     LEFT JOIN evaluacionindicador ev 
     ON mi.id=ev.id_med
     WHERE mi.id='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -6874,7 +6873,7 @@ FROM
         $j = 1;
         for ($i = 0; $i < $tamsrc; $i++) {
             $evid .= "<a href='" . $parsrc[$i] . "' target='_blank' class=\"btn default btn-xs blue\">"
-                    . "<i class=\"fa fa-search\"></i> Evidencia " . $j . "</a>";
+                . "<i class=\"fa fa-search\"></i> Evidencia " . $j . "</a>";
             $j++;
         }
     }
@@ -6921,13 +6920,13 @@ FROM
                     </td>
                 </tr>
             </thead>"
-            . "   <tbody id='tb_Body_Indicadores'>\n";
+        . "   <tbody id='tb_Body_Indicadores'>\n";
 
     $contACt = 0;
 
     if (mysqli_num_rows($resultado1) > 0) {
         while ($fila = mysqli_fetch_array($resultado1)) {
-            $contACt ++;
+            $contACt++;
             $Tab_Act .= "<tr class=\"selected\" id='filaAct" . $contACt . "' ><td>" . $contACt . "</td>";
             $Tab_Act .= "<td>" . $fila["act"] . "</td>";
             $Tab_Act .= "<td>" . $fila["resp"] . "</td>";
@@ -6965,28 +6964,28 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Indicad = "<thead>\n" .
-            "      <tr>\n" .
-            "          <td>\n" .
-            "              <i></i> #\n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Nombre del Indicador \n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Tipo de Indicador \n" .
-            "          </td>\n" .
-            "          <td>\n" .
-            "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
-            "          </td>\n" .
-            "      </tr>\n" .
-            "  </thead>"
-            . "   <tbody id='tb_Body_Indicadores'>\n";
+        "      <tr>\n" .
+        "          <td>\n" .
+        "              <i></i> #\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Nombre del Indicador \n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Tipo de Indicador \n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "          </td>\n" .
+        "      </tr>\n" .
+        "  </thead>"
+        . "   <tbody id='tb_Body_Indicadores'>\n";
 
     $contIndicad = 0;
 
     if (mysqli_num_rows($resultado1) > 0) {
         while ($fila = mysqli_fetch_array($resultado1)) {
-            $contIndicad ++;
+            $contIndicad++;
             $Tab_Indicad .= "<tr class=\"selected\" id='filaIndicadores" . $contIndicad . "' ><td>" . $contIndicad . "</td>";
             $Tab_Indicad .= "<td>" . $fila["nom"] . "</td>";
             $Tab_Indicad .= "<td>" . $fila["tipo"] . "</td>";
@@ -7024,9 +7023,10 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     $Secre = "<option value=' '>Seleccione...</option>";
     $dpto = "<option value=' '>Seleccione...</option>";
     $usu = "<option value=' '>Seleccione...</option>";
+    $fFin = "<option value=' '>Seleccione...</option>";
     $barrio = "<option value=' '>Seleccione...</option><option value='N/A'>N/A</option>";
 
-//////////////////////CONSULTAR RESPONSABLES
+    //////////////////////CONSULTAR RESPONSABLES
     $consulta = "select * from responsables where estado='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -7035,7 +7035,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
         }
     }
 
-//////////////////////CONSULTAR TIPOLOGIA
+    //////////////////////CONSULTAR TIPOLOGIA
     $consulta = "select * from tipologia_proyecto where est_tipolo='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -7043,7 +7043,15 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
             $Tipolog .= "<option value='" . $fila["id_tipolo"] . "'>" . $fila["cod_tipolo"] . " - " . $fila["des_tipolo"] . "</option>";
         }
     }
-//////////////////////CONSULTAR RESPONSABLES
+    //////////////////////CONSULTAR FUENTE DE FINANCIACION
+    $consulta = "select * from fuentes where estado='ACTIVO'";
+    $resultado = mysqli_query($link, $consulta);
+    if (mysqli_num_rows($resultado) > 0) {
+        while ($fila = mysqli_fetch_array($resultado)) {
+            $fFin .= "<option value='" . $fila["id"] . "'>" . $fila["nombre"] . "</option>";
+        }
+    }
+    //////////////////////CONSULTAR RESPONSABLES
     $consulta = "select * from secretarias where estado_secretaria='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -7052,7 +7060,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
         }
     }
 
-/////////////////////CONSULTAR DPTO
+    /////////////////////CONSULTAR DPTO
     $consulta = "select * from " . $_SESSION['ses_BDBase'] . ".dpto";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -7060,7 +7068,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
             $dpto .= "<option value='" . $fila["COD_DPTO"] . "'>" . $fila["COD_DPTO"] . " - " . $fila["NOM_DPTO"] . "</option>";
         }
     }
-/////////////////////CONSULTAR BARRIOS
+    /////////////////////CONSULTAR BARRIOS
     $consulta = "select * from " . $_SESSION['ses_BDBase'] . ".barrios";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -7068,7 +7076,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
             $barrio .= "<option value='" . $fila["codigo"] . "'>" . $fila["codigo"] . " - " . $fila["nombre"] . "</option>";
         }
     }
-/////////////////////CONSULTAR USUARIOS
+    /////////////////////CONSULTAR USUARIOS
     $consulta = "select id_usuario id, cue_nombres nombre from " . $_SESSION['ses_BDBase'] . ".usuarios";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -7078,6 +7086,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     }
 
     $myDat->Tipolog = $Tipolog;
+    $myDat->fFin = $fFin;
     $myDat->Secre = $Secre;
     $myDat->dpto = $dpto;
     $myDat->barrio = $barrio;
@@ -7094,7 +7103,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     $barrio = "<option value=' '>Seleccione...</option><option value='N/A'>N/A</option>";
 
 
-/////////////////////CONSULTAR DPTO
+    /////////////////////CONSULTAR DPTO
     $consulta = "select * from " . $_SESSION['ses_BDBase'] . ".dpto";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -7102,7 +7111,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
             $dpto .= "<option value='" . $fila["COD_DPTO"] . "'>" . $fila["COD_DPTO"] . " - " . $fila["NOM_DPTO"] . "</option>";
         }
     }
-/////////////////////CONSULTAR BARRIOS
+    /////////////////////CONSULTAR BARRIOS
     $consulta = "select * from " . $_SESSION['ses_BDBase'] . ".barrios";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -7129,7 +7138,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     $ProExp = "<option value=' '>Seleccione...</option>";
     $dpto = "<option value=' '>Seleccione...</option>";
 
-//////////////////////CONSULTAR SUPERVISOR
+    //////////////////////CONSULTAR SUPERVISOR
     $consulta = "select * from supervisores where estado_supervisores='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -7137,7 +7146,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
             $Superv .= "<option value='" . $fila["id_supervisores"] . "'>" . $fila["cod_supervisores"] . " - " . $fila["nom_supervisores"] . "</option>";
         }
     }
-//////////////////////CONSULTAR INTERVENTOR
+    //////////////////////CONSULTAR INTERVENTOR
     $consulta = "select * from interventores where estado_interventores='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -7145,7 +7154,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
             $Interv .= "<option value='" . $fila["id_interventores"] . "'>" . $fila["cod_interventores"] . " - " . $fila["nom_interventores"] . "</option>";
         }
     }
-//////////////////////CONSULTAR TIPOLOGIA
+    //////////////////////CONSULTAR TIPOLOGIA
     $consulta = "select * from tipo_contratacion where ESTADO='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -7153,7 +7162,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
             $Tipolog .= "<option value='" . $fila["ID"] . "'>" . $fila["CODIGO"] . " - " . $fila["NOMBRE"] . "</option>";
         }
     }
-//////////////////////CONSULTAR CONTRATISTA
+    //////////////////////CONSULTAR CONTRATISTA
     $consulta = "select * from contratistas WHERE estado_contratis='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -7163,7 +7172,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     }
 
 
-/////////////////////CONSULTAR PROYECTOS
+    /////////////////////CONSULTAR PROYECTOS
     $consulta = "select * from proyectos where estado='ACTIVO' and estado_proyect='En Ejecucion'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -7174,7 +7183,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     }
 
 
-/////////////////////CONSULTAR PROYECTOS expres
+    /////////////////////CONSULTAR PROYECTOS expres
     $consulta = "select * from proyectos_expres where estado='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -7213,7 +7222,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     $Secr = "<option value=' '>Todas...</option>";
     $Proyec = "<option value=' '>Todos</option>";
 
-/////////////////////CONSULTAR PROYECTOS
+    /////////////////////CONSULTAR PROYECTOS
     $consulta = "select * from proyectos where estado='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -7222,7 +7231,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
         }
     }
 
-/////////////////////CONSULTAR SECRETARIAS
+    /////////////////////CONSULTAR SECRETARIAS
     $consulta = "select * from secretarias where estado_secretaria='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -7230,7 +7239,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
             $Secr .= "<option value='" . $fila["idsecretarias"] . "'>" . $fila["cod_secretarias"] . " - " . $fila["des_secretarias"] . "</option>";
         }
     }
-/////////////////////CONSULTAR EJES
+    /////////////////////CONSULTAR EJES
     $consulta = "select * from ejes where ESTADO='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -7251,7 +7260,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     $myDat = new stdClass();
     $mun = "<option value=' '>Seleccione...</option><option value='N/A'>N/A</option>";
 
-//////////////////////CONSULTAR TIPOLOGIA
+    //////////////////////CONSULTAR TIPOLOGIA
     $consulta = "select * from " . $_SESSION['ses_BDBase'] . ".muni where ID_DPTO='" . $_POST["cod"] . "'";
 
     $resultado = mysqli_query($link, $consulta);
@@ -7270,7 +7279,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     $myDat = new stdClass();
     $Depa = "<option value=' '>Seleccione...</option>";
 
-//////////////////////CONSULTAR DEPARTAMENTOS
+    //////////////////////CONSULTAR DEPARTAMENTOS
     $consulta = "SELECT * FROM " . $_SESSION['ses_BDBase'] . ".dpto";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -7288,7 +7297,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     $myDat = new stdClass();
     $corr = "<option value=' '>Seleccione...</option><option value='N/A'>N/A</option>";
 
-//////////////////////CONSULTAR TIPOLOGIA
+    //////////////////////CONSULTAR TIPOLOGIA
     $consulta = "select * from " . $_SESSION['ses_BDBase'] . ".corregi where ID_MUNI='" . $_POST["cod"] . "'";
 
     $resultado = mysqli_query($link, $consulta);
@@ -7470,7 +7479,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
   FROM
     contratos
   GROUP BY num_contrato)";
-//    echo $consulta;
+    //    echo $consulta;
     $resultado1 = mysqli_query($link, $consulta);
     $rawdata = array(); //creamos un array
     if (mysqli_num_rows($resultado1) > 0) {
@@ -7489,7 +7498,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     }
 
     //   $myDat = json_encode($rawdata);
-//    echo $myDat;
+    //    echo $myDat;
 } else if ($_POST['ope'] == "GrafContratos") {
 
 
@@ -7524,7 +7533,7 @@ WHERE estad_contrato = '" . $_POST['Estad'] . "'
     }
 
     //   $myDat = json_encode($rawdata);
-//    echo $myDat;
+    //    echo $myDat;
 } else if ($_POST['ope'] == "GrafProyectos") {
 
     if ($_POST['TipInf'] == "1") {
@@ -7558,7 +7567,7 @@ WHERE estad_contrato = '" . $_POST['Estad'] . "'
     }
 
     //   $myDat = json_encode($rawdata);
-//    echo $myDat;
+    //    echo $myDat;
 } else if ($_POST['ope'] == "GrafContrat1") {
 
     $myDat = new stdClass();
@@ -7590,7 +7599,7 @@ WHERE IFNULL(proy.secretaria_proyect, '') LIKE '" . $_POST["CbSecr"] . "%'
   AND proy.estado='ACTIVO'  
 GROUP BY id_proyect) AS t GROUP BY estado_proyect";
 
-//    echo $consulta;
+    //    echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     $rawdata = array(); //creamos un array
     if (mysqli_num_rows($resultado) > 0) {
@@ -7758,7 +7767,7 @@ WHERE IFNULL(proy.secretaria_proyect, '') LIKE '" . $_POST["CbSecr"] . "%'
   GROUP BY num_contrato) AS t 
 GROUP BY estado ";
 
-//   echo $consulta;
+    //   echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     $rawdata = array(); //creamos un array
     if (mysqli_num_rows($resultado) > 0) {
@@ -7799,7 +7808,7 @@ AND contr.id_contrato IN
     contratos   
   GROUP BY num_contrato) GROUP BY proy.cod_proyect";
 
-//   echo $consulta;
+    //   echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     $rawdata = array(); //creamos un array
     if (mysqli_num_rows($resultado) > 0) {
@@ -7840,29 +7849,29 @@ AND contr.id_contrato IN
             $resultado3 = mysqli_query($link, $consulta);
 
             $Cont .= "<table class='table table-bordered table-hover' style='border: 1; font-size: 9px; padding-top: 10px;'>" .
-                    "<thead>\n" .
-                    "      <tr>\n" .
-                    "          <td>\n" .
-                    "              <b> Número Contrato</b>\n" .
-                    "          </td>\n" .
-                    "          <td>\n" .
-                    "              <b> Objeto del Contrato</b>\n" .
-                    "          </td>\n" .
-                    "          <td>\n" .
-                    "              <b> Contratista</b>\n" .
-                    "          </td>\n" .
-                    "          <td>\n" .
-                    "              <b> Valor Contrato</b>\n" .
-                    "          </td>\n" .
-                    "          <td>\n" .
-                    "              <b> Estado</b>\n" .
-                    "          </td>\n" .
-                    "          <td>\n" .
-                    "              <b> % de Avance</b>\n" .
-                    "          </td>\n" .
-                    "      </tr>\n" .
-                    "  </thead>"
-                    . " <tbody >";
+                "<thead>\n" .
+                "      <tr>\n" .
+                "          <td>\n" .
+                "              <b> Número Contrato</b>\n" .
+                "          </td>\n" .
+                "          <td>\n" .
+                "              <b> Objeto del Contrato</b>\n" .
+                "          </td>\n" .
+                "          <td>\n" .
+                "              <b> Contratista</b>\n" .
+                "          </td>\n" .
+                "          <td>\n" .
+                "              <b> Valor Contrato</b>\n" .
+                "          </td>\n" .
+                "          <td>\n" .
+                "              <b> Estado</b>\n" .
+                "          </td>\n" .
+                "          <td>\n" .
+                "              <b> % de Avance</b>\n" .
+                "          </td>\n" .
+                "      </tr>\n" .
+                "  </thead>"
+                . " <tbody >";
 
             if (mysqli_num_rows($resultado3) > 0) {
                 while ($fila3 = mysqli_fetch_array($resultado3)) {
@@ -7895,7 +7904,7 @@ AND contr.id_contrato IN
 
     echo json_encode($myDat);
     //   $myDat = json_encode($rawdata);
-//    echo $myDat;
+    //    echo $myDat;
 } else if ($_POST['ope'] == "GrafInfGenPoblacional") {
 
     $myDat = new stdClass();
@@ -7936,7 +7945,7 @@ GROUP BY pobl.id_proyect) t GROUP BY des_secretarias";
     }
     echo json_encode($rawdata);
     //   $myDat = json_encode($rawdata);
-//    echo $myDat;
+    //    echo $myDat;
 } else if ($_POST['ope'] == "GrafContrat2") {
 
     // $myDat = new stdClass();
@@ -7994,8 +8003,8 @@ GROUP BY proy.id_proyect) AS t GROUP BY secretaria_proyect";
               LEFT JOIN secretarias sec
                 ON proy.secretaria_proyect=sec.idsecretarias
                 WHERE secretaria_proyect='" . $ides . "'"
-                    . "AND IFNULL(proy.secretaria_proyect, '') LIKE '" . $_POST["CbSecr"] . "%'"
-                    . " AND IFNULL(eje.ID, '') LIKE '" . $_POST["CbEje"] . "%'
+                . "AND IFNULL(proy.secretaria_proyect, '') LIKE '" . $_POST["CbSecr"] . "%'"
+                . " AND IFNULL(eje.ID, '') LIKE '" . $_POST["CbEje"] . "%'
                     AND IFNULL(comp.ID, '') LIKE '" . $_POST["CbComp"] . "%'
                     AND IFNULL(prog.ID, '') LIKE '" . $_POST["CbProg"] . "%'
                     AND IFNULL(proy.estado_proyect, '') LIKE '" . $_POST["CbEsta"] . "%'  AND proy.estado='ACTIVO'  ";
@@ -8084,8 +8093,8 @@ WHERE IFNULL(proy.secretaria_proyect, '') LIKE '" . $_POST["CbSecr"] . "%'
                      ON proy.secretaria_proyect=sec.idsecretarias
                       WHERE
                          eje.ID ='" . $ides . "' "
-                    . " AND IFNULL(proy.secretaria_proyect, '') LIKE '" . $_POST["CbSecr"] . "%'"
-                    . " AND IFNULL(eje.ID, '') LIKE '" . $_POST["CbEje"] . "%'
+                . " AND IFNULL(proy.secretaria_proyect, '') LIKE '" . $_POST["CbSecr"] . "%'"
+                . " AND IFNULL(eje.ID, '') LIKE '" . $_POST["CbEje"] . "%'
                     AND IFNULL(comp.ID, '') LIKE '" . $_POST["CbComp"] . "%'
                     AND IFNULL(prog.ID, '') LIKE '" . $_POST["CbProg"] . "%'
                     AND IFNULL(proy.estado_proyect, '') LIKE '" . $_POST["CbEsta"] . "%'  AND proy.estado='ACTIVO'  ";
@@ -8116,9 +8125,9 @@ WHERE IFNULL(proy.secretaria_proyect, '') LIKE '" . $_POST["CbSecr"] . "%'
     $myDat = new stdClass();
 
     $consulta = "SELECT  estr.CODIGO cod, estr.NOMBRE nom, estr.`OBSERVACIONES` obsestrat,"
-            . " ej.`ID` idej, ej.CODIGO codej,ej.`NOMBRE` nomej, estr.IMG img FROM componente estr LEFT JOIN ejes ej "
-            . "ON estr.ID_EJE=ej.ID where estr.ID='" . $_POST["cod"] . "'";
-// echo $consulta;
+        . " ej.`ID` idej, ej.CODIGO codej,ej.`NOMBRE` nomej, estr.IMG img FROM componente estr LEFT JOIN ejes ej "
+        . "ON estr.ID_EJE=ej.ID where estr.ID='" . $_POST["cod"] . "'";
+    // echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -8139,7 +8148,7 @@ WHERE IFNULL(proy.secretaria_proyect, '') LIKE '" . $_POST["CbSecr"] . "%'
     $myDat = new stdClass();
     $Eval = "NO";
     $consulta = "SELECT id_evaluacion FROM eval_contratista WHERE ncont_evaluacion = '" . $_POST['idcon'] . "' AND nitcont_evaluacion='" . $_POST['idcont'] . "'";
-// echo $consulta;
+    // echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -8156,7 +8165,7 @@ WHERE IFNULL(proy.secretaria_proyect, '') LIKE '" . $_POST["CbSecr"] . "%'
     $myDat = new stdClass();
 
     $consulta = "SELECT email_responsable email FROM responsables WHERE id_responsable='" . $_POST['id'] . "'";
-// echo $consulta;
+    // echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -8186,7 +8195,7 @@ FROM
     ON prog.ID_EJE = ej.ID
   LEFT JOIN componente estr
     ON prog.ID_COMP = estr.ID where prog.ID='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -8227,7 +8236,7 @@ FROM
  ON ob.ID_EST=est.ID
  INNER JOIN ejes ej
  ON ob.ID_EJE=ej.ID where ob.ID='" . $_POST["cod"] . "'";
-// echo $consulta;
+    // echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -8250,7 +8259,7 @@ FROM
     $myDat = new stdClass();
 
     $consulta = "select * from ejes where ID='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -8269,7 +8278,7 @@ FROM
     $myDat = new stdClass();
 
     $consulta = "select * from dimensiones where id='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -8294,7 +8303,7 @@ FROM
   responsables resp
   LEFT JOIN dependencias dep
     ON resp.dependencia = dep.iddependencias where resp.id_responsable='" . $_POST["id"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -8311,7 +8320,7 @@ FROM
     $myDat = new stdClass();
 
     $consulta = "SELECT estado_proyect,porceEjec_proyect from proyectos where id_proyect='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -8326,7 +8335,7 @@ FROM
 
     $myDat = new stdClass();
     $Secre = "<option value=' '>Seleccione...</option>";
-//////////////////////CONSULTAR RESPONSABLES
+    //////////////////////CONSULTAR RESPONSABLES
     $consulta = "select * from secretarias where estado_secretaria='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -8342,7 +8351,7 @@ FROM
 
     $myDat = new stdClass();
     $Secre = "<option value=' '>Todas...</option>";
-//////////////////////CONSULTAR RESPONSABLES
+    //////////////////////CONSULTAR RESPONSABLES
     $consulta = "select * from secretarias where estado_secretaria='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -8397,7 +8406,7 @@ AND contr.id_contrato IN
 
     $myDat = new stdClass();
     $Proyec = "<option value=' '>Todos...</option>";
-/////////////////////CONSULTAR PROYECTOS
+    /////////////////////CONSULTAR PROYECTOS
     $consulta = "select * from proyectos where estado='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -8413,7 +8422,7 @@ AND contr.id_contrato IN
 
     $myDat = new stdClass();
     $ejes = "<option value=' '>Sel...</option>";
-/////////////////////CONSULTAR PROYECTOS
+    /////////////////////CONSULTAR PROYECTOS
     $consulta = "select * from ejes where ESTADO='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -8429,7 +8438,7 @@ AND contr.id_contrato IN
 
     $myDat = new stdClass();
     $Proyec = "<option value=' '>Seleccionar Proyecto...</option>";
-/////////////////////CONSULTAR PROYECTOS
+    /////////////////////CONSULTAR PROYECTOS
     $consulta = "select * from proyectos where estado='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -8445,7 +8454,7 @@ AND contr.id_contrato IN
 
     $myDat = new stdClass();
     $Proyec = "<option value=' '>Todos...</option>";
-/////////////////////CONSULTAR PROYECTOS
+    /////////////////////CONSULTAR PROYECTOS
     $consulta = "select * from proyectos where estado='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -8456,7 +8465,7 @@ AND contr.id_contrato IN
 
     $Depa = "<option value=' '>Seleccione...</option>";
 
-//////////////////////CONSULTAR DEPARTAMENTOS
+    //////////////////////CONSULTAR DEPARTAMENTOS
     $consulta = "SELECT * FROM " . $_SESSION['ses_BDBase'] . ".dpto";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -8473,7 +8482,7 @@ AND contr.id_contrato IN
 
     $myDat = new stdClass();
     $Contrat = "<option value=' '>Seleccione...</option>";
-//////////////////////CONSULTAR RESPONSABLES
+    //////////////////////CONSULTAR RESPONSABLES
     $consulta = "select * from contratistas WHERE estado_contratis='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -8491,7 +8500,7 @@ AND contr.id_contrato IN
     $myDat = new stdClass();
     $resp = "<option value=' '>Seleccione...</option>";
     $consulta = "select * from responsables where estado='ACTIVO'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -8506,7 +8515,7 @@ AND contr.id_contrato IN
     $myDat = new stdClass();
 
     $consulta = "select * from origen_informacion where id_info='" . $_POST["cod"] . "'";
-//echo $consulta;
+    //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -8612,7 +8621,7 @@ AND contr.id_contrato IN
             $outp .= '"cue_dir":"' . $fila["cue_dir"] . '"}';
         }
 
-        echo($outp);
+        echo ($outp);
     }
 } else if ($_POST["ope"] == "ConConsecutivo2") {
 
@@ -8655,7 +8664,7 @@ AND contr.id_contrato IN
     echo $myJSONDat;
 } else if ($_POST['ope'] == "ConMap") {
 
-//    $myDat = new stdClass();
+    //    $myDat = new stdClass();
     $outp = "";
 
     $consulta = "SELECT

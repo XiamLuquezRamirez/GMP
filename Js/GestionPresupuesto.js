@@ -65,12 +65,13 @@ $(document).ready(function () {
         },
       });
     },
-    editDepen: function (cod) {
+    editPresupuesto: function (cod) {
       $("#acc").val("2");
       $("#btn_nuevo2").prop("disabled", true);
       $("#btn_guardar").prop("disabled", false);
+    
       var datos = {
-        ope: "BusqEditDependencia",
+        ope: "BusqEditPresupuesto",
         cod: cod,
       };
 
@@ -80,12 +81,15 @@ $(document).ready(function () {
         data: datos,
         dataType: "JSON",
         success: function (data) {
-          $("#txt_Cod").val(data["cod_dependencia"]);
-          $("#txt_Desc").val(data["des_dependencia"]);
-          $("#txt_Corre").val(data["correo_dependencia"]);
-          $("#txt_Telf").val(data["tel_dependencia"]);
-          $("#txt_obser").val(data["obs_dependencia"]);
-          $("#txt_id").val(cod);
+       
+          $("#fuente").select2("val", data["fuente"]);
+          $("#txt_PresTotal").val(data["valor"]);
+          $("#txt_PresTotalVis").val(formatCurrency(data["valor"], "es-CO", "COP"));
+          $("#txtFecRegistro").val(data["fecha_recepcion"]);
+          $("#CbPeriodoI").val(data["periodo_ini"]);
+          $("#CbPeriodoF").val(data["periodo_fin"]);
+          $("#txt_obser").val(data["observacion"]);
+          $("#id").val(cod);
         },
         error: function (error_messages) {
           alert("HA OCURRIDO UN ERROR");
@@ -93,16 +97,11 @@ $(document).ready(function () {
       });
       $("#responsive").modal({ backdrop: "static", keyboard: false });
       $("#mopc").show();
-
-      $("#txt_Cod").prop("disabled", false);
-      $("#txt_Desc").prop("disabled", false);
-      $("#txt_Corre").prop("disabled", false);
-      $("#txt_Telf").prop("disabled", false);
-      $("#txt_obser").prop("disabled", false);
+   
     },
-    VerDepen: function (cod) {
+    VerPresupuesto: function (cod) {
       var datos = {
-        ope: "BusqEditDependencia",
+        ope: "BusqEditPresupuesto",
         cod: cod,
       };
 
@@ -112,12 +111,12 @@ $(document).ready(function () {
         data: datos,
         dataType: "JSON",
         success: function (data) {
-          $("#txt_Cod").val(data["cod_dependencia"]);
-          $("#txt_Desc").val(data["des_dependencia"]);
-          $("#txt_Corre").val(data["correo_dependencia"]);
-          $("#txt_Telf").val(data["tel_dependencia"]);
-          $("#txt_obser").val(data["obs_dependencia"]);
-          $("#txt_id").val(cod);
+          $("#fuente").select2("val", data["fuente"]);
+          $("#txt_PresTotalVis").val(formatCurrency(data["valor"], "es-CO", "COP"));
+          $("#txtFecRegistro").val(data["fecha_recepcion"]);
+          $("#CbPeriodoI").val(data["periodo_ini"]);
+          $("#CbPeriodoF").val(data["periodo_fin"]);
+          $("#txt_obser").val(data["observacion"]);
         },
         error: function (error_messages) {
           alert("HA OCURRIDO UN ERROR");
@@ -126,52 +125,53 @@ $(document).ready(function () {
       $("#responsive").modal({ backdrop: "static", keyboard: false });
       $("#mopc").hide();
 
-      $("#txt_Cod").prop("disabled", false);
-      $("#txt_Desc").prop("disabled", false);
-      $("#txt_Corre").prop("disabled", false);
-      $("#txt_obser").prop("disabled", false);
     },
-    deletDepen: function (cod) {
-      if (confirm("\xbfEsta seguro de realizar la operaci\xf3n?")) {
-        var datos = {
-          acc: "3",
-          cod: cod,
-        };
+    deletPresupuesto: function (cod) {
 
-        $.ajax({
-          type: "POST",
-          url: "../Administracion/GuardarDependencia.php",
-          data: datos,
-          success: function (data) {
-            if (data === "bien") {
-              $.Alert(
-                "#msg2",
-                "Operación Realizada Exitosamente...",
-                "success",
-                "check"
-              );
-              $.Depend();
-            } else if (data === "nbien") {
-              $.Alert(
-                "#msg2",
-                "Esta Dependencia no se puede Eliminar, Se encuentra relacionada a una Meta",
-                "warning",
-                "warning"
-              );
-            } else if (data === "rbien") {
-              $.Alert(
-                "#msg2",
-                "Esta Dependencia no se puede Eliminar, Se encuentra relacionada a una Responsable",
-                "warning",
-                "warning"
-              );
-            }
-          },
-          error: function (error_messages) {
-            alert("HA OCURRIDO UN ERROR");
-          },
-        });
-      }
+      Swal.fire({
+        title: '¿Estás seguro de eliminar este registro?',
+        text: "¡No podrás revertir esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '¡Sí, eliminar!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+
+          var datos = {
+            acc: "3",
+            id: cod,
+          };
+  
+          $.ajax({
+            type: "POST",
+            url: "../Administracion/GuardarRubroPresup.php",
+            data: datos,
+            success: function (data) {
+              if (data === "bien") {
+                Swal.fire(
+                  '¡Eliminado!',
+                  'El registro fue eliminado exitosamente.',
+                  'success'
+                )
+                $.Presupuesto();
+              }
+            },
+            error: function (error_messages) {
+              alert("HA OCURRIDO UN ERROR");
+            },
+          });
+
+         
+        }
+      })
+      
+
+
+
+      
     },
    
     Validar: function () {
@@ -327,6 +327,7 @@ $(document).ready(function () {
 
           $("#btn_nuevo2").prop("disabled", false);
           $("#btn_guardar").prop("disabled", true);
+          $.Presupuesto();
         }
       },
       error: function (error_messages) {

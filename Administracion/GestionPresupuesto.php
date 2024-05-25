@@ -24,53 +24,10 @@ $link = conectar();
 <!--<![endif]-->
 <!-- BEGIN HEAD -->
 
-
-
-<head>
-    <meta charset="utf-8" />
-    <title> Gestión de Presupuesto | SGP Gestor Publico de Gobierno</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <meta content="" name="description" />
-    <meta content="" name="author" />
-    <!-- BEGIN GLOBAL MANDATORY STYLES -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
-    <link href="../Plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    <link href="../Plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
-    <link href="../Plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="../Plugins/bootstrap-switch/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
-    <!-- END GLOBAL MANDATORY STYLES -->
-
-    <!-- BEGIN PAGE LEVEL PLUGINS -->
-    <link href="../Plugins/bootstrap-daterangepicker/daterangepicker.min.css" rel="stylesheet" type="text/css" />
-    <link href="../Plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css" rel="stylesheet" type="text/css" />
-    <link href="../Plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css" rel="stylesheet" type="text/css" />
-    <link href="../Plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
-    <link href="../Plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
-    <link href="../Plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="../Plugins/bootstrap-select/css/bootstrap-select.min.css" rel="stylesheet" type="text/css" />
-    <link href="../Plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css" />
-    <link href="../Plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css" />
-    <!-- END PAGE LEVEL PLUGINS -->
-
-    <!-- BEGIN THEME GLOBAL STYLES -->
-    <link href="../Css/Global/css/components.min.css" rel="stylesheet" type="text/css" />
-    <link href="../Css/Global/css/plugins.min.css" rel="stylesheet" type="text/css" />
-    <!-- END THEME GLOBAL STYLES -->
-    <!-- BEGIN THEME LAYOUT STYLES -->
-    <link href="../Css/Layouts/layout/css/layout.min.css" rel="stylesheet" type="text/css" />
-    <link href="../Css/Layouts/layout/css/themes/light2.css" rel="stylesheet" type="text/css" id="style_color" />
-    <link href="../Css/Layouts/layout/css/custom.min.css" rel="stylesheet" type="text/css" />
-    <!-- END THEME LAYOUT STYLES -->
-    <link rel="shortcut icon" href="../Img/favicon.ico" />
-
-    <script src="../Js/jquery-3.1.1.min.js" type="text/javascript"></script>
-    <script src="../Js/GestionPresupuesto.js" type="text/javascript"></script>
-    <script src="../Js/funciones_generales.js" type="text/javascript"></script>
-</head>
-<!-- END HEAD -->
-
-<!-- BEGIN BODY -->
+<?php
+$pageTitle = "Gestión de Presupuesto | SGP Gestor Publico de Gobierno";
+include("../Plantilla/head.php");
+?>
 
 <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white page-footer-fixed page-sidebar-fixed">
     <div class="page-header navbar navbar-fixed-top">
@@ -171,7 +128,7 @@ $link = conectar();
                                                 </div>
                                             </div>
                                             <div class='col-md-4'>
-                                                <div class='form-group'  id="formFecReg">
+                                                <div class='form-group' id="formFecReg">
                                                     <label class='control-label'>Fecha de registro:<span class="required">* </span></label>
                                                     <input type='text' id='txtFecRegistro' name='txtFecRegistro' class='form-control' />
                                                 </div>
@@ -181,7 +138,7 @@ $link = conectar();
                                             <div class='col-md-4'>
                                                 <div class='form-group' id="From_VigenciaI">
                                                     <label class='control-label'>Periodo nicio:<span class="required">* </span></label>
-                                                    <input type='text' value="<?php echo date('Y'); ?>" id='CbPeriodoI'  name='CbPeriodoI' readonly class='form-control' />
+                                                    <input type='text' value="<?php echo date('Y'); ?>" id='CbPeriodoI' name='CbPeriodoI' readonly class='form-control' />
 
                                                 </div>
                                             </div>
@@ -189,7 +146,7 @@ $link = conectar();
                                             <div class='col-md-4'>
                                                 <div class='form-group' id="From_VigenciaF">
                                                     <label class='control-label'>Periodo final:<span class="required">* </span></label>
-                                                    <input type='text' value="<?php echo date('Y'); ?>" name='CbPeriodoF'  id='CbPeriodoF' readonly class='form-control' />
+                                                    <input type='text' value="<?php echo date('Y'); ?>" name='CbPeriodoF' id='CbPeriodoF' readonly class='form-control' />
 
                                                 </div>
                                             </div>
@@ -275,8 +232,6 @@ $link = conectar();
                                                             <div id="tab_Presupuesto" style="height: 250px;overflow: scroll;">
 
                                                             </div>
-
-
                                                         </div>
 
                                                     </div>
@@ -287,7 +242,7 @@ $link = conectar();
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        
+
 
                                                     </div>
 
@@ -314,49 +269,7 @@ $link = conectar();
             </div>
         </div>
 
-        <?php echo $_SESSION['Footer']; ?>
-
-        <!-- BEGIN CORE PLUGINS -->
-        <script src="../Plugins/jquery.min.js" type="text/javascript"></script>
-        <script src="../Plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-        <script src="../Plugins/js.cookie.min.js" type="text/javascript"></script>
-        <script src="../Plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js" type="text/javascript"></script>
-        <script src="../Plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
-        <script src="../Plugins/jquery.blockui.min.js" type="text/javascript"></script>
-        <script src="../Plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
-        <!-- END CORE PLUGINS -->
-
-        <!-- BEGIN PAGE LEVEL PLUGINS -->
-        <script src="../Plugins/moment.min.js" type="text/javascript"></script>
-        <script src="../Plugins/bootstrap-daterangepicker/daterangepicker.min.js" type="text/javascript"></script>
-        <script src="../Plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>
-        <script src="../Plugins/bootstrap-datepicker/locales/bootstrap-datepicker.es.min.js" type="text/javascript"></script>
-        <script src="../Plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js" type="text/javascript"></script>
-        <script src="../Plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
-        <script src="../Plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.es.js" type="text/javascript"></script>
-        <script src="../Plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type="text/javascript"></script>
-        <script src="../Plugins/select2/js/select2.full.js" type="text/javascript"></script>
-        <script src="../Plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
-        <script src="../Plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
-        <script src="../Plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>
-        <!-- END PAGE LEVEL PLUGINS -->
-
-        <!-- BEGIN THEME GLOBAL SCRIPTS -->
-        <script src="../Css/Global/scripts/app.min.js" type="text/javascript"></script>
-        <!-- END THEME GLOBAL SCRIPTS -->
-        <!-- BEGIN PAGE LEVEL SCRIPTS -->
-        <script src="../Plugins/Scripts/components-bootstrap-select.js" type="text/javascript"></script>
-        <script src="../Plugins/Scripts/components-select2.js" type="text/javascript"></script>
-        <script src="../Plugins/Scripts/components-date-time-pickers.js" type="text/javascript"></script>
-        <script src="../Plugins/Scripts/form-samples.js" type="text/javascript"></script>
-        <script src="../Plugins/Scripts/form-input-mask.js" type="text/javascript"></script>
-        <script src="../Plugins/Scripts/ui-extended-modals.js" type="text/javascript"></script>
-        <!-- END PAGE LEVEL SCRIPTS -->
-        <!-- BEGIN THEME LAYOUT SCRIPTS -->
-        <script src="../Css/Layouts/layout/scripts/layout.min.js" type="text/javascript"></script>
-        <script src="../Css/Layouts/layout/scripts/demo.min.js" type="text/javascript"></script>
-        <script src="../Css/Layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
-        <!-- END THEME LAYOUT SCRIPTS -->
+        <?php include('../Plantilla/Footer.php'); ?>
 </body>
 
 </html>

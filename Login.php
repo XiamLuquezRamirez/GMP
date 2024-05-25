@@ -676,15 +676,6 @@ Mostrar Contratos</a>
                                </li></ul>
                        </li>
 
-   <li class='dropdown dropdown-user'>
-                         <a class='dropdown-toggle' target='_blank' href='Administracion/Manual_Usuario.pdf'>
-                             <img class='img-circle' src='Img/manual.png' alt=''/>
-                             <span class='username'>
-                                Manual de Usuario
-                            </span>
-                             <i class='fa fa-angle-left'></i>
-                         </a>
-                     </li>
   <li class='dropdown dropdown-user'>
                          <a href='javascript:;' class='dropdown-toggle' data-toggle='dropdown' data-hover='dropdown' data-close-others='true'>
                              <img class='img-circle' src='Img/Compa.png' alt=''/>
@@ -704,21 +695,12 @@ Mostrar Contratos</a>
                 <i class='fa fa-angle-left'></i>
             </a>
             <ul class='dropdown-menu'>
-               <li><a href='extra_profile.html'><i class='icon-user'></i> My Profile</a></li>
+               <li><a href='#'><i class='icon-key'></i> Cambio de contraseña</a></li>
                <li class='divider'></li>
-               <li><a href='javascript:;' id='trigger_fullscreen'><i class='icon-move'></i> Full Screen</a></li>
-               <li><a href='login.html'><i class='icon-key'></i> Log Out</a></li>
+               <li><a target='_blank' href='Administracion/Manual_Usuario.pdf' id='trigger_fullscreen'><i class='fa fa-book'></i> Manual de usuario</a></li>
+               <li><a href='cerrar.php'><i class='fa fa-sign-out'></i>  Cerrar Sesi&oacute;n</a></li>
            </ul>
-        </li>
-
-                     <li class='dropdown dropdown-user'>
-                         <a href='cerrar.php' class='dropdown-toggle'>
-                             <span class='username'>
-                                Cerrar Sesi&oacute;n
-                            </span>
-                             <i class='icon-logout'></i>
-                        </a>
-                     </li>";
+        </li>";
 
             $consulta = "SELECT num_contrato ncont, ffin_contrato ffi  FROM " . $_SESSION['ses_nombd'] . ".contratos WHERE estad_contrato='Ejecucion' AND
                 DATE(ffin_contrato)  < DATE_FORMAT(DATE(NOW()),'%Y-%m-%d')   AND id_contrato IN(
@@ -778,28 +760,19 @@ Mostrar Contratos</a>
             $User_SubLogin = $User_SubLogin . "</li>
             <li class='dropdown dropdown-user' >
             <a class='dropdown-toggle' data-toggle='dropdown' data-hover='dropdown' data-close-others='true'>
-                <img class='img-circle' src='Img/User.png' alt=''/>
+                <img class='img-circle' src='../Img/User.png' alt=''/>
                 <span class='username'>
                    " . $_SESSION['ses_nombre'] . "
                </span>
                 <i class='fa fa-angle-left'></i>
             </a>
             <ul class='dropdown-menu'>
-               <li><a href='extra_profile.html'><i class='icon-user'></i> My Profile</a></li>
+               <li><a href='extra_profile.html'><i class='icon-key'></i> My Profile</a></li>
                <li class='divider'></li>
-               <li><a href='javascript:;' id='trigger_fullscreen'><i class='icon-move'></i> Full Screen</a></li>
-               <li><a href='login.html'><i class='icon-key'></i> Log Out</a></li>
+               <li><a target='_blank' href='../Administracion/Manual_Usuario.pdf' id='trigger_fullscreen'><i class='fa fa-book'></i> Manual de usuario</a></li>
+               <li><a href='../cerrar.php'><i class='fa fa-sign-out'></i>  Cerrar Sesi&oacute;n</a></li>
            </ul>
-        </li>
-
-                     <li class='dropdown dropdown-user'>
-                         <a href='../cerrar.php' class='dropdown-toggle'>
-                             <span class='username'>
-                                Cerrar Sesi&oacute;n
-                            </span>
-                             <i class='icon-logout'></i>
-                        </a>
-                     </li>";
+        </li>";
 
             $Menu_Left = " <div class='page-sidebar-wrapper'>
                 <div class='page-sidebar navbar-collapse collapse'>

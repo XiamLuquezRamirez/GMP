@@ -112,14 +112,14 @@ $(document).ready(function () {
   var contIngPres = 0;
   var contAnexo = 0;
 
+  var PreTotal=0;
+
   var contImg = 0;
   var Dat_Img = [];
   var Dat_Usu = [];
   var Dat_Metas = [];
   var Dat_MetasP = [];
-
   ///
-
   var Dat_Causas = [];
   var Dat_Efectos = [];
   var Dat_ObjEspec = [];
@@ -162,6 +162,15 @@ $(document).ready(function () {
           alert("HA OCURRIDO UN ERROR");
         },
       });
+    },
+    habilitarPresupuesto: function(val){
+     
+      if(val == "Priorizado" || val == "En Ejecucion" || val =="Ejecutado"){
+        $("#div-presupuesto").show();
+      }else{
+        $("#div-presupuesto").hide();
+      }
+
     },
     busqProyect: function (val) {
       var datos = {
@@ -278,6 +287,9 @@ $(document).ready(function () {
         },
       });
     },
+    quitarDoc: function () {
+      $("#Src_FileComp").val("");
+    },
     editProy: function (cod) {
       $("#acc").val("2");
       $("#botones").show();
@@ -322,6 +334,13 @@ $(document).ready(function () {
 
           $("#CbVige").val(data["vigenc_proyect"]);
           $("#CbEstado").selectpicker("val", data["estado_proyect"]);
+
+          if(data["estado_proyect"] == "Priorizado" || data["estado_proyect"] == "En Ejecucion" || data["estado_proyect"] =="Ejecutado"){
+            $("#div-presupuesto").show();
+          }else{
+            $("#div-presupuesto").hide();
+          }
+
 
           $("#txt_CodProyAs").val(data["codproyasoc_proyect"]);
           $("#txt_NombProyAs").val(data["desproyasoc_proyect"]);
@@ -396,11 +415,11 @@ $(document).ready(function () {
           $("#contFinancia").val(data["contFinancia"]);
           $("#txt_FinanciaTotal").val(data["TotFinancia"]);
           //
-          $("#tb_Presup").html(data["Tab_Presupuesto"]);
+          $("#tb_Presup").html(data["Tab_Presupuesto"]);          
+          PreTotal = data["Total"];
+          $("#gtotalPresTota").html(formatCurrency(PreTotal, "es-CO", "COP"));
           $("#contPresup").val(data["contPresupuesto"]);
 
-          $("#txt_valPreVigTot").val(data["TotVige"]);
-          $("#txt_valPreTotTot").val(data["Total"]);
           //
           $("#tb_Ingresos").html(data["Tab_Ingresos"]);
           $("#contIngPres").val(data["contIngresos"]);
@@ -539,11 +558,10 @@ $(document).ready(function () {
           $("#contFinancia").val(data["contFinancia"]);
           $("#txt_FinanciaTotal").val(data["TotFinancia"]);
           //
-          $("#tb_Presup").html(data["Tab_Presupuesto"]);
+          $("#tb_Presup").html(data["Tab_Presupuesto"]);          
+          PreTotal = data["Total"];
+          $("#gtotalPresTota").html(formatCurrency(PreTotal, "es-CO", "COP"));
           $("#contPresup").val(data["contPresupuesto"]);
-
-          $("#txt_valPreVigTot").val(data["TotVige"]);
-          $("#txt_valPreTotTot").val(data["Total"]);
           //
           $("#tb_Ingresos").html(data["Tab_Ingresos"]);
           $("#contIngPres").val(data["contIngresos"]);
@@ -1138,6 +1156,7 @@ $(document).ready(function () {
         dataType: "JSON",
         success: function (data) {
           $("#CbTiplog").html(data["Tipolog"]);
+          $("#CbOriFinancia").html(data["fFin"]);
           $("#CbSecre").html(data["Secre"]);
           $("#CbRespoAct").html(data["Respons"]);
           $("#CbDepa").html(data["dpto"]);
@@ -2502,34 +2521,45 @@ $(document).ready(function () {
     },
     AddFinancia: function () {
       var CbOriFinancia = $("#CbOriFinancia").val();
-      var txt_OriFin = $("#txt_OriFin").val();
+      var textTiplog = $("#CbOriFinancia option:selected").text();      
       var txt_cosFin = $("#txt_cosFin").val();
+      var txt_cosFinVi = $("#txt_cosFinVi").val();
+
+      if(CbOriFinancia == " "){
+        $.Alert(
+          "#msg",
+          "Debes seleccionar el origen de la financiación del proyecto. Verifique...",
+          "warning"
+        );
+        return;
+      }
+
+      if(txt_cosFinVi == "$ 0,00" || txt_cosFinVi == " "){
+        $.Alert(
+          "#msg",
+          "Debes de ingresar el valor. Verifique...",
+          "warning"
+        );
+        return;
+      }
+
+    
 
       contFinancia = $("#contFinancia").val();
       contFinancia++;
 
-      var txt_finan = txt_cosFin.split(" ");
-      valfina = parseFloat(
-        txt_finan[1].replace(".", "").replace(".", "").replace(".", "").replace(",", ".")
-      );
-      financi = parseFloat($("#txt_FinanciaTotal").val()) + valfina;
+      financi = parseFloat($("#txt_FinanciaTotal").val()) +  parseFloat(txt_cosFin);
 
       var fila = '<tr class="selected" id="filaFinancia' + contFinancia + '" >';
 
       fila += "<td>" + contFinancia + "</td>";
-      fila += "<td>" + CbOriFinancia + "</td>";
-      fila += "<td>" + txt_OriFin + "</td>";
-      fila += "<td>" + txt_cosFin + "</td>";
+      fila += "<td>" + textTiplog + "</td>";
+      fila += "<td>" + txt_cosFinVi + "</td>";
       fila +=
         "<td><input type='hidden' id='idFinancia" +
         contFinancia +
         "' name='terce' value='" +
-        CbOriFinancia +
-        "//" +
-        valfina +
-        "//" +
-        txt_OriFin +
-        "' /><a onclick=\"$.QuitarFinancia('filaFinancia" +
+        CbOriFinancia + "//" + txt_cosFin +"' /><a onclick=\"$.QuitarFinancia('filaFinancia" +
         contFinancia +
         "//" +
         txt_cosFin +
@@ -2542,8 +2572,9 @@ $(document).ready(function () {
       $("#txt_FinanciaTotal").val(financi);
       $("#gtotalFinanc").html("$ " + number_format2(financi, 2, ",", "."));
 
-      $("#txt_OriFin").val("");
-      $("#txt_cosFin").val("");
+      $("#CbOriFinancia").select2("val"," ");
+      $("#txt_cosFinVi").val("$ 0,00");
+      $("#txt_cosFin").val("0");
     },
     reordenarFinancia: function () {
       var num = 1;
@@ -2565,37 +2596,18 @@ $(document).ready(function () {
       contFinancia = $("#contFinancia").val();
       contFinancia = contFinancia - 1;
 
-      var txt_finan = txt_para[1].split(" ");
-
-      var financi =
-        $("#txt_FinanciaTotal").val() -
-        parseFloat(
-          txt_finan[1].replace(".", "").replace(".", "").replace(",", ".")
-        );
+      var financi = parseFloat($("#txt_FinanciaTotal").val()) - parseFloat(txt_para[1]);
+       
       $("#txt_FinanciaTotal").val(financi);
-      $("#gtotalFinanc").html("$ " + number_format2(financi, 2, ",", "."));
+      $("#gtotalFinanc").html(formatCurrency(financi, "es-CO", "COP"));
 
       $("#contFinancia").val(contFinancia);
     },
     AddPresupuesto: function () {
-      var txt_DesPres = $("#CbOriPres").val() + " " + $("#txt_DesPres").val();
-      var txt_CantPres = $("#txt_CantPres").val();
-      var txt_UnMed = $("#txt_UnMed").val();
-      var txt_valPreVig = $("#txt_valPreVig").val();
+      var txt_DesPres = $("#CbOriPres").val() + " " + $("#txt_DesPres").val(); 
       var txt_valPreTot = $("#txt_valPreTot").val();
 
-      var txt_PreVig = txt_valPreVig.split(" ");
-      valvig = parseFloat(
-        txt_PreVig[1].replace(".", "").replace(".", "").replace(".", "").replace(",", ".")
-      );
-   
-      PreVig = parseFloat($("#txt_valPreVigTot").val()) + valvig;
-      ///
-      var txt_PreTot = txt_valPreTot.split(" ");
-      valtot = parseFloat(
-        txt_PreTot[1].replace(".", "").replace(".", "").replace(".", "").replace(",", ".")
-      );
-      PreTot = parseFloat($("#txt_valPreTotTot").val()) + valtot;
+    PreTotal += parseFloat(txt_valPreTot);
 
       if ($("#txt_DesPres").val() === "") {
         $.Alert(
@@ -2606,33 +2618,16 @@ $(document).ready(function () {
         );
         return;
       }
-      if ($("#CbSecre").val() === " ") {
+      if ($("#txt_valPreTot").val() === "") {
         $.Alert(
           "#msg",
-          "Debe de Seleccionar la Secretaria del Proyecto",
+          "Debe de ingresar el valor total del item agregado",
           "warning",
           "warning"
         );
         return;
       }
 
-      var datos = {
-        ope: "ConsPresSecret",
-        sec: $("#CbSecre").val(),
-      };
-
-      $.ajax({
-        type: "POST",
-        url: "../All.php",
-        data: datos,
-        dataType: "JSON",
-        success: function (data) {
-          $("#CbSecre").html(data["Secre"]);
-        },
-        error: function (error_messages) {
-          alert("HA OCURRIDO UN ERROR");
-        },
-      });
 
       contPresup = $("#contPresup").val();
       contPresup++;
@@ -2640,47 +2635,31 @@ $(document).ready(function () {
 
       fila += "<td>" + contPresup + "</td>";
       fila += "<td>" + txt_DesPres + "</td>";
-      fila += "<td>" + txt_CantPres + "</td>";
-      fila += "<td>" + txt_UnMed + "</td>";
-      fila += "<td>" + txt_valPreVig + "</td>";
-      fila += "<td>" + txt_valPreTot + "</td>";
+      fila += "<td>" + formatCurrency(txt_valPreTot, "es-CO", "COP") + "</td>";
       fila +=
-        "<td><input type='hidden' id='idPresup" +
+        "<td ><input type='hidden' id='idPresup" +
         contPresup +
         "' name='terce' value='" +
         txt_DesPres +
         "//" +
-        txt_CantPres +
-        "//" +
-        txt_UnMed +
-        "//" +
-        valvig +
-        "//" +
-        valtot +
+        txt_valPreTot +
         "' /><a onclick=\"$.QuitarPresup('filaPresup" +
         contPresup +
         "//" +
-        valvig +
-        "//" +
-        valtot +
+        txt_valPreTot +
         '\')" class="btn default btn-xs red">' +
         '<i class="fa fa-trash-o"></i> Quitar</a></td></tr>';
       $("#tb_Presup").append(fila);
+      $("#gtotalPresTota").html(formatCurrency(PreTotal, "es-CO", "COP"));
+      $
+      
       $.reordenarPresup();
       $("#contPresup").val(contPresup);
 
-      $("#txt_valPreVigTot").val(PreVig);
-      $("#gtotalPresVigAct").html("$ " + number_format2(PreVig, 2, ",", "."));
-
-      $("#txt_valPreTotTot").val(PreTot);
-      $("#gtotalPresTota").html("$ " + number_format2(PreTot, 2, ",", "."));
-
-      $("#txt_DesPres").val("");
-      $("#txt_CantPres").val("");
-      $("#txt_UnMed").val("");
-      $("#CbOriPres").selectpicker("val", "SERVICIOS PERSONALES INDIRECTOS");
-      $("#txt_valPreTot").val("0,00");
-      $("#txt_valPreVig").val("0,00");
+       $("#txt_DesPres").val("");
+      $("#CbOriPres").selectpicker("val", "GASTOS INDIRECTOS");
+      $("#txt_valPreTotVis").val("0,00");
+      $("#txt_valPreTotTot").val("0");
     },
     reordenarPresup: function () {
       var num = 1;
@@ -2694,6 +2673,13 @@ $(document).ready(function () {
         num++;
       });
     },
+    cambioFormato: function (id,val) {
+      var numero = $("#" + id).val();
+      $("#"+val).val(numero);
+      var formatoMoneda = formatCurrency(numero, "es-CO", "COP");
+      
+      $("#" + id).val(formatoMoneda);
+    },
     QuitarPresup: function (id_fila) {
       var para_fila = id_fila.split("//");
       $("#" + para_fila[0]).remove();
@@ -2702,20 +2688,11 @@ $(document).ready(function () {
       contPresup = contPresup - 1;
       $("#contPresup").val(contPresup);
 
-      var txt_Vig = para_fila[1].split(" ");
 
-      vigen =
-        parseFloat($("#txt_valPreVigTot").val()) - parseFloat(para_fila[1]);
-
-      $("#txt_valPreVigTot").val(vigen);
-      $("#gtotalPresVigAct").html("$ " + number_format2(vigen, 2, ",", "."));
-
-      var txt_VigTot = para_fila[2].split(" ");
-      vigenTot =
-        parseFloat($("#txt_valPreTotTot").val()) - parseFloat(para_fila[2]);
-
-      $("#txt_valPreTotTot").val(vigenTot);
-      $("#gtotalPresTota").html("$ " + number_format2(vigenTot, 2, ",", "."));
+      PreTotal = PreTotal - parseFloat(para_fila[1]);
+    
+     $("#gtotalPresTota").html(formatCurrency(PreTotal, "es-CO", "COP"));
+      
     },
 
     AddUsuarios: function () {
@@ -3701,6 +3678,14 @@ $(document).ready(function () {
 
   //    $.Load_Documentos();
 
+  function formatCurrency(number, locale, currencySymbol) {
+    return new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: currencySymbol,
+      minimumFractionDigits: 2,
+    }).format(number);
+  }
+
   $("#archivos").on("change", function () {
     /* Limpiar vista previa */
     $("#vista-previa").html("");
@@ -4087,6 +4072,8 @@ $(document).ready(function () {
     }
   });
 
+
+
   $("#Anx_Doc").on("click", function () {
     var des = $("#txt_DesAnex").val();
     var name = $("#Name_File").val();
@@ -4301,6 +4288,21 @@ $(document).ready(function () {
       PreComp = "si";
     }
 
+    if($("#CbEstado").val() == "Priorizado" || $("#CbEstado").val() == "En Ejecucion" || $("#CbEstado").val() == "Ejecutado"){
+      if(PreComp == "no"){
+      let estado =  $("#CbEstado").val() === "En Ejecucion" ? "En ejecución" : $("#CbEstado").val();
+        $.Alert(
+          "#msg",
+          "Si el estado del proyecto cambia a "+estado+", el presupuesto debe estar comprometido... Verifique en pestaña Pressupuesto",
+          "warning",
+          {
+            duration: 9000
+        }
+        );
+        return;
+      }
+    }
+
     if ($("#CbEstado").val() === "En Ejecucion" && PreComp === "no") {
       $.Alert(
         "#msg",
@@ -4406,5 +4408,14 @@ function check(e) {
   if (letras.indexOf(tecla) == -1 && !tecla_especial) {
     return false;
   }
+}
+
+function restrictInput(event) {
+  const input = event.target;
+  const regex = /[^0-9.,]/g;
+  
+  // Remove any invalid characters
+  input.value = input.value.replace(regex, '');
+
 }
 ///////////////////////
