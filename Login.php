@@ -32,8 +32,9 @@ if ($_POST['opc'] == "vercompa") {
             $usu_maestro = $fila["usu_maestro"];
             $_SESSION['ses_compa'] = "";
             $_SESSION['ses_nombre'] = $fila['cue_nombres'];
+            $_SESSION['cue_foto'] = $fila['cue_foto'];
             $_SESSION['ses_user'] = $_POST['USER'];
-            $_SESSION['ses_nivel'] = $fila['niv_codigo'];
+            $_SESSION['ses_idusu'] = $fila['id_usuario'];
             $_SESSION['usu_maestro'] = $usu_maestro;
             $flag = "s";
         }
@@ -58,40 +59,29 @@ if ($_POST['opc'] == "vercompa") {
                          </div>
                      </div>";
 
-            $User_Login = "
-
-                     <li class='dropdown dropdown-user'>
-                         <a class='dropdown-toggle' target='_blank' href='Administracion/Manual_Usuario.pdf'>
-                             <img class='img-circle' src='Img/manual.png' alt=''/>
-                             <span class='username'>
-                                Manual de Usuario
-                            </span>
-                             <i class='fa fa-angle-left'></i>
-                         </a>
-                     </li>
-                     <li class='dropdown dropdown-user'>
+            $User_Login = "<li class='dropdown dropdown-user'>
                          <a class='dropdown-toggle'>
                              <img class='img-circle' src='Img/Compa.png' alt=''/>
                              <span class='username'>
                                 ---
                             </span>
-                             <i class='fa fa-angle-left'></i>
+                            
                          </a>
                      </li>
                      <li class='dropdown dropdown-user' >
                          <a class='dropdown-toggle' data-toggle='dropdown' data-hover='dropdown' data-close-others='true'>
-                             <img class='img-circle' src='Img/User.png' alt=''/>
+                             <img class='img-circle' src='Img/Usuarios/".$_SESSION['cue_foto']." alt=''/>
                              <span class='username'>
                                 " . $_SESSION['ses_nombre'] . "
                             </span>
                              <i class='fa fa-angle-left'></i>
                          </a>
                          <ul class='dropdown-menu'>
-							<li><a href='extra_profile.html'><i class='icon-user'></i> My Profile</a></li>
-							<li class='divider'></li>
-							<li><a href='javascript:;' id='trigger_fullscreen'><i class='icon-move'></i> Full Screen</a></li>
-							<li><a href='login.html'><i class='icon-key'></i> Log Out</a></li>
-						</ul>
+                         <li><a href='MiPerfil/'><i class='fa fa-user'></i> Mi perfil</a></li>
+                         <li class='divider'></li>
+                         <li><a target='_blank' href='Administracion/Manual_Usuario.pdf' id='trigger_fullscreen'><i class='fa fa-book'></i> Manual de usuario</a></li>
+                         <li><a href='cerrar.php'><i class='fa fa-sign-out'></i>  Cerrar Sesi&oacute;n</a></li>
+                     </ul>
                      </li>
 
                      <li class='dropdown dropdown-user'>
@@ -103,47 +93,30 @@ if ($_POST['opc'] == "vercompa") {
                         </a>
                      </li>";
             $User_SubLogin = "
-                 <li class='dropdown dropdown-user'>
-                         <a class='dropdown-toggle' target='_blank' href='../Administracion/Manual_Usuario.pdf'>
-                             <img class='img-circle' src='Img/manual.png' alt=''/>
-                             <span class='username'>
-                                Manual de Usuario
-                            </span>
-                             <i class='fa fa-angle-left'></i>
-                         </a>
-                     </li>
+                
                 <li class='dropdown dropdown-user'>
                          <a class='dropdown-toggle'>
                              <img class='img-circle' src='../Img/Compa.png' alt=''/>
                              <span class='username'>
                                 ---
                             </span>
-                             <i class='fa fa-angle-left'></i>
+                             
                          </a>
                      </li>
                      <li class='dropdown dropdown-user' >
                          <a class='dropdown-toggle' data-toggle='dropdown' data-hover='dropdown' data-close-others='true'>
-                             <img class='img-circle' src='Img/User.png' alt=''/>
+                             <img class='img-circle' src='../Img/Usuarios/".$_SESSION['cue_foto']."' alt=''/>
                              <span class='username'>
                                 " . $_SESSION['ses_nombre'] . "
                             </span>
                              <i class='fa fa-angle-left'></i>
                          </a>
                          <ul class='dropdown-menu'>
-							<li><a href='extra_profile.html'><i class='icon-user'></i> My Profile</a></li>
-							<li class='divider'></li>
-							<li><a href='javascript:;' id='trigger_fullscreen'><i class='icon-move'></i> Full Screen</a></li>
-							<li><a href='login.html'><i class='icon-key'></i> Log Out</a></li>
-						</ul>
-                     </li>
-
-                     <li class='dropdown dropdown-user'>
-                         <a href='../cerrar.php' class='dropdown-toggle'>
-                             <span class='username'>
-                                Cerrar Sesi&oacute;n
-                            </span>
-                             <i class='icon-logout'></i>
-                        </a>
+                         <li><a href='../MiPerfil/'><i class='fa fa-user'></i> Mi perfil</a></li>
+                         <li class='divider'></li>
+                         <li><a target='_blank' href='../Administracion/Manual_Usuario.pdf' id='trigger_fullscreen'><i class='fa fa-book'></i> Manual de usuario</a></li>
+                         <li><a href='../cerrar.php'><i class='fa fa-sign-out'></i>  Cerrar Sesi&oacute;n</a></li>
+                     </ul>
                      </li>";
 
             $Menu_Left = "<div class='page-sidebar-wrapper'>
@@ -199,7 +172,7 @@ if ($_POST['opc'] == "vercompa") {
                                 </li>
                                 <li class='nav-item' id='menu_ges_perf'>
                                     <a href='Perfiles/'>
-                                        <i class='icon-key'></i>
+                                        <i class='fa fa-user'></i>
                                         Gestionar Perfiles
                                     </a>
                                 </li>
@@ -269,7 +242,7 @@ if ($_POST['opc'] == "vercompa") {
                                 </li>
                                 <li  class='nav-item' id='menu_ges_perf'>
                                     <a href='../Perfiles/'>
-                                        <i class='icon-key'></i>
+                                        <i class='fa fa-user'></i>
                                         Gestionar Perfil
                                     </a>
                                 </li>
@@ -682,20 +655,20 @@ Mostrar Contratos</a>
                              <span class='username'>
                                 " . $_SESSION['ses_compa'] . "
                             </span>
-<i class='fa fa-angle-left'></i>
+
                          </a>";
 
             $User_Login = $User_Login . "</li>
             <li class='dropdown dropdown-user' >
             <a class='dropdown-toggle' data-toggle='dropdown' data-hover='dropdown' data-close-others='true'>
-                <img class='img-circle' src='Img/User.png' alt=''/>
+                <img class='img-circle' src='Img/Usuarios/".$_SESSION['cue_foto']."' alt=''/>
                 <span class='username'>
                    " . $_SESSION['ses_nombre'] . "
                </span>
                 <i class='fa fa-angle-left'></i>
             </a>
             <ul class='dropdown-menu'>
-               <li><a href='#'><i class='icon-key'></i> Cambio de contraseña</a></li>
+               <li><a href='MiPerfil/'><i class='fa fa-user'></i> Mi perfil</a></li>
                <li class='divider'></li>
                <li><a target='_blank' href='Administracion/Manual_Usuario.pdf' id='trigger_fullscreen'><i class='fa fa-book'></i> Manual de usuario</a></li>
                <li><a href='cerrar.php'><i class='fa fa-sign-out'></i>  Cerrar Sesi&oacute;n</a></li>
@@ -739,35 +712,27 @@ Mostrar Contratos</a>
                                </li></ul>
                        </li>
 
-   <li class='dropdown dropdown-user'>
-                         <a class='dropdown-toggle' target='_blank' href='../Administracion/Manual_Usuario.pdf'>
-                             <img class='img-circle' src='../Img/manual.png' alt=''/>
-                             <span class='username'>
-                                Manual de Usuario
-                            </span>
-                             <i class='fa fa-angle-left'></i>
-                         </a>
-                     </li>
+ 
  <li class='dropdown dropdown-user'>
                          <a href='javascript:;' class='dropdown-toggle' data-toggle='dropdown' data-hover='dropdown' data-close-others='true'>
                              <img class='img-circle' src='../Img/Compa.png' alt=''/>
                              <span class='username'>
                                 " . $_SESSION['ses_compa'] . "
                             </span>
-                             <i class='fa fa-angle-down'></i>
+                           
                          </a>";
 
             $User_SubLogin = $User_SubLogin . "</li>
             <li class='dropdown dropdown-user' >
             <a class='dropdown-toggle' data-toggle='dropdown' data-hover='dropdown' data-close-others='true'>
-                <img class='img-circle' src='../Img/User.png' alt=''/>
+                <img class='img-circle' src='../Img/Usuarios/".$_SESSION['cue_foto']."' alt=''/>
                 <span class='username'>
                    " . $_SESSION['ses_nombre'] . "
                </span>
                 <i class='fa fa-angle-left'></i>
             </a>
             <ul class='dropdown-menu'>
-               <li><a href='extra_profile.html'><i class='icon-key'></i> My Profile</a></li>
+               <li><a href='../MiPerfil/'><i class='fa fa-user'></i> Mi perfil</a></li>
                <li class='divider'></li>
                <li><a target='_blank' href='../Administracion/Manual_Usuario.pdf' id='trigger_fullscreen'><i class='fa fa-book'></i> Manual de usuario</a></li>
                <li><a href='../cerrar.php'><i class='fa fa-sign-out'></i>  Cerrar Sesi&oacute;n</a></li>
@@ -1136,7 +1101,7 @@ Mostrar Contratos</a>
                 if ($_SESSION['GesUsuVPe'] == "s") {
                     $Menu_Left .= "<li class='nav-item' id='menu_ges_perf'>
                                     <a href='Perfiles/'>
-                                        <i class='icon-key'></i>
+                                        <i class='fa fa-user'></i>
                                         Gestionar Perfiles
                                     </a>
                                 </li>";
@@ -1515,7 +1480,7 @@ Mostrar Contratos</a>
                 if ($_SESSION['GesUsuVPe'] == "s") {
                     $Menu_SubLeft .= "<li class = 'nav-item' id = 'menu_ges_perf'>
                     <a href = '../Perfiles/'>
-                    <i class = 'icon-key'></i>
+                    <i class = 'fa fa-user'></i>
                     Gestionar Perfiles
                     </a>
                     </li>";

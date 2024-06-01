@@ -167,11 +167,7 @@ $(document).ready(function () {
          
         }
       })
-      
-
-
-
-      
+            
     },
    
     Validar: function () {

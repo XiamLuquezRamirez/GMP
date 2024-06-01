@@ -5,7 +5,7 @@ $(document).ready(function () {
     $("#menu_p_proy").addClass("start active open");
     $("#menu_p_Contra_ges").addClass("active");
 
-    $("#txt_fechaG,#txt_fecha,#txt_fecha_Modi,#txt_FIni,#txt_FSusp,#txt_FRein,#txt_FFina,#txt_FReci").datepicker({
+    $("#txt_fechaG,#txt_fecha,#txt_fecha_Modi,#txt_FIni,#txt_FSusp,#txt_FRein,#txt_FFina,#txt_FReci,#txt_fechaAdd,#txt_fechaGasto").datepicker({
         format: 'yyyy-mm-dd',
         autoclose: true,
         todayBtn: 'linked',
@@ -13,7 +13,7 @@ $(document).ready(function () {
         language: 'es'
     });
 
-    $("#CbPersonaC,#cbx_tipo_identC,#CbEstadoProc,#CbEstado,#CbEstImg,#CbTiemDura,#CbTiemProrog").selectpicker();
+    $("#CbPersonaC,#cbx_tipo_identC,#CbEstadoProc,#CbEstado,#CbEstImg,#CbTiemDura,#CbTiemProrog,#CbGastos").selectpicker();
 
     var Datos, Op_Save, Id;
     Datos = "";
@@ -34,7 +34,9 @@ $(document).ready(function () {
     var Op_Anx = "New";
     Op_Anx = "New";
     var Op_Url = "";
+    var Dat_detAdicion = [];
 
+    var PreTotalAdicion = 0;
     var contImg = 0;
     var Dat_Img = "";
     var Dat_Localiza = "";
@@ -132,6 +134,7 @@ $(document).ready(function () {
             $("#txt_id").val(cod);
             $("#btn_nuevo").prop('disabled', true);
             $("#btn_guardar").prop('disabled', false);
+            $("#btn-adicion").show();
 
             var datos = {
                 ope: "BusqEditContrato",
@@ -154,9 +157,11 @@ $(document).ready(function () {
                     $('#CbSuper').val(data["idsuperv_contrato"]).change();
                     $('#CbInter').val(data["idinterv_contrato"]).change();
                     $("#txt_VaCont").val('$ ' + number_format2(data['vcontr_contrato'], 2, ',', '.'));
-                    $("#txt_VaAdi").val('$ ' + number_format2(data['vadic_contrato'], 2, ',', '.'));
+                    $("#txt_VaAdiV").val('$ ' + number_format2(data['vadic_contrato'], 2, ',', '.'));
+                    $("#txt_VaAdi").val(data['vadic_contrato']);
                     $("#txt_VaFin").val('$ ' + number_format2(data['vfin_contrato'], 2, ',', '.'));
-                    $("#txt_VaEje").val('$ ' + number_format2(data['veje_contrato'], 2, ',', '.'));
+                    $("#txt_VaEjeV").val('$ ' + number_format2(data['veje_contrato'], 2, ',', '.'));
+                    $("#txt_VaEje").val(data['veje_contrato']);
                     $("#txt_Fpago").val(data['forpag_contrato']);
 
                     if (data['durac_contrato'] === "  ") {
@@ -241,7 +246,7 @@ $(document).ready(function () {
             $("#divdura").hide();
 //            $("#divfini").hide();
             $("#divtitpro").hide();
-            $("#divproy").hide();
+            $("#divproy").show();
             $("#divequi").hide();
 
 
@@ -291,9 +296,11 @@ $(document).ready(function () {
                     $('#CbSuper').val(data["idsuperv_contrato"]).change();
                     $('#CbInter').val(data["idinterv_contrato"]).change();
                     $("#txt_VaCont").val('$ ' + number_format2(data['vcontr_contrato'], 2, ',', '.'));
-                    $("#txt_VaAdi").val('$ ' + number_format2(data['vadic_contrato'], 2, ',', '.'));
+                    $("#txt_VaAdiV").val('$ ' + number_format2(data['vadic_contrato'], 2, ',', '.'));
+                    $("#txt_VaAdi").val(data['vadic_contrato']);
                     $("#txt_VaFin").val('$ ' + number_format2(data['vfin_contrato'], 2, ',', '.'));
-                    $("#txt_VaEje").val('$ ' + number_format2(data['veje_contrato'], 2, ',', '.'));
+                    $("#txt_VaEje").val(data['veje_contrato']);
+                    $("#txt_VaEjeV").val('$ ' + number_format2(data['veje_contrato'], 2, ',', '.'));
                     $("#txt_Fpago").val(data['forpag_contrato']);
                     $("#Text_Motivo").val(data['observacion']);
 
@@ -382,8 +389,7 @@ $(document).ready(function () {
                     $("#txt_Avance").val(data['porav_contrato']);
                     $("#txt_PorEqui").val(data['porproy_contrato']);
                     $("#txt_Url").val(data['secop_contrato']);
-
-
+                 
                     $("#CbEstado").selectpicker("val", data['estad_contrato']);
                     $("#CbEstadoProc").selectpicker("val", data['estcont_contra']);
 
@@ -478,9 +484,11 @@ $(document).ready(function () {
                     $('#CbSuper').val(data["idsuperv_contrato"]).change();
                     $('#CbInter').val(data["idinterv_contrato"]).change();
                     $("#txt_VaCont").val('$ ' + number_format2(data['vcontr_contrato'], 2, ',', '.'));
-                    $("#txt_VaAdi").val('$ ' + number_format2(data['vadic_contrato'], 2, ',', '.'));
+                    $("#txt_VaAdiV").val('$ ' + number_format2(data['vadic_contrato'], 2, ',', '.'));
+                    $("#txt_VaAdi").val(data['vadic_contrato']);
                     $("#txt_VaFin").val('$ ' + number_format2(data['vfin_contrato'], 2, ',', '.'));
-                    $("#txt_VaEje").val('$ ' + number_format2(data['veje_contrato'], 2, ',', '.'));
+                    $("#txt_VaEje").val(data['veje_contrato']);
+                    $("#txt_VaEjeV").val('$ ' + number_format2(data['veje_contrato'], 2, ',', '.'));
                     $("#txt_Fpago").val(data['forpag_contrato']);
 
                     if (data['durac_contrato'] === "  ") {
@@ -725,8 +733,17 @@ $(document).ready(function () {
                 $('#botones').hide();
                 $.Alert("#msg", "No Tiene permisos para Crear Contratos", "warning", 'warning');
             }
+            $("#btn-adicion").hide();
         },
         CambEstado: function (val) {
+            
+            let resul = $.verificarEstado(val);
+
+            if(resul){
+                $("#CbEstado").selectpicker("val", " ")
+                return;
+            }
+
             if (val === "Prorroga") {
                 $('#Div_CamEst').show();
                 $('#TitMoti').html("Motivo de Prorroga");
@@ -752,6 +769,44 @@ $(document).ready(function () {
             }
 
 
+
+        },
+        verificarEstado: function(estCont){
+            let proy = $("#CbProy").val();
+            let estProy = $("#text_estadoProyecto").val();
+            let CbEstadoProc = $("#CbEstadoProc").val();
+            
+
+            if(proy== " "){
+                Swal.fire({
+                    position: "center",
+                    icon: "warning",
+                    title: "Este contrato no ha sido relacionado con ningun proyecto.", 
+                    showConfirmButton: true,
+                    timer: 3000
+                  });
+                  return true;
+            }else{
+                if(estCont == "Ejecucion" && estProy != "En Ejecucion"){
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: "Para cambiar el estado a Ejecución, el proyecto relacionado debe encontrarse en Ejecución.", 
+                        showConfirmButton: true,
+                        timer: 5000
+                      });
+                      return true;
+                }else if(estCont == "Ejecucion" && CbEstadoProc == "Por Verificar"){
+                    Swal.fire({
+                        position: "center",
+                        icon: "warning",
+                        title: "Para cambiar el estado a Ejecución, el contrato debe estar verificado.", 
+                        showConfirmButton: true,
+                        timer: 5000
+                      });
+                      return true;
+                }
+            }
 
         },
         combopag: function (pag, servel) {
@@ -903,6 +958,8 @@ $(document).ready(function () {
                     $("#CbSuper").html(data['Superv']);
                     $("#CbInter").html(data['Interv']);
                     $("#CbDepa").html(data['dpto']);
+                    $("#CbFuenteFinanciacion").html(data['fuenteFinanciacion']);
+                    $("#CbCategoriaGasto").html(data['catGastos']);
 
                 },
                 error: function (error_messages) {
@@ -933,6 +990,28 @@ $(document).ready(function () {
                     }
                 });
             }
+        },
+        verEstadoProyecto: function (val) {
+            
+
+                var datos = {
+                    ope: "BusEstProy",
+                    cod: val
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "../All.php",
+                    data: datos,
+                    dataType: 'JSON',
+                    success: function (data) {
+                        $("#text_estadoProyecto").val(data['estado']);
+                    },
+                    error: function (error_messages) {
+                        alert('HA OCURRIDO UN ERROR');
+                    }
+                });
+          
         },
         BusMun: function (val) {
 
@@ -1806,23 +1885,21 @@ $(document).ready(function () {
             por = $("#" + id).val().replace("%", "");
             $("#" + id).val(por);
         },
-        AddAdic: function (value, id) {
+        AddAdic: function () {
             var PVaCont = $("#txt_VaCont").val().split(" ");
             VaCon = PVaCont[1].replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
-            var PVaAdi = $("#txt_VaAdi").val();
-            VaAdi = PVaAdi.replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+            var VaAdi = $("#txt_VaAdi").val();
 
             vtotal = parseFloat(VaCon) + parseFloat(VaAdi);
 
             $("#txt_VaFin").val('$ ' + number_format2(vtotal, 2, ',', '.'));
-            textm(value, id);
+            
         },
         AddVFina: function (value, id) {
 
             var PVaCont = $("#txt_VaCont").val();
             VaCon = PVaCont.replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
-            var PVaAdi = $("#txt_VaAdi").val().split(" ");
-            VaAdi = PVaAdi[1].replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+            var VaAdi = $("#txt_VaAdi").val();
 
             vtotal = parseFloat(VaCon) + parseFloat(VaAdi);
 
@@ -1830,6 +1907,7 @@ $(document).ready(function () {
             $("#txt_VaFin").val('$ ' + number_format2(vtotal, 2, ',', '.'));
             textm(value, id);
         },
+       
         updateporc: function (id) {
             var Toporc = 0;
             $("input[name='PorCont[]']").each(function (indice, elemento) {
@@ -2125,6 +2203,15 @@ $(document).ready(function () {
 
         },
 
+        cambioFormato: function (id,val) {
+            var numero = $("#" + id).val();
+            $("#"+val).val(numero);
+            var formatoMoneda = formatCurrency(numero, "es-CO", "COP");
+            
+            $("#" + id).val(formatoMoneda);
+          },
+         
+
         NewTipo: function () {
             $("#VentTipologias").modal("show");
         },
@@ -2134,10 +2221,253 @@ $(document).ready(function () {
         NewInter: function () {
             $("#VentInterventor").modal("show");
         },
+        NewAdicion: function (op) {
+            if(op == "1"){
+                $("#VentAdicion").modal({backdrop: 'static', keyboard: false});
+            }
+         
+            var datos = {
+                ope: "CargAdiciones",
+                cont: $("#txt_Cod").val()
+            };
+
+            $("#listAdiciones").show();
+            $("#AddAdiciones").hide();
+           
+            $.ajax({
+                type: "POST",
+                url: "../All.php",
+                data: datos,
+                async: false,
+                dataType: 'JSON',
+                success: function (data) {
+                    $("#td-AdicionContrato").html(data['CadAdicion']);
+                    $("#gtotalAdicion").html(formatCurrency(data['total'],"es-CO", "COP"));
+                    $("#txt_VaAdiV").val(formatCurrency(data['total'],"es-CO", "COP"));
+                    $("#txt_VaAdi").val(data['total']);
+                },
+                error: function (error_messages) {
+                    alert('HA OCURRIDO UN ERROR');
+                }
+            });
+            $.AddAdic();
+          
+        },
+        QuitarAdicion: function(id){
+            Swal.fire({
+                title: '¿Estás seguro de eliminar este registro?',
+                text: "¡No podrás revertir esto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                customClass: {
+                    container: 'swal2-container'
+                },
+                confirmButtonText: '¡Sí, eliminar!'
+              }).then((result) => {
+                if (result.isConfirmed) {
+        
+                 var datos = {
+                    ope: "eliminarAdicion",
+                    id: id,
+                  };
+          
+                  $.ajax({
+                    type: "POST",
+                    url: "../All.php",
+                    data: datos,
+                    success: function (data) {
+                      if (data === "Bien") {
+                        Swal.fire(
+                          '¡Eliminado!',
+                          'El registro fue eliminado exitosamente.',
+                          'success'
+                        )
+                        $.NewAdicion('2');
+                      }
+                    },
+                    error: function (error_messages) {
+                      alert("HA OCURRIDO UN ERROR");
+                    },
+                  });
+        
+                 
+                }
+              })
+              
+        },
+        QuitarGasto: function(id){
+            Swal.fire({
+                title: '¿Estás seguro de eliminar este registro?',
+                text: "¡No podrás revertir esto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                customClass: {
+                    container: 'swal2-container'
+                },
+                confirmButtonText: '¡Sí, eliminar!'
+              }).then((result) => {
+                if (result.isConfirmed) {
+        
+                 var datos = {
+                    ope: "eliminarGasto",
+                    id: id,
+                  };
+          
+                  $.ajax({
+                    type: "POST",
+                    url: "../All.php",
+                    data: datos,
+                    success: function (data) {
+                      if (data === "Bien") {
+                        Swal.fire(
+                          '¡Eliminado!',
+                          'El registro fue eliminado exitosamente.',
+                          'success'
+                        )
+                        $.NewGastos('2');
+                      }
+                    },
+                    error: function (error_messages) {
+                      alert("HA OCURRIDO UN ERROR");
+                    },
+                  });
+        
+                 
+                }
+              })
+              
+        },
+        EditarAdicion: function (id) {
+            $("#txt_idAdicion").val(id)
+            var datos = {
+                ope: "editAdicion",
+                idAdi: id
+            };
+
+            $("#listAdiciones").hide();
+            $("#AddAdiciones").show();
+            $("#acc").val("5");
+
+            $.ajax({
+                type: "POST",
+                url: "../All.php",
+                data: datos,
+                dataType: 'JSON',
+                success: function (data) {
+
+                    $("#txt_fechaAdd").val(data['fecha']);
+                    $("#txt_valorAdicV").val(formatCurrency(data['valor'],"es-CO", "COP"));
+                    $("#txt_valorAdic").val(data['valor']);
+                    $("#Src_FileAdicion").val(data['url_documento']);
+
+                    if(data['url_documento'] !== ""){
+                        $('#btn-verDocumentos').show();
+                    }else{
+                        $('#btn-verDocumentos').hide();
+                    }
+
+                //detalles
+                   $("#td-DetAdicionContrato").html(data['tabDetAddiciones']);
+                   $("#gtotalPresTota").html(formatCurrency(data['contTotal'],"es-CO", "COP"));
+                   $("#contAdicion").val(data['cont']);
+                   PreTotalAdicion =data['contTotal'];
+
+                },
+                error: function (error_messages) {
+                    alert('HA OCURRIDO UN ERROR');
+                }
+            });  
+        },
+        quitarDocumento: function(){
+            $("Src_FileAdicion").val("");
+            $('#btn-verDocumentos').hide();
+        },
+        verDocumento: function(){            
+            var rutaArchivo = '../Proyecto/'+  $("#Src_FileAdicion").val();; // Cambia esta ruta a la ubicación de tu archivo
+            window.open(rutaArchivo, '_blank');
+        },
+        quitarDocumentoGasto: function(){
+            $("Src_FileGasto").val("");
+            $('#btn-verDocumebtosGasto').hide();
+        },
+        verDocumentoGasto: function(){            
+            var rutaArchivo = '../Proyecto/'+  $("#Src_FileGasto").val();; // Cambia esta ruta a la ubicación de tu archivo
+            window.open(rutaArchivo, '_blank');
+        },
+        NewGastos: function(op){
+            if(op == "1"){
+                $("#VentGastos").modal({backdrop: 'static', keyboard: false});
+            }
+
+            var datos = {
+                ope: "CargGastos",
+                cont: $("#txt_Cod").val()
+            };
+            $("#listGastos").show();
+            $("#AddGasto").hide();
+           
+            $.ajax({
+                type: "POST",
+                url: "../All.php",
+                data: datos,
+                dataType: 'JSON',
+                success: function (data) {
+                    $("#td-GastoContrato").html(data['CadGastos']);
+                    $("#gtotalGasto").html(formatCurrency(data['total'],"es-CO", "COP"));
+                    $("#txt_VaEjeV").val(formatCurrency(data['total'],"es-CO", "COP"));
+                    $("#txt_VaEje").val(data['total']);
+                },
+                error: function (error_messages) {
+                    alert('HA OCURRIDO UN ERROR');
+                }
+            });
+         
+        },
+        
+        EditarGasto: function (id) {
+            $("#txt_idGasto").val(id)
+            var datos = {
+                ope: "editGasto",
+                idGast: id
+            };
+
+            $("#listGastos").hide();
+            $("#AddGasto").show();
+
+            $("#acc").val("7");
+
+            $.ajax({
+                type: "POST",
+                url: "../All.php",
+                data: datos,
+                dataType: 'JSON',
+                success: function (data) {
+                    $("#txt_fechaGasto").val(data['fecha']);
+                    $("#CbCategoriaGasto").select2("val",data['categoria'])
+                    $("#txt_valorGastoV").val(formatCurrency(data['valor'],"es-CO", "COP"));
+                    $("#txt_valorGasto").val(data['valor']);
+                    $("#txt_descripcionGasto").val(data['descripcion']);
+                    $("#Src_FileGasto").val(data['url_documento']);
+
+                    if(data['url_documento'] !== ""){
+                        $('#btn-verDocumebtosGasto').show();
+                    }else{
+                        $('#btn-verDocumebtosGasto').hide();
+                    }
+                },
+                error: function (error_messages) {
+                    alert('HA OCURRIDO UN ERROR');
+                }
+            });
+        },
         CargTipol: function () {
 
             var datos = {
-                ope: "CargTipologiaCont"
+                ope: "CargTipologiaCont" 
             };
 
             $.ajax({
@@ -2342,7 +2672,356 @@ $(document).ready(function () {
                 }
             });
 
-        }
+        },
+        Dta_detallesAdicion: function () {
+            Dat_detAdicion = "";
+            $("#tb_AdicionContrato").find(':input').each(function () {
+                
+                Dat_detAdicion += "&" + $(this).attr("id") + "=" + $(this).val();
+            });
+         
+            
+          },
+        guadarAdicion: function () {
+
+           
+           if ($("#txt_fechaAdd").val() === "" || $("#txt_fechaAdd").val() === " ") {
+            $.Alert(
+              "#msgAdicionGen",
+              "Debe de seleccionar la fecha de adición",
+              "warning",
+              "warning"
+            );
+            return;
+          }
+           if ($("#txt_valorAdicV").val() === "$ 0,00") {
+            $.Alert(
+              "#msgAdicionGen",
+              "Debe de agregar un detalle para la adición",
+              "warning",
+              "warning"
+            );
+            return;
+          }
+
+          $.UploadDoc();
+          $.Dta_detallesAdicion();
+
+          var datos =
+            "txt_fechaAdd=" + $("#txt_fechaAdd").val()+"&txt_valorAdic="+$("#txt_valorAdic").val()
+            + "&Src_FileAdicion="+$("#Src_FileAdicion").val()
+            + "&idContrato="+ $("#txt_Cod").val()
+            +"&Long_DetAdicion="+ $("#contAdicion").val()
+            +"&txt_idAdicion="+ $("#txt_idAdicion").val()
+            +"&acc="+$("#acc").val();
+          
+
+          var Alldata = datos + Dat_detAdicion;
+
+          $.ajax({
+            type: "POST",
+            url: "../Proyecto/GuardarContrato.php",
+            data: Alldata,
+            success: function (data) {
+                var pares = data.split("/");
+                if (trimAll(pares[0]) === "bien") {
+                $.Alert(
+                  "#msgAdicionGen",
+                  "Datos Guardados Exitosamente...",
+                  "success",
+                  "check"
+                );
+                
+
+                setTimeout(function () {
+                    $("#acc").val("2");
+                    $.NewAdicion('2');
+                }, 2000);
+            
+              }
+            },
+            error: function (error_messages) {
+              alert("HA OCURRIDO UN ERROR");
+            },
+          });
+
+
+
+        },
+        guadarGasto: function () {
+
+           
+           if ($("#txt_fechaGasto").val() === "" || $("#txt_fechaGasto").val() === " ") {
+            $.Alert(
+              "#msgGastoGen",
+              "Debe de seleccionar la fecha del gasto",
+              "warning",
+              "warning"
+            );
+            return;
+          }
+           if ($("#CbCategoriaGasto").val() === "" || $("#CbCategoriaGasto").val() === " ") {
+            $.Alert(
+              "#msgGastoGen",
+              "Debe de seleccionar la categoria del gasto",
+              "warning",
+              "warning"
+            );
+            return;
+          }
+           if ($("#txt_valorGastoV").val() === "$ 0,00") {
+            $.Alert(
+              "#msgGastoGen",
+              "Debe de agregar el valor para el gasto",
+              "warning",
+              "warning"
+            );
+            return;
+          }
+
+          $.UploadDocGasto();
+
+          var datos = "txt_fechaGasto=" + $("#txt_fechaGasto").val()
+            +"&CbCategoriaGasto="+$("#CbCategoriaGasto").val()
+            +"&txt_valorGasto="+$("#txt_valorGasto").val()
+            +"&idContrato="+ $("#txt_Cod").val()
+            +"&txt_descripcionGasto="+ $("#txt_descripcionGasto").val()
+            +"&Src_FileGasto="+ $("#Src_FileGasto").val()
+            +"&txt_idGasto="+ $("#txt_idGasto").val()
+            +"&acc="+$("#acc").val();
+          
+          $.ajax({
+            type: "POST",
+            url: "../Proyecto/GuardarContrato.php",
+            data: datos,
+            success: function (data) {
+                var pares = data.split("/");
+                if (trimAll(pares[0]) === "bien") {
+                $.Alert(
+                  "#msgGastoGen",
+                  "Datos Guardados Exitosamente...",
+                  "success",
+                  "check"
+                );
+                setTimeout(function () {
+                    $("#acc").val("2");
+                    $.NewGastos('2');
+                }, 2000);            
+              }
+            },
+            error: function (error_messages) {
+              alert("HA OCURRIDO UN ERROR");
+            },
+          });
+
+
+
+        },
+      
+        AddAdicion: function () {
+           $("#listAdiciones").hide(); 
+           $("#AddAdiciones").show();
+           $("#acc").val("4");
+
+           //limpiar campos
+           $("#txt_fechaAdd").val("");
+           $("#txt_valorAdicV").val("$ 0,00");
+           $("#txt_valorAdic").val("");
+           $("#archivosAdicion").val("");
+           $("#Src_FileAdicion").val("");
+
+           //limpiar detalles
+           $("#contAdicion").val("0");
+           $("#td-DetAdicionContrato").html("");
+           $("#gtotalPresTota").html("$ 0,00");
+
+           $("#btn-verDocumentos").hide();
+
+        },
+        AddGasto: function () {
+           $("#listGastos").hide(); 
+           $("#AddGasto").show();
+           $("#acc").val("6");
+           
+           //limpiar campos
+           $("#txt_fechaGasto").val("");
+           $("#CbCategoriaGasto").select2("val", " ");
+           $("#txt_valorGastoV").val("$ 0,00");
+           $("#txt_valorGasto").val("");
+           $("#archivosGasto").val("");
+           $("#Src_FileGasto").val("");
+           $("#txt_descripcionGasto").val("");
+           $("#btn-verDocumebtosGasto").hide();
+        },
+        atrasAdicion: function () {
+            $("#AddAdiciones").hide();
+            $("#listAdiciones").show();
+        },
+        atrasGasto: function () {
+            $("#AddGasto").hide();
+            $("#listGastos").show();
+        },
+        AddDeltalleAdicionContrato: function () {
+            var CbFuenteFinanciacion = $("#CbFuenteFinanciacion").val(); 
+            var desCbFuenteFinanciacion =$("#CbFuenteFinanciacion option:selected").text();
+            var CbGastos =  $("#CbGastos").val(); 
+            var txt_DesGastos =  $("#txt_DesGastos").val(); 
+            var txt_valorDetAdic = $("#txt_valorDetAdic").val();
+      
+            PreTotalAdicion += parseFloat(txt_valorDetAdic);
+      
+            if ($("#CbFuenteFinanciacion").val() === " ") {
+              $.Alert(
+                "#msgAdicion",
+                "Debe de seleccionar la fuente de financiación",
+                "warning",
+                "warning"
+              );
+              return;
+            }
+            
+            if ($("#txt_valorDetAdicV").val() === "$ 0,00") {
+              $.Alert(
+                "#msgAdicion",
+                "Debe de ingresar el valor total del item agregado",
+                "warning",
+                "warning"
+              );
+              return;
+            }
+      
+      
+            contAdicion = $("#contAdicion").val();
+            contAdicion++;
+            var fila = '<tr class="selected" id="filaPresup' + contAdicion + '" >';
+      
+            fila += "<td>" + contAdicion + "</td>";
+            fila += "<td>" + desCbFuenteFinanciacion+ "</td>";
+            fila += "<td>" + CbGastos+" - "+txt_DesGastos+ "</td>";
+            fila += "<td>" + formatCurrency(txt_valorDetAdic, "es-CO", "COP") + "</td>";
+            fila += "<td ><input type='hidden' id='idDetAdicion" +contAdicion + "' name='terce' value='" + CbFuenteFinanciacion +"//" +  CbGastos +"//" +  txt_DesGastos +"//" +  txt_valorDetAdic +"' /><a data-conse='filaPresup"+contAdicion+"' data-valor='"+  txt_valorDetAdic +"'  onclick='$.QuitardetAdicion(this)' class='btn default btn-xs red'>";
+            fila += "<i class='fa fa-trash-o'></i> Quitar</a></td></tr>";
+            $("#td-DetAdicionContrato").append(fila);
+           
+            $("#gtotalPresTota").html(formatCurrency(PreTotalAdicion, "es-CO", "COP"));
+            $("#txt_valorAdicV").val(formatCurrency(PreTotalAdicion, "es-CO", "COP"));
+            $("#txt_valorAdic").val(PreTotalAdicion);
+                        
+            $.reordenarAdicion();
+            $("#contAdicion").val(contAdicion);
+      
+            $("#CbFuenteFinanciacion").select2("val", " ");          
+            $("#CbGastos").selectpicker("val", "GASTOS INDIRECTOS");
+            $("#txt_DesGastos").val("");
+            $("#txt_valorDetAdicV").val("$ 0,00");
+            $("#txt_valorDetAdic").val("0");
+          },
+          QuitardetAdicion: function (element) {
+            
+            let idElement = element.getAttribute("data-conse");
+            let valor = element.getAttribute("data-valor");
+            
+            console.log(idElement);
+            $("#" + idElement).remove();
+            $.reordenarAdicion();
+            contPresup = $("#contAdicion").val();
+            contPresup = contPresup - 1;
+            $("#contAdicion").val(contPresup);      
+      
+            PreTotalAdicion = PreTotalAdicion - parseFloat(valor);
+          
+           $("#gtotalPresTota").html(formatCurrency(PreTotalAdicion, "es-CO", "COP"));
+           $("#txt_valorAdicV").val(formatCurrency(PreTotalAdicion, "es-CO", "COP"));
+           $("#txt_valorAdic").val(PreTotalAdicion);
+         
+          },
+      
+          reordenarAdicion: function () {
+            var num = 1;
+            $("#tb_Presup tbody tr").each(function () {
+              $(this).find("td").eq(0).text(num);
+              num++;
+            });
+            num = 1;
+            $("#tb_Presup tbody input").each(function () {
+              $(this).attr("id", "idPresup" + num);
+              num++;
+            });
+          },
+          UploadDoc: function () {
+           
+            var archivos = document.getElementById("archivosAdicion"); //Creamos un objeto con el elemento que contiene los archivos: el campo input file, que tiene el id = 'archivos'
+            var archivo = archivos.files; //Obtenemos los archivos seleccionados en el imput
+            //Creamos una instancia del Objeto FormDara.
+            var archivos = new FormData();
+            /* Como son multiples archivos creamos un ciclo for que recorra la el arreglo de los archivos seleccionados en el input
+                   Este y añadimos cada elemento al formulario FormData en forma de arreglo, utilizando la variable i (autoincremental) como
+                   indice para cada archivo, si no hacemos esto, los valores del arreglo se sobre escriben*/
+            for (i = 0; i < archivo.length; i++) {
+              archivos.append("archivosAdicion" + i, archivo[i]); //Añadimos cada archivo a el arreglo con un indice direfente
+            }
+      
+            var ruta = "../Proyecto/SubirDocumContrato.php";
+      
+            $.ajax({
+              async: false,
+              url: ruta,
+              type: "POST",
+              data: archivos,
+              contentType: false,
+              processData: false,
+              success: function (datos) {
+                var par_res = datos.split("//");
+                if (par_res[0] === "Bien") {
+                  $("#Src_FileAdicion").val(par_res[1].trim());
+                } else if (par_res[0] === "Mal") {
+                  $.Alert(
+                    "#msgArchAdicion",
+                    "El archivo no se Puede Agregar debido al siguiente Error:"
+                      .par_res[1],
+                    "warning"
+                  );
+                }
+              },
+            });
+          },
+          UploadDocGasto: function () {
+           
+            var archivos = document.getElementById("archivosGasto"); //Creamos un objeto con el elemento que contiene los archivos: el campo input file, que tiene el id = 'archivos'
+            var archivo = archivos.files; //Obtenemos los archivos seleccionados en el imput
+            //Creamos una instancia del Objeto FormDara.
+            var archivos = new FormData();
+            /* Como son multiples archivos creamos un ciclo for que recorra la el arreglo de los archivos seleccionados en el input
+                   Este y añadimos cada elemento al formulario FormData en forma de arreglo, utilizando la variable i (autoincremental) como
+                   indice para cada archivo, si no hacemos esto, los valores del arreglo se sobre escriben*/
+            for (i = 0; i < archivo.length; i++) {
+              archivos.append("archivosGasto" + i, archivo[i]); //Añadimos cada archivo a el arreglo con un indice direfente
+            }
+      
+            var ruta = "../Proyecto/SubirDocumContrato.php";
+      
+            $.ajax({
+              async: false,
+              url: ruta,
+              type: "POST",
+              data: archivos,
+              contentType: false,
+              processData: false,
+              success: function (datos) {
+                var par_res = datos.split("//");
+                if (par_res[0] === "Bien") {
+                  $("#Src_FileGasto").val(par_res[1].trim());
+                } else if (par_res[0] === "Mal") {
+                  $.Alert(
+                    "#msgArchGasto",
+                    "El archivo no se Puede Agregar debido al siguiente Error:"
+                      .par_res[1],
+                    "warning"
+                  );
+                }
+              },
+            });
+          },
 
     });
     //======FUNCIONES========\\
@@ -2478,6 +3157,24 @@ $(document).ready(function () {
         window.location.href = "../Contratos/";
 
     });
+
+    function restrictInput(event) {
+        const input = event.target;
+        const regex = /[^0-9.,]/g;
+        
+        // Remove any invalid characters
+        input.value = input.value.replace(regex, '');
+    
+      }
+
+
+      function formatCurrency(number, locale, currencySymbol) {
+        return new Intl.NumberFormat(locale, {
+          style: "currency",
+          currency: currencySymbol,
+          minimumFractionDigits: 2,
+        }).format(number);
+      }
 
     $("#anexo_justAtra").on("change", function () {
         /* Limpiar vista previa */
@@ -2634,9 +3331,11 @@ $(document).ready(function () {
         $("#CbSuper").select2("val", " ");
         $("#CbInter").select2("val", " ");
         $("#txt_VaCont").val("$ 0,00");
-        $("#txt_VaAdi").val("$ 0,00");
+        $("#txt_VaAdiV").val("$ 0,00");
+        $("#txt_VaAdi").val("0");
         $("#txt_VaFin").val("$ 0,00");
-        $("#txt_VaEje").val("$ 0,00");
+        $("#txt_VaEjeV").val("$ 0,00");
+        $("#txt_VaEje").val("0");
         $("#txt_Fpago").val("");
         $("#txt_Durac").val("");
         $("#txt_FIni").val("");
@@ -2789,9 +3488,11 @@ $(document).ready(function () {
             $("#CbSuper").select2("val", " ");
             $("#CbInter").select2("val", " ");
             $("#txt_VaCont").val("$ 0,00");
-            $("#txt_VaAdi").val("$ 0,00");
+            $("#txt_VaAdiV").val("$ 0,00");
+            $("#txt_VaAdi").val("");
             $("#txt_VaFin").val("$ 0,00");
-            $("#txt_VaEje").val("$ 0,00");
+            $("#txt_VaEje").val("0");
+            $("#txt_VaEjeV").val("$ 0,00");
             $("#txt_Fpago").val("");
             $("#txt_Durac").val("");
             $("#txt_FIni").val("");
@@ -3076,6 +3777,7 @@ $(document).ready(function () {
             }
         });
     });
+ 
 
     $("#txt_FSusp").keypress(function (tecla) {
         return false;
@@ -3108,16 +3810,13 @@ $(document).ready(function () {
 
         var PvalCont = $("#txt_VaCont").val().split(" ");
         var ValCon = PvalCont[1].replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
-
-        var PvalAdic = $("#txt_VaAdi").val().split(" ");
-        var ValAdic = PvalAdic[1].replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
-
+   
+        var ValAdic = $("#txt_VaAdi").val();
 
         var PvalFin = $("#txt_VaFin").val().split(" ");
         var ValFin = PvalFin[1].replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
 
-        var PvalEje = $("#txt_VaEje").val().split(" ");
-        var ValEje = PvalEje[1].replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+        var ValEje = $("#txt_VaEje").val();
 
         var txt_FIni = $("#txt_FIni").val();
         if ($("#txt_FIni").val() === "") {

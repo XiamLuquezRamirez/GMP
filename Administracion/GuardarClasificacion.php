@@ -6,11 +6,11 @@ include("../Conectar.php");
 $success = 1;
 $error = "";
 $link = conectar();
-mysql_query("BEGIN");
+mysqli_query($link, "BEGIN");
 
 if ($_POST['acc'] == "1") {
     $consulta = "INSERT INTO clasificacion_proyecto VALUES(null,'" . $_POST['cod'] . "','" . $_POST['id'] . "',"
-            . "'" . $_POST['des'] . "')";
+        . "'" . $_POST['des'] . "')";
 } else {
     $consulta = "DELETE FROM clasificacion_proyecto WHERE id='" . $_POST['cod'] . "'";
 }
@@ -18,22 +18,21 @@ if ($_POST['acc'] == "1") {
 
 
 //echo $consulta;
-$qc = mysql_query($consulta, $link);
+$qc = mysqli_query($link, $consulta);
 
-if (($qc == false) || (mysql_affected_rows($link) == -1) || mysql_errno($link) != 0) {
+if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
     $success = 0;
     $error = 1;
 }
 
 
 if ($success == 0) {
-    mysql_query("ROLLBACK");
+    mysqli_query($link, "ROLLBACK");
     echo $error;
     echo $consulta;
 } else {
-    mysql_query("COMMIT");
+    mysqli_query($link, "COMMIT");
     echo "bien";
 }
 
-mysql_close();
-?>
+mysqli_close($link);

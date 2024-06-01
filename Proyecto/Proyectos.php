@@ -77,7 +77,7 @@ $link = conectar();
     <script src="../Js/ckeditor/ckeditor.js" type="text/javascript"></script>
     <script src="../Js/ckeditor/styles.js" type="text/javascript"></script>
 
-
+  
 
 
 
@@ -114,18 +114,18 @@ $link = conectar();
         <div class="page-content-wrapper">
             <div class="page-content">
                 <div class="page-bar">
-                    <ul class="page-breadcrumb">
-                        <li>
-                            <i class="fa fa-home"></i>
-                            <a href="../Administracion.php">Administración</a>
-                            <i class="fa fa-circle"></i>
-                        </li>
-                        <li>
-                            <i style="color: yellow;" class="fa fa-star"></i>
-                            <a href="../Proyecto/Proyectos.php">Gestión de Proyectos</a>
+                <ul class="page-breadcrumb">
+                            <li>
+                                <i class="fa fa-home"></i>
+                                <a href="Administracion.php">Administración</a>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                            <li>
+                                <i style="color: yellow;"  class="fa fa-star"></i>
+                                <a href="Perfil/">Mi perfil </a>
 
-                        </li>
-                    </ul>
+                            </li>
+                        </ul>
                 </div>
 
                 <h3 class="page-title"> </h3>
@@ -710,7 +710,7 @@ $link = conectar();
                                         <li id="tab_pp3">
                                             <a href="#tab_3" data-toggle="tab"> Descripción </a>
                                         </li>
-                                        <li id="tab_pp4">
+                                        <li style="display: none;" id="tab_pp4">
                                             <a href="#tab_4" data-toggle="tab"> Costos Asociados </a>
                                         </li>
                                         <li id="tab_pp5">
@@ -2379,7 +2379,7 @@ $link = conectar();
                                                                             <div class="col-md-12">
                                                                                 <div class="form-group" style="float: right">
                                                                                     <button type="button" id="Anx_Doc" class="btn green-meadow" title="Anexar Documento">
-                                                                                        <i class="fa fa-plus-circle" /></i> Anexar Documento
+                                                                                        <i class="fa fa-plus-circle" ></i> Anexar Documento
                                                                                     </button>
                                                                                 </div>
                                                                             </div>

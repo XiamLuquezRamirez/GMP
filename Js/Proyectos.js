@@ -2604,20 +2604,12 @@ $(document).ready(function () {
       $("#contFinancia").val(contFinancia);
     },
     AddPresupuesto: function () {
-      var txt_DesPres = $("#CbOriPres").val() + " " + $("#txt_DesPres").val(); 
+      var txt_DesPres = $("#CbOriPres").val(); 
+      var txt_Observacion =  $("#txt_DesPres").val(); 
       var txt_valPreTot = $("#txt_valPreTot").val();
 
     PreTotal += parseFloat(txt_valPreTot);
 
-      if ($("#txt_DesPres").val() === "") {
-        $.Alert(
-          "#msg",
-          "Debe de Ingresar una Descripción",
-          "warning",
-          "warning"
-        );
-        return;
-      }
       if ($("#txt_valPreTot").val() === "") {
         $.Alert(
           "#msg",
@@ -2634,17 +2626,11 @@ $(document).ready(function () {
       var fila = '<tr class="selected" id="filaPresup' + contPresup + '" >';
 
       fila += "<td>" + contPresup + "</td>";
-      fila += "<td>" + txt_DesPres + "</td>";
+      fila += "<td>" + txt_DesPres+" - "+txt_Observacion+ "</td>";
       fila += "<td>" + formatCurrency(txt_valPreTot, "es-CO", "COP") + "</td>";
       fila +=
         "<td ><input type='hidden' id='idPresup" +
-        contPresup +
-        "' name='terce' value='" +
-        txt_DesPres +
-        "//" +
-        txt_valPreTot +
-        "' /><a onclick=\"$.QuitarPresup('filaPresup" +
-        contPresup +
+        contPresup + "' name='terce' value='" + txt_DesPres +"//" +  txt_valPreTot +"//" +  txt_Observacion +"' /><a onclick=\"$.QuitarPresup('filaPresup" +   contPresup +
         "//" +
         txt_valPreTot +
         '\')" class="btn default btn-xs red">' +

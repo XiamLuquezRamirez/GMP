@@ -1094,6 +1094,144 @@ FROM
     $myJSONDat = json_encode($myDat);
 
     echo $myJSONDat;
+} else if ($_POST['ope'] == "CargAdiciones") {
+
+    $myDat = new stdClass();
+
+    $CadAdicion = "";
+    $cont = 0;
+    $total = 0;
+    $consulta = "select * from adicion_contrato where contrato='" . $_POST["cont"] . "' AND estado ='ACTIVO'";
+    $resultado = mysqli_query($link, $consulta);
+    if (mysqli_num_rows($resultado) > 0) {
+        while ($fila = mysqli_fetch_array($resultado)) {
+            $cont++;
+            $total += $fila["valor"];
+            $CadAdicion .= '<tr class="selected" id="filaAdicion' . $cont . '" >';
+            $CadAdicion .= "<td>" . $cont . "</td>";
+            $CadAdicion .= "<td>" . $fila["fecha"] . "</td>";
+            $CadAdicion .= "<td style='text-align: center;'>";
+            if ($fila['url_documento'] == "") {
+                $CadAdicion .= "Sin documento";
+            } else {
+                $CadAdicion .= "<a href='" . "../Proyecto/" . $fila['url_documento'] . "' target='_blank' class=\"btn default btn-xs blue\"><i class=\"fa fa-search\"></i></a>";
+            }
+
+            $CadAdicion .= "</td>";
+            $CadAdicion .= "<td>$ " . number_format($fila["valor"], 2, ",", ".") . "</td>";
+            $CadAdicion .= "<td><input type='hidden' id='idAdicion" . $cont . "' name='idAdicion' value='" . $fila["fecha"] . "//" . $fila["valor"] . "' />
+            <a onclick=\"$.EditarAdicion(" . $fila["id"] . ")\" class=\"btn default btn-xs blue\">"
+                . "<i class=\"fa fa-trash-o\"></i> Editar</a>
+            <a onclick=\"$.QuitarAdicion(" . $fila["id"] . ")\" class=\"btn default btn-xs red\">"
+                . "<i class='fa fa-trash-o'></i> Eliminar</a>
+            </td></tr>";
+        }
+    }
+
+    $myDat->CadAdicion = $CadAdicion;
+    $myDat->total = $total;
+    $myJSONDat = json_encode($myDat);
+    echo $myJSONDat;
+} else if ($_POST['ope'] == "CargGastos") {
+
+    $myDat = new stdClass();
+
+    $CadGastos = "";
+    $cont = 0;
+    $total = 0;
+    $consulta = "SELECT gc.id, cg.nombre, gc.fecha,gc.valor, gc.url_documento 
+    FROM gastos_contrato gc
+    LEFT JOIN categoria_gastos cg ON gc.categoria=cg.id
+    WHERE gc.contrato = '" . $_POST["cont"] . "' AND gc.estado= 'ACTIVO'";
+
+    $resultado = mysqli_query($link, $consulta);
+    if (mysqli_num_rows($resultado) > 0) {
+        while ($fila = mysqli_fetch_array($resultado)) {
+            $cont++;
+            $total += $fila["valor"];
+            $CadGastos .= '<tr class="selected" id="filaGasto' . $cont . '" >';
+            $CadGastos .= "<td>" . $cont . "</td>";
+            $CadGastos .= "<td>" . $fila["fecha"] . "</td>";
+            $CadGastos .= "<td>" . $fila["nombre"] . "</td>";
+            $CadGastos .= "<td style='text-align: center;'>";
+            if ($fila['url_documento'] == "") {
+                $CadGastos .= "Sin documento";
+            } else {
+                $CadGastos .= "<a href='" . "../Proyecto/" . $fila['url_documento'] . "' target='_blank' class=\"btn default btn-xs blue\"><i class=\"fa fa-search\"></i></a>";
+            }
+
+            $CadGastos .= "</td>";
+            $CadGastos .= "<td>$ " . number_format($fila["valor"], 2, ",", ".") . "</td>";
+            $CadGastos .= "<td>
+            <a onclick=\"$.EditarGasto(" . $fila["id"] . ")\" class=\"btn default btn-xs blue\">"
+                . "<i class=\"fa fa-trash-o\"></i> Editar</a>
+            <a onclick=\"$.QuitarGasto(" . $fila["id"] . ")\" class=\"btn default btn-xs red\">"
+                . "<i class='fa fa-trash-o'></i> Eliminar</a>
+            </td></tr>";
+        }
+    }
+
+    $myDat->CadGastos = $CadGastos;
+    $myDat->total = $total;
+    $myJSONDat = json_encode($myDat);
+    echo $myJSONDat;
+} else if ($_POST['ope'] == "editAdicion") {
+    $myDat = new stdClass();
+    $consulta = "SELECT * FROM adicion_contrato WHERE id = " . $_POST['idAdi'];
+
+    $resultado = mysqli_query($link, $consulta);
+    if (mysqli_num_rows($resultado) > 0) {
+        while ($fila = mysqli_fetch_array($resultado)) {
+            $myDat->fecha = $fila["fecha"];
+            $myDat->valor = $fila["valor"];
+            $myDat->url_documento = $fila["url_documento"];
+        }
+    }
+
+    $consulta = "SELECT da.origen_financiacion,fu.nombre,da.gastos_presupuesto, da.desc_gasto, da.valor  FROM detalle_adicion da
+    LEFT JOIN fuentes fu on da.origen_financiacion = fu.id
+     WHERE da.adicion = " . $_POST['idAdi'];
+    $resultado1 = mysqli_query($link, $consulta);
+    $tabDetAddiciones = "";
+    $cont = 0;
+    $contTotal = 0;
+
+    if (mysqli_num_rows($resultado1) > 0) {
+        while ($fila1 = mysqli_fetch_array($resultado1)) {
+            $cont++;
+            $contTotal += $fila1['valor'];
+            $tabDetAddiciones .= '<tr class="selected" id="filaPresup' . $cont . '">';
+            $tabDetAddiciones .= '<td>' . $cont . '</td>';
+            $tabDetAddiciones .= '<td>' . $fila1['nombre'] . '</td>';
+            $tabDetAddiciones .= '<td>' . $fila1['gastos_presupuesto'] . ' - ' . $fila1['desc_gasto'] . '</td>';
+            $tabDetAddiciones .= '<td>' . number_format($fila1['valor'], 2, ",", ".") . '</td>';
+            $tabDetAddiciones .= '<td><input type="hidden" id="idDetAdicion' . $cont . '" value="' . $fila1['origen_financiacion'] . '//' . $fila1['gastos_presupuesto'] . '//' . $fila1['desc_gasto'] . '//' . $fila1['valor'] . '" /><a data-conse="filaPresup' . $cont . '" data-valor="' . $fila1['valor'] . '" onclick="$.QuitardetAdicion(this)" class="btn default btn-xs red"><i class="fa fa-trash-o"></i> Quitar</a></td>';
+            $tabDetAddiciones .= '</tr>';
+        }
+    }
+
+    $myDat->cont = $cont;
+    $myDat->contTotal = $contTotal;
+    $myDat->tabDetAddiciones = $tabDetAddiciones;
+    $myJSONDat = json_encode($myDat);
+    echo $myJSONDat;
+} else if ($_POST['ope'] == "editGasto") {
+    $myDat = new stdClass();
+    $consulta = "SELECT * FROM gastos_contrato WHERE id = " . $_POST['idGast'];
+
+    $resultado = mysqli_query($link, $consulta);
+    if (mysqli_num_rows($resultado) > 0) {
+        while ($fila = mysqli_fetch_array($resultado)) {
+            $myDat->fecha = $fila["fecha"];
+            $myDat->categoria = $fila["categoria"];
+            $myDat->descripcion = $fila["descripcion"];
+            $myDat->valor = $fila["valor"];
+            $myDat->url_documento = $fila["url_documento"];
+        }
+    }
+
+    $myJSONDat = json_encode($myDat);
+    echo $myJSONDat;
 } else if ($_POST['ope'] == "CargHisContr") {
 
     $myDat = new stdClass();
@@ -1634,7 +1772,7 @@ WHERE cod_proy='" . $_POST['cod'] . "' ";
 
     $consulta2 = "SELECT des_dependencia FROM dependencias WHERE iddependencias IN (" . $resp_Meta . ")";
     //  echo $consulta2;
-    $resultado2 = mysqli_query($consulta2, $link);
+    $resultado2 = mysqli_query($link, $consulta2);
     if (mysqli_num_rows($resultado2) > 0) {
         while ($fila2 = mysqli_fetch_array($resultado2)) {
             $carg = $carg . $fila2["des_dependencia"] . ', ';
@@ -2288,9 +2426,9 @@ FROM
             $contPresupuesto++;
             $Total = $Total + $fila["total"];
             $Tab_Presupuesto .= "<tr class='selected' id='filaPresup" . $contPresupuesto . "' ><td>" . $contPresupuesto . "</td>";
-            $Tab_Presupuesto .= "<td>" . $fila["desc"] . "</td>";
+            $Tab_Presupuesto .= "<td>" . $fila["desc"] . " - " . $fila["observacion"] . "</td>";
             $Tab_Presupuesto .= "<td>$ " . number_format($fila["total"], 2, ",", ".") . "</td>";
-            $Tab_Presupuesto .= "<td><input type='hidden' id='idPresup" . $contPresupuesto . "' name='terce' value='" . $fila["desc"] . "//" . $fila["total"] . "' /><a onclick=\"$.QuitarPresup('filaPresup" . $contPresupuesto . "//" . $fila["total"] . "')\" class=\"btn default btn-xs red\">" . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
+            $Tab_Presupuesto .= "<td><input type='hidden' id='idPresup" . $contPresupuesto . "' name='terce' value='" . $fila["desc"] . "//" . $fila["total"] . "//" . $fila["observacion"] . "' /><a onclick=\"$.QuitarPresup('filaPresup" . $contPresupuesto . "//" . $fila["total"] . "')\" class=\"btn default btn-xs red\">" . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
         }
     }
     $Tab_Presupuesto .= "</tbody><tfoot>
@@ -2390,7 +2528,7 @@ FROM
             $Tab_Anexos .= "<tr class='selected' id='filaAnexo" . $contAnexos . "' ><td>" . $contAnexos . "</td>";
             $Tab_Anexos .= "<td>" . $fila["desc"] . "</td>";
             $Tab_Anexos .= "<td>" . $fila["nombre_arch"] . "</td>";
-            $Tab_Anexos .= "<td><a href='" . "../Proyecto/AnexosProyecto/" . $_SESSION['ses_complog'] . "/" . $cod_proyect . "/" . $fila["src_arch"] . "' target='_blank' class=\"btn default btn-xs blue\">"
+            $Tab_Anexos .= "<td style='text-align: center;'><a href='" . "../Proyecto/AnexosProyecto/" . $_SESSION['ses_complog'] . "/" . $cod_proyect . "/" . $fila["src_arch"] . "' target='_blank' class=\"btn default btn-xs blue\">"
                 . "<i class=\"fa fa-search\"></i> Ver</a>";
             $Tab_Anexos .= "<input type='hidden' id='idAnexo" . $contAnexos . "' name='idAnexo' value='" . $fila["desc"] . "///" . $fila["nombre_arch"] . "///" . $fila["src_arch"] . "' /><a onclick=\"$.QuitarAnexo('filaAnexo" . $contAnexos . "')\" class=\"btn default btn-xs red\">"
                 . "<i class=\"fa fa-trash-o\"></i> Quitar</a></td></tr>";
@@ -6999,6 +7137,45 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     $myDat->cont = $contIndicad;
     $myJSONDat = json_encode($myDat);
     echo $myJSONDat;
+} else if ($_POST['ope'] == "buscarDatosUsuario") {
+
+    $myDat = new stdClass();
+
+    $consulta = "select * from " . $_SESSION['ses_BDBase'] . ".usuarios where id_usuario='" . $_POST["idUsu"] . "'";
+   
+    $resultado = mysqli_query($link, $consulta);
+
+    if (mysqli_num_rows($resultado) > 0) {
+        while ($fila = mysqli_fetch_array($resultado)) {
+            $myDat->cue_correo = $fila["cue_correo"];
+            $myDat->cue_tele = $fila["cue_tele"];
+            $myDat->cue_dir = $fila["cue_dir"];
+        }
+    }
+
+   
+    $consulta = "SELECT id_proyect, nombre_proyect,dsecretar_proyect, CASE WHEN estado_proyect='En Ejecucion' THEN 'En Ejecución' ELSE estado_proyect END estado,(SELECT SUM(total) valor FROM banco_proyec_presupuesto WHERE id_proyect = proy.id_proyect GROUP BY id_proyect) AS valor FROM usu_proyect usu
+    LEFT JOIN proyectos proy ON usu.proyect = proy.id_proyect
+    WHERE usu.usuario=".$_POST["idUsu"]." AND proy.estado='ACTIVO'
+    GROUP BY usu.proyect";
+    $resultado1 = mysqli_query($link, $consulta);
+
+    $tr_poryectos = '';
+    if (mysqli_num_rows($resultado1) > 0) {
+        while ($fila = mysqli_fetch_array($resultado1)) {
+            $detSecre = explode(" - ", $fila['dsecretar_proyect']);
+            $tr_poryectos.='  <tr>
+            <td><a href="$.verProyecto('.$fila['id_proyect'].');">'.$fila['nombre_proyect'].'</a></td>
+            <td class="hidden-phone">'.$detSecre[1].'</td>
+            <td style="text-align: center; width:200px;">$ '.number_format($fila['valor'], 2, ",", ".").'<br><span class="label label-success label-mini">'.$fila['estado'].'</span></td>
+           
+        </tr>';
+        }
+    }    
+
+    $myDat->tr_poryectos = $tr_poryectos;
+    $myJSONDat = json_encode($myDat);
+    echo $myJSONDat;
 } else if ($_POST['ope'] == "ConsulUsuario") {
     $myDat = new stdClass();
     $Usu = "<option value=' '>Seleccione...</option>";
@@ -7137,6 +7314,8 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     $Interv = "<option value=' '>Seleccione...</option>";
     $ProExp = "<option value=' '>Seleccione...</option>";
     $dpto = "<option value=' '>Seleccione...</option>";
+    $fuente = "<option value=' '>Seleccione...</option>";
+    $catGastos = "<option value=' '>Seleccione...</option>";
 
     //////////////////////CONSULTAR SUPERVISOR
     $consulta = "select * from supervisores where estado_supervisores='ACTIVO'";
@@ -7162,6 +7341,15 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
             $Tipolog .= "<option value='" . $fila["ID"] . "'>" . $fila["CODIGO"] . " - " . $fila["NOMBRE"] . "</option>";
         }
     }
+
+    //////////////////////CONSULTAR CATEGORIA DE GASTOS
+    $consulta = "select * from categoria_gastos where estado='ACTIVO'";
+    $resultado = mysqli_query($link, $consulta);
+    if (mysqli_num_rows($resultado) > 0) {
+        while ($fila = mysqli_fetch_array($resultado)) {
+            $catGastos .= "<option value='" . $fila["id"] . "'>" . $fila["nombre"] . "</option>";
+        }
+    }
     //////////////////////CONSULTAR CONTRATISTA
     $consulta = "select * from contratistas WHERE estado_contratis='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
@@ -7171,9 +7359,8 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
         }
     }
 
-
     /////////////////////CONSULTAR PROYECTOS
-    $consulta = "select * from proyectos where estado='ACTIVO' and estado_proyect='En Ejecucion'";
+    $consulta = "select * from proyectos where estado='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -7182,13 +7369,21 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
         }
     }
 
-
     /////////////////////CONSULTAR PROYECTOS expres
     $consulta = "select * from proyectos_expres where estado='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
             $ProExp .= "<option value='" . $fila["id"] . "'>" . $fila["codigo"] . " - " . $fila["nombre"] . "</option>";
+        }
+    }
+
+    /////////////////////CONSULTAR FUENTE DE FINANCIACION
+    $consulta = "select * from fuentes where estado='ACTIVO'";
+    $resultado = mysqli_query($link, $consulta);
+    if (mysqli_num_rows($resultado) > 0) {
+        while ($fila = mysqli_fetch_array($resultado)) {
+            $fuente .= "<option value='" . $fila["id"] . "'>" . $fila["nombre"] . "</option>";
         }
     }
 
@@ -7210,7 +7405,9 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     $myDat->Superv = $Superv;
     $myDat->Interv = $Interv;
     $myDat->ProExp = $ProExp;
+    $myDat->fuenteFinanciacion = $fuente;
     $myDat->dpto = $dpto;
+    $myDat->catGastos = $catGastos;
 
 
     $myJSONDat = json_encode($myDat);
@@ -7361,6 +7558,32 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     echo $myJSONDat;
 } else if ($_POST['ope'] == "UdParEval") {
     $consulta = "UPDATE para_calf_contratista SET PorCO='" . $_POST['PCCO'] . "',PorCE='" . $_POST['PCEC'] . "',PorCC='" . $_POST['PCC'] . "'";
+    mysqli_query($link, $consulta);
+
+    echo "Bien";
+} else if ($_POST['ope'] == "eliminarAdicion") {
+    $consulta = "UPDATE adicion_contrato SET estado='ELIMINADO' WHERE id=" . $_POST['id'];
+    mysqli_query($link, $consulta);
+
+    ///ELIMINAR ADICION AGREGADA AL PRESUPUESTO DEL PROYECTO
+    $consulta = "DELETE FROM banco_proyec_presupuesto WHERE adicion='" . $_POST['id'] . "'";
+    $qc = mysqli_query($link, $consulta);
+    if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
+        $success = 0;
+        $error = 14;
+    }
+
+    ///ELIMINAR ADICION AGREGADA A LA FINANCIACION DEL PROYECTO
+    $consulta = "DELETE FROM banco_proyec_financiacion WHERE adicion='" . $_POST['id'] . "'";
+    $qc = mysqli_query($link, $consulta);
+    if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
+        $success = 0;
+        $error = 15;
+    }
+
+    echo "Bien";
+} else if ($_POST['ope'] == "eliminarGasto") {
+    $consulta = "UPDATE gastos_contrato SET estado='ELIMINADO' WHERE id=" . $_POST['id'];
     mysqli_query($link, $consulta);
 
     echo "Bien";

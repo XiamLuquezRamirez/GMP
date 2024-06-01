@@ -16,20 +16,22 @@ mysqli_query($link, "BEGIN");
 
 mysqli_set_charset($link, 'utf8');
 
+// acc 1: Guardar contrato, 2: editar contrato, 4: agregar adicion, 5: editar edicion, 6: agregar gastos, 7: editar gastos
+
 if ($_POST['acc'] == "1") {
 
     $consulta = "INSERT INTO contratos VALUES(null,'" . $_POST['CbTiplog'] . "',"
-            . "'" . $_POST['DesCbTiplog'] . "','" . $_POST['txt_fecha'] . "','" . date('Y-m-d') . "','" . $_POST['txt_Cod'] . "',"
-            . "'" . $_POST['txt_Nomb'] . "','" . $_POST['CbContratis'] . "','" . $_POST['CbContratisDesc'] . "',"
-            . "'" . $_POST['txt_Super'] . "','" . $_POST['CbSuperDesc'] . "','" . $_POST['txt_Inter'] . "',"
-            . "'" . $_POST['CbInterDesc'] . "','" . $_POST['ValCon'] . "',"
-            . "'" . $_POST['ValAdic'] . "','" . $_POST['ValFin'] . "','" . $_POST['ValEje'] . "',"
-            . "'" . $_POST['txt_Fpago'] . "','" . $_POST['txt_Durac'] . "','" . $_POST['txt_FIni'] . "',"
-            . "'" . $_POST['txt_FSusp'] . "','" . $_POST['txt_FRein'] . "','" . $_POST['txt_Prorog'] . "',"
-            . "'" . $_POST['txt_FFina'] . "','" . $_POST['txt_FReci'] . "','" . $_POST['CbProy'] . "',"
-            . "'" . $_POST['CbProyDes'] . "','" . $_POST['txt_Avance'] . "','" . $_POST['CbEstado'] . "',"
-            . "'" . $_POST['CbEstadoProc'] . "','" . $_POST['txt_PorEqui'] . "','" . $_POST['txt_Url'] . "',"
-            . "'" . $_POST['Text_Motivo'] . "','" . $_POST['Src_FileEstad'] . "','" . $_POST['novedad'] . "')";
+        . "'" . $_POST['DesCbTiplog'] . "','" . $_POST['txt_fecha'] . "','" . date('Y-m-d') . "','" . $_POST['txt_Cod'] . "',"
+        . "'" . $_POST['txt_Nomb'] . "','" . $_POST['CbContratis'] . "','" . $_POST['CbContratisDesc'] . "',"
+        . "'" . $_POST['txt_Super'] . "','" . $_POST['CbSuperDesc'] . "','" . $_POST['txt_Inter'] . "',"
+        . "'" . $_POST['CbInterDesc'] . "','" . $_POST['ValCon'] . "',"
+        . "'" . $_POST['ValAdic'] . "','" . $_POST['ValFin'] . "','" . $_POST['ValEje'] . "',"
+        . "'" . $_POST['txt_Fpago'] . "','" . $_POST['txt_Durac'] . "','" . $_POST['txt_FIni'] . "',"
+        . "'" . $_POST['txt_FSusp'] . "','" . $_POST['txt_FRein'] . "','" . $_POST['txt_Prorog'] . "',"
+        . "'" . $_POST['txt_FFina'] . "','" . $_POST['txt_FReci'] . "','" . $_POST['CbProy'] . "',"
+        . "'" . $_POST['CbProyDes'] . "','" . $_POST['txt_Avance'] . "','" . $_POST['CbEstado'] . "',"
+        . "'" . $_POST['CbEstadoProc'] . "','" . $_POST['txt_PorEqui'] . "','" . $_POST['txt_Url'] . "',"
+        . "'" . $_POST['Text_Motivo'] . "','" . $_POST['Src_FileEstad'] . "','" . $_POST['novedad'] . "')";
 
     //echo $consulta;
     $qc = mysqli_query($link, $consulta);
@@ -90,10 +92,6 @@ if ($_POST['acc'] == "1") {
     }
 
 
-
-
-
-
     /////GUARDAR GALERIA////////
 
     $consulta = "DELETE FROM contrato_galeria WHERE num_contrato_galeria='" . $_POST['txt_Cod'] . "'";
@@ -133,7 +131,7 @@ if ($_POST['acc'] == "1") {
                 $carpetaDest = $carpetaDest . $parimg[1];
                 chmod($carpetaOrigen, 0777);
 
-//                mkdir($carpetaOrigen, 0644, true);
+                //                mkdir($carpetaOrigen, 0644, true);
                 if (!@copy($carpetaOrigen, $carpetaDest)) {
                     $errors = error_get_last();
                     echo "COPY ERROR: " . $errors['type'];
@@ -149,18 +147,18 @@ if ($_POST['acc'] == "1") {
 } else if ($_POST['acc'] == "2") {
 
     $consulta = "UPDATE contratos SET idtipolg_contrato='" . $_POST['CbTiplog'] . "',"
-            . "destipolg_contrato='" . $_POST['DesCbTiplog'] . "',fmod_contrato='" . date('Y-m-d'). "',"
-            . "obj_contrato='" . $_POST['txt_Nomb'] . "',idcontrati_contrato='" . $_POST['CbContratis'] . "',descontrati_contrato='" . $_POST['CbContratisDesc'] . "',"
-            . "idsuperv_contrato='" . $_POST['txt_Super'] . "',dessuperv_contrato='" . $_POST['CbSuperDesc'] . "',idinterv_contrato='" . $_POST['txt_Inter'] . "',"
-            . "desinterv_contrato='" . $_POST['CbInterDesc'] . "',vcontr_contrato='" . $_POST['ValCon'] . "',"
-            . "vadic_contrato='" . $_POST['ValAdic'] . "',vfin_contrato='" . $_POST['ValFin'] . "',veje_contrato='" . $_POST['ValEje'] . "',"
-            . "forpag_contrato='" . $_POST['txt_Fpago'] . "',durac_contrato='" . $_POST['txt_Durac'] . "',fini_contrato='" . $_POST['txt_FIni'] . "',"
-            . "fsusp_contrato='" . $_POST['txt_FSusp'] . "',frein_contrato='" . $_POST['txt_FRein'] . "',prorg_contrato='" . $_POST['txt_Prorog'] . "',"
-            . "ffin_contrato='" . $_POST['txt_FFina'] . "',frecb_contrato='" . $_POST['txt_FReci'] . "',idproy_contrato='" . $_POST['CbProy'] . "',"
-            . "desproy_contrato='" . $_POST['CbProyDes'] . "',porav_contrato='" . $_POST['txt_Avance'] . "',porproy_contrato='" . $_POST['txt_PorEqui'] . "',"
-            . "estcont_contra='" . $_POST['CbEstadoProc'] . "',estad_contrato='" . $_POST['CbEstado'] . "',secop_contrato='" . $_POST['txt_Url'] . "',observacion='" . $_POST['Text_Motivo'] . "',"
-            . "urldocumento='" . $_POST['Src_FileEstad'] . "',tipnovedad='" . $_POST['novedad'] . "' WHERE id_contrato='" . $_POST['id'] . "'";
-//    echo $consulta;
+        . "destipolg_contrato='" . $_POST['DesCbTiplog'] . "',fmod_contrato='" . date('Y-m-d') . "',"
+        . "obj_contrato='" . $_POST['txt_Nomb'] . "',idcontrati_contrato='" . $_POST['CbContratis'] . "',descontrati_contrato='" . $_POST['CbContratisDesc'] . "',"
+        . "idsuperv_contrato='" . $_POST['txt_Super'] . "',dessuperv_contrato='" . $_POST['CbSuperDesc'] . "',idinterv_contrato='" . $_POST['txt_Inter'] . "',"
+        . "desinterv_contrato='" . $_POST['CbInterDesc'] . "',vcontr_contrato='" . $_POST['ValCon'] . "',"
+        . "vadic_contrato='" . $_POST['ValAdic'] . "',vfin_contrato='" . $_POST['ValFin'] . "',veje_contrato='" . $_POST['ValEje'] . "',"
+        . "forpag_contrato='" . $_POST['txt_Fpago'] . "',durac_contrato='" . $_POST['txt_Durac'] . "',fini_contrato='" . $_POST['txt_FIni'] . "',"
+        . "fsusp_contrato='" . $_POST['txt_FSusp'] . "',frein_contrato='" . $_POST['txt_FRein'] . "',prorg_contrato='" . $_POST['txt_Prorog'] . "',"
+        . "ffin_contrato='" . $_POST['txt_FFina'] . "',frecb_contrato='" . $_POST['txt_FReci'] . "',idproy_contrato='" . $_POST['CbProy'] . "',"
+        . "desproy_contrato='" . $_POST['CbProyDes'] . "',porav_contrato='" . $_POST['txt_Avance'] . "',porproy_contrato='" . $_POST['txt_PorEqui'] . "',"
+        . "estcont_contra='" . $_POST['CbEstadoProc'] . "',estad_contrato='" . $_POST['CbEstado'] . "',secop_contrato='" . $_POST['txt_Url'] . "',observacion='" . $_POST['Text_Motivo'] . "',"
+        . "urldocumento='" . $_POST['Src_FileEstad'] . "',tipnovedad='" . $_POST['novedad'] . "' WHERE id_contrato='" . $_POST['id'] . "'";
+    //    echo $consulta;
     $qc = mysqli_query($link, $consulta);
     if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
         $success = 0;
@@ -172,7 +170,7 @@ if ($_POST['acc'] == "1") {
 
     /////GUARDAR LOCALIZACION////////
     $consulta = "DELETE FROM ubic_contratos WHERE num_contrato='" . $_POST['txt_Cod'] . "'";
-//    echo $consulta;
+    //    echo $consulta;
     $qc = mysqli_query($link, $consulta);
     if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
         $success = 0;
@@ -184,7 +182,7 @@ if ($_POST['acc'] == "1") {
         $consulta2 = "";
         $parLoca = explode("//", $_POST['Loca' . $i]);
 
-        $consulta2 = "INSERT INTO ubic_contratos VALUES(null,'" . $id_Proy . "','" . $parLoca[0] . "','" . $parLoca[1] . "','" . $parLoca[2] . "','" . $parLoca[3] . "','" . $parLoca[4] . "','" . $parLoca[5] . "','" . $_POST['txt_Cod'] . "')";
+        $consulta2 = "INSERT INTO ubic_contratos VALUES(null,'" . $id_Cont . "','" . $parLoca[0] . "','" . $parLoca[1] . "','" . $parLoca[2] . "','" . $parLoca[3] . "','" . $parLoca[4] . "','" . $parLoca[5] . "','" . $_POST['txt_Cod'] . "')";
         //echo $consulta2;
         $qc2 = mysqli_query($link, $consulta2);
         if (($qc2 == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
@@ -259,7 +257,7 @@ if ($_POST['acc'] == "1") {
                 $carpetaDest = $carpetaDest . $parimg[1];
                 chmod($carpetaOrigen, 0777);
 
-//                mkdir($carpetaOrigen, 0644, true);
+                //                mkdir($carpetaOrigen, 0644, true);
                 if (!@copy($carpetaOrigen, $carpetaDest)) {
                     $errors = error_get_last();
                     echo "COPY ERROR: " . $errors['type'];
@@ -272,6 +270,159 @@ if ($_POST['acc'] == "1") {
             }
         }
     }
+} else if ($_POST['acc'] == "4") {
+    $id_Cont = $_POST['idContrato'];
+    $consulta = "INSERT INTO adicion_contrato VALUES(null,'" . $id_Cont . "',"
+        . "'" . $_POST['txt_fechaAdd'] . "'," . $_POST['txt_valorAdic'] . ",'" . $_POST['Src_FileAdicion'] . "','ACTIVO')";
+
+
+    $qc = mysqli_query($link, $consulta);
+    if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
+        $success = 0;
+        $error = 11;
+    }
+
+    $sql = "SELECT MAX(id) AS id FROM adicion_contrato";
+    $resulsql = mysqli_query($link, $sql);
+    if (mysqli_num_rows($resulsql) > 0) {
+        while ($fila = mysqli_fetch_array($resulsql)) {
+            $id_adicion = $fila["id"];
+        }
+    }
+
+
+    $sql = "SELECT idproy_contrato FROM contratos WHERE num_contrato ='" . $id_Cont . "'";
+    $resulsql = mysqli_query($link, $sql);
+    if (mysqli_num_rows($resulsql) > 0) {
+        while ($fila = mysqli_fetch_array($resulsql)) {
+            $proy = $fila["idproy_contrato"];
+        }
+    }
+
+    $Tam_adiciones = $_POST['Long_DetAdicion'];
+    for ($i = 1; $i <= $Tam_adiciones; $i++) {
+        $consulta2 = "";
+        $ParAdicion = explode("//", $_POST['idDetAdicion' . $i]);
+
+        $consulta2 = "INSERT INTO detalle_adicion VALUES(null,'" . $id_adicion . "','" . $ParAdicion[0] . "','" . $ParAdicion[1] . "','" . $ParAdicion[2] . "'," . $ParAdicion[3] . ")";
+        //echo $consulta2;
+        $qc2 = mysqli_query($link, $consulta2);
+        if (($qc2 == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
+            $success = 0;
+            $error = 88;
+        }
+
+        $consulta3 = "INSERT INTO banco_proyec_presupuesto VALUES (null,'" . $proy . "','" . $ParAdicion[1] . "','" . $ParAdicion[3] . "','" . $ParAdicion[2] . "','" . $id_adicion . "')";
+        $qc3 = mysqli_query($link, $consulta3);
+        if (($qc3 == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
+            $success = 0;
+            $error = 89;
+        }
+        $consulta4 = "INSERT INTO banco_proyec_financiacion VALUES (null,'" . $proy . "','" . $ParAdicion[0] . "','" . $ParAdicion[3] . "','" . $id_adicion . "')";
+        $qc4 = mysqli_query($link, $consulta4);
+        if (($qc4 == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
+            $success = 0;
+            $error = 90;
+        }
+    }
+} else if ($_POST['acc'] == "5") {
+    $id_Cont = $_POST['idContrato'];
+    $consulta = "UPDATE adicion_contrato SET fecha='" . $_POST['txt_fechaAdd'] . "',valor=" . $_POST['txt_valorAdic'] . ",url_documento='" . $_POST['Src_FileAdicion'] . "' WHERE id='" . $_POST['txt_idAdicion'] . "'";
+
+    $qc = mysqli_query($link, $consulta);
+    if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
+        $success = 0;
+        $error = 11;
+    }
+
+    $consulta = "DELETE FROM detalle_adicion WHERE adicion='" . $_POST['txt_idAdicion'] . "'";
+    $qc = mysqli_query($link, $consulta);
+    if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
+        $success = 0;
+        $error = 14;
+    }
+
+    ///ELIMINAR ADICION AGREGADA AL PRESUPUESTO DEL PROYECTO
+    $consulta = "DELETE FROM banco_proyec_presupuesto WHERE adicion='" . $_POST['txt_idAdicion'] . "'";
+    $qc = mysqli_query($link, $consulta);
+    if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
+        $success = 0;
+        $error = 14;
+    }
+
+
+    ///ELIMINAR ADICION AGREGADA A LA FINANCIACION DEL PROYECTO
+    $consulta = "DELETE FROM banco_proyec_financiacion WHERE adicion='" . $_POST['txt_idAdicion'] . "'";
+    $qc = mysqli_query($link, $consulta);
+    if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
+        $success = 0;
+        $error = 15;
+    }
+
+    $sql = "SELECT idproy_contrato FROM contratos WHERE num_contrato ='" . $id_Cont . "'";
+    $resulsql = mysqli_query($link, $sql);
+    if (mysqli_num_rows($resulsql) > 0) {
+        while ($fila = mysqli_fetch_array($resulsql)) {
+            $proy = $fila["idproy_contrato"];
+        }
+    }
+
+    $Tam_adiciones = $_POST['Long_DetAdicion'];
+    for ($i = 1; $i <= $Tam_adiciones; $i++) {
+        $consulta2 = "";
+        $ParAdicion = explode("//", $_POST['idDetAdicion' . $i]);
+
+        $consulta2 = "INSERT INTO detalle_adicion VALUES(null,'" .  $_POST['txt_idAdicion'] . "','" . $ParAdicion[0] . "','" . $ParAdicion[1] . "','" . $ParAdicion[2] . "'," . $ParAdicion[3] . ")";
+        //echo $consulta2;
+        $qc2 = mysqli_query($link, $consulta2);
+        if (($qc2 == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
+            $success = 0;
+            $error = 88;
+        }
+
+
+        $consulta3 = "INSERT INTO banco_proyec_presupuesto VALUES (null,'" . $proy . "','" . $ParAdicion[1] . "','" . $ParAdicion[3] . "','" . $ParAdicion[2] . "','" . $_POST['txt_idAdicion'] . "')";
+        $qc3 = mysqli_query($link, $consulta3);
+        if (($qc3 == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
+            $success = 0;
+            $error = 89;
+        }
+
+        $consulta4 = "INSERT INTO banco_proyec_financiacion VALUES (null,'" . $proy . "','" . $ParAdicion[0] . "','" . $ParAdicion[3] . "','" . $_POST['txt_idAdicion']  . "')";
+        $qc4 = mysqli_query($link, $consulta4);
+        if (($qc4 == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
+            $success = 0;
+            $error = 90;
+        }
+    }
+} else if ($_POST['acc'] == "6") {
+    // Agregar gastos del contrato
+    $id_Cont = $_POST['idContrato'];
+    $consulta = "INSERT INTO gastos_contrato VALUES(null,'" . $id_Cont . "','"
+              . $_POST['txt_fechaGasto'] . "','" . $_POST['CbCategoriaGasto'] . "','"
+              . $_POST['txt_descripcionGasto'] . "'," . $_POST['txt_valorGasto'] . ",'"
+              . $_POST['Src_FileGasto'] . "','ACTIVO')";
+
+
+    $qc = mysqli_query($link, $consulta);
+    if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
+        $success = 0;
+        $error = 11;
+    }
+} else if ($_POST['acc'] == "7") {
+    // Editar gastos del contrato
+    $id_Cont = $_POST['idContrato'];
+    $consulta = "UPDATE gastos_contrato SET  fecha='". $_POST['txt_fechaGasto'] . "',categoria='" . $_POST['CbCategoriaGasto'] . "',descripcion='"
+              . $_POST['txt_descripcionGasto'] . "',valor=" . $_POST['txt_valorGasto'] . ",url_documento='"
+              . $_POST['Src_FileGasto'] . "'";
+
+
+    $qc = mysqli_query($link, $consulta);
+    if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
+        $success = 0;
+        $error = 11;
+    }
+
 } else {
     $id_Cont = $_POST['cod'];
     $consulta = "select COUNT(*) conta from contratos where num_contrato='" . $_POST['cod'] . "'";
@@ -295,13 +446,13 @@ if ($_POST['acc'] == "1") {
 
 
 
-//    $consulta = "DELETE FROM contrato_galeria WHERE contr_galeria='" . $_POST['cod'] . "'";
-//
-//    $qc = mysqli_query($link, $consulta);
-//    if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
-//        $success = 0;
-//        $error = 14;
-//    }
+    //    $consulta = "DELETE FROM contrato_galeria WHERE contr_galeria='" . $_POST['cod'] . "'";
+    //
+    //    $qc = mysqli_query($link, $consulta);
+    //    if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
+    //        $success = 0;
+    //        $error = 14;
+    //    }
 }
 
 
@@ -315,7 +466,31 @@ if ($_POST['acc'] == "1") {
             log_hora, log_accion, log_tipo, log_interfaz) VALUES
             ('" . $_SESSION['ses_user'] . "','" . $_SERVER['REMOTE_ADDR'] . "',CURRENT_DATE(),
             NOW(),'Actualizacion de Contrato " . $_POST['txt_Cod'] . "' ,'ACTUALIZACION', '"
-            . "contrato.php')";
+        . "contrato.php')";
+} else if ($_POST['acc'] == "4") {
+    $consulta = "INSERT INTO logs (usuario_id, log_direccion, log_fecha,
+            log_hora, log_accion, log_tipo, log_interfaz) VALUES
+            ('" . $_SESSION['ses_user'] . "','" . $_SERVER['REMOTE_ADDR'] . "',CURRENT_DATE(),
+            NOW(),'Agregar adición al contrato " . $_POST['idContrato'] . "' ,'ACTUALIZACION', '"
+        . "contrato.php')";
+} else if ($_POST['acc'] == "5") {
+    $consulta = "INSERT INTO logs (usuario_id, log_direccion, log_fecha,
+            log_hora, log_accion, log_tipo, log_interfaz) VALUES
+            ('" . $_SESSION['ses_user'] . "','" . $_SERVER['REMOTE_ADDR'] . "',CURRENT_DATE(),
+            NOW(),'Modificar adición al contrato " . $_POST['idContrato'] . "' ,'ACTUALIZACION', '"
+        . "contrato.php')";
+} else if ($_POST['acc'] == "6") {
+    $consulta = "INSERT INTO logs (usuario_id, log_direccion, log_fecha,
+            log_hora, log_accion, log_tipo, log_interfaz) VALUES
+            ('" . $_SESSION['ses_user'] . "','" . $_SERVER['REMOTE_ADDR'] . "',CURRENT_DATE(),
+            NOW(),'Agregar gastos al contrato " . $_POST['idContrato'] . "' ,'ACTUALIZACION', '"
+        . "contrato.php')";
+} else if ($_POST['acc'] == "7") {
+    $consulta = "INSERT INTO logs (usuario_id, log_direccion, log_fecha,
+            log_hora, log_accion, log_tipo, log_interfaz) VALUES
+            ('" . $_SESSION['ses_user'] . "','" . $_SERVER['REMOTE_ADDR'] . "',CURRENT_DATE(),
+            NOW(),'Editar gastos al contrato " . $_POST['idContrato'] . "' ,'ACTUALIZACION', '"
+        . "contrato.php')";
 } else {
     $consulta = "INSERT INTO logs (usuario_id, log_direccion, log_fecha,
             log_hora, log_accion, log_tipo, log_interfaz) VALUES
@@ -342,4 +517,3 @@ if ($success == 0) {
 }
 
 mysqli_close($link);
-?>

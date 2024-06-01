@@ -417,7 +417,7 @@ include "Conectar.php";
                                 <div class="tab-pane active" id="tab_1">
                                     <div class="row" id="nodatos" style="display:none;">
                                         <div   class="col-md-12 " id="cbx_5">
-                                            <h4>NO EXISTE INFORMACIÓN RELACIONADA A LOS PARAMETRSO DE BUSQUEDA SELECCIONADOS</h4>  
+                                            <h4>NO EXISTE INFORMACIÓN RELACIONADA A LOS PARÁMETROS DE BÚSQUEDA SELECCIONADOS</h4>  
                                         </div>
                                     </div>
                                     <div class="row" id="sidatos">

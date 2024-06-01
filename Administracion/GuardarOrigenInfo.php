@@ -6,7 +6,7 @@ include("../Conectar.php");
 $success = 1;
 $error = "";
 $link = conectar();
-mysql_query("BEGIN");
+mysqli_query($link,"BEGIN");
 
 
 
@@ -21,9 +21,9 @@ if ($_POST['acc'] == "1") {
 }
 
 //echo $consulta;
-$qc = mysql_query($consulta, $link);
+$qc = mysqli_query($link,$consulta);
 
-if (($qc == false) || (mysql_affected_rows($link) == -1) || mysql_errno($link) != 0) {
+if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
     $success = 0;
     $error = 1;
 }
@@ -46,20 +46,20 @@ if ($_POST['acc'] == "1") {
             " . $_POST['id'] . "' ,'ELIMINACION', 'GestionOrigenInformacion.php')";
 }
 
-$qc = mysql_query($consulta, $link);
-if (($qc == false) || (mysql_affected_rows($link) == -1) || mysql_errno($link) != 0) {
+$qc = mysqli_query($link,$consulta);
+if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
     $success = 0;
     $error = 2;
 }
 
 if ($success == 0) {
-    mysql_query("ROLLBACK");
+    mysqli_query($link,"ROLLBACK");
     echo $error;
     echo $consulta;
 } else {
-    mysql_query("COMMIT");
+    mysqli_query($link,"COMMIT");
     echo "bien";
 }
 
-mysql_close();
+mysqli_close($link);
 ?>

@@ -37,22 +37,22 @@ $cad = "<table class=\"table table-bordered table-striped table-condensed table 
     . "<thead>"
     . "<tr>"
     . "<th>"
-    . "<i ></i> <b>Numero</b>"
+    . "<i ></i> <b>Número</b>"
     . "</th>"
     . "<th>"
-    . "<i ></i> <b>Objeto</b>"
+    . "<i ></i> <b>Objeto del contrato</b>"
     . "</th>"
-    . "<th>"
-    . "<i ></i> <b>Tipologia</b>"
-    . "</th>"
-    . "<th>"
+    . "<th style='width: 100px;'>"
     . "<i ></i> <b>V. Contrato</b>"
     . "</th>"
-    . "<th>"
+    . "<th style='width: 100px;'>"
     . "<i ></i> <b>V. Ejecutado</b>"
     . "</th>"
     . "<th>"
     . "<i ></i> <b>Contratista</b>"
+    . "</th>"
+    . "<th>"
+    . "<i ></i> <b>Proyecto</b>"
     . "</th>"
     . "<th>"
     . "<i ></i> <b>Estado</b>"
@@ -67,7 +67,7 @@ $cad = "<table class=\"table table-bordered table-striped table-condensed table 
 $busq = $_POST["bus"];
 $Proy = $_POST["Pro"];
 if($Proy==" "){
- $Proy="";  
+ $Proy="";
 }
 
 if ($busq != "") {
@@ -82,8 +82,9 @@ if ($busq != "") {
   vcontr_contrato,
   veje_contrato,
   descontrati_contrato,
-  estad_contrato,
-  estcont_contra
+  estad_contrato,  
+  estcont_contra,
+  desproy_contrato
 FROM
   contratos  WHERE ";
 
@@ -124,7 +125,8 @@ ORDER BY id_contrato DESC  LIMIT " . $regemp . "," . $regmos;
   veje_contrato,
   descontrati_contrato,
   estad_contrato,
-  estcont_contra
+  estcont_contra,
+  desproy_contrato
 FROM
   contratos
 WHERE idproy_contrato LIKE '%".$Proy."' AND id_contrato IN
@@ -143,69 +145,66 @@ if (mysqli_num_rows($resultado) > 0) {
     while ($fila = mysqli_fetch_array($resultado)) {
         $contador++;
         $cod = $fila["id_contrato"];
+        $proye = explode(' ',$fila["desproy_contrato"]);
+
+        
+
         $cad .= "<tr>"
-        . "<td class=\"highlight\">"
+        . "<td class=\"highlight\" style='vertical-align: middle; font-size: x-small;
+        line-height: 1.3em;'>"
         . $fila["num_contrato"] . " "
         . "</td>"
-        . "<td class=\"highlight\">"
+        . "<td class=\"highlight\" style='vertical-align: middle; font-size: x-small;
+        line-height: 1.3em;'>"
         . $fila["obj_contrato"] . "" . ""
         . "</td>"
-        . "<td class=\"highlight\">"
-        . $fila["destipolg_contrato"] . ""
-        . "</td>"
-        . "<td class=\"highlight\">"
+   
+        . "<td class=\"highlight\" style='vertical-align: middle; font-size: x-small;
+        line-height: 1.3em;'>"
         . "$ " . number_format($fila["vcontr_contrato"], 2, ",", ".") . ""
         . "</td>"
-        . "<td class=\"highlight\">"
+        . "<td class=\"highlight\" style='vertical-align: middle; font-size: x-small;
+        line-height: 1.3em;'>"
         . "$ " . number_format($fila["veje_contrato"], 2, ",", ".") . ""
             . "</td>"
-            . "<td class=\"highlight\">"
+            . "<td class=\"highlight\" style='vertical-align: middle; font-size: x-small;
+            line-height: 1.3em;'>"
             . $fila["descontrati_contrato"] . ""
             . "</td>"
-            . "<td class=\"highlight\">"
+            . "<td class=\"highlight\" style='vertical-align: middle; font-size: x-small;
+            line-height: 1.3em;'>"
+            . $proye[0]. ""
+            . "</td>"
+            . "<td class=\"highlight\" style='vertical-align: middle; font-size: x-small;
+            line-height: 1.3em;'>"
             . $fila["estad_contrato"] . ""
             . "</td>"
-            . "<td class=\"highlight\">"
-            . "<table>"
-            . "<tr>";
-
-        $cad .= "<td>"
-            . "<a href='javascript:;' class='btn default btn-xs yellow btnPolizas' data-id='" . $fila["num_contrato"] . "'>" .
-            "<i class='fa fa-edit'></i> Polizas"
-            . "</a>"
-            . "</td>";
-
-        if ($_SESSION['GesProyMCo'] == "s") {
-            if ($fila["estcont_contra"] == "Por Verificar") {
-                $cad .= "<td>"
-                    . "<a  onclick=\"$.editContratos('" . $cod . "')\" class='btn default btn-xs green'>" .
-                    "<i class='fa fa-edit'></i> Editar Cotrato"
-                    . "</a>"
-                    . "</td>";
-            } else if ($fila["estcont_contra"] == "Verificado") {
-                $cad .= "<td>"
-                    . "<a  onclick=\"$.AddAvaces('" . $cod . "')\" class='btn default btn-xs purple'>" .
-                    "<i class='fa fa-edit'></i> Actualizar Avances"
-                    . "</a>"
-                    . "</td>";
+            . "<td class=\"highlight\" style='vertical-align: middle; font-size: x-small;
+            line-height: 1.3em;'>"
+             ."<div class='opciones'>"
+             . "<a href='javascript:;' class='btn default btn-xs yellow btnPolizas' data-id='" . $fila["num_contrato"] . "'>" .
+             "<i class='fa fa-edit'></i> Polizas"
+             . "</a>";
+             if ($_SESSION['GesProyMCo'] == "s") {
+                if ($fila["estcont_contra"] == "Por Verificar") {
+                    $cad .= "<a  onclick=\"$.editContratos('" . $cod . "')\" class='btn default btn-xs green'>" .
+                        "<i class='fa fa-edit'></i> Editar Cotrato"
+                        . "</a>";
+                } else if ($fila["estcont_contra"] == "Verificado") {
+                    $cad .= "<a  onclick=\"$.AddAvaces('" . $cod . "')\" class='btn default btn-xs purple'>" .
+                        "<i class='fa fa-edit'></i> Actualizar Avances"
+                        . "</a>";
+                }
             }
-        }
-
-        $cad .= "<td>"
-    . "<a onclick=\"$.VerContrat('" . $fila["num_contrato"] .'/'.$cod. "')\" class='btn default btn-xs blue'>" .
-            "<i class='fa fa-search'></i> Ver Historial "
-            . "</a>"
-            . "</td>";
-        if ($_SESSION['GesProyECo'] == "s") {
-            $cad .= "<td>"
-                . "<a onclick=\"$.deletContr('" . $fila["num_contrato"] . "')\" class='btn default btn-xs red'>" .
-                "<i class='fa fa-trash-o'></i> Eliminar "
-                . "</a>"
-                . "</td>";
-        }
-
-        $cad .= "</tr>"
-            . "</table>"
+            $cad .= "<a onclick=\"$.VerContrat('" . $fila["num_contrato"] .'/'.$cod. "')\" class='btn default btn-xs blue'>" .
+                    "<i class='fa fa-search'></i> Ver Historial "
+                    . "</a>";
+                    if ($_SESSION['GesProyECo'] == "s") {
+                        $cad .= "<a onclick=\"$.deletContr('" . $fila["num_contrato"] . "')\" class='btn default btn-xs red'>" .
+                            "<i class='fa fa-trash-o'></i> Eliminar "
+                            . "</a>";
+                    }
+            $cad .= "</div>"
             . "</td>"
             . "</tr>";
     }
@@ -257,7 +256,7 @@ if ($contador > $regmos) {
     }
     $cad2 = $cad2 . "</select></td>";
 
-    if ($pagact < $div - 1) {
+    if ($pagact <= $div) {
         $cad2 = $cad2 . "<td><input type='button' style=\"width: 70px;\" class=\"btn blue btn-outline\" value=' > ' onclick=\"$.paginador('" . $pagsig . "','../paginador_centros');\" style='padding: 4px 4px 4px 4px' />";
         $cad2 = $cad2 . "<td><input type='button' style=\"width: 70px;\" class=\"btn blue btn-outline\" value=' >> ' onclick=\"$.paginador('" . $div . "','../paginador_centros');\"  style='padding: 4px 4px 4px 4px' /><input type='hidden' id='txttotal' value='" . $div . "' />"
             . "<input type='hidden' id='codter' name='codter' value='' /></td>";

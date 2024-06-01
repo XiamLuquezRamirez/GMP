@@ -166,8 +166,7 @@ $(document).ready(function () {
                 dataType: 'JSON',
                 success: function (data) {
 
-                    if (data.RawUbiProy.length > 0) {
-
+                    if (data.PI > 0) {
 
                         //INFORMACION MAPS
                         $.each(data.RawUbiProy, function (i, itemUbi) {
@@ -181,14 +180,14 @@ $(document).ready(function () {
                         $("#Presupuesto").html("$ " + number_format2(data.PI, 2, ',', '.'));
 
                         //PRESUPUESTO COMPROMETIDO
-                        PresComprom = parseFloat(data.TotProyPriori) + parseFloat(data.TotProyEjecucion);
+                        PresComprom = parseFloat(data.TotProyPriori);
                         $("#vprecomp").html(number_format2(PresComprom, 2, ',', '.'));
 
                         //PRESUPUESTO GASTADO
                         PresGastado = parseFloat(data.PresEjecutado) + parseFloat(data.TotContEje);
                         $("#vpregat").html(number_format2(PresGastado, 2, ',', '.'));
                         //PRESUPUESTO NO AFECTADO
-                        PresNoAfect = PresInicial - (PresComprom + PresGastado);
+                        PresNoAfect = PresInicial - (PresGastado+PresComprom);
                         $("#vprenafec").html(number_format2(PresNoAfect, 2, ',', '.'));
                         ////LLENAR GRAFICAS
 
@@ -207,10 +206,11 @@ $(document).ready(function () {
                         }, 800);
 
                         setTimeout(function () {
-                            var valor2 = (Number(pgasta.toFixed(1)) * 360) / 100;
+                           
+                            var valor2 = (Number(pgasta.toFixed(2)) * 360) / 100;
                             var activeBorder = $("#activeBorder2");
                             conGlobal = 0;
-                            ValorFinal = pgasta.toFixed(1);
+                            ValorFinal = pgasta.toFixed(2);
                             $.llenarCirculos(ValorFinal, "#prec2", activeBorder, valor2, "#1ec854");
                         }, 800);
 
@@ -229,7 +229,7 @@ $(document).ready(function () {
                         });
                         var ContSecr = '';
 
-
+                        
 
                         $.each(PreSecr, function (i, itemPre) {
                             var colores = ['success', 'info', 'warning', 'danger'];
@@ -268,24 +268,23 @@ $(document).ready(function () {
                         pieSeries.labels.template.text = "{category}: {value} ({value.percent.formatNumber('#.0')}%)";
 
 
-
                         ////////////////PRESUPUESTO COMPROMETIDO VS PRESUPUESTO GASTATO
 
                         am4core.useTheme(am4themes_animated);
 
-// Create chart instance
+                        // Create chart instance
                         var chart = am4core.create("LisCompxGast", am4charts.XYChart);
 
-// Add data
+                        // Add data
                         chart.data = data.rawPCvsPG;
 
-// Create axes
+                        // Create axes
                         var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
                         dateAxis.renderer.grid.template.location = 0;
 
                         var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
 
-// Create series
+                        // Create series
                         function createSeries(field, name) {
                             var series = chart.series.push(new am4charts.LineSeries());
                             series.dataFields.valueY = field;
@@ -378,7 +377,6 @@ $(document).ready(function () {
 //            mapa = new google.maps.Map($("#map_canvas").get(0), myOptions); /*Creamos el mapa y lo situamos en su capa */
 
             var coorMarcador = new google.maps.LatLng(latitud, longitud);
-            /Un nuevo punto con nuestras coordenadas para el marcador (flecha) */
 
             var marcador = new google.maps.Marker({
                 /*Creamos un marcador*/

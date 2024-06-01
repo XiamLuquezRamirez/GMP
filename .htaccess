@@ -52,6 +52,7 @@ RewriteRule ^Presupuesto/$ Administracion/GestionPresupuesto.php [L]
 #Usuarios
 RewriteRule ^Usuarios/$ Administracion/GestionUsuarios.php [L]
 RewriteRule ^Perfiles/$ Administracion/GestionPerfiles.php [L]
+RewriteRule ^MiPerfil/$ Administracion/perfil.php [L]
 
 
 #RewriteCond %{REQUEST_FILENAME} !-f
