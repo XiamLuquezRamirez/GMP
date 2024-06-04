@@ -66,7 +66,7 @@ $link = conectar();
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ_FNKVfd7vx76ykD4XbVjATqK5sVp8AQ&sensor=false">
     </script>
     <script src="../Js/sweetalert2.all.min.js"></script>
-    <link href="../Css/Global/css/sweetalert2.min" rel="stylesheet">
+    <link href="../Css/Global/css/sweetalert2.min.css" rel="stylesheet">
 
     <script src="../Js/jquery-3.1.1.min.js" type="text/javascript"></script>
     <script src="../Js/Contratos.js" type="text/javascript"></script>

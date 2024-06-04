@@ -812,6 +812,7 @@ $(document).ready(function () {
                             });
                             if (Inv === "SI") {
                                 porcinv = (item.inv * 100) / item.presupuesto;
+
                                 $("#TotProyecto").append('<h3 style="padding-top: 10px;">Detalles de Inversión.</h3><div class="portlet">'
                                         + '<div class="portlet-body">');
                                 $("#TotProyecto").append('<div class="well">El presupuesto asignado para esta secretaria es de $ ' + number_format2(item.presupuesto, 2, ',', '.') + ', con una \n\
@@ -923,7 +924,12 @@ $(document).ready(function () {
                 success: function (data) {
 
                     var parsecr = TextSecre.split(" - ");
+                    if(data['totalpre'] == 0){
+                        SubTit = "La Secretaria de " + parsecr[1].toLowerCase() + ", no cuenta con un Presupuesto inicial";
+
+                    }else{
                     SubTit = "La Secretaria de " + parsecr[1].toLowerCase() + ", Cuenta con un Presupuesto inicial de " + '$ ' + number_format2(data['totalpre'], 2, ',', '.');
+                    }
                    
                     if (data.rawdata.length > 0) {
                         $("#chartdivSecre").show();
@@ -1046,8 +1052,10 @@ $(document).ready(function () {
                     });
 
                     porcinv = (data['totalInv'] * 100) / data['totalpre'];
+                    if(data['totalpre'] != 0){
+                        $("#DetInvSecretaria").html("Del Presupuesto asignado de $ " + number_format2(data['totalpre'], 2, ',', '.') + " a la " + parsecr[1].toLowerCase() + " Evidencia una inversión de $ " + number_format2(data['totalInv'], 2, ',', '.') + ". Que representa el " + porcinv.toFixed(2) + "% del Presupuesto Inicial");
 
-                    $("#DetInvSecretaria").html("Del Presupuesto asignado de $ " + number_format2(data['totalpre'], 2, ',', '.') + " a la " + parsecr[1].toLowerCase() + " Evidencia una inversión de $ " + number_format2(data['totalInv'], 2, ',', '.') + ". Que representa el " + porcinv.toFixed(2) + "% del Presupuesto Inicial");
+                    }
 
                 }});
 
@@ -2068,7 +2076,7 @@ $(document).ready(function () {
                 var doc = {
                     pageSize: "LETTER",
                     pageOrientation: "portrait",
-                    pageMargins: [40, 60, 40, 60],
+                    pageMargins: [40, 50, 50, 60],
                     content: []
                 };
 
@@ -2181,30 +2189,58 @@ $(document).ready(function () {
 
                         var porcinv = 0;
                         $.each(data.RawSec, function (j, item) {
-                            doc.content.push({text: item.dessec, fontSize: 12, bold: true, italics: false, margin: [0, 0, 0, 0]});
+                            doc.content.push({text: item.dessec, fontSize: 12, bold: true, italics: false, margin: [0, 15, 0, 0]});
 
                             $.each(item.proy, function (j, itemP) {
-                                doc.content.push({text: itemP.codproy + ' - ' + itemP.nomproy, fontSize: 11, bold: true, italics: false, margin: [0, 10, 0, 0]});
+                                doc.content.push({text: itemP.codproy + ' - ' + itemP.nomproy, fontSize: 11, bold: true, italics: false, margin: [0, 5, 0, 0]});
                                 if (itemP.Contratos === "NO") {
                                     doc.content.push({
                                         text: "NO TIENE RELACIOANADO NINGÚN CONTRATO.",
+                                        layout: {
+                                            hLineWidth: function (i, node) {
+                                                return 0.3; // Grosor de la línea horizontal
+                                            },
+                                            vLineWidth: function (i, node) {
+                                                return 0.3; // Grosor de la línea vertical
+                                            },
+                                            hLineColor: function (i, node) {
+                                                return '#000000'; // Color de la línea horizontal
+                                            },
+                                            vLineColor: function (i, node) {
+                                                return '#000000'; // Color de la línea vertical
+                                            }
+                                        },
                                         fontSize: 13,
                                         bold: false,
                                         margin: [0, 10, 0, 5]
                                     });
                                 } else {
-                                    doc.content.push({text: 'Contratos por Proyecto', fontSize: 10, bold: true, italics: true, margin: [0, 10, 0, 0]},
+                                    doc.content.push({text: 'Contratos por Proyecto', fontSize: 10, bold: true, italics: true, margin: [0, 5, 0, 0]},
                                             {
                                                 table: {
                                                     widths: ['10%', '55%', '15%', '10%', '10%'],
                                                     body: [
-                                                        ['Número', 'Objeto del Contrato', 'Valor', 'Estado', '% de Avance']
+                                                        ['Número', 'Objeto del Contrato', 'Valor', 'Estado', '% Avance']
 
                                                     ]
                                                 },
+                                                layout: {
+                                                    hLineWidth: function (i, node) {
+                                                        return 0.3; // Grosor de la línea horizontal
+                                                    },
+                                                    vLineWidth: function (i, node) {
+                                                        return 0.3; // Grosor de la línea vertical
+                                                    },
+                                                    hLineColor: function (i, node) {
+                                                        return '#000000'; // Color de la línea horizontal
+                                                    },
+                                                    vLineColor: function (i, node) {
+                                                        return '#000000'; // Color de la línea vertical
+                                                    }
+                                                },
                                                 fontSize: 10,
                                                 bold: true,
-                                                fillColor: '#f4efef'
+                                                fillColor: '#E8E9E9'
 
                                             }
                                     );
@@ -2227,6 +2263,20 @@ $(document).ready(function () {
                                                 body: [
                                                     [itemC.numcont, itemC.obj, itemC.total, {text: itemC.estado.replace('Ejecucion', 'Ejecución'), bold: true, italics: true, color: colesta}, {text: itemC.porava, bold: true, italics: true}]
                                                 ]
+                                            },
+                                            layout: {
+                                                hLineWidth: function (i, node) {
+                                                    return 0.3; // Grosor de la línea horizontal
+                                                },
+                                                vLineWidth: function (i, node) {
+                                                    return 0.3; // Grosor de la línea vertical
+                                                },
+                                                hLineColor: function (i, node) {
+                                                    return '#000000'; // Color de la línea horizontal
+                                                },
+                                                vLineColor: function (i, node) {
+                                                    return '#000000'; // Color de la línea vertical
+                                                }
                                             },
 
                                             fontSize: 8,
@@ -2255,9 +2305,23 @@ $(document).ready(function () {
 
                                             ]
                                         },
+                                        layout: {
+                                            hLineWidth: function (i, node) {
+                                                return 0.3; // Grosor de la línea horizontal
+                                            },
+                                            vLineWidth: function (i, node) {
+                                                return 0.3; // Grosor de la línea vertical
+                                            },
+                                            hLineColor: function (i, node) {
+                                                return '#000000'; // Color de la línea horizontal
+                                            },
+                                            vLineColor: function (i, node) {
+                                                return '#000000'; // Color de la línea vertical
+                                            }
+                                        },
                                         fontSize: 10,
                                         bold: true,
-                                        fillColor: '#f4efef'
+                                        fillColor: '#E8E9E9'
 
                                     }
                             );
@@ -2286,7 +2350,20 @@ $(document).ready(function () {
                                             [contP, itemP.nproy, itemP.secre, {text: itemP.estado.replace('En Ejecucion', 'En Ejecución'), bold: true, italics: true, color: colesta}]
                                         ]
                                     },
-
+                                    layout: {
+                                        hLineWidth: function (i, node) {
+                                            return 0.3; // Grosor de la línea horizontal
+                                        },
+                                        vLineWidth: function (i, node) {
+                                            return 0.3; // Grosor de la línea vertical
+                                        },
+                                        hLineColor: function (i, node) {
+                                            return '#000000'; // Color de la línea horizontal
+                                        },
+                                        vLineColor: function (i, node) {
+                                            return '#000000'; // Color de la línea vertical
+                                        }
+                                    },
                                     fontSize: 8,
                                     bold: true
                                 }
@@ -2355,10 +2432,18 @@ $(document).ready(function () {
                     async: false,
                     dataType: 'JSON',
                     success: function (data) {
-                        SubTit = "La " + parsecr[1].toLowerCase() + ", Cuenta con un Presupuesto inicial de " + '$ ' + number_format2(data['totalpre'], 2, ',', '.');
-                        porcinv = (data['totalInv'] * 100) / data['totalpre'];
-                        Resum = "Del Presupuesto asignado de $ " + number_format2(data['totalpre'], 2, ',', '.') + " a la " + parsecr[1].toLowerCase() + " Evidencia una inversión de $ " + number_format2(data['totalInv'], 2, ',', '.') + ". Que representa el " + Math.round(porcinv) + "% del Presupuesto Inicial";
-
+                        if(data['totalpre']==0){
+                            SubTit = "La " + parsecr[1].toLowerCase() + ", no cuenta con un Presupuesto inicial";
+                            Resum = "";
+                        
+                        }else{
+                            SubTit = "La " + parsecr[1].toLowerCase() + ", Cuenta con un Presupuesto inicial de " + '$ ' + number_format2(data['totalpre'], 2, ',', '.');
+                            porcinv = (data['totalInv'] * 100) / data['totalpre'];
+                            Resum = "Del Presupuesto asignado de $ " + number_format2(data['totalpre'], 2, ',', '.') + " a la " + parsecr[1].toLowerCase() + " Evidencia una inversión de $ " + number_format2(data['totalInv'], 2, ',', '.') + ". Que representa el " + Math.round(porcinv) + "% del Presupuesto Inicial";
+    
+                        }
+                        
+                      
                         doc.content.push({
                             text: "Grafica de Proyectos por Secretarias.",
                             fontSize: 13,
@@ -2447,7 +2532,21 @@ $(document).ready(function () {
 
                                             ]
                                         },
-                                        fontSize: 10,
+                                        layout: {
+                                            hLineWidth: function (i, node) {
+                                                return 0.3; // Grosor de la línea horizontal
+                                            },
+                                            vLineWidth: function (i, node) {
+                                                return 0.3; // Grosor de la línea vertical
+                                            },
+                                            hLineColor: function (i, node) {
+                                                return '#000000'; // Color de la línea horizontal
+                                            },
+                                            vLineColor: function (i, node) {
+                                                return '#000000'; // Color de la línea vertical
+                                            }
+                                        },
+                                        fontSize: 9,
                                         bold: true,
                                         fillColor: '#f4efef'
 
@@ -2465,7 +2564,20 @@ $(document).ready(function () {
                                                 [{text: 'Este Proyecto No tiene Relacionado Ningún Contrato.', style: 'tableHeader', colSpan: 5, fontSize: 9, alignment: 'center'}]
                                             ]
                                         },
-
+                                        layout: {
+                                            hLineWidth: function (i, node) {
+                                                return 0.3; // Grosor de la línea horizontal
+                                            },
+                                            vLineWidth: function (i, node) {
+                                                return 0.3; // Grosor de la línea vertical
+                                            },
+                                            hLineColor: function (i, node) {
+                                                return '#000000'; // Color de la línea horizontal
+                                            },
+                                            vLineColor: function (i, node) {
+                                                return '#000000'; // Color de la línea vertical
+                                            }
+                                        },
                                         fontSize: 8,
                                         bold: true,
                                         margin: [0, 0, 0, 15]
@@ -2489,6 +2601,20 @@ $(document).ready(function () {
                                             body: [
                                                 [item3.ncont, item3.obj, item3.descontita, item3.total, {text: item3.estado.replace('Ejecucion', 'Ejecución'), bold: true, italics: true, color: colesta}]
                                             ]
+                                        },
+                                        layout: {
+                                            hLineWidth: function (i, node) {
+                                                return 0.3; // Grosor de la línea horizontal
+                                            },
+                                            vLineWidth: function (i, node) {
+                                                return 0.3; // Grosor de la línea vertical
+                                            },
+                                            hLineColor: function (i, node) {
+                                                return '#000000'; // Color de la línea horizontal
+                                            },
+                                            vLineColor: function (i, node) {
+                                                return '#000000'; // Color de la línea vertical
+                                            }
                                         },
 
                                         fontSize: 8,

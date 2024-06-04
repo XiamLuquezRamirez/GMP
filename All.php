@@ -3909,7 +3909,7 @@ ORDER BY id_contrato";
 } else if ($_POST['ope'] == "InfGenSecretaria") {
     $myDat = new stdClass();
 
-    $consulta = "SELECT SUM(valor) totalpre FROM presupuesto_secretarias WHERE id_secretaria='" . $_POST['Secre'] . "'";
+    $consulta = "SELECT IFNULL(SUM(valor),'0') totalpre FROM presupuesto_secretarias WHERE id_secretaria='" . $_POST['Secre'] . "'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -3917,22 +3917,20 @@ ORDER BY id_contrato";
         }
     }
 
-
-
     $consulta = "SELECT COUNT(*) cant,estado_proyect  FROM (
-SELECT 
+   SELECT 
     COUNT(cod_proyect), cod_proyect,nombre_proyect,estado_proyect
- FROM  proyectos proy
-LEFT JOIN proyect_metas proymet
+   FROM  proyectos proy
+   LEFT JOIN proyect_metas proymet
     ON proy.id_proyect = proymet.cod_proy
 
   LEFT JOIN secretarias sec
     ON proy.secretaria_proyect=sec.idsecretarias
-WHERE IFNULL(proy.secretaria_proyect, '') = '" . $_POST['Secre'] . "'
+  WHERE IFNULL(proy.secretaria_proyect, '') = '" . $_POST['Secre'] . "'
   AND proy.estado='ACTIVO'  
-GROUP BY id_proyect) AS t GROUP BY estado_proyect";
+  GROUP BY id_proyect) AS t GROUP BY estado_proyect";
     //    echo $consulta;
-    $resultado = mysqli_query($link, $consulta);
+  $resultado = mysqli_query($link, $consulta);
     $rawdata = array(); //creamos un array
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -3985,7 +3983,7 @@ GROUP BY id_proyect) AS t GROUP BY estado_proyect";
                 }
             } else {
                 $RawMet[] = array(
-                    "desmet" => 'El proyecto no Tiene una Meta Trazadara Relacionada.'
+                    "desmet" => 'El proyecto no Tiene una Meta Trazadora Relacionada.'
                 );
             }
 
@@ -6023,17 +6021,17 @@ FROM
 } else if ($_POST['ope'] == "InfGenPoblacion") {
 
     $myDat = new stdClass();
-    $consulta = "SELECT 
+    $consulta = "SELECT
             COUNT(*) cantp
           FROM
-            proyectos proy 
-            LEFT JOIN banco_proyec_pobla pobl 
-              ON proy.id_proyect = pobl.id_proyect 
+            proyectos proy
+            LEFT JOIN banco_proyec_pobla pobl
+              ON proy.id_proyect = pobl.id_proyect
           WHERE IFNULL(pobl.edad, '') LIKE '" . $_POST["Edad"] . "%'
         AND IFNULL(pobl.grupoetnico, '') LIKE '" . $_POST["Grupo"] . "%'
         AND IFNULL(pobl.genero, '') LIKE '" . $_POST["Genero"] . "%'
-            AND proy.estado = 'ACTIVO' 
-            AND proy.estado_proyect = 'En Ejecucion' 
+            AND proy.estado = 'ACTIVO'
+            AND proy.estado_proyect IN('En Ejecucion','Ejecutado','Priorizado')
           GROUP BY pobl.id_proyect";
     //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
@@ -6044,29 +6042,21 @@ FROM
     }
     //////////////// CONSULTAR CONTRATOS
 
-    $consulta = "SELECT idsec,secre,presupuesto,SUM(inversion) inv, SUM(totalPers) tpers FROM( 
-SELECT 
- sec.idsecretarias idsec, sec.des_secretarias secre, (SELECT SUM(ps.valor) FROM presupuesto_secretarias ps WHERE ps.id_secretaria=proy.secretaria_proyect) presupuesto, SUM(contr.vfin_contrato) inversion, pobl.personas totalPers
-FROM
-  contratos contr 
-  LEFT JOIN proyectos proy 
-    ON contr.idproy_contrato = proy.id_proyect 
-    LEFT JOIN banco_proyec_pobla pobl
-  ON proy.id_proyect=pobl.id_proyect
-    LEFT JOIN secretarias sec
-  ON proy.secretaria_proyect=sec.idsecretarias
-WHERE contr.estcont_contra='Verificado'
-AND IFNULL(pobl.edad, '') LIKE '" . $_POST['Edad'] . "%'
-AND IFNULL(pobl.grupoetnico, '') LIKE '" . $_POST['Grupo'] . "%'
-AND IFNULL(pobl.genero, '') LIKE '" . $_POST['Genero'] . "%'
-AND contr.id_contrato IN
-  (SELECT
-    MAX(id_contrato)
-  FROM
-    contratos
-    WHERE estad_contrato='Ejecucion' OR estad_contrato='Terminado'
-  GROUP BY num_contrato)
- GROUP BY pobl.id_proyect) t GROUP BY secre ";
+    $consulta = "SELECT proy.cod_proyect, sec.idsecretarias idsec, sec.des_secretarias secre, 
+    IFNULL(SUM(pobl.personas),'0') tpers, 
+    IFNULL((SELECT SUM(ps.valor) FROM presupuesto_secretarias ps WHERE ps.id_secretaria=proy.secretaria_proyect),'0') presupuesto, 
+    IFNULL((SELECT SUM(total) FROM banco_proyec_presupuesto WHERE id_proyect=proy.id_proyect),'0') inv 
+    FROM proyectos proy 
+        LEFT JOIN banco_proyec_pobla pobl
+      ON proy.id_proyect=pobl.id_proyect
+        LEFT JOIN secretarias sec
+      ON proy.secretaria_proyect=sec.idsecretarias
+      WHERE proy.estado_proyect IN ('En Ejecucion','Ejecutado','Priorizado') 
+    AND IFNULL(pobl.edad, '') LIKE '" . $_POST['Edad'] . "%'
+    AND IFNULL(pobl.grupoetnico, '') LIKE '" . $_POST['Grupo'] . "%'
+    AND IFNULL(pobl.genero, '') LIKE '" . $_POST['Genero'] . "%'
+    GROUP BY idsec";
+
     //    echo $consulta;
     $resultado = mysqli_query($link, $consulta);
 
@@ -6084,6 +6074,8 @@ AND contr.id_contrato IN
             $RawSec[] = array(
                 "dessec" => $fila['secre']
             );
+
+
 
             $consulta = "SELECT 
                 proy.id_proyect idproy,
@@ -7142,7 +7134,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     $myDat = new stdClass();
 
     $consulta = "select * from " . $_SESSION['ses_BDBase'] . ".usuarios where id_usuario='" . $_POST["idUsu"] . "'";
-   
+
     $resultado = mysqli_query($link, $consulta);
 
     if (mysqli_num_rows($resultado) > 0) {
@@ -7150,28 +7142,33 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
             $myDat->cue_correo = $fila["cue_correo"];
             $myDat->cue_tele = $fila["cue_tele"];
             $myDat->cue_dir = $fila["cue_dir"];
+            $myDat->cue_inden = $fila["cue_inden"];
+            $myDat->cue_nombres = $fila["cue_nombres"];
+            $myDat->cue_sexo = $fila["cue_sexo"];
+            $myDat->cue_foto = $fila["cue_foto"];
         }
     }
 
-   
+
     $consulta = "SELECT id_proyect, nombre_proyect,dsecretar_proyect, CASE WHEN estado_proyect='En Ejecucion' THEN 'En Ejecución' ELSE estado_proyect END estado,(SELECT SUM(total) valor FROM banco_proyec_presupuesto WHERE id_proyect = proy.id_proyect GROUP BY id_proyect) AS valor FROM usu_proyect usu
     LEFT JOIN proyectos proy ON usu.proyect = proy.id_proyect
-    WHERE usu.usuario=".$_POST["idUsu"]." AND proy.estado='ACTIVO'
+    WHERE usu.usuario=" . $_POST["idUsu"] . " AND proy.estado='ACTIVO'
     GROUP BY usu.proyect";
     $resultado1 = mysqli_query($link, $consulta);
-
+    $cont = 1;
     $tr_poryectos = '';
     if (mysqli_num_rows($resultado1) > 0) {
         while ($fila = mysqli_fetch_array($resultado1)) {
             $detSecre = explode(" - ", $fila['dsecretar_proyect']);
-            $tr_poryectos.='  <tr>
-            <td><a href="$.verProyecto('.$fila['id_proyect'].');">'.$fila['nombre_proyect'].'</a></td>
-            <td class="hidden-phone">'.$detSecre[1].'</td>
-            <td style="text-align: center; width:200px;">$ '.number_format($fila['valor'], 2, ",", ".").'<br><span class="label label-success label-mini">'.$fila['estado'].'</span></td>
-           
-        </tr>';
+            $tr_poryectos .= '<tr>            
+            <td>' . $cont . '</td>
+            <td>' . $fila['nombre_proyect'] . '</td>
+            <td class="hidden-phone">' . $detSecre[1] . '</td>
+            <td style="text-align: center; width:200px;">$ ' . number_format($fila['valor'], 2, ",", ".") . '<br><span class="label label-success label-mini">' . $fila['estado'] . '</span></td>
+            </tr>';
+            $cont++;
         }
-    }    
+    }
 
     $myDat->tr_poryectos = $tr_poryectos;
     $myJSONDat = json_encode($myDat);
@@ -7561,6 +7558,18 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     mysqli_query($link, $consulta);
 
     echo "Bien";
+} else if ($_POST['ope'] == "changePasword") {
+    $consulta = "SELECT * FROM " . $_SESSION['ses_BDBase'] . ".usuarios where id_usuario='" . $_SESSION['ses_idusu'] . "' AND cue_pass=SHA1('" . $_POST['old'] . "')";
+
+    $resultado = mysqli_query($link, $consulta);
+    if (mysqli_num_rows($resultado) > 0) {
+        $consulta = "UPDATE " . $_SESSION['ses_BDBase'] . ".usuarios SET cue_pass=sha1('" . $_POST['new'] . "') WHERE id_usuario=" . $_SESSION['ses_idusu'];
+        echo $consulta;
+        mysqli_query($link, $consulta);
+        echo "bien";
+    } else {
+        echo "diferente";
+    }
 } else if ($_POST['ope'] == "eliminarAdicion") {
     $consulta = "UPDATE adicion_contrato SET estado='ELIMINADO' WHERE id=" . $_POST['id'];
     mysqli_query($link, $consulta);
