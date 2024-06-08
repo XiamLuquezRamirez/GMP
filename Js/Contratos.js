@@ -2290,6 +2290,48 @@ $(document).ready(function () {
                     error: function (error_messages) {
                       alert("HA OCURRIDO UN ERROR");
                     },
+                  });                 
+                }
+              })
+              
+        },
+        QuitarPoliza: function(id){
+            Swal.fire({
+                title: '¿Estás seguro de eliminar este registro?',
+                text: "¡No podrás revertir esto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                customClass: {
+                    container: 'swal2-container'
+                },
+                confirmButtonText: '¡Sí, eliminar!'
+              }).then((result) => {
+                if (result.isConfirmed) {
+        
+                 var datos = {
+                    ope: "eliminarPoliza",
+                    id: id,
+                  };
+          
+                  $.ajax({
+                    type: "POST",
+                    url: "../All.php",
+                    data: datos,
+                    success: function (data) {
+                      if (data === "Bien") {
+                        Swal.fire(
+                          '¡Eliminado!',
+                          'El registro fue eliminado exitosamente.',
+                          'success'
+                        )
+                        $.mostrarListPolizas();
+                      }
+                    },
+                    error: function (error_messages) {
+                      alert("HA OCURRIDO UN ERROR");
+                    },
                   });
         
                  
@@ -2380,7 +2422,47 @@ $(document).ready(function () {
                 error: function (error_messages) {
                     alert('HA OCURRIDO UN ERROR');
                 }
-            });  
+            });
+        },
+        EditarPoliza: function (id) {   
+            var datos = {
+                ope: "editPoliza",
+                idPoli: id
+            };
+
+            $("#opcPoliza").val("EDITAR");
+            $("#id_poliza").val(id);
+
+            $("#ListPoliza").hide();
+            $("#formPoliza").show();
+            
+            $.ajax({
+                type: "POST",
+                url: "../All.php",
+                data: datos,
+                dataType: 'JSON',
+                success: function (data) {
+                    $("#num_poliza").val(data['num_poliza']);
+                    $("#des_poliza").val(data['descripcion']);
+                    $("#fecha_ini_poliza_u").val(data['fecha_ini']);
+                    $("#fecha_fin_poliza_u").val(data['fecha_fin']);
+                    $("#doc_anexo_poliza").val(data['anexo']);
+
+                    if(data['anexo'] != ''){
+                        $("#From_Arch").hide();
+                        $("#detaDocumento").show();
+                    }else{
+                        $("#From_Arch").show();
+                        $("#detaDocumento").hide();
+                    }
+
+                },
+                error: function (error_messages) {
+                    alert('HA OCURRIDO UN ERROR');
+                }
+            });
+
+
         },
         quitarDocumento: function(){
             $("Src_FileAdicion").val("");
@@ -2390,9 +2472,18 @@ $(document).ready(function () {
             var rutaArchivo = '../Proyecto/'+  $("#Src_FileAdicion").val();; // Cambia esta ruta a la ubicación de tu archivo
             window.open(rutaArchivo, '_blank');
         },
+        verDocumentoPoliza: function(){            
+            var rutaArchivo = '../Proyecto/'+  $("#doc_anexo_poliza").val();; // Cambia esta ruta a la ubicación de tu archivo
+            window.open(rutaArchivo, '_blank');
+        },
         quitarDocumentoGasto: function(){
             $("Src_FileGasto").val("");
             $('#btn-verDocumebtosGasto').hide();
+        },
+        quitarDocumentoPoliza: function(){
+            $("doc_anexo_poliza").val("");
+            $('#From_Arch').show();
+            $('#detaDocumento').hide();
         },
         verDocumentoGasto: function(){            
             var rutaArchivo = '../Proyecto/'+  $("#Src_FileGasto").val();; // Cambia esta ruta a la ubicación de tu archivo
@@ -2817,7 +2908,50 @@ $(document).ready(function () {
 
 
         },
-      
+        nuevaPoliza: function(){
+
+            $("#ListPoliza").hide();
+            $("#formPoliza").show();
+
+            $("#num_poliza").val("");
+            $("#des_poliza").val("");
+            $("#fecha_ini_poliza_u").val("");
+            $("#fecha_fin_poliza_u").val("");
+            $("#doc_anexo_poliza").val("");
+            $("#opcPoliza").val("GUARDAR");
+
+            $("#From_Arch").show();
+            $("#detaDocumento").hide();
+
+        },
+        atrasListPolizas: function(){
+            $("#ListPoliza").show();
+            $("#formPoliza").hide();
+        },
+        mostrarListPolizas: function(){
+            $("#ListPoliza").show();
+            $("#formPoliza").hide();
+
+            var id_contrato = $("#id_contrato").val();
+            
+            var datos = {
+                id_contrato: id_contrato,
+                OPCION: 'CONSULTAR'
+            }
+            $.ajax({
+                type: "POST",
+                url: "../Proyecto/Polizas.php",
+                data: datos,
+                dataType: 'JSON',
+                success: function (data) {
+                   $("#tb_Body_polizas").html(data);
+                },
+                error: function (error_messages) {
+    
+                }
+            });
+
+        },
         AddAdicion: function () {
            $("#listAdiciones").hide(); 
            $("#AddAdiciones").show();

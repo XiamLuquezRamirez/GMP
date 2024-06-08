@@ -10,7 +10,7 @@ foreach ($_FILES as $key) { //Iteramos el arreglo de archivos
         $temporal = $key['tmp_name']; //Obtenemos la ruta Original del archivo
         $nomArchi = $prefijo . '_' . sanear_string($NombreOriginal);
         $Destino = $ruta . $nomArchi; //Creamos una ruta de destino con la variable ruta y el nombre original del archivo
-
+      
         move_uploaded_file($temporal, $Destino); //Movemos el archivo temporal a la ruta especificada
         $name_archi .= $Destino . "*";
         chmod($Destino, '0777');

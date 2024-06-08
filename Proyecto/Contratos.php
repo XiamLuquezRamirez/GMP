@@ -1344,10 +1344,10 @@ $link = conectar();
                         <div class='portlet box blue'>
                             <div class='portlet-title'>
                                 <div class='caption'>
-                                    <i class='fa fa-angle-right'></i>Datos de la Poliza
+                                    <i class='fa fa-angle-right'></i>Información de Polizas relacionadas al contrato
                                 </div>
                             </div>
-                            <div class='portlet-body form'>
+                            <div class='portlet-body form' style="display: none;" id="formPoliza">
                                 <div class='form-body'>
                                     <div class="row">
                                         <div class="col-md-12">
@@ -1363,12 +1363,20 @@ $link = conectar();
                                         </div>
                                     </div>
                                     <div class='row'>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <input type="hidden" id="doc_anexo_poliza" name='doc_anexo_poliza' />
                                                 <input type="hidden" id="id_contrato" name='id_contrato' />
+                                                <input type="hidden" id="id_poliza" name='id_poliza' />
+                                                <input type="hidden" id="opcPoliza" name='opcPoliza' />
                                                 <label class='control-label' for='num_poliza'>Número:<span class="required">* </span></label>
-                                                <input type='text' name='num_poliza' id='num_poliza' class='form-control' />
+                                                <input type='text' maxlength="45" name='num_poliza' id='num_poliza' class='form-control' />
+                                            </div>
+                                        </div>
+                                        <div class='col-md-9'>
+                                            <div class='form-group'>
+                                                <label class='control-label' for="des_poliza">Descripción:<span class="required">* </span></label>
+                                                <input type='text' maxlength="250" placeholder='Descripción' id='des_poliza' name='des_poliza' class='form-control' style='background-color:white;' />
                                             </div>
                                         </div>
                                         <div class='col-md-4'>
@@ -1389,7 +1397,7 @@ $link = conectar();
                                         <div class="col-md-12">
                                             <div class="form-group" id="From_Arch">
                                                 <form method="POST" id="form_polizas" action="#" class="form-vertical" enctype="multipart/form-data">
-                                                    <label class="control-label">Anexar Documento <span class="required">* </span></label>
+                                                    <label class="control-label">Adjuntar Documento <span class="required">* </span></label>
                                                     <input type="file" id="anexo_poliza" name="anexo_poliza" accept="image/jpeg,image/png,application/pdf">
                                                     Tamaño Del Archivo: <span id="fileSize">0</span></p>
 
@@ -1400,6 +1408,18 @@ $link = conectar();
                                                     </p>
                                                 </form>
                                             </div>
+                                            <div style="display: none;" id="detaDocumento">
+                                                <div class="input-group">
+                                                    <span class="input-group-btn" id="btn-verDocumentos">
+                                                        <button type="button" id="btn_new_resp" onclick="$.verDocumentoPoliza();" title="Ver documento" class="btn green-meadow btn-sm">
+                                                            <i class="fa fa-search"></i> Ver
+                                                        </button>
+                                                        <button type="button" id="btn_new_resp" onclick="$.quitarDocumentoPoliza();" title="Quitar documento" class="btn red btn-sm">
+                                                            <i class="fa fa-trash-o"> </i> Quitar
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
@@ -1408,16 +1428,61 @@ $link = conectar();
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="modal-footer">
+                                        <a href='javascript:;' class='btn btn-sm red' id='btnGuaPol'> <i class='fa fa-edit'></i> Guardar</a>
+                                        <button type="button" onclick="$.atrasListPolizas();" class="btn green btn-sm">
+                                            <i class='fa fa-reply'></i> Atras
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
+                            <div class='portlet-body form' id="ListPoliza">
+                                <div class='form-body'>
+                                    <div style="float: right; margin-bottom: 5px;">
+                                        <button type="button" data-dismiss="modal" class="btn blue mb-1"><i class="fa fa-reply "></i> Salir</button>
+                                        <button type="button" onclick="$.nuevaPoliza();" class="btn purple mb-1"><i class="fa fa-file-o"></i> Nuevo</button>
+                                    </div>
+                                    <div class="row">
+                                        <div class='col-md-12'>
+                                            <div class='form-group'>
+                                                <table class='table table-striped table-hover table-bordered' id="tablaPolizas">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>
+                                                                #
+                                                            </th>
+                                                            <th>
+                                                                Numero
+                                                            </th>
+                                                            <th>
+                                                                Descripción
+                                                            </th>
+                                                            <th>
+                                                                Fechas
+                                                            </th>
+                                                            <th>
+                                                                Archivo
+                                                            </th>
+
+                                                            <th>
+                                                                Acción
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id='tb_Body_polizas'>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
+
                     </div>
-                    <div class="modal-footer">
-                        <a href='javascript:;' class='btn btn-sm red' id='btnGuaPol'> <i class='fa fa-edit'></i> Guardar</a>
-                        <button type="button" data-dismiss="modal" class="btn green btn-sm">
-                            <i class='fa fa-close'></i> Cancelar
-                        </button>
-                    </div>
+
                 </div>
                 <!-- Fin Ventana Poliza -->
 
@@ -1555,9 +1620,9 @@ $link = conectar();
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <center>
+                                                    
                                                         <h4 class='form-section'></h4>
-                                                    </center>
+                                                   
                                                 </div>
                                             </div>
                                         </div>

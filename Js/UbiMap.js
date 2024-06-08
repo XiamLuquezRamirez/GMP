@@ -4,7 +4,8 @@ var lng = null;
 var map = null;
 var geocoder = null;
 var marker = null;
-
+var map, heatmap;
+var latLng = null;
 jQuery(document).ready(function () {
     //obtenemos los valores en caso de tenerlos en un formulario ya guardado en la base de datos
     lat = jQuery('#lat').val();
@@ -86,75 +87,74 @@ function initialize2() {
 
 
 }
-function initialize3() {
 
+function initialize3() {
     geocoder = new google.maps.Geocoder();
     lat = jQuery('#lat').val();
     lng = jQuery('#long').val();
-    //Si hay valores creamos un objeto Latlng
-
-    if (jQuery('#lat').val() != '' && jQuery('#long').val() != '')
-    {
-        var latLng = new google.maps.LatLng(lat, lng);
-    } else
-    {
-        var latLng = new google.maps.LatLng(4.623389416100528, -74.0281466875);
+    
+    if (jQuery('#lat').val() != '' && jQuery('#long').val() != '') {
+      latLng = new google.maps.LatLng(lat, lng);
+    } else {
+      latLng = new google.maps.LatLng(4.623389416100528, -74.0281466875);
     }
-    //Definimos algunas opciones del mapa a crear
+
     var myOptions = {
-        center: latLng, //centro del mapa
-        zoom: 13, //zoom del mapa
-        mapTypeId: google.maps.MapTypeId.ROADMAP //tipo de mapa, carretera, híbrido,etc
+      center: latLng,
+      zoom: 13,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
     };
-    //creamos el mapa con las opciones anteriores y le pasamos el elemento div
+
     map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
-    heatmap = new google.maps.visualization.HeatmapLayer({
-        data: getPoints(),
+    getPoints().then(function(points) {
+      heatmap = new google.maps.visualization.HeatmapLayer({
+        data: points,
         map: map
+      });
     });
 
-
     updatePosition(latLng);
+  }
 
-}
-
-function getPoints() {
-
+  function getPoints() {
     var lotsOfMarkers = [];
-
     var Depart = $('#CbDep').val();
     var Muni = $('#CbMun').val();
     var Proy = $('#CbProyectos2').val();
 
-
     if (Proy === " ") {
-        Proy = "";
+      Proy = "";
     }
 
     var datos = {
-        Proy: Proy,
-        Depart: Depart,
-        Muni: Muni,
-        ope: "InfMapsCal"
+      Proy: Proy,
+      Depart: Depart,
+      Muni: Muni,
+      ope: "InfMapsCal"
     };
 
-    $.ajax({
+    return new Promise(function(resolve, reject) {
+      $.ajax({
         type: "POST",
         url: "../All.php",
         data: datos,
         dataType: 'JSON',
-        success: function (data) {
-            $.each(data.RawCont, function (i, item) {
-                var random = new google.maps.LatLng((item.lat), (item.lon));
-                lotsOfMarkers.push(random);
+        success: function(data) {
+          $.each(data.RawCont, function(i, item) {
+            var random = new google.maps.LatLng(item.lat, item.lon);
+            lotsOfMarkers.push(random);
+          });
+          resolve(lotsOfMarkers);
+        },
+        error: function(err) {
+          reject(err);
+        }
+      });
+    });
+  }
 
-            });
 
-        }});
-
-    return lotsOfMarkers;
-}
 
 //funcion que traduce la direccion en coordenadas
 function codeAddress(address) {

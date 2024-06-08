@@ -20,32 +20,19 @@ $(document).ready(function () {
             data: datos,
             dataType: 'JSON',
             success: function (data) {
-                if (data.TIENE === 1) {
-                    for (var i = 1; i <= data.contrato.tam; i++) {
-                        $("#num_poliza").val(data.contrato.num_poliza[i]);
-                        $("#fecha_ini_poliza_u").val(data.contrato.fecha_ini[i]);
-                        $("#fecha_fin_poliza_u").val(data.contrato.fecha_fin[i]);
-                        $("#doc_anexo_poliza").val(data.contrato.anexo[i]);
-                    }
-                } else {
-                    $("#num_poliza").val("");
-                    $("#fecha_ini_poliza_u").val("");
-                    $("#fecha_fin_poliza_u").val("");
-                    $("#doc_anexo_poliza").val("");
-                }
+               $("#tb_Body_polizas").html(data);
             },
             error: function (error_messages) {
 
             }
         });
-        $("#modalPoliza").modal("show");
+        $("#modalPoliza").modal({backdrop: 'static', keyboard: false});
+        $("#ListPoliza").show();
+        $("#formPoliza").hide();
+       
     });
-    $('#modalPoliza').on('shown.bs.modal', function () {
 
-    });
-    $("#modalPoliza").on('hidden.bs.modal', function () {
-
-    });
+  
     //===============VALIDAR LAS FECHAS==================\\ 
     $("#fecha_ini_poliza_u").on('change', function (ev) {
         var hasta = $("#fecha_fin_poliza_u").val();
@@ -141,25 +128,31 @@ $(document).ready(function () {
                 $.Alert("#msgCodPol", "Por favor digite el numero de poliza", "warning", 'warning');
                 return false;
             }
+            
             if ($("#fecha_ini_poliza_u").val() === "") {
                 $.Alert("#msgCodPol", "Por favor seleccione la fecha de inicio de la poliza", "warning", 'warning');
                 return false;
             }
+
             if ($("#fecha_fin_poliza_u").val() === "") {
                 $.Alert("#msgCodPol", "Por favor seleccione la fecha final de la poliza", "warning", 'warning');
                 return false;
             }
+
             if ($("#doc_anexo_poliza").val() === "") {
-                $.Alert("#msgCodPol", "Por favor anexe el documento de la poliza", "warning", 'warning');
+                $.Alert("#msgCodPol", "Por favor adjunte el documento de la poliza", "warning", 'warning');
                 return false;
             }
+
             var datos = {
                 num_poliza: $("#num_poliza").val(),
+                des_poliza: $("#des_poliza").val(),
                 fecha_ini: $("#fecha_ini_poliza_u").val(),
                 fecha_fin: $("#fecha_fin_poliza_u").val(),
                 id_contrato: $("#id_contrato").val(),
+                id_poliza: $("#id_poliza").val(),
                 anexo: $("#doc_anexo_poliza").val(),
-                OPCION: 'GUARDAR'
+                OPCION: $("#opcPoliza").val()
             }
             $.ajax({
                 type: "POST",
@@ -169,6 +162,7 @@ $(document).ready(function () {
                 success: function (data) {
                     if (data === 1) {
                         $.Alert("#msgCodPol", "Poliza guardada de manera exitosa", "success", 'success');
+                        $.mostrarListPolizas();
                     } else {
                         $.Alert("#msgCodPol", "La poliza no fue guardada", "warning", 'warning');
                     }

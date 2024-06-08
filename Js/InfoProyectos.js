@@ -10,6 +10,7 @@ $(document).ready(function () {
     var legend;
     var selected;
     var types = [];
+    var chartImages = []; 
     var mapa, mapa1, latitud, longitud;
     var chart = am4core.create("chartdiv", am4charts.PieChart3D);
     var chartEstCon = am4core.create("chartdivEstaCont", am4charts.PieChart3D);
@@ -634,7 +635,7 @@ $(document).ready(function () {
         Graficar1: function () {
             $("#divurl").html("");
             $("#DetOtProyecto").html("");
-            ////OCTENER PARAMETROS
+            ////OCTENER PARÁMETROS
             var TipRepor = $('#CbTipInf').val();
             var TextTipRepor = $('#CbTipInf option:selected').text();
             var Grupo = $('#CbGrupEtn').val();
@@ -704,7 +705,7 @@ $(document).ready(function () {
 
                     } else {
                         $("#chartdiv").hide();
-                        $("#tit_grafpobla").html("NO EXISTE INFORMACIÓN CARGADA PARA ESTOS PARAMETROS DE CONSULTA.");
+                        $("#tit_grafpobla").html("NO EXISTE INFORMACIÓN CARGADA PARA ESTOS PARÁMETROS DE CONSULTA.");
 
                     }
 
@@ -882,7 +883,7 @@ $(document).ready(function () {
             $("#divur2").html("");
             $("#ProyxContra").html("");
             $("#Tabla_Proyectos").html("");
-            ////OCTENER PARAMETROS
+            ////OCTENER PARÁMETROS
             var TipRepor = $('#CbTipInf').val();
             var TextTipRepor = $('#CbTipInf option:selected').text();
             var Secre = $('#CbSecre').val();
@@ -1196,7 +1197,7 @@ $(document).ready(function () {
                         });
                     } else {
                         TMetas += "<tr class='selected'>";
-                        TMetas += "<td COLSPAN='4'>No Existe ninguna Meta Relacioanda a estos Parametros de Busqueda.</td></tr>";
+                        TMetas += "<td COLSPAN='4'>No Existe ninguna Meta Relacioanda a estos Parámetros de Busqueda.</td></tr>";
 
                     }
 
@@ -1209,7 +1210,7 @@ $(document).ready(function () {
                 }});
         },
         Graficar4: function () {
-            ////OCTENER PARAMETROS
+            ////OCTENER PARÁMETROS
             var TipRepor = $('#CbTipInf').val();
             var TextTipRepor = $('#CbTipInf option:selected').text();
             var Secre = $('#CbSecre').val();
@@ -1241,7 +1242,7 @@ $(document).ready(function () {
         },
         Graficar5: function () {
 
-            ////OCTENER PARAMETROS
+            ////OCTENER PARÁMETROS
             var TipRepor = $('#CbTipInf').val();
             var TextTipRepor = $('#CbTipInf option:selected').text();
             var Secre = $('#CbSecre').val();
@@ -1263,7 +1264,7 @@ $(document).ready(function () {
 
             am4core.useTheme(am4themes_animated);
             chart2 = am4core.create("chartdivContProy", am4charts.XYChart);
-
+            let cantCont;
             $.ajax({
                 type: "POST",
                 url: "../All.php",
@@ -1271,10 +1272,15 @@ $(document).ready(function () {
                 async: false,
                 dataType: 'JSON',
                 success: function (data) {
+                    cantCont = data.GrafCont.length;
                     chart2.data = data.GrafCont;
                     $("#DetContxProy").html(data.CadCont);
                 }});
 
+
+            if(cantCont>0){
+
+                $("#chartdivContProy").show();
             // Create axes
             var categoryAxis = chart2.xAxes.push(new am4charts.CategoryAxis());
             categoryAxis.dataFields.category = "Cate";
@@ -1301,9 +1307,14 @@ $(document).ready(function () {
             labelBullet.label.dy = -10;
             labelBullet.label.text = "{values.valueY.workingValue.formatNumber('#.')}";
 
+        }else{
+            $("#DetContxProy").html("NO EXISTEN CONTRATOS RELACIONADOS A ESTOS PARÁMETROS DE BUSQUEDA ");
+            $("#chartdivContProy").hide();
+        }
+
         },
         Graficar6: function () {
-            ////OCTENER PARAMETROS
+            ////OCTENER PARÁMETROS
             var TipRepor = $('#CbTipInf').val();
             var TextTipRepor = $('#CbTipInf option:selected').text();
             var Secre = $('#CbSecre').val();
@@ -1321,7 +1332,6 @@ $(document).ready(function () {
 
             var datos = {
                 Secre: Secre,
-
                 ope: "InfGenContrxSuspAtras"
             };
 
@@ -1336,55 +1346,46 @@ $(document).ready(function () {
                     $("#ContSuspAtra").html(data.Tab_Contratos);
                     var x = 1;
                     $.each(data.RawCon, function (j, item) {
-                        'chartSe' + x + "=" + am4core.create("chartdivSecre" + j, am4charts.PieChart3D);
-                        window['chartSe' + x] = am4core.create("chartdivSecre" + j, am4charts.PieChart3D);
-                        window['chartSe' + x].innerRadius = am4core.percent(20);
-                        window['chartSe' + x].paddingTop = 0;
-                        window['chartSe' + x].marginTop = 0;
-                        window['chartSe' + x].valign = 'top';
-                        window['chartSe' + x].contentValign = 'top';
-                        window['chartSe' + x].legend = new am4charts.Legend();
-                        window['pieSeries' + x] = window['chartSe' + x].series.push(new am4charts.PieSeries3D());
+                        var chart = am4core.create("chartdivSecre" + j, am4charts.PieChart3D);
+                        window['chartSe' + x] = chart;
+                        chart.innerRadius = am4core.percent(20);
+                        chart.paddingTop = 0;
+                        chart.marginTop = 0;
+                        chart.valign = 'top';
+                        chart.contentValign = 'top';
+                        chart.legend = new am4charts.Legend();
+                        var pieSeries = chart.series.push(new am4charts.PieSeries3D());
+            
+                        chart.data = item.estados;
+            
+                        pieSeries.dataFields.value = "cant";
+                        pieSeries.dataFields.category = "cate";
+                        pieSeries.slices.template.cornerRadius = 6;
+                        pieSeries.labels.template.text = "{category}: {value} ({value.percent.formatNumber('#.0')}%)";
+                        
+                       
+                        // Exportar la gráfica y guardar la imagen en la variable global
 
-                        window['chartSe' + x].data = item.estados;
-
-                        window['pieSeries' + x].dataFields.value = "cant";
-                        window['pieSeries' + x].dataFields.category = "cate";
-                        window['pieSeries' + x].slices.template.cornerRadius = 6;
-                        window['pieSeries' + x].labels.template.text = "{category}: {value} ({value.percent.formatNumber('#.0')}%)";
-
-//                        $("#divimgsec").append('<textarea type="texare" id="Src_img' + x + '"  ></textarea>');
-
-                        window['chartSe' + x].exporting.getImage("png").then(function (imgData) {
-//                           $("#Src_img" + x).log(imgData);
-
-                            var datos = {
-                                ope: "InserImgSec",
-                                img: imgData
-                            };
-                            $.ajax({
-                                type: "POST",
-                                url: "../All.php",
-                                data: datos,
-                                async: false,
-                                dataType: 'JSON',
-                                success: function (data) {
-//                                  $("#Src_img" + x).val(data['img']);
-                                }
-                            });
-
+                        chart.exporting.getImage("png", {
+                            quality: 3, // Ajustar la calidad de la imagen
+                            scale: 3,
+                            keepTainted: true // Mantener los colores originales
+                        }).then(function (imgData) {
+                         
+                            chartImages.push(imgData);
+                            // Verificar si se han exportado todas las gráficas
+                          
                         });
-
-
+                             
+                        x++;
                     });
-
                 }});
 
 
 
         },
         Graficar7: function () {
-            ////OCTENER PARAMETROS
+            ////OCTENER PARÁMETROS
             var TipRepor = $('#CbTipInf').val();
             var TextTipRepor = $('#CbTipInf option:selected').text();
             var Contr = $('#CbContratos').val();
@@ -1579,7 +1580,7 @@ $(document).ready(function () {
 
 
                     } else {
-                        $("#ContEvalCont").append("<div class='col-md-12' style='text-align: center;'><h3>NO EXISTE NINGUNA EVALUACIÓN RELACIONADA A ESTOS PARAMETROS.</h3></div>");
+                        $("#ContEvalCont").append("<div class='col-md-12' style='text-align: center;'><h3>NO EXISTE NINGUNA EVALUACIÓN RELACIONADA A ESTOS PARÁMETROS.</h3></div>");
                     }
 
                 }});
@@ -1590,7 +1591,7 @@ $(document).ready(function () {
 
         },
         Graficar8: function () {
-            ////OCTENER PARAMETROS
+            ////OCTENER PARÁMETROS
             var TipRepor = $('#CbTipInf').val();
             var TextTipRepor = $('#CbTipInf option:selected').text();
             var Proy = $('#CbProyectos').val();
@@ -1914,7 +1915,7 @@ $(document).ready(function () {
         },
 
         Graficar9: function () {
-            ////OCTENER PARAMETROS
+            ////OCTENER PARÁMETROS
             var TipRepor = $('#CbTipInf').val();
             var TextTipRepor = $('#CbTipInf option:selected').text();
             var Contr = $('#CbContratos').val();
@@ -1935,8 +1936,9 @@ $(document).ready(function () {
                 return;
             }
 
-
+            GrafGenCont
             $("#ContGenCont").html("");
+            $("#ContGenCont").append("<div class='form-body'>");
 
             $("#TitInfoGenCont").html(TextTipRepor);
 
@@ -1945,7 +1947,7 @@ $(document).ready(function () {
                 Contr: Ncont,
                 ope: "InfGenContratos"
             };
-            $("#ContGenProy").append("<div class='row'>");
+            $("#ContGenCont").append("<div class='row'>");
             var NumPoliza = "";
             var FIniPoliza = "";
             var FFinPoliza = "";
@@ -1961,8 +1963,8 @@ $(document).ready(function () {
                         $("#ContGenCont").append("<div class='col-md-4'><b>Numero:</b><br> " + item.num + "</div>");
                         $("#ContGenCont").append("<div class='col-md-4'><b>Fecha Creación:</b><br> " + item.fech + "</div><div class='col-md-4'><b>Tipologia Contrato:</b><br> " + item.tipol + "</div>");
                         $("#ContGenCont").append("<div class='col-md-12'><b>Objeto:</b><br> " + item.obj + "</div>");
-                        $("#ContGenCont").append("<div class='col-md-3'><b>Valor:</b><br> " + item.valor + "</div><div class='col-md-3'><b>V. Adición:</b><br> " + item.vadic + "</div><div class='col-md-3'><b>V. Final:</b><br> " + item.vfin + "</div><div class='col-md-3'><b>V. Ejecutado:</b><br> " + item.veje + "</div>");
-                        var colesta = "";
+                        $("#ContGenCont").append("<div class='col-md-3'><b>Valor:</b><br> " + item.valor + "</div><div class='col-md-3'><b>Valor Adición:</b><br> " + item.vadic + "</div><div class='col-md-3'><b>Valor Final:</b><br> " + item.vfin + "</div><div class='col-md-3'><b>Valor Ejecutado:</b><br> " + item.veje + "</div>");
+                        var colesta = "#000";
                         if (item.estado === "Ejecucion") {
                             colesta = "#2ED26E";
                         } else if (item.estado === "Terminado") {
@@ -1983,9 +1985,93 @@ $(document).ready(function () {
 
                     });
 
-                    $("#ContGenCont").append("<div class='col-md-12'><h4>POLIZA DEL CONTRATO.</h4></div>");
-                    $("#ContGenCont").append("<div class='col-md-4'><b>Número de Poliza:</b><br> " + NumPoliza + "</div><div class='col-md-3'><b>Fecha de Inicio:</b><br> " + FIniPoliza + "</div><div class='col-md-3'><b>Fecha de Finalización:</b><br> " + FFinPoliza + "</div>");
+                    $("#ContGenCont").append("<div class='col-md-12'><h4> GASTOS DEL CONTRATO.</h4></div>");
 
+                    if (data.RawaGastos.length > 0) {
+                        var tabGastos = "<table class='table table-striped table-hover table-bordered p-2'>"
+                        + "<thead>"
+                        + "    <tr>"
+                        + "        <th>"
+                        + "            <i class='fa fa-angle-right'></i> #"
+                        + "        </th>"
+                        + "        <th>"
+                        + "            <i class='fa fa-angle-right'></i> Fecha"
+                        + "        </th>"
+                        + "       <th>"
+                        + "            <i class='fa fa-angle-right'></i> Descripción"
+                        + "        </th>"
+                        + "       <th>"
+                        + "            <i class='fa fa-angle-right'></i> Valor"
+                        + "        </th>"
+                        + "   </tr>"
+                        + "</thead>"
+                        + "<tbody id='tb_Body_Polizas>";
+                      let conG=1;
+                      let total=0;
+                $.each(data.RawaGastos, function (j, itemGas) {
+                    tabGastos += "<tr class='selected'>";
+                    tabGastos += "<td>" + conG + "</td>";
+                    tabGastos += "<td>" + itemGas.fecha + "</td>";
+                    tabGastos += "<td>" + itemGas.ngasto+ " - "+itemGas.descr + "</td>";
+                    tabGastos += "<td>" + formatCurrency(itemGas.val, "es-CO", "COP") + "</td></tr>";
+                    conG++;
+                    total+=parseFloat(itemGas.val);
+                });
+
+                    tabGastos += "</tbody> <tfoot>"
+                    + "<tr>"
+                    + "   <th colspan='3' style='text-align: right;'>Total gastos:</th>"
+                    + "    <th colspan='1'><label id='gtotalGasto' style='font-weight: bold;'>"+formatCurrency(total, "es-CO", "COP")+"</label></th>"
+                    + " </tr>"
+                    + " </tfoot>"
+                    
+                              + "</table>";
+                    $("#ContGenCont").append(tabGastos);
+
+                    }else{
+                        $("#ContGenCont").append("<div class='col-md-4'>Este contrato no tiene gastos reladcionados:<br></div>");
+                    }
+                    
+
+                    $("#ContGenCont").append("<div class='col-md-12'><h4>POLIZAS DEL CONTRATO.</h4></div>");
+                    if (data.RawaPolizas.length > 0) {
+                        var tabPolizas = "<table class='table table-striped table-hover table-bordered p-2'>"
+                        + "<thead>"
+                        + "    <tr>"
+                        + "        <th>"
+                        + "            <i class='fa fa-angle-right'></i> #"
+                        + "        </th>"
+                        + "        <th>"
+                        + "            <i class='fa fa-angle-right'></i> Descripción"
+                        + "        </th>"
+                        + "       <th>"
+                        + "            <i class='fa fa-angle-right'></i> Fecha de inicio"
+                        + "        </th>"
+                        + "       <th>"
+                        + "            <i class='fa fa-angle-right'></i> Fecha de finalización"
+                        + "        </th>"
+                        + "   </tr>"
+                        + "</thead>"
+                        + "<tbody id='tb_Body_Polizas>";
+                      let conP=1;
+                $.each(data.RawaPolizas, function (j, itemPol) {
+                    tabPolizas += "<tr class='selected'>";
+                    tabPolizas += "<td>" + conP + "</td>";
+                    tabPolizas += "<td>" + itemPol.num_poliza+ " - "+itemPol.descripcion + "</td>";
+                    tabPolizas += "<td>" + itemPol.fecha_ini + "</td>";
+                    tabPolizas += "<td>" + itemPol.fecha_fin + "</td></tr>";
+
+                    conP++;
+                });
+
+                tabPolizas += "</tbody>"
+                           + "</table>";
+                    $("#ContGenCont").append(tabPolizas);
+
+                    }else{
+                        $("#ContGenCont").append("<div class='col-md-4'>Este contrato no tiene una poliza relacionada:<br></div>");
+
+                    }
 
                     if (data.RawConSusp.length > 0) {
                         $("#ContGenCont").append("<div class='col-md-12'><h4>SUSPENSIÓN DEL CONTRATO.</h4></div>");
@@ -2012,13 +2098,13 @@ $(document).ready(function () {
                         var ContUbi = 1;
                         $("#ContGenCont").append("<div class='col-md-12'><h4>UBICACIÓN DE CONTRATO.</h4></div>");
                         $.each(data.RawUbiCon, function (i, item) {
-                            $("#ContGenCont").append("<div class='col-md-12'><b>" + ContUbi + ".</b>" + item.Ubic + "</div>");
+                            $("#ContGenCont").append("<div class='col-md-12'><b>" + ContUbi + ". </b>" + item.Ubic + "</div>");
                             ContUbi++;
                         });
                     }
 
                     if (data.RawFotosA.length > 0) {
-                        var tabImg = "<div class='col-md-12'><h5>Registro Fotografico del Contrato</h5></div>";
+                        var tabImg = "<div class='col-md-12'><h4>TREGISTRO FOTOGRAFICO DEL CONTRATO</h4></div>";
 
                         $.each(data.RawFotosA, function (l, itemIM) {
                             tabImg += "<div class='col-md-4'><b>" + itemIM.tip_galeria + "</b><br><img src=" + itemIM.img_galeria + " width='250' height='170'>&nbsp;</div>";
@@ -2034,13 +2120,13 @@ $(document).ready(function () {
 
                 }});
 
-            $("#ContGenProy").append("</div");
+            $("#ContGenCont").append("</div></div>");
 
 
 
         },
         Graficar10: function () {
-            ////OCTENER PARAMETROS
+            ////OCTENER PARÁMETROS
             var TipRepor = $('#CbTipInf').val();
             var TextTipRepor = $('#CbTipInf option:selected').text();
 
@@ -2088,7 +2174,7 @@ $(document).ready(function () {
                     margin: [0, 0, 0, 10]
                 });
 
-                ////OCTENER PARAMETROS
+                ////OCTENER PARÁMETROS
                 var TipRepor = $('#CbTipInf').val();
                 var TextTipRepor = $('#CbTipInf option:selected').text();
                 var Grupo = $('#CbGrupEtn').val();
@@ -2548,7 +2634,7 @@ $(document).ready(function () {
                                         },
                                         fontSize: 9,
                                         bold: true,
-                                        fillColor: '#f4efef'
+                                        fillColor: '#E8E9E9'
 
                                     }
                             );
@@ -2686,18 +2772,12 @@ $(document).ready(function () {
                     margin: [0, 10, 0, 5]
                 });
 
-
-                doc.content.push({
-                    image: res[1],
-                    width: 530
-                });
-
                 var datos = {
                     Secre: Secre,
                     ope: "InfGenContxProy"
                 };
 
-
+             
                 $.ajax({
                     type: "POST",
                     url: "../All.php",
@@ -2705,13 +2785,17 @@ $(document).ready(function () {
                     async: false,
                     dataType: 'JSON',
                     success: function (data) {
+                     
+                        if(data.RawProy.length > 0){
 
-
+                        doc.content.push({
+                            image: res[1],
+                            width: 530
+                        });
+        
                         $.each(data.RawProy, function (j, item2) {
                             doc.content.push({text: item2.codproy, fontSize: 10, bold: true, italics: true, margin: [0, 10, 0, 0]}, {text: item2.nomproy, fontSize: 10, bold: false, italics: true, margin: [0, 5, 0, 0]}, {text: '(' + item2.poravan + ') Completado', fontSize: 10, bold: false, italics: true, color: 'green', margin: [0, 0, 0, 5]});
-
-
-                            doc.content.push({
+                           doc.content.push({
                                 text: "Contratos.", style: 'subheader'},
                                     {
                                         table: {
@@ -2721,9 +2805,23 @@ $(document).ready(function () {
 
                                             ]
                                         },
+                                        layout: {
+                                            hLineWidth: function (i, node) {
+                                                return 0.3; // Grosor de la línea horizontal
+                                            },
+                                            vLineWidth: function (i, node) {
+                                                return 0.3; // Grosor de la línea vertical
+                                            },
+                                            hLineColor: function (i, node) {
+                                                return '#000000'; // Color de la línea horizontal
+                                            },
+                                            vLineColor: function (i, node) {
+                                                return '#000000'; // Color de la línea vertical
+                                            }
+                                        },
                                         fontSize: 10,
                                         bold: true,
-                                        fillColor: '#f4efef'
+                                        fillColor: '#E8E9E9'
 
                                     }
                             );
@@ -2748,7 +2846,20 @@ $(document).ready(function () {
 
                                         ]
                                     },
-
+                                    layout: {
+                                        hLineWidth: function (i, node) {
+                                            return 0.3; // Grosor de la línea horizontal
+                                        },
+                                        vLineWidth: function (i, node) {
+                                            return 0.3; // Grosor de la línea vertical
+                                        },
+                                        hLineColor: function (i, node) {
+                                            return '#000000'; // Color de la línea horizontal
+                                        },
+                                        vLineColor: function (i, node) {
+                                            return '#000000'; // Color de la línea vertical
+                                        }
+                                    },
                                     fontSize: 8,
                                     bold: true
                                 }
@@ -2756,6 +2867,14 @@ $(document).ready(function () {
                             });
 
                         });
+                        }else{
+                            doc.content.push({
+                                text: "NO EXISTEN CONTRATOS RELACIONADOS A ESTOS PARÁMETROS DE BUSQUEDA",
+                                fontSize: 13,
+                                bold: true,
+                                margin: [0, 10, 0, 5]
+                            });
+                        }
 
                     }});
 
@@ -2767,6 +2886,7 @@ $(document).ready(function () {
         },
         savePDFContAtraSusp: function () {
 
+            console.log(chartImages);
             var TipRepor = $('#CbTipInf').val();
             var TextTipRepor = $('#CbTipInf option:selected').text();
             var Secre = $('#CbSecre').val();
@@ -2822,12 +2942,11 @@ $(document).ready(function () {
                                 text: item.dessec, style: 'subheader'});
 
                             doc.content.push({
-                                image: item.img,
+                                image: chartImages[x],
                                 width: 530,
                                 alignment: 'center'
 
                             });
-
 //                       
                             var dataRow = "";
                             $.each(item.Estad, function (j, item2) {
@@ -2843,9 +2962,23 @@ $(document).ready(function () {
 
                                                 ]
                                             },
-                                            fontSize: 10,
+                                            layout: {
+                                                hLineWidth: function (i, node) {
+                                                    return 0.3; // Grosor de la línea horizontal
+                                                },
+                                                vLineWidth: function (i, node) {
+                                                    return 0.3; // Grosor de la línea vertical
+                                                },
+                                                hLineColor: function (i, node) {
+                                                    return '#000000'; // Color de la línea horizontal
+                                                },
+                                                vLineColor: function (i, node) {
+                                                    return '#000000'; // Color de la línea vertical
+                                                }
+                                            },
+                                            fontSize: 9,
                                             bold: true,
-                                            fillColor: '#f4efef'
+                                            fillColor: '#E8E9E9'
 
                                         }
                                 );
@@ -2861,8 +2994,21 @@ $(document).ready(function () {
 
                                             ]
                                         },
-
-                                        fontSize: 8,
+                                        layout: {
+                                            hLineWidth: function (i, node) {
+                                                return 0.3; // Grosor de la línea horizontal
+                                            },
+                                            vLineWidth: function (i, node) {
+                                                return 0.3; // Grosor de la línea vertical
+                                            },
+                                            hLineColor: function (i, node) {
+                                                return '#000000'; // Color de la línea horizontal
+                                            },
+                                            vLineColor: function (i, node) {
+                                                return '#000000'; // Color de la línea vertical
+                                            }
+                                        },
+                                        fontSize: 7,
                                         bold: true
                                     }
                                     );
@@ -2874,7 +3020,7 @@ $(document).ready(function () {
 
                             });
                             doc.content.push({
-                                text: item.ResInv, fontSize: 8, bold: false, italics: true, margin: [0, 5, 0, 10]});
+                                text: item.ResInv, fontSize: 7, bold: false, italics: true, margin: [0, 5, 0, 10]});
                             x++;
                         });
 
@@ -2957,9 +3103,23 @@ $(document).ready(function () {
 
                                 ]
                             },
+                            layout: {
+                                hLineWidth: function (i, node) {
+                                    return 0.3; // Grosor de la línea horizontal
+                                },
+                                vLineWidth: function (i, node) {
+                                    return 0.3; // Grosor de la línea vertical
+                                },
+                                hLineColor: function (i, node) {
+                                    return '#000000'; // Color de la línea horizontal
+                                },
+                                vLineColor: function (i, node) {
+                                    return '#000000'; // Color de la línea vertical
+                                }
+                            },
                             fontSize: 10,
                             bold: true,
-                            fillColor: '#f4efef'
+                            fillColor: '#E8E9E9'
 
                         }
                 );
@@ -2985,7 +3145,20 @@ $(document).ready(function () {
 
                                         ]
                                     },
-
+                                    layout: {
+                                        hLineWidth: function (i, node) {
+                                            return 0.3; // Grosor de la línea horizontal
+                                        },
+                                        vLineWidth: function (i, node) {
+                                            return 0.3; // Grosor de la línea vertical
+                                        },
+                                        hLineColor: function (i, node) {
+                                            return '#000000'; // Color de la línea horizontal
+                                        },
+                                        vLineColor: function (i, node) {
+                                            return '#000000'; // Color de la línea vertical
+                                        }
+                                    },
                                     fontSize: 8,
                                     bold: true
                                 }
@@ -2999,10 +3172,23 @@ $(document).ready(function () {
                                 table: {
                                     widths: ['45%', '20%', '10%', '10%', '15%'],
                                     body: [
-                                        [{text: 'No Existe ninguna Meta Relacioanda a estos Parametros de Busqueda.', style: 'tableHeader', colSpan: 5, fontSize: 9, alignment: 'center'}]
+                                        [{text: 'No Existe ninguna Meta Relacioanda a estos Parámetros de Busqueda.', style: 'tableHeader', colSpan: 5, fontSize: 9, alignment: 'center'}]
                                     ]
                                 },
-
+                                layout: {
+                                    hLineWidth: function (i, node) {
+                                        return 0.3; // Grosor de la línea horizontal
+                                    },
+                                    vLineWidth: function (i, node) {
+                                        return 0.3; // Grosor de la línea vertical
+                                    },
+                                    hLineColor: function (i, node) {
+                                        return '#000000'; // Color de la línea horizontal
+                                    },
+                                    vLineColor: function (i, node) {
+                                        return '#000000'; // Color de la línea vertical
+                                    }
+                                },
                                 fontSize: 8,
                                 bold: true,
                                 margin: [0, 0, 0, 15]
@@ -3027,9 +3213,23 @@ $(document).ready(function () {
 
                                                 ]
                                             },
+                                            layout: {
+                                                hLineWidth: function (i, node) {
+                                                    return 0.3; // Grosor de la línea horizontal
+                                                },
+                                                vLineWidth: function (i, node) {
+                                                    return 0.3; // Grosor de la línea vertical
+                                                },
+                                                hLineColor: function (i, node) {
+                                                    return '#000000'; // Color de la línea horizontal
+                                                },
+                                                vLineColor: function (i, node) {
+                                                    return '#000000'; // Color de la línea vertical
+                                                }
+                                            },
                                             fontSize: 10,
                                             bold: true,
-                                            fillColor: '#f4efef'
+                                            fillColor: '#E8E9E9'
 
                                         }
                                 );
@@ -3046,7 +3246,20 @@ $(document).ready(function () {
 
                                                 ]
                                             },
-
+                                            layout: {
+                                                hLineWidth: function (i, node) {
+                                                    return 0.3; // Grosor de la línea horizontal
+                                                },
+                                                vLineWidth: function (i, node) {
+                                                    return 0.3; // Grosor de la línea vertical
+                                                },
+                                                hLineColor: function (i, node) {
+                                                    return '#000000'; // Color de la línea horizontal
+                                                },
+                                                vLineColor: function (i, node) {
+                                                    return '#000000'; // Color de la línea vertical
+                                                }
+                                            },
                                             fontSize: 8,
                                             bold: true
                                         });
@@ -3061,7 +3274,20 @@ $(document).ready(function () {
                                                 [{text: 'Total: ' + item.Cumplimiento + '%', style: 'tableHeader', colSpan: 5, alignment: 'right'}]
                                             ]
                                         },
-
+                                        layout: {
+                                            hLineWidth: function (i, node) {
+                                                return 0.3; // Grosor de la línea horizontal
+                                            },
+                                            vLineWidth: function (i, node) {
+                                                return 0.3; // Grosor de la línea vertical
+                                            },
+                                            hLineColor: function (i, node) {
+                                                return '#000000'; // Color de la línea horizontal
+                                            },
+                                            vLineColor: function (i, node) {
+                                                return '#000000'; // Color de la línea vertical
+                                            }
+                                        },
                                         fontSize: 10,
                                         bold: true,
                                         fillColor: '#f2f2f2',
@@ -3080,7 +3306,20 @@ $(document).ready(function () {
 
                                             ]
                                         },
-
+                                        layout: {
+                                            hLineWidth: function (i, node) {
+                                                return 0.3; // Grosor de la línea horizontal
+                                            },
+                                            vLineWidth: function (i, node) {
+                                                return 0.3; // Grosor de la línea vertical
+                                            },
+                                            hLineColor: function (i, node) {
+                                                return '#000000'; // Color de la línea horizontal
+                                            },
+                                            vLineColor: function (i, node) {
+                                                return '#000000'; // Color de la línea vertical
+                                            }
+                                        },
                                         fontSize: 8,
                                         bold: true,
                                         margin: [0, 0, 0, 15]
@@ -3099,7 +3338,20 @@ $(document).ready(function () {
                                         [{text: 'No se ha realizado una medición para esta Meta.', style: 'tableHeader', colSpan: 5, fontSize: 9, alignment: 'center'}]
                                     ]
                                 },
-
+                                layout: {
+                                    hLineWidth: function (i, node) {
+                                        return 0.3; // Grosor de la línea horizontal
+                                    },
+                                    vLineWidth: function (i, node) {
+                                        return 0.3; // Grosor de la línea vertical
+                                    },
+                                    hLineColor: function (i, node) {
+                                        return '#000000'; // Color de la línea horizontal
+                                    },
+                                    vLineColor: function (i, node) {
+                                        return '#000000'; // Color de la línea vertical
+                                    }
+                                },
                                 fontSize: 8,
                                 bold: true,
                                 margin: [0, 0, 0, 15]
@@ -3189,9 +3441,23 @@ $(document).ready(function () {
 
                                                     ]
                                                 },
+                                                layout: {
+                                                    hLineWidth: function (i, node) {
+                                                        return 0.3; // Grosor de la línea horizontal
+                                                    },
+                                                    vLineWidth: function (i, node) {
+                                                        return 0.3; // Grosor de la línea vertical
+                                                    },
+                                                    hLineColor: function (i, node) {
+                                                        return '#000000'; // Color de la línea horizontal
+                                                    },
+                                                    vLineColor: function (i, node) {
+                                                        return '#000000'; // Color de la línea vertical
+                                                    }
+                                                },
                                                 fontSize: 10,
                                                 bold: true,
-                                                fillColor: '#f4efef'
+                                                fillColor: '#E8E9E9'
 
                                             }
                                     );
@@ -3209,7 +3475,20 @@ $(document).ready(function () {
                                                             [{text: 'Este Proyecto No tiene Relacionado Ningún Contrato.', style: 'tableHeader', colSpan: 6, fontSize: 9, alignment: 'center'}]
                                                         ]
                                                     },
-
+                                                    layout: {
+                                                        hLineWidth: function (i, node) {
+                                                            return 0.3; // Grosor de la línea horizontal
+                                                        },
+                                                        vLineWidth: function (i, node) {
+                                                            return 0.3; // Grosor de la línea vertical
+                                                        },
+                                                        hLineColor: function (i, node) {
+                                                            return '#000000'; // Color de la línea horizontal
+                                                        },
+                                                        vLineColor: function (i, node) {
+                                                            return '#000000'; // Color de la línea vertical
+                                                        }
+                                                    },
                                                     fontSize: 8,
                                                     bold: true
                                                 }
@@ -3232,7 +3511,20 @@ $(document).ready(function () {
 
                                                         ]
                                                     },
-
+                                                    layout: {
+                                                        hLineWidth: function (i, node) {
+                                                            return 0.3; // Grosor de la línea horizontal
+                                                        },
+                                                        vLineWidth: function (i, node) {
+                                                            return 0.3; // Grosor de la línea vertical
+                                                        },
+                                                        hLineColor: function (i, node) {
+                                                            return '#000000'; // Color de la línea horizontal
+                                                        },
+                                                        vLineColor: function (i, node) {
+                                                            return '#000000'; // Color de la línea vertical
+                                                        }
+                                                    },
                                                     fontSize: 8,
                                                     bold: true
                                                 }
@@ -3246,7 +3538,7 @@ $(document).ready(function () {
                             });
                         } else {
                             doc.content.push({
-                                text: "NO EXISTEN PROYECTOS RELACIONADOS A ESTOS PARAMETROS DE BUSQUEDA ", style: 'subheader'});
+                                text: "NO EXISTEN PROYECTOS RELACIONADOS A ESTOS PARÁMETROS DE BUSQUEDA ", style: 'subheader'});
                         }
 
 
@@ -3286,7 +3578,6 @@ $(document).ready(function () {
                     pageMargins: [30, 30, 30, 30],
                     content: []
                 };
-
 
                 doc.content.push({
                     text: "INFORME DE EVALUACIÓN DE CONTRATISTAS",
@@ -3496,9 +3787,23 @@ $(document).ready(function () {
 
                                                 ]
                                             },
+                                            layout: {
+                                                hLineWidth: function (i, node) {
+                                                    return 0.3; // Grosor de la línea horizontal
+                                                },
+                                                vLineWidth: function (i, node) {
+                                                    return 0.3; // Grosor de la línea vertical
+                                                },
+                                                hLineColor: function (i, node) {
+                                                    return '#000000'; // Color de la línea horizontal
+                                                },
+                                                vLineColor: function (i, node) {
+                                                    return '#000000'; // Color de la línea vertical
+                                                }
+                                            },
                                             fontSize: 10,
                                             bold: true,
-                                            fillColor: '#f4efef'
+                                            fillColor: '#E8E9E9'
 
                                         }
                                 );
@@ -3589,7 +3894,6 @@ $(document).ready(function () {
                     content: []
                 };
 
-
                 doc.content.push({
                     text: "INFORME GENERAL DE PROYECTOS",
                     alignment: 'center',
@@ -3603,7 +3907,6 @@ $(document).ready(function () {
                     ope: "InfGenProyectos",
                     dest: "pdf"
                 };
-
 
                 $.ajax({
                     type: "POST",
@@ -3621,7 +3924,6 @@ $(document).ready(function () {
                                 bold: true,
                                 margin: [0, 5, 0, 0]
                             });
-
 
                             doc.content.push({
                                 columns: [
@@ -3739,26 +4041,27 @@ $(document).ready(function () {
                                             },
                                             layout: {
                                                 hLineWidth: function (i, node) {
-                                                    return 1;
+                                                    return 0.3; // Grosor de la línea horizontal
                                                 },
                                                 vLineWidth: function (i, node) {
-                                                    return 1;
+                                                    return 0.3; // Grosor de la línea vertical
                                                 },
                                                 hLineColor: function (i, node) {
-                                                    return '#000000';
+                                                    return '#000000'; // Color de la línea horizontal
                                                 },
                                                 vLineColor: function (i, node) {
-                                                    return '#000000';
+                                                    return '#000000'; // Color de la línea vertical
                                                 }
                                             },
-                                            fontSize: 10,
+                                            fontSize: 9,
                                             bold: true,
-                                            fillColor: '#f4efef'
+                                            fillColor: '#E8E9E9'
 
 
                                         }
                                 );
                                 var conMT = 1;
+                                console.log(item.mett);
                                 $.each(item.mett, function (y, item3) {
 
                                     doc.content.push({
@@ -3770,24 +4073,22 @@ $(document).ready(function () {
 
                                             ]
                                         },
-
-                                        fontSize: 8,
-                                        bold: true,
-
                                         layout: {
                                             hLineWidth: function (i, node) {
-                                                return 1;
+                                                return 0.3; // Grosor de la línea horizontal
                                             },
                                             vLineWidth: function (i, node) {
-                                                return -.01;
+                                                return 0.3; // Grosor de la línea vertical
                                             },
                                             hLineColor: function (i, node) {
-                                                return '#000000';
+                                                return '#000000'; // Color de la línea horizontal
                                             },
                                             vLineColor: function (i, node) {
-                                                return '#000000';
+                                                return '#000000'; // Color de la línea vertical
                                             }
-                                        }
+                                        },
+                                        fontSize: 7,
+                                        bold: true,
                                     }
                                     );
                                     conMT++;
@@ -3825,21 +4126,21 @@ $(document).ready(function () {
                                             },
                                             layout: {
                                                 hLineWidth: function (i, node) {
-                                                    return 1;
+                                                    return 0.3; // Grosor de la línea horizontal
                                                 },
                                                 vLineWidth: function (i, node) {
-                                                    return 1;
+                                                    return 0.3; // Grosor de la línea vertical
                                                 },
                                                 hLineColor: function (i, node) {
-                                                    return '#000000';
+                                                    return '#000000'; // Color de la línea horizontal
                                                 },
                                                 vLineColor: function (i, node) {
-                                                    return '#000000';
+                                                    return '#000000'; // Color de la línea vertical
                                                 }
                                             },
                                             fontSize: 10,
                                             bold: true,
-                                            fillColor: '#f4efef'
+                                            fillColor: '#E8E9E9'
 
 
                                         }
@@ -3862,18 +4163,18 @@ $(document).ready(function () {
 
                                         layout: {
                                             hLineWidth: function (i, node) {
-                                                return 1;
+                                                return 0.3; // Grosor de la línea horizontal
                                             },
                                             vLineWidth: function (i, node) {
-                                                return -.01;
+                                                return 0.3; // Grosor de la línea vertical
                                             },
                                             hLineColor: function (i, node) {
-                                                return '#000000';
+                                                return '#000000'; // Color de la línea horizontal
                                             },
                                             vLineColor: function (i, node) {
-                                                return '#000000';
+                                                return '#000000'; // Color de la línea vertical
                                             }
-                                        }
+                                        },
                                     }
                                     );
                                     conMP++;
@@ -4280,15 +4581,15 @@ $(document).ready(function () {
                                     },
                                     {
                                         width: '*',
-                                        text: 'V. Adición:', bold: true, fontSize: 12
+                                        text: 'Valor Adición:', bold: true, fontSize: 12
                                     },
                                     {
                                         width: '*',
-                                        text: 'V. Final:', bold: true, fontSize: 12
+                                        text: 'Valor Final:', bold: true, fontSize: 12
                                     },
                                     {
                                         width: '*',
-                                        text: 'V. Ejecutado:', bold: true, fontSize: 12
+                                        text: 'Valor Ejecutado:', bold: true, fontSize: 12
                                     }
                                 ]});
                             doc.content.push({
@@ -4331,11 +4632,11 @@ $(document).ready(function () {
                                     },
                                     {
                                         width: '*',
-                                        text: 'Fecha. Finalización:', bold: true, fontSize: 12
+                                        text: 'Fecha Finalización:', bold: true, fontSize: 12
                                     }
                                 ]});
 
-                            var colesta = "";
+                            var colesta = "#000";
                             if (item.estado === "Ejecucion") {
                                 colesta = "#2ED26E";
                             } else if (item.estado === "Terminado") {
@@ -4413,45 +4714,156 @@ $(document).ready(function () {
                             FFinPoliza = item.ffinpol;
 
                         });
+                        
 
+                        if (data.RawaGastos.length > 0) {
                         doc.content.push({
-                            text: "POLIZA DEL CONTRATO.",
+                            text: "GASTOS DEL CONTRATO.",
                             alignment: 'left',
                             fontSize: 13,
                             bold: true,
                             margin: [0, 5, 0, 0]
                         });
 
+                        doc.content.push(
+                            {
+                                table: {
+                                    widths: ['5%', '15%', '60%', '20%'],
+                                    body: [
+                                        ['#', 'Fecha', 'Descripción', 'Valor']
+    
+                                    ]
+                                },
+                                layout: {
+                                    hLineWidth: function (i, node) {
+                                        return 0.3; // Grosor de la línea horizontal
+                                    },
+                                    vLineWidth: function (i, node) {
+                                        return 0.3; // Grosor de la línea vertical
+                                    },
+                                    hLineColor: function (i, node) {
+                                        return '#000000'; // Color de la línea horizontal
+                                    },
+                                    vLineColor: function (i, node) {
+                                        return '#000000'; // Color de la línea vertical
+                                    }
+                                },
+                                fontSize: 10,
+                                bold: true,
+                                fillColor: '#E8E9E9'
+    
+                            }
+                    );
+
+                    let ContG=1;
+
+                    $.each(data.RawaGastos, function (y, item3) {
+
                         doc.content.push({
-                            columns: [
-                                {
-                                    width: '*',
-                                    text: 'Número de Poliza:', bold: true, fontSize: 10
+                            table: {
+                                widths: ['5%', '15%', '60%', '20%'],
+                                body: [
+                                    [ContG, item3.fecha, item3.ngasto+"-"+item3.descr, formatCurrency(item3.val, "es-CO", "COP")]
+
+                                ]
+                            },
+                            layout: {
+                                hLineWidth: function (i, node) {
+                                    return 0.3; // Grosor de la línea horizontal
                                 },
-                                {
-                                    width: '*',
-                                    text: 'Fecha de Inicio:', bold: true, fontSize: 10
+                                vLineWidth: function (i, node) {
+                                    return 0.3; // Grosor de la línea vertical
                                 },
-                                {
-                                    width: '*',
-                                    text: 'Fecha de Finalización:', bold: true, fontSize: 10
+                                hLineColor: function (i, node) {
+                                    return '#000000'; // Color de la línea horizontal
+                                },
+                                vLineColor: function (i, node) {
+                                    return '#000000'; // Color de la línea vertical
                                 }
-                            ]});
+                            },
+                            fontSize: 8,
+                            bold: true
+                        }
+                        );
+
+                        ContG++;
+                    });
+
+                        }
+
+                        if (data.RawaPolizas.length > 0) {
                         doc.content.push({
-                            columns: [
-                                {
-                                    width: '*',
-                                    text: NumPoliza, fontSize: 10
+                            text: "POLIZAS DEL CONTRATO.",
+                            alignment: 'left',
+                            fontSize: 13,
+                            bold: true,
+                            margin: [0, 5, 0, 0]
+                        });
+                        
+                        doc.content.push(
+                            {
+                                table: {
+                                    widths: ['5%', '55%', '20%', '20%'],
+                                    body: [
+                                        ['#', 'Descripción', 'Fecha de inicio', 'Fecha de finalización']
+    
+                                    ]
                                 },
-                                {
-                                    width: '*',
-                                    text: FIniPoliza, fontSize: 10
+                                layout: {
+                                    hLineWidth: function (i, node) {
+                                        return 0.3; // Grosor de la línea horizontal
+                                    },
+                                    vLineWidth: function (i, node) {
+                                        return 0.3; // Grosor de la línea vertical
+                                    },
+                                    hLineColor: function (i, node) {
+                                        return '#000000'; // Color de la línea horizontal
+                                    },
+                                    vLineColor: function (i, node) {
+                                        return '#000000'; // Color de la línea vertical
+                                    }
                                 },
-                                {
-                                    width: '*',
-                                    text: FFinPoliza, fontSize: 10
+                                fontSize: 10,
+                                bold: true,
+                                fillColor: '#E8E9E9'    
+                            }
+                    );
+
+                    let ContG=1;
+
+                    $.each(data.RawaPolizas, function (y, item4) {
+
+                        doc.content.push({
+                            table: {
+                                widths: ['5%', '55%', '20%', '20%'],
+                                body: [
+                                    [ContG, item4.num_poliza+ " - "+item4.descripcion, item4.fecha_ini, item4.fecha_fin]
+
+                                ]
+                            },
+                            layout: {
+                                hLineWidth: function (i, node) {
+                                    return 0.3; // Grosor de la línea horizontal
+                                },
+                                vLineWidth: function (i, node) {
+                                    return 0.3; // Grosor de la línea vertical
+                                },
+                                hLineColor: function (i, node) {
+                                    return '#000000'; // Color de la línea horizontal
+                                },
+                                vLineColor: function (i, node) {
+                                    return '#000000'; // Color de la línea vertical
                                 }
-                            ]});
+                            },
+                            fontSize: 8,
+                            bold: true
+                        }
+                        );
+
+                        ContG++;
+                    });
+
+                        }
 
 
                         if (data.RawConSusp.length > 0) {
@@ -4469,7 +4881,7 @@ $(document).ready(function () {
                                     columns: [
                                         {
                                             width: '*',
-                                            text: 'Fecha de Supensión:', bold: true, fontSize: 10
+                                            text: 'Fecha de Suspensión:', bold: true, fontSize: 10
                                         },
                                         {
                                             width: '*',
@@ -4592,7 +5004,7 @@ $(document).ready(function () {
 
 
                         doc.content.push({
-                            text: "Registro Fotografico del Contrato.",
+                            text: "REGISTRO FOTOGRAFICO DEL CONTRATO.",
                             alignment: 'left',
                             fontSize: 12,
                             bold: true,
@@ -4627,21 +5039,24 @@ $(document).ready(function () {
                                                     alignment: 'center'
                                                 }]
 
-                                        ],
-
+                                        ]
+                                    },
+                                    layout: {
                                         hLineWidth: function (i, node) {
-                                            return (i === 0 || i === node.table.body.length) ? 2 : 1;
+                                            return 0.3; // Grosor de la línea horizontal
                                         },
                                         vLineWidth: function (i, node) {
-                                            return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+                                            return 0.3; // Grosor de la línea vertical
                                         },
                                         hLineColor: function (i, node) {
-                                            return (i === 0 || i === node.table.body.length) ? 'black' : 'gray';
+                                            return '#000000'; // Color de la línea horizontal
                                         },
                                         vLineColor: function (i, node) {
-                                            return (i === 0 || i === node.table.widths.length) ? 'black' : 'gray';
+                                            return '#000000'; // Color de la línea vertical
                                         }
-                                    }
+                                    },
+                                    fontSize: 8,
+                                    bold: true
 
 //                                             
                                 });
@@ -4658,19 +5073,14 @@ $(document).ready(function () {
                                 margin: [0, 5, 0, 0]
                             });
                         }
-
-
-
-
-
-
-
-
                     }});
 
                 pdfMake.createPdf(doc).download($('#CbTipInf option:selected').text() + ".pdf");
 
             });
+        },
+        printMap: function(){
+            window.print();
         }
 
 
@@ -4678,6 +5088,14 @@ $(document).ready(function () {
     //======FUNCIONES========\\
 
     $.CargaTodContr();
+
+    function formatCurrency(number, locale, currencySymbol) {
+        return new Intl.NumberFormat(locale, {
+          style: "currency",
+          currency: currencySymbol,
+          minimumFractionDigits: 2,
+        }).format(number);
+      }
 
     $("#btn_Excel").click(function () {
         CbProy = trimAll($("#CbProy").val());
@@ -4688,4 +5106,3 @@ $(document).ready(function () {
         window.open("../Informes/ExcelContratosEstados.php?CbProy=" + CbProy + "&CbSecr=" + CbSecr + "&CbEje=" + CbEje + "&CbComp=" + CbComp + "&CbProg=" + CbProg);
     });
 });
-///////////////////////

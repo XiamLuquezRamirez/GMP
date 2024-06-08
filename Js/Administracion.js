@@ -154,6 +154,7 @@ $(document).ready(function () {
             var PresComprom = 0;
             var PresGastado = 0;
             var PresNoAfect = 0;
+            var PresGasComp = 0;
 
             var chartProEzt = am4core.create("ProyxEst", am4charts.PieChart3D);
             am4core.useTheme(am4themes_animated);
@@ -186,22 +187,27 @@ $(document).ready(function () {
                         //PRESUPUESTO GASTADO
                         PresGastado = parseFloat(data.PresEjecutado) + parseFloat(data.TotContEje);
                         $("#vpregat").html(number_format2(PresGastado, 2, ',', '.'));
+                       
                         //PRESUPUESTO NO AFECTADO
-                        PresNoAfect = PresInicial - (PresGastado+PresComprom);
+                        PresNoAfect = PresInicial - (PresComprom+data.PresEjecutado);
+                        
                         $("#vprenafec").html(number_format2(PresNoAfect, 2, ',', '.'));
-                        ////LLENAR GRAFICAS
+
+                        PresGasComp = PresComprom - parseFloat(data.TotContEje)
+                        $("#vpreCompGast").html(number_format2(PresGasComp, 2, ',', '.'));
 
                         ///CALCULAR PORCENTAJES
                         var ppcomp = (PresComprom * 100) / PresInicial;
                         var pgasta = (PresGastado * 100) / PresInicial;
                         var pnafec = (PresNoAfect * 100) / PresInicial;
-
+                        var pgasco = (PresGasComp * 100) / PresComprom;
+                        
                         setTimeout(function () {
-                            var valor1 = (Number(ppcomp.toFixed(1)) * 360) / 100;
+                            var valor1 = (Number(ppcomp.toFixed(3)) * 360) / 100;
 
                             var activeBorder = $("#activeBorder1");
                             conGlobal = 0;
-                            ValorFinal = ppcomp.toFixed(1);
+                            ValorFinal = ppcomp.toFixed(3);
                             $.llenarCirculos(ValorFinal, "#prec1", activeBorder, valor1, "#39B4CC");
                         }, 800);
 
@@ -211,15 +217,23 @@ $(document).ready(function () {
                             var activeBorder = $("#activeBorder2");
                             conGlobal = 0;
                             ValorFinal = pgasta.toFixed(2);
-                            $.llenarCirculos(ValorFinal, "#prec2", activeBorder, valor2, "#1ec854");
+                            $.llenarCirculos(ValorFinal, "#prec2", activeBorder, valor2, "#c83d1e");
                         }, 800);
 
                         setTimeout(function () {
-                            var valor3 = (Number(pnafec.toFixed(1)) * 360) / 100;
+                            var valor3 = (Number(pnafec.toFixed(3)) * 360) / 100;
                             var activeBorder = $("#activeBorder3");
                             conGlobal = 0;
-                            ValorFinal = pnafec.toFixed(1);
-                            $.llenarCirculos(ValorFinal, "#prec3", activeBorder, valor3, "#c83d1e");
+                            ValorFinal = pnafec.toFixed(3);
+                            $.llenarCirculos(ValorFinal, "#prec3", activeBorder, valor3, "#1ec854");
+                        }, 800);
+
+                        setTimeout(function () {
+                            var valor4 = (Number(pgasco.toFixed(3)) * 360) / 100;
+                            var activeBorder = $("#activeBorder4");
+                            conGlobal = 0;
+                            ValorFinal = pgasco.toFixed(3);
+                            $.llenarCirculos(ValorFinal, "#prec4", activeBorder, valor4, "#c83d1e");
                         }, 800);
 
                         /////PRESUPUESTO COMPROMETIDO POR SERCRETARIA
@@ -234,13 +248,17 @@ $(document).ready(function () {
                         $.each(PreSecr, function (i, itemPre) {
                             var colores = ['success', 'info', 'warning', 'danger'];
                             var color = colores[Math.floor(Math.random() * colores.length)];
+                            let colorFont = "#333";
+                            if(itemPre.PorGat>25){
+                                colorFont = "#fff";
+                            }
                             ContSecr += ' <div class="row">'
                                     + '     <div class="col-md-7">'
                                     + '         <label>' + $.capitalizeWords(itemPre.Desc) + '</label>'
                                     + '     </div>'
                                     + '     <div class="col-md-5">'
                                     + '         <div class="progress progress-striped  active">'
-                                    + '           <div class="progress-bar progress-bar-' + color + ' active" role="progressbar" aria-valuenow="40" aria-valuemin="0" title="'+itemPre.PorGat+'%" aria-valuemax="100" style="width: ' + itemPre.PorGat + '%">' + itemPre.PorGat + '%</div>'
+                                    + '           <div  class="progress-bar progress-bar-' + color + ' active" role="progressbar" aria-valuenow="40" aria-valuemin="0" title="'+itemPre.PorGat+'%" aria-valuemax="100" style="color: '+colorFont+'; width: ' + itemPre.PorGat + '%">' + itemPre.PorGat + '%</div>'
                                     + '         </div>'
                                     + '     </div>'
                                     + ' </div>';

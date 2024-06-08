@@ -183,7 +183,7 @@ if (mysqli_num_rows($resultado) > 0) {
             line-height: 1.3em;'>"
              ."<div class='opciones'>"
              . "<a href='javascript:;' class='btn default btn-xs yellow btnPolizas' data-id='" . $fila["num_contrato"] . "'>" .
-             "<i class='fa fa-edit'></i> Polizas"
+             "<i class='fa fa-handshake-o'></i> Polizas"
              . "</a>";
              if ($_SESSION['GesProyMCo'] == "s") {
                 if ($fila["estcont_contra"] == "Por Verificar") {

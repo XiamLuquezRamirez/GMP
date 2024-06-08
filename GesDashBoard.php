@@ -148,7 +148,7 @@ WHERE proy.estado_proyect IN ('En Ejecucion','Ejecutado')";
     ON met.ideje_metas = eje.ID 
     LEFT JOIN banco_proyec_financiacion finan
     ON proy.id_proyect = finan.id_proyect
-  WHERE proy.estado='ACTIVO' and comp_pres='si'";
+  WHERE proy.estado='ACTIVO' and comp_pres='si' and estado_proyect='En Ejecucion'";
 
   if ($_POST["CbSec"] != "") {
     $consulta .= " AND IFNULL(proy.secretaria_proyect, '') = '" . $_POST["CbSec"] . "'";
@@ -205,7 +205,7 @@ WHERE proy.estado_proyect IN ('En Ejecucion','Ejecutado')";
     ON met.ideje_metas = eje.ID 
     LEFT JOIN banco_proyec_financiacion finan
     ON proy.id_proyect = finan.id_proyect
-  WHERE proy.estado='ACTIVO' and estado_proyect='En Ejecucion'";
+  WHERE proy.estado='ACTIVO' and estado_proyect='Ejecutados'";
 
   if ($_POST["CbSec"] != "") {
     $consulta .= " AND IFNULL(proy.secretaria_proyect, '') = '" . $_POST["CbSec"] . "'";
@@ -467,9 +467,7 @@ WHERE proy.estado='ACTIVO'";
   $TotProyEjecutado = 0;
 $TotContEjecutado = 0;
 
-// Crear tabla temporal para almacenar resultados
-
-
+// guardar resultados actuales
 $consulta = "INSERT INTO temp_proy1 (idproy, fcre, valtot, mes)
 SELECT idproy, fcre, SUM(val) valtot, MONTH(fcre) mes FROM(
     SELECT 
@@ -490,12 +488,7 @@ SELECT idproy, fcre, SUM(val) valtot, MONTH(fcre) mes FROM(
         SELECT pc.id_secretaria secr, pc.id_fuente fuent FROM presupuesto_secretarias pc GROUP BY pc.id_secretaria
     ) s  
         ON proy.secretaria_proyect=s.secr
-    WHERE proy.estado_proyect NOT IN (
-            'Radicado',
-            'Registrado',
-            'No Viabilizado'
-        )
-        AND proy.estado='ACTIVO'";
+    WHERE proy.comp_pres='si' AND proy.estado='ACTIVO'";
 
 if ($_POST["CbSec"] != "") {
     $consulta .= " AND IFNULL(proy.secretaria_proyect, '') = '" . $_POST["CbSec"] . "'";
@@ -554,10 +547,16 @@ foreach ($mesesConGastos as $mes) {
     $TotProyEjecutado = $valtot;
 
     // Obtener gastos del mes actual
-    $ConsultaCE = "SELECT SUM(valor) veje FROM gastos_contrato gast
-    left join contratos contr on  gast.contrato = contr.num_contrato
-    left join proyectos proy on contr.idproy_contrato = proy.id_proyect
-    WHERE gast.estado='ACTIVO' AND MONTH(gast.fecha) = $mes";
+    $ConsultaCE = "SELECT SUM(valor) veje  FROM gastos_contrato gast 
+    LEFT JOIN contratos contr ON gast.contrato = contr.num_contrato 
+    LEFT JOIN proyectos proy ON contr.idproy_contrato = proy.id_proyect 
+    WHERE gast.estado='ACTIVO' AND MONTH(gast.fecha) = ".$mes." AND contr.id_contrato IN
+      (SELECT
+        MAX(id_contrato)
+      FROM
+        contratos WHERE num_contrato = contr.num_contrato
+      GROUP BY num_contrato)";
+   
     if ($_POST["CbSec"] != "") {
       $ConsultaCE .= " AND IFNULL(proy.secretaria_proyect, '') = '" . $_POST["CbSec"] . "'";
     }

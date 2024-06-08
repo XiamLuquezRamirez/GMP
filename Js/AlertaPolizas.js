@@ -160,11 +160,10 @@ $(document).ready(function () {
                             campo = "";
                             campo += "<tr>";
                             campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + i + "</td>";
-                            campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;text-align:center;'>" + Vacio(data.RIESGOALTO.num_contrato[i]) + "</td>";
-                            campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;text-align: justify;'>" + Vacio(data.RIESGOALTO.obj_contrato[i]).toUpperCase() + "</td>";
+                            campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;text-align: justify;'>" +Vacio(data.RIESGOALTO.num_contrato[i])+ "-"+ Vacio(data.RIESGOALTO.obj_contrato[i]).toUpperCase() + "</td>";
                             campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + Vacio(data.RIESGOALTO.fini_contrato[i]).substring(0, 10) + "</td>";
                             campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + Vacio(data.RIESGOALTO.ffin_contrato[i]).substring(0, 10) + "</td>";
-                            campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;text-align:center;'>" + Vacio(data.RIESGOALTO.num_poliza[i]) + "</td>";
+                            campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + Vacio(data.RIESGOALTO.num_poliza[i]) + "-"+Vacio(data.RIESGOALTO.descripcion[i]) + "</td>";
                             campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + Vacio(data.RIESGOALTO.fecha_ini[i]).substring(0, 10) + "</td>";
                             campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + Vacio(data.RIESGOALTO.fecha_fin[i]).substring(0, 10) + "</td>";
                             //                                            campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + Vacio(data['por_con' + i]) + " %</td>";
@@ -187,16 +186,15 @@ $(document).ready(function () {
                             campo = "";
                             campo += "<tr>";
                             campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + i + "</td>";
-                            campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;text-align:center;'>" + Vacio(data.RIESGOMEDIO.num_contrato[i]) + "</td>";
-                            campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;text-align: justify;'>" + Vacio(data.RIESGOMEDIO.obj_contrato[i]).toUpperCase() + "</td>";
+                            campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;text-align: justify;'>" +Vacio(data.RIESGOMEDIO.num_contrato[i])+ "-"+ Vacio(data.RIESGOMEDIO.obj_contrato[i]).toUpperCase() + "</td>";
                             campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + Vacio(data.RIESGOMEDIO.fini_contrato[i]).substring(0, 10) + "</td>";
                             campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + Vacio(data.RIESGOMEDIO.ffin_contrato[i]).substring(0, 10) + "</td>";
-                            campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;text-align:center;'>" + Vacio(data.RIESGOMEDIO.num_poliza[i]) + "</td>";
+                            campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + Vacio(data.RIESGOMEDIO.num_poliza[i]) + "-"+Vacio(data.RIESGOMEDIO.descripcion[i]) + "</td>";
                             campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + Vacio(data.RIESGOMEDIO.fecha_ini[i]).substring(0, 10) + "</td>";
                             campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + Vacio(data.RIESGOMEDIO.fecha_fin[i]).substring(0, 10) + "</td>";
                             //                                            campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + Vacio(data['por_con' + i]) + " %</td>";
-                            // campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + Vacio(data.RIESGOALTO.estad_contrato[i]).toUpperCase() + "</td>";
-                            campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;text-align:center;'>" + Vacio(data.RIESGOMEDIO.porav_contrato[i]).toUpperCase() + "</td>";
+                            // campo += "<td style='font-size: 11px;font-weight: b:old;vertical-align: middle;'>" + Vacio(data.RIESGOALTO.estad_contrato[i]).toUpperCase() + "</td>";
+                            campo += "<td style='font-size: 11px;font-weight: bold;vertical-align middle;text-align:center;'>" + Vacio(data.RIESGOMEDIO.porav_contrato[i]).toUpperCase() + "</td>";
                             campo += "</tr>";
                             $("#contenido").append(campo);
                         }
@@ -214,11 +212,10 @@ $(document).ready(function () {
                             campo = "";
                             campo += "<tr>";
                             campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + i + "</td>";
-                            campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;text-align:center;'>" + Vacio(data.RIESGOBAJO.num_contrato[i]) + "</td>";
-                            campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;text-align: justify;'>" + Vacio(data.RIESGOBAJO.obj_contrato[i]).toUpperCase() + "</td>";
+                            campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;text-align: justify;'>" +Vacio(data.RIESGOBAJO.num_contrato[i])+ "-"+ Vacio(data.RIESGOBAJO.obj_contrato[i]).toUpperCase() + "</td>";
                             campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + Vacio(data.RIESGOBAJO.fini_contrato[i]).substring(0, 10) + "</td>";
                             campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + Vacio(data.RIESGOBAJO.ffin_contrato[i]).substring(0, 10) + "</td>";
-                            campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;text-align:center;'>" + Vacio(data.RIESGOBAJO.num_poliza[i]) + "</td>";
+                            campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + Vacio(data.RIESGOBAJO.num_poliza[i]) +"-"+Vacio(data.RIESGOBAJO.descripcion[i]) + "</td>";
                             campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + Vacio(data.RIESGOBAJO.fecha_ini[i]).substring(0, 10) + "</td>";
                             campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + Vacio(data.RIESGOBAJO.fecha_fin[i]).substring(0, 10) + "</td>";
                             //                                            campo += "<td style='font-size: 11px;font-weight: bold;vertical-align: middle;'>" + Vacio(data['por_con' + i]) + " %</td>";

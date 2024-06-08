@@ -10,9 +10,9 @@ mysqli_set_charset($link, 'utf8');
 
 if ($_REQUEST["OPCION"] == "GUARDAR") {
     // GUARDAR POLIZA
-    $consulta = "REPLACE INTO polizas(id_contrato,num_poliza,fecha_ini,fecha_fin,anexo,estado)
-        VALUES(
-            '" . $_REQUEST['id_contrato'] . "','" . $_REQUEST['num_poliza'] . "','" . $_REQUEST['fecha_ini'] . "',
+    $consulta = "REPLACE INTO polizas(id,id_contrato,num_poliza,descripcion,fecha_ini,fecha_fin,anexo,estado)
+        VALUES(null,
+            '" . $_REQUEST['id_contrato'] . "','" . $_REQUEST['num_poliza'] . "','" . $_REQUEST['des_poliza'] . "','" . $_REQUEST['fecha_ini'] . "',
             '" . $_REQUEST['fecha_fin'] . "','" . $_REQUEST['anexo'] . "','Activo'
         )";
 
@@ -35,32 +35,66 @@ if ($_REQUEST["OPCION"] == "GUARDAR") {
     // echo $consulta;
     // GUARDAR POLIZA
 }
+if ($_REQUEST["OPCION"] == "EDITAR") {
+    // EDITAR POLIZA
+    $consulta = "UPDATE polizas SET num_poliza ='" . $_REQUEST['num_poliza'] . "',
+    descripcion='" . $_REQUEST['des_poliza'] . "', fecha_ini='" . $_REQUEST['fecha_ini'] . "',
+    fecha_fin='" . $_REQUEST['fecha_fin'] . "', anexo='" . $_REQUEST['anexo'] . "' WHERE id=".$_REQUEST['id_poliza'];
+
+    $qc = mysqli_query($link, $consulta);
+    if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
+        $success = 0;
+        $error = 4;
+    }
+
+    if ($success == 0) {
+        mysqli_query($link, "ROLLBACK");
+        echo $error;
+        echo $consulta;
+    } else {
+        mysqli_query($link, "COMMIT");
+        echo 1;
+    }
+
+    mysqli_close($link);
+}
+
 if ($_REQUEST["OPCION"] == "CONSULTAR") {
     $consulta = "SELECT * FROM polizas
         WHERE  id_contrato='" . $_REQUEST['id_contrato'] . "' AND estado='Activo' ";
     $resultado = mysqli_query($link, $consulta);
-    $contrato = [];
-    $TIENE = 0;
-    $resp = [];
     $contador = 0;
+    $cont = 1;
+    $CadPolizas = "";
     if (mysqli_num_rows($resultado) > 0) {
         $i = 1;
         while ($fila = mysqli_fetch_array($resultado)) {
-            $contrato['id_contrato'][$i] = $fila["id_contrato"];
-            $contrato['num_poliza'][$i] = $fila["num_poliza"];
-            $contrato['fecha_ini'][$i] = $fila["fecha_ini"];
-            $contrato['fecha_fin'][$i] = $fila["fecha_fin"];
-            $contrato['anexo'][$i] = $fila["anexo"];
-            $TIENE = 1;
-            $contador++;
-            $i++;
+            $cont++;
+            $CadPolizas .= '<tr class="selected" id="filaGasto' . $cont . '" >';
+            $CadPolizas .= "<td>" . $cont . "</td>";
+            $CadPolizas .= "<td>" . $fila["num_poliza"] . "</td>";
+            $CadPolizas .= "<td>" . $fila["descripcion"] . "</td>";
+            $CadPolizas .= "<td>" . $fila["fecha_ini"] ." - ".$fila["fecha_fin"]. "</td>";
+            $CadPolizas .= "<td style='text-align: center;'>";
+            if ($fila['anexo'] == "") {
+                $CadPolizas .= "Sin documento";
+            } else {
+                $CadPolizas .= "<a href='" . "../Proyecto/" . $fila['anexo'] . "' target='_blank' class=\"btn default btn-xs blue\"><i class=\"fa fa-search\"></i></a>";
+            }
+
+            $CadPolizas .= "</td>";
+            $CadPolizas .= "<td>
+            <a onclick=\"$.EditarPoliza(" . $fila["id"] . ")\" class=\"btn default btn-xs blue\">"
+                . "<i class=\"fa fa-trash-o\"></i> Editar</a>
+            <a onclick=\"$.QuitarPoliza(" . $fila["id"] . ")\" class=\"btn default btn-xs red\">"
+                . "<i class='fa fa-trash-o'></i> Eliminar</a>
+            </td></tr>";
         }
     }
-    $contrato['tam'] = $contador;
-    $resp['TIENE'] = $TIENE;
-    $resp['contrato'] = $contrato;
+    
+
     mysqli_close($link);
-    echo json_encode($resp);
+    echo json_encode($CadPolizas);
 }
 if ($_REQUEST["OPCION"] == "CONSULTARALERTAS") {
     $campo = array();
@@ -131,26 +165,33 @@ if ($_REQUEST["OPCION"] == "PAGINAR2") {
     $MENOS = 0;
     $sql = "SELECT * FROM parametros_alerta";
     $consulta = mysqli_query($link, $sql);
+    
+    if (!$consulta) {
+        die("Error en la consulta de parametros_alerta: " . mysqli_error($link));
+    }
+    
     while ($resp = $consulta->fetch_assoc()) {
         $MAS = $resp['mas'];
         $MENOS = $resp['menos'];
     }
-
-    $sql = "SELECT c.num_contrato,c.id_contrato,c.obj_contrato,c.porav_contrato,c.fini_contrato,
-                    c.ffin_contrato,c.estad_contrato,c.num_contrato,
-                    p.fecha_ini,p.fecha_fin,SYSDATE() AS FECHAHOY,p.num_poliza,
-                DATEDIFF(p.fecha_fin, p.fecha_ini) DIFERENCIADIAS,DATEDIFF(p.fecha_fin, SYSDATE()) DIFERENCIAPOLIZA
-            FROM
-                contratos AS c
-                    INNER JOIN
-                polizas AS p ON c.num_contrato = p.id_contrato
-            WHERE
-                estad_contrato = 'Ejecucion' 
+    
+    $sql = "SELECT c.num_contrato, c.id_contrato, c.obj_contrato, c.porav_contrato, c.fini_contrato,
+                    c.ffin_contrato, c.estad_contrato, c.num_contrato,
+                    p.fecha_ini, p.fecha_fin, SYSDATE() AS FECHAHOY, p.num_poliza, p.descripcion,
+                    DATEDIFF(p.fecha_fin, p.fecha_ini) DIFERENCIADIAS, DATEDIFF(p.fecha_fin, SYSDATE()) DIFERENCIAPOLIZA
+            FROM contratos AS c
+            INNER JOIN polizas AS p ON c.num_contrato = p.id_contrato
+            WHERE estad_contrato = 'Ejecucion'
             GROUP BY c.num_contrato";
     $campo = array();
     $RESPUESTA = array();
-
+    
     $consulta = mysqli_query($link, $sql);
+    
+    if (!$consulta) {
+        die("Error en la consulta de contratos y polizas: " . mysqli_error($link));
+    }
+    
     $kA = 1;
     $kM = 1;
     $kB = 1;
@@ -161,29 +202,32 @@ if ($_REQUEST["OPCION"] == "PAGINAR2") {
     $RIESGOMEDIO = array();
     $RIESGOALTO = array();
     $porciones = "";
+    
     while ($resp = $consulta->fetch_assoc()) {
         $DIFERENCIADIAS = $resp['DIFERENCIADIAS'];
         $DIFERENCIAPOLIZA = $resp['DIFERENCIAPOLIZA'];
         $DIFERENCIA = $DIFERENCIADIAS - $DIFERENCIAPOLIZA;
         if ($DIFERENCIA < 0) {
-            $DIFERENCIA = $DIFERENCIA * -1;
+            $DIFERENCIA = abs($DIFERENCIA);
         }
         $porriezgo = (($DIFERENCIA * 100) / $DIFERENCIADIAS);
         $porciones = explode("%", $resp['porav_contrato']);
         $por_contrato = $porciones[0];
-
+    
         $porriezgoMAS = $porriezgo + $MAS;
         $porriezgoMENOS = $porriezgo - $MENOS;
+    
         if ($por_contrato > $porriezgoMAS) {
             $OpB = "Existe";
             $RIESGOBAJO["id_contrato"][$kB] = $resp['id_contrato'];
             $RIESGOBAJO["num_contrato"][$kB] = $resp['num_contrato'];
-            $RIESGOBAJO["obj_contrato"][$kB] = stripslashes(utf8_decode(cambiarLetra($resp['obj_contrato'])));
+            $RIESGOBAJO["obj_contrato"][$kB] = stripslashes(cambiarLetra($resp['obj_contrato']));
             $RIESGOBAJO["fini_contrato"][$kB] = $resp['fini_contrato'];
             $RIESGOBAJO["ffin_contrato"][$kB] = $resp['ffin_contrato'];
-            $RIESGOBAJO["porav_contrato"][$kB] = stripslashes(utf8_decode($resp['porav_contrato']));
+            $RIESGOBAJO["porav_contrato"][$kB] = stripslashes($resp['porav_contrato']);
             $RIESGOBAJO["estad_contrato"][$kB] = $resp['estad_contrato'];
             $RIESGOBAJO["num_poliza"][$kB] = $resp['num_poliza'];
+            $RIESGOBAJO["descripcion"][$kB] = $resp['descripcion'];
             $RIESGOBAJO["fecha_ini"][$kB] = $resp['fecha_ini'];
             $RIESGOBAJO["fecha_fin"][$kB] = $resp['fecha_fin'];
             $kB++;
@@ -192,12 +236,13 @@ if ($_REQUEST["OPCION"] == "PAGINAR2") {
                 $OpM = "Existe";
                 $RIESGOMEDIO["id_contrato"][$kM] = $resp['id_contrato'];
                 $RIESGOMEDIO["num_contrato"][$kM] = $resp['num_contrato'];
-                $RIESGOMEDIO["obj_contrato"][$kM] = stripslashes(utf8_decode(cambiarLetra($resp['obj_contrato'])));
+                $RIESGOMEDIO["obj_contrato"][$kM] = stripslashes(cambiarLetra($resp['obj_contrato']));
                 $RIESGOMEDIO["fini_contrato"][$kM] = $resp['fini_contrato'];
-                $RIESGOMEDIO["ffin_contrato"][$kB] = $resp['ffin_contrato'];
-                $RIESGOMEDIO["porav_contrato"][$kM] = stripslashes(utf8_decode($resp['porav_contrato']));
+                $RIESGOMEDIO["ffin_contrato"][$kM] = $resp['ffin_contrato'];
+                $RIESGOMEDIO["porav_contrato"][$kM] = stripslashes($resp['porav_contrato']);
                 $RIESGOMEDIO["estad_contrato"][$kM] = $resp['estad_contrato'];
                 $RIESGOMEDIO["num_poliza"][$kM] = $resp['num_poliza'];
+                $RIESGOMEDIO["descripcion"][$kM] = $resp['descripcion'];
                 $RIESGOMEDIO["fecha_ini"][$kM] = $resp['fecha_ini'];
                 $RIESGOMEDIO["fecha_fin"][$kM] = $resp['fecha_fin'];
                 $kM++;
@@ -205,22 +250,24 @@ if ($_REQUEST["OPCION"] == "PAGINAR2") {
                 $OpA = "Existe";
                 $RIESGOALTO["id_contrato"][$kA] = $resp['id_contrato'];
                 $RIESGOALTO["num_contrato"][$kA] = $resp['num_contrato'];
-                $RIESGOALTO["obj_contrato"][$kA] = stripslashes(utf8_decode(cambiarLetra($resp['obj_contrato'])));
+                $RIESGOALTO["obj_contrato"][$kA] = stripslashes(cambiarLetra($resp['obj_contrato']));
                 $RIESGOALTO["fini_contrato"][$kA] = $resp['fini_contrato'];
-                $RIESGOALTO["ffin_contrato"][$kB] = $resp['ffin_contrato'];
-                $RIESGOALTO["porav_contrato"][$kA] = stripslashes(utf8_decode($resp['porav_contrato']));
+                $RIESGOALTO["ffin_contrato"][$kA] = $resp['ffin_contrato'];
+                $RIESGOALTO["porav_contrato"][$kA] = stripslashes($resp['porav_contrato']);
                 $RIESGOALTO["estad_contrato"][$kA] = $resp['estad_contrato'];
                 $RIESGOALTO["num_poliza"][$kA] = $resp['num_poliza'];
+                $RIESGOALTO["descripcion"][$kA] = $resp['descripcion'];
                 $RIESGOALTO["fecha_ini"][$kA] = $resp['fecha_ini'];
                 $RIESGOALTO["fecha_fin"][$kA] = $resp['fecha_fin'];
                 $kA++;
             }
         }
     }
+    
     $campo["RIESGOBAJO"] = $RIESGOBAJO;
     $campo["RIESGOMEDIO"] = $RIESGOMEDIO;
     $campo["RIESGOALTO"] = $RIESGOALTO;
-
+    
     $campo["tamA"] = $kA - 1;
     $campo["tamM"] = $kM - 1;
     $campo["tamB"] = $kB - 1;
@@ -228,8 +275,12 @@ if ($_REQUEST["OPCION"] == "PAGINAR2") {
     $campo["OpA"] = $OpA;
     $campo["OpM"] = $OpM;
     $campo["OpB"] = $OpB;
+   
+    
     mysqli_close($link);
+    
     echo json_encode($campo);
+    
 }
 
 if ($_REQUEST["OPCION"] == "GUARDARPARAMETROSALERTA") {

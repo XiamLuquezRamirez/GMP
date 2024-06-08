@@ -71,6 +71,7 @@ $link = conectar();
         </script>
 
         <script src="../Js/jquery-3.1.1.min.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/printThis/1.15.0/printThis.min.js" defer></script>
         <script src="../Js/InfoProyectos.js" type="text/javascript"></script>
         <script src="../Js/funciones_generales.js" type="text/javascript"></script>
         <script src="../Js/UbiMap.js" type="text/javascript"></script>
@@ -700,7 +701,7 @@ $link = conectar();
                                                             </div>
                                                         </div>
                                                         <div class='col-md-3'>
-                                                            <div class='form-group' style="">
+                                                            <div class='form-group'>
                                                                 <label class='control-label'>Tipo de Meta:</label>
                                                                 <select class="form-control"  id="CbTipMeta"  name="options2">
                                                                     <option value=" ">Seleccione...</option>
@@ -848,7 +849,7 @@ $link = conectar();
                                                                 <div id="SecProyCont" class='col-md-12'>
                                                                  <div class='col-md-3'><div class='progress progress-striped active'>
                                                                             <div class='progress-bar progress-bar-success' role='progressbar' aria-valuenow='40' aria-valuemin='0' aria-valuemax='100' style='width: 50%'>
-                                                                                <span style="">50% Completado</span>
+                                                                                <span >50% Completado</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -885,7 +886,6 @@ $link = conectar();
 
                                                             </div>
 
-
                                                             <div class="form-actions right">
                                                                 <button type="button" class="btn blue" onclick="$.savePDFContAtraSusp();" id="btn_GenPDFSecr"><i class="fa fa-file-pdf-o"></i> Generar PDF</button>
                                                             </div>
@@ -902,6 +902,7 @@ $link = conectar();
                                                                 </div>
 
                                                             </div>
+
 
 
                                                             <div class="form-actions right">
@@ -933,7 +934,7 @@ $link = conectar();
                                                                     <h2 id="TitInfoGenCont"></h2>
                                                                 </div>
 
-                                                                <div id="ContGenCont" class='row'>
+                                                                <div id="ContGenCont" class='form-body'>
 
                                                                 </div>
 
@@ -945,7 +946,7 @@ $link = conectar();
 
                                                         </div>
                                                         <div class='col-md-12' id="GrafMapsCal" style="display: none;">
-                                                            <div class="row">
+                                                            <div class="row" id="detaMapa">
                                                                 <div class='col-md-12 text-center'>
                                                                     <h2 id="TitInfoMapsCal"></h2>
                                                                 </div>
@@ -955,9 +956,9 @@ $link = conectar();
                                                                     <div id="map_canvas" style="width:100%;height:400px;"></div>
                                                                 </div>
                                                             </div>
-                                                            <!--                                                            <div class="form-actions right">
-                                                                                                                            <button type="button" class="btn blue" onclick="$.savePDFInfGenCont();" id="btn_GenPDFSecr"><i class="fa fa-file-pdf-o"></i> Generar PDF</button>
-                                                                                                                        </div>-->
+                                                            <div class="form-actions right">
+                                                                <button type="button" class="btn blue" onclick="$.printMap();"><i class="fa fa-file-pdf-o"></i> Generar PDF</button>
+                                                             </div>
                                                         </div>
 
                                                         <div class="form-actions right" style="display: none;" id="btn_volver">
@@ -969,7 +970,7 @@ $link = conectar();
                                                     </div>
 
                                                 </div>
-                                                <center><h4 class='form-section'></h4></center>
+                                               <h4 class='form-section'></h4>
                                             </div>
                                         </div>
                                     </div>

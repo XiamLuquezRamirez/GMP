@@ -1215,6 +1215,22 @@ FROM
     $myDat->tabDetAddiciones = $tabDetAddiciones;
     $myJSONDat = json_encode($myDat);
     echo $myJSONDat;
+} else if ($_POST['ope'] == "editPoliza") {
+    $myDat = new stdClass();
+    $consulta = "SELECT * FROM polizas WHERE id = " . $_POST['idPoli'];
+
+    $resultado = mysqli_query($link, $consulta);
+    if (mysqli_num_rows($resultado) > 0) {
+        while ($fila = mysqli_fetch_array($resultado)) {
+            $myDat->num_poliza = $fila["num_poliza"];
+            $myDat->descripcion = $fila["descripcion"];
+            $myDat->fecha_ini = $fila["fecha_ini"];
+            $myDat->fecha_fin = $fila["fecha_fin"];
+            $myDat->anexo = $fila["anexo"];
+        }
+    }
+    $myJSONDat = json_encode($myDat);
+    echo $myJSONDat;
 } else if ($_POST['ope'] == "editGasto") {
     $myDat = new stdClass();
     $consulta = "SELECT * FROM gastos_contrato WHERE id = " . $_POST['idGast'];
@@ -3930,7 +3946,7 @@ ORDER BY id_contrato";
   AND proy.estado='ACTIVO'  
   GROUP BY id_proyect) AS t GROUP BY estado_proyect";
     //    echo $consulta;
-  $resultado = mysqli_query($link, $consulta);
+    $resultado = mysqli_query($link, $consulta);
     $rawdata = array(); //creamos un array
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -5023,9 +5039,9 @@ FROM
   proy.cod_proyect cproy,
   proy.nombre_proyect nproy,
   dsecretar_proyect secre,
-    eje.NOMBRE neje,
-  comp.NOMBRE ncomp,
-  prog.NOMBRE nprog,
+  IFNULL(eje.NOMBRE,'No se encuentra relacionado a un eje ') neje,
+  IFNULL(comp.NOMBRE,'No se encuentra relacionado a un componente ') ncomp,
+  IFNULL(prog.NOMBRE,'No se encuentra relacionado a un programa ') nprog,
   tp.des_tipolo dtip,
   proy.porceEjec_proyect pava
 FROM
@@ -5354,6 +5370,8 @@ WHERE proy.id_proyect = '" . $_POST['Proy'] . "' GROUP BY cproy";
     $RawConSusp = array(); //Datos Suspen
     $RawConPro = array(); //Datos Prorroga
     $RawaAtra = array(); //Datos Atrasa
+    $RawaPolizas = array(); //Datos polizas
+    $RawaGastos = array(); //Datos gastos
 
 
     $consulta = "SELECT 
@@ -5374,9 +5392,6 @@ WHERE proy.id_proyect = '" . $_POST['Proy'] . "' GROUP BY cproy";
   cttas.nom_contratis nomctta,
   sup.nom_supervisores nomsuper,
   inter.nom_interventores nominter,
-  pol.num_poliza npol,
-  pol.fecha_ini finipol,
-  pol.fecha_fin ffinpol,
   proy.dsecretar_proyect secr
 FROM
   contratos contr 
@@ -5387,9 +5402,7 @@ FROM
     LEFT JOIN contratistas cttas 
     ON contr.idcontrati_contrato=cttas.id_contratis
     LEFT JOIN interventores inter
-    ON contr.idinterv_contrato=inter.id_interventores
-    LEFT JOIN polizas pol
-    ON contr.num_contrato=pol.id_contrato
+    ON contr.idinterv_contrato=inter.id_interventores    
     LEFT JOIN proyectos proy 
     ON contr.idproy_contrato=proy.id_proyect
     WHERE contr.id_contrato='" . $_POST['idContr'] . "'";
@@ -5415,9 +5428,6 @@ FROM
                 "nomctta" => $filaC['nomctta'],
                 "nomsuper" => $filaC['nomsuper'],
                 "nominter" => $filaC['nominter'],
-                "npol" => $filaC['npol'],
-                "finipol" => $filaC['finipol'],
-                "ffinpol" => $filaC['ffinpol'],
                 "secr" => $filaC['secr'],
             );
         }
@@ -5542,6 +5552,36 @@ WHERE num_contrato = '" . $_POST['Contr'] . "' ";
         }
     }
 
+    ///CONSULTAR POLIZAS 
+    $consultaP = "SELECT * FROM polizas WHERE id_contrato = '" . $_POST['Contr'] . "' AND estado='Activo'";
+
+    $resultadoP = mysqli_query($link, $consultaP);
+    if (mysqli_num_rows($resultadoP) > 0) {
+        while ($filaP = mysqli_fetch_array($resultadoP)) {
+            $RawaPolizas[] = array(
+                "num_poliza" => $filaP['num_poliza'],
+                "descripcion" => $filaP['descripcion'],
+                "fecha_ini" => $filaP['fecha_ini'],
+                "fecha_fin" => $filaP['fecha_fin']
+            );
+        }
+    }
+    ///CONSULTAR GASTOS 
+    $consultaG = "SELECT gc.fecha fecha, cg.nombre ngasto, gc.descripcion descr, gc.valor val FROM gastos_contrato  gc
+    LEFT JOIN categoria_gastos cg  ON gc.categoria = cg.id
+    WHERE gc.contrato = '" . $_POST['Contr'] . "' AND gc.estado='ACTIVO'";
+
+    $resultadoG = mysqli_query($link, $consultaG);
+    if (mysqli_num_rows($resultadoG) > 0) {
+        while ($filaG = mysqli_fetch_array($resultadoG)) {
+            $RawaGastos[] = array(
+                "fecha" => $filaG['fecha'],
+                "ngasto" => $filaG['ngasto'],
+                "descr" => $filaG['descr'],
+                "val" => $filaG['val']
+            );
+        }
+    }
 
     ///COSULTA ATRASO
     $consultaA = "SELECT 
@@ -5587,6 +5627,8 @@ WHERE estad_contrato = 'Ejecucion' AND contr.num_contrato='" . $_POST['Contr'] .
     $myDat->RawConPro = $RawConPro;
     $myDat->RawUbiCon = $RawUbiCon;
     $myDat->RawaAtra = $RawaAtra;
+    $myDat->RawaPolizas = $RawaPolizas;
+    $myDat->RawaGastos = $RawaGastos;
 
     $myJSONDat = json_encode($myDat);
     echo $myJSONDat;
@@ -5762,19 +5804,12 @@ AND contr.id_contrato IN
                     $ip++;
 
                     $porcinv = ($totalInv * 100) / $totalpre;
-                    $img = "";
-                    $consultaImg = "select * from aux_inf_atra_sup where id='" . $contSe . "'";
-                    $resultadoImg = mysqli_query($link, $consultaImg);
-                    while ($filaimg = mysqli_fetch_array($resultadoImg)) {
-                        $img = $filaimg['img'];
-                    }
 
                     $ResInv = "LA " . $fila['dsec'] . " POSEE " . $ncontAtr . " CONTRATO ATRASADO(S) Y " . $ncontSus . "  SUSPENDIDO(S) LO CUAL REPRESENTAN "
                         . "EL " . round($porcinv, 2) . "%($ " . number_format($totalInv, 2, ",", ".") . ") DEL PRESUPUESTO GENERAL ($ " . number_format($totalpre, 2, ",", ".") . ")";
 
                     $RawSec[$is] = array(
                         "dessec" => $fila['dsec'],
-                        "img" => $img,
                         "ResInv" => $ResInv,
                         "Estad" => $RawEst
                     );
@@ -5819,7 +5854,7 @@ FROM
 } else if ($_POST['ope'] == "InfGenContxProy") {
     $myDat = new stdClass();
 
-    $RawProy = array(1000); //creamos un array
+    $RawProy = array(); //creamos un array
     $RawCon = array(); //creamos un array
     $is = 0;
     $ip = 0;
@@ -5827,11 +5862,11 @@ FROM
     $consulta = "SELECT 
             proy.id_proyect idproy, proy.nombre_proyect nomproy, proy.porceEjec_proyect poravan,proy.cod_proyect codproy
             FROM
-              contratos contr 
-              LEFT JOIN proyectos proy 
-                ON contr.idproy_contrato = proy.id_proyect 
+              contratos contr
+              LEFT JOIN proyectos proy
+                ON contr.idproy_contrato = proy.id_proyect
              LEFT JOIN secretarias sec
-              ON proy.secretaria_proyect=sec.idsecretarias 
+              ON proy.secretaria_proyect=sec.idsecretarias
             WHERE proy.estado_proyect='En Ejecucion' AND contr.estcont_contra='Verificado' AND proy.secretaria_proyect LIKE '" . $_POST['Secre'] . "%'
             AND contr.id_contrato IN
               (SELECT
@@ -7590,6 +7625,10 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
         $error = 15;
     }
 
+    echo "Bien";
+} else if ($_POST['ope'] == "eliminarPoliza") {
+    $consulta = "UPDATE polizas SET estado='ELIMINADO' WHERE id=" . $_POST['id'];
+    mysqli_query($link, $consulta);
     echo "Bien";
 } else if ($_POST['ope'] == "eliminarGasto") {
     $consulta = "UPDATE gastos_contrato SET estado='ELIMINADO' WHERE id=" . $_POST['id'];
