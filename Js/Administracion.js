@@ -271,6 +271,7 @@ $(document).ready(function () {
 
 
                         chartProEzt.legend = new am4charts.Legend();
+                        chartProEzt.legend.fontSize = 12;
                         chartProEzt.innerRadius = am4core.percent(20);
                         chartProEzt.paddingTop = 0;
                         chartProEzt.marginTop = 0;
@@ -283,8 +284,9 @@ $(document).ready(function () {
                         pieSeries.dataFields.value = "cant";
                         pieSeries.dataFields.category = "Cate";
                         pieSeries.slices.template.cornerRadius = 10;
+                        pieSeries.labels.template.fontSize = 10; // Cambia el tamaño de la fuente aquí
                         pieSeries.labels.template.text = "{category}: {value} ({value.percent.formatNumber('#.0')}%)";
-
+                
 
                         ////////////////PRESUPUESTO COMPROMETIDO VS PRESUPUESTO GASTATO
 

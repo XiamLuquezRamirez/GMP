@@ -7626,6 +7626,27 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     }
 
     echo "Bien";
+} else if ($_POST['ope'] == "eliminarSubFuente") {
+   /* $consulta = "UPDATE adicion_contrato SET estado='ELIMINADO' WHERE id=" . $_POST['id'];
+    mysqli_query($link, $consulta);
+
+    ///ELIMINAR ADICION AGREGADA AL PRESUPUESTO DEL PROYECTO
+    $consulta = "DELETE FROM banco_proyec_presupuesto WHERE adicion='" . $_POST['id'] . "'";
+    $qc = mysqli_query($link, $consulta);
+    if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
+        $success = 0;
+        $error = 14;
+    }*/
+
+    ///ELIMINAR SUBFUENTE DE FINANCIACION
+    $consulta = "DELETE FROM subfinanciacion WHERE id='" . $_POST['idf'] . "'";
+    $qc = mysqli_query($link, $consulta);
+    if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
+        $success = 0;
+        $error = 15;
+    }
+
+    echo "Bien";
 } else if ($_POST['ope'] == "eliminarPoliza") {
     $consulta = "UPDATE polizas SET estado='ELIMINADO' WHERE id=" . $_POST['id'];
     mysqli_query($link, $consulta);
@@ -8667,9 +8688,6 @@ AND contr.id_contrato IN
         }
     }
 
-
-
-
     $myDat->Contr = $Contr;
     $myJSONDat = json_encode($myDat);
     echo $myJSONDat;
@@ -8779,6 +8797,49 @@ AND contr.id_contrato IN
         }
     }
     $myDat->resp = $resp;
+    $myJSONDat = json_encode($myDat);
+    echo $myJSONDat;
+} else if ($_POST['ope'] == "cargarSubFuentes") {
+
+    $myDat = new stdClass();
+    $consulta = "select * from subfinanciacion where financiacion='".$_POST['idf']."'";
+    //echo $consulta;
+    $Tab_Subfuente = "<thead>\n" .
+    "     <tr>\n" .
+    "         <td>\n" .
+    "              #\n" .
+    "         </td>\n" .
+    "         <td>\n" .
+    "             Descripci&oacute;n\n" .
+    "         </td>\n" .
+    "         <td>\n" .
+    "             Acci&oacute;n\n" .
+    "         </td>\n" .
+    "     </tr>\n" .
+    " </thead>"
+    . "   <tbody >\n";
+    $contSubfuente=0;
+    $resultado = mysqli_query($link, $consulta);
+    if (mysqli_num_rows($resultado) > 0) {
+        while ($fila = mysqli_fetch_array($resultado)) {
+            $contSubfuente++;
+            $Tab_Subfuente .= "<tr class='selected filasSubfuentes' id='filaSubfuente" . $contSubfuente . "' ><td>" . $contSubfuente . "</td>";
+            $Tab_Subfuente .= "<td>" . $fila["descripcion"] . "</td>";
+            $Tab_Subfuente .= "<td>
+            <input type='hidden' id='idSubfuente" . $contSubfuente . "' name='terce' value='" . $fila["descripcion"] . "//".$fila["id"]."' />
+            <a data-fila='" . $contSubfuente . "' data-id='".$fila["id"]."' onclick=\"$.EditarSubfuente(this)\" class=\"btn default btn-xs blue\">"
+            . "<i class=\"fa fa-edit\"></i> Editar</a>
+            <a data-fila='" . $contSubfuente . "' data-id='".$fila["id"]."' onclick=\"$.QuitarSubfuente(this)\" class=\"btn default btn-xs red\">"
+            . "<i class=\"fa fa-trash-o\"></i> Borrar</a>
+            </td></tr>";
+        }
+    }
+    $Tab_Subfuente .= "</tbody>";
+
+
+    $myDat->Tab_Subfuente = $Tab_Subfuente;
+    $myDat->contSubfuentes = $contSubfuente;
+
     $myJSONDat = json_encode($myDat);
     echo $myJSONDat;
 } else if ($_POST['ope'] == "BusqEditOrInform") {

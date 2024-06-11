@@ -80,12 +80,7 @@ $link = conectar();
     <script src="../Js/ckeditor/ckeditor.js" type="text/javascript"></script>
     <script src="../Js/ckeditor/styles.js" type="text/javascript"></script>
 
-  
-
-
-
-
-</head>
+  </head>
 <!-- END HEAD -->
 
 <!-- BEGIN BODY -->
@@ -841,9 +836,7 @@ $link = conectar();
                                                                                 <i class="fa fa-plus" ></i>
                                                                             </button>
                                                                         </span>
-
                                                                     </div>
-
                                                                 </div>
                                                             </div>
                                                             <div class='col-md-3'>

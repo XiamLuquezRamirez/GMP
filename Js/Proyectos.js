@@ -2069,7 +2069,7 @@ $(document).ready(function () {
         contCaus +
         '\')" class="btn default btn-xs red">' +
         '<i class="fa fa-trash-o"></i> Quitar</a></td></tr>';
-      $("#tb_Causas").append(fila);
+      $("#tb_Subfuente").append(fila);
       $.reordenarCausas();
       $("#contCausas").val(contCaus);
       $("#txt_Caus").val("");

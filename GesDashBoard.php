@@ -488,7 +488,7 @@ SELECT idproy, fcre, SUM(val) valtot, MONTH(fcre) mes FROM(
         SELECT pc.id_secretaria secr, pc.id_fuente fuent FROM presupuesto_secretarias pc GROUP BY pc.id_secretaria
     ) s  
         ON proy.secretaria_proyect=s.secr
-    WHERE proy.comp_pres='si' AND proy.estado='ACTIVO'";
+    WHERE proy.comp_pres='si' AND proy.estado='ACTIVO' AND estado_proyect='En Ejecucion'";
 
 if ($_POST["CbSec"] != "") {
     $consulta .= " AND IFNULL(proy.secretaria_proyect, '') = '" . $_POST["CbSec"] . "'";
@@ -547,9 +547,9 @@ foreach ($mesesConGastos as $mes) {
     $TotProyEjecutado = $valtot;
 
     // Obtener gastos del mes actual
-    $ConsultaCE = "SELECT SUM(valor) veje  FROM gastos_contrato gast 
-    LEFT JOIN contratos contr ON gast.contrato = contr.num_contrato 
-    LEFT JOIN proyectos proy ON contr.idproy_contrato = proy.id_proyect 
+    $ConsultaCE = "SELECT SUM(valor) veje  FROM gastos_contrato gast
+    LEFT JOIN contratos contr ON gast.contrato = contr.num_contrato
+    LEFT JOIN proyectos proy ON contr.idproy_contrato = proy.id_proyect
     WHERE gast.estado='ACTIVO' AND MONTH(gast.fecha) = ".$mes." AND contr.id_contrato IN
       (SELECT
         MAX(id_contrato)

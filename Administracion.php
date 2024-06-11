@@ -453,7 +453,7 @@ include "Conectar.php";
                                                     <div class='form-body'>
                                                         <div class="row" style="width:100%;height:255px; display: flex; align-items: center; justify-content: space-between; ">
 
-                                                            <div class="col-md-3" style='text-align:center;'>
+                                                            <div class="col-md-3" style='text-align:center;padding-left: 10px; padding-right: 10px;'>
                                                                 <div id="activeBorder1" class="active-border123">
                                                                     <div id="circle1" class="circle123">
                                                                         <span class="prec123 " id="prec1" valor='5'></span>
@@ -462,7 +462,7 @@ include "Conectar.php";
 
                                                                 <div class="desc" style='text-align:center;font-weight:bold;font-size:12px;margin-top: 10px;'>% Presupuesto Comprometido <br>(<i class='fa fa-dollar'></i> <label id="vprecomp"></label>)</div>
                                                             </div>
-                                                            <div class="col-md-3" style='text-align:center;'>
+                                                            <div class="col-md-3" style='text-align:center;padding-left: 10px; padding-right: 10px;'>
 
                                                                 <div id="activeBorder2" class="active-border123">
                                                                     <div id="circle2" class="circle123">
@@ -472,7 +472,7 @@ include "Conectar.php";
 
                                                                 <div class="desc" style='text-align:center;font-weight:bold;font-size:12px;margin-top: 10px;'>% Presupuesto Gastado <br>(<i class='fa fa-dollar'></i> <label id="vpregat"></label>)</div>
                                                             </div>
-                                                            <div class="col-md-3" style='text-align:center;'>
+                                                            <div class="col-md-3" style='text-align:center;padding-left: 10px; padding-right: 10px;'>
 
                                                                 <div id="activeBorder3" class="active-border123">
                                                                     <div id="circle3" class="circle123">
@@ -482,7 +482,7 @@ include "Conectar.php";
 
                                                                 <div class="desc" style='text-align:center;font-weight:bold;font-size:12px;margin-top: 10px;'>% Presupuesto no Afectado <br>(<i class='fa fa-dollar'></i> <label id="vprenafec"></label>)</div>
                                                             </div>
-                                                            <div class="col-md-3" style='text-align:center;'>
+                                                            <div class="col-md-3" style='text-align:center;padding-left: 10px; padding-right: 10px;'>
 
                                                                 <div id="activeBorder4" class="active-border123">
                                                                     <div id="circle3" class="circle123">
@@ -490,7 +490,7 @@ include "Conectar.php";
                                                                     </div>
                                                                 </div>
 
-                                                                <div class="desc" style='text-align:center;font-weight:bold;font-size:12px;margin-top: 10px;'>% Ppto. comprometido gastado<br>(<i class='fa fa-dollar'></i> <label id="vpreCompGast"></label>)</div>
+                                                                <div class="desc" style='text-align:center;font-weight:bold;font-size:12px;margin-top: 10px;'>% Presupuesto comp. gastado<br>(<i class='fa fa-dollar'></i> <label id="vpreCompGast"></label>)</div>
                                                             </div>
                                                         </div>
 
@@ -516,7 +516,7 @@ include "Conectar.php";
                                                 <div class='portlet-body form'>
                                                     <div class='form-body'>
                                                         <div class="row">
-                                                            <div class='form-body' id='LisSecr' style="height: 62vh; max-height: 62vh; overflow: auto;">
+                                                            <div class='form-body' id='LisSecr' style="height: 67vh; max-height: 67vh; overflow: auto;">
                                                             </div>
                                                         </div>
 
@@ -527,35 +527,7 @@ include "Conectar.php";
 
                                         </div>
                                         <div class="col-md-7">
-
-                                            <div class='portlet box red-intense'>
-                                                <div class='portlet-title'>
-                                                    <div class='caption'>
-                                                        <i class='fa fa-angle-right'></i>Proyectos por Estado
-                                                    </div>
-                                                    <div class='tools'>
-                                                        <a href='javascript:;' class='collapse'></a>
-                                                    </div>
-                                                </div>
-                                                <div class='portlet-body form'>
-                                                    <div class='form-body'>
-                                                        <div class="row">
-                                                            <div class='form-body'>
-                                                                <div id='ProyxEst' style="width: 100%;  height: 55vh;max-height: 55vh;overflow: auto;">
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class='portlet box red'>
+                                        <div class='portlet box red'>
                                                 <div class='portlet-title'>
                                                     <div class='caption'>
                                                         <i class='fa fa-angle-right'></i>Presupuesto Comprometido vs Gastado
@@ -568,7 +540,62 @@ include "Conectar.php";
                                                     <div class='form-body'>
                                                         <div class="row">
                                                             <div class='form-body'>
-                                                                <div id='LisCompxGast' style="width: 100%;  height: 300px;">
+                                                                <div id='LisCompxGast' style="height: 62vh; max-height: 60vh; overflow: auto;">
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                        <div class='portlet box red-intense'>
+                                                <div class='portlet-title'>
+                                                    <div class='caption'>
+                                                        <i class='fa fa-angle-right'></i>Proyectos por Estado
+                                                    </div>
+                                                    <div class='tools'>
+                                                        <a href='javascript:;' class='collapse'></a>
+                                                    </div>
+                                                </div>
+                                                <div class='portlet-body form'>
+                                                    <div class='form-body'>
+                                                        <div class="row">
+                                                            <div class='form-body'>
+                                                                <div id='ProyxEst' style="width: 100%;  height: 55vh;max-height: 55vh;">
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="col-md-6">
+                                        <div class='portlet box red-intense'>
+                                                <div class='portlet-title'>
+                                                    <div class='caption'>
+                                                        <i class='fa fa-angle-right'></i> Distribución de presupuesto
+                                                    </div>
+                                                    <div class='tools'>
+                                                        <a href='javascript:;' class='collapse'></a>
+                                                    </div>
+                                                </div>
+                                                <div class='portlet-body form'>
+                                                    <div class='form-body'>
+                                                        <div class="row">
+                                                            <div class='form-body'>
+                                                                <div id='PresuDist' style="width: 100%;  height: 55vh;max-height: 55vh;">
 
                                                                 </div>
                                                             </div>

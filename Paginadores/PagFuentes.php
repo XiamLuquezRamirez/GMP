@@ -34,16 +34,16 @@ $cad = "<table class=\"table table-bordered table-striped table-hover table-cond
     . "<thead>"
     . "<tr>"
     . "<th>"
-    . "<i class=\"fa fa-angle-right\"></i> Id"
+    . " #"
     . "</th>"
     . "<th>"
-    . "<i class=\"fa fa-angle-right\"></i> Nombre"
+    . " Nombre"
     . "</th>"
     . "<th>"
-    . "<i class=\"fa fa-angle-right\"></i> Descripción"
+    . " Descripción"
     . "</th>"
     . "<th>"
-    . "<i class=\"fa fa-angle-right\"></i> Acci&oacute;n"
+    . " Acci&oacute;n"
     . "</th>"
     . "</tr>"
     . "</thead>"
@@ -82,16 +82,19 @@ if (mysqli_num_rows($resultado) > 0) {
                     data-nombre='" . $fila["nombre"] . "'
                     data-descripcion='" . $fila["descripcion"] . "'
               >"
-            . "<td class=\"highlight\">"
+            . "<td class=\"highlight\" style='vertical-align: middle; font-size: x-small;
+            line-height: 1.3em;'>"
             . $k . " "
             . "</td>"
-            . "<td class=\"highlight\">"
+            . "<td class=\"highlight\" style='vertical-align: middle; font-size: x-small;
+            line-height: 1.3em;'>"
             . $fila["nombre"] . " "
             . "</td>"
-            . "<td class=\"highlight\">"
+            . "<td class=\"highlight\" style='vertical-align: middle; font-size: x-small;
+            line-height: 1.3em;'>"
             . $fila["descripcion"] . ""
             . "</td>"
-            . "<td class=\"highlight\">";
+            . "<td class=\"highlight\"><div class='opciones'>";
         if ($_SESSION['GesParMSec'] == "s") {
             $cad .= "<a class=\"btn default btn-xs purple btnEditar\">" .
                 "<i class='fa fa-edit'></i> Editar "
@@ -105,7 +108,7 @@ if (mysqli_num_rows($resultado) > 0) {
                 "<i class='fa fa-trash-o'></i> Eliminar "
                 . "</a>";
         }
-        $cad .= "</td>"
+        $cad .= "</div></td>"
             . "</tr>";
         $k++;
     }
