@@ -585,7 +585,7 @@ $link = conectar();
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <center><h4 class='form-section'></h4></center>
+                                                        <h4 class='form-section'></h4>
                                                     </div>
                                                 </div>
                                             </div>
@@ -670,7 +670,7 @@ $link = conectar();
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <center><h4 class='form-section'></h4></center>
+                                                      <h4 class='form-section'></h4>
                                                     </div>
                                                 </div>
                                             </div>

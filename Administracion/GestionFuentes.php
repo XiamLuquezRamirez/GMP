@@ -253,12 +253,7 @@ $link = conectar();
                                 <div class='row'>
                                     <div class="col-md-12">
                                         <form method="POST" id="formGesFuentes" action="#" class="form-vertical">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div id="msgCodPol">
-                                                    </div>
-                                                </div>
-                                            </div>
+                                          
                                             <div class='row'>
                                                 <div class="col-md-12">
                                                     <div class="form-group" id="From_Nombre">
@@ -283,8 +278,9 @@ $link = conectar();
                                                     <h4>Listado de subfuentes: </h4> 
                                                     <div class="input-group">
                                                         <input type="hidden" id="contSubfuentes" value="0" />
+                                                        <input type="hidden" id="opbSub" value="guardar" />
                                                         <input type="text" id="txt_Subfuente" class="form-control">
-                                                        <input type="hidden" id="opbSub" value="" />
+                                                        
                                                         <span class="input-group-btn">
                                                             <button class="btn blue" onclick="$.AddSubfuente()" type="button"> <i class="fa fa-plus-circle"></i> Agregar</button>
                                                         </span>
@@ -316,6 +312,12 @@ $link = conectar();
                                                         </table>
 
 
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div id="msgCodPol">
                                                     </div>
                                                 </div>
                                             </div>

@@ -12,6 +12,9 @@ mysqli_query($link, "BEGIN");
 if ($_POST['acc'] == "1") {
     $consulta = "INSERT INTO presupuesto_total VALUES(null,'" . $_POST['fuente'] . "','" . $_POST['txt_PresTotal'] . "',"
             . "'" . $_POST['txtFecRegistro'] . "','" . trim($_POST['CbPeriodoI']) . "','" . trim($_POST['CbPeriodoF']) . "','" . $_POST['txt_obser'] . "','ACTIVO')";
+
+    
+
 } else if ($_POST['acc'] == "2") {
     $consulta = "UPDATE  presupuesto_total SET fuente='" . $_POST['fuente'] . "',valor='" . $_POST['txt_PresTotal'] . "',"
             . "observacion='" . $_POST['txt_obser'] . "',fecha_recepcion='" . trim($_POST['txtFecRegistro']) . "',periodo_ini='" . trim($_POST['CbPeriodoI']) . "',periodo_fin='" . $_POST['CbPeriodoF'] . "' "
@@ -23,7 +26,6 @@ if ($_POST['acc'] == "1") {
 
 // echo $consulta;
 $qc = mysqli_query($link,$consulta);
-
 if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
     $success = 0;
     $error = 1;

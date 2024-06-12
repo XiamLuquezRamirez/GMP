@@ -261,7 +261,7 @@ $link = conectar();
                                             </div>
 
                                         </div>
-                                        <center><h4 class='form-section'></h4></center>
+                                     <h4 class='form-section'></h4>
                                         <div class="form-actions right" id="mopc" >
                                             <button type="button" class="btn green" id="btn_guardar"><i class="fa fa-save"></i> Guardar</button>
                                             <?php
@@ -378,7 +378,7 @@ $link = conectar();
 
                                                         </div>
                                                     </div>
-                                                    <center><h4 class='form-section'></h4></center>
+                                                    <h4 class='form-section'></h4>
 
                                                 </div>
 

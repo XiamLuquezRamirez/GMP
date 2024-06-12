@@ -184,7 +184,7 @@ $(document).ready(function () {
         return;
       }
 
-      if ($("#opbSub").val("editar") == "guardar") {
+      if ($("#opbSub").val() == "guardar") {
         let contSubfuente = $("#contSubfuentes").val();
         contSubfuente++;
         var fila =

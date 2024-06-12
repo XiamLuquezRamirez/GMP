@@ -3905,6 +3905,26 @@ ORDER BY id_contrato";
 
     $myJSONDat = json_encode($myDat);
     echo $myJSONDat;
+} else if ($_POST['ope'] == "buscarSubfuente") {
+
+    $myDat = new stdClass();
+    $subfi = "<option value=' '>Seleccione...</option>";
+
+
+    //////////////////////CONSULTAR DIMENSIONES
+    $consulta = "select * from subfinanciacion where financiacion='".$_POST['cod']."'";
+    $resultado = mysqli_query($link, $consulta);
+    if (mysqli_num_rows($resultado) > 0) {
+        while ($fila = mysqli_fetch_array($resultado)) {
+            $subfi .= "<option value='" . $fila["id"] . "'>" . $fila["descripcion"] . "</option>";
+        }
+    }
+
+    $myDat->subfi = $subfi;
+
+
+    $myJSONDat = json_encode($myDat);
+    echo $myJSONDat;
 } else if ($_POST['ope'] == "ConsulDepend") {
 
     $myDat = new stdClass();

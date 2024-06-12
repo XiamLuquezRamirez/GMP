@@ -80,7 +80,7 @@ include("../Plantilla/head.php");
 
                 <div id="responsive" class="modal fade" tabindex="-1" data-width="760">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <button type="button" class="close" onclick="$.cerrarSubfuente()"  aria-hidden="true"></button>
                         <h4 class="modal-title" id='titformi'>Datos del Presupuesto</h4>
 
                     </div>
@@ -122,9 +122,17 @@ include("../Plantilla/head.php");
 
                                             <div class='col-md-4'>
                                                 <div class='form-group' id="formValor">
+
                                                     <label class='control-label'>Valor:<span class="required">* </span></label>
-                                                    <input type='text' id='txt_PresTotalVis' name="txt_PresTotalVis" onchange="$.cambioFormato(this.id);" onclick="this.select()" value="$ 0,00" class='form-control' />
-                                                    <input type='hidden' value='0' id="txt_PresTotal" name='txt_PresTotal' />
+                                                    <div class="input-group ">
+                                                        <input type='text' id='txt_PresTotalVis' name="txt_PresTotalVis" disabled value="$ 0,00" class='form-control' />
+                                                        <input type='hidden' value='0' id="txt_PresTotal" name='txt_PresTotal' />
+                                                        <span class="input-group-btn" id="btn-adicion">
+                                                            <button type="button" id="btn_new_resp" onclick="$.NewSubfinanciacion();" title="Agregar adición" class="btn green-meadow">
+                                                                <i class="fa fa-usd"></i>
+                                                            </button>
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class='col-md-4'>
@@ -137,7 +145,7 @@ include("../Plantilla/head.php");
 
                                             <div class='col-md-4'>
                                                 <div class='form-group' id="From_VigenciaI">
-                                                    <label class='control-label'>Periodo nicio:<span class="required">* </span></label>
+                                                    <label class='control-label'>Periodo inicio:<span class="required">* </span></label>
                                                     <input type='text' value="<?php echo date('Y'); ?>" id='CbPeriodoI' name='CbPeriodoI' readonly class='form-control' />
 
                                                 </div>
@@ -180,6 +188,97 @@ include("../Plantilla/head.php");
                                         </div>
                                     </div>
                                 </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- ventana subfinanciacion -->
+                <div id="responsiveSubfinanciacion" class="modal fade" tabindex="-1" data-width="760">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                        <h4 class="modal-title" id='titformisubfin'>Detalles del presupuesto</h4>
+
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class='portlet-body form'>
+                                <div class='form-body'>
+
+                                        <div class='row'>
+
+                                            <div class='col-md-8'>
+                                                <div class='form-group' id="From_Subfuente">
+                                                    <label class='control-label'>Subfuente de financiación:</label><span class="required">* </span>
+                                                    <select class='form-control select2' id="subfuente" name="subfuente">
+
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class='col-md-4'>
+                                                <div class='form-group' id="formValor">
+
+                                                    <label class='control-label'>Valor:<span class="required">* </span></label>
+                                                    <input type='text' id='txt_valorSubVis' name="txt_valorSubVis" onchange="$.cambioFormato(this.id);" onclick="this.select()" value="$ 0,00" class='form-control' />
+                                                    <input type='hidden' value='0' id="txt_valorSub" name='txt_valorSub' />
+                                                </div>
+                                            </div>
+                                            <input type="hidden" id="contSubfuentes" value="0" />
+                                            <input type="hidden" id="opbSub" value="guardar" />
+                                            <div class="col-md-12" style="text-align: right">
+                                                <div class="form-group">
+                                                    <a onclick="$.AddSubfuentes()" class="btn green-meadow">
+                                                        <i class="fa fa-plus-circle"></i> Agregar
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <div class='col-md-12'>
+                                                <div class='form-group'>
+                                                    <table class='table table-striped table-hover table-bordered' id="tb_Subfuente">
+                                                        <thead>
+                                                            <tr>
+                                                                <td>
+                                                                    #
+                                                                </td>
+                                                                <td>
+                                                                    Subfuente de financiación
+                                                                </td>
+                                                                <td>
+                                                                    Valor
+                                                                </td>
+                                                                <td>
+                                                                    Acción
+                                                                </td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="td_subfuentes">
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div id="msgSubfuente">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-actions right" id="mopc">
+                                            <button type="button" class="btn green" onclick="$.guardarSubfuente();" id="btn_guardarSub"><i class="fa fa-save"></i> Guardar</button>
+
+                                            <button type="button" onclick="$.cerrarSubfuente();" class="btn yellow-casablanca"><i class="fa fa-close"></i> Cerrar</button>
+                                        </div>
+                                    </div>
+                               
                             </div>
                         </div>
                     </div>

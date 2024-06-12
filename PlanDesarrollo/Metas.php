@@ -177,7 +177,7 @@ $link = conectar();
                                 </div>
 
                             </div>
-                            <center><h2 class='form-section'></h2></center>
+                          <h2 class='form-section'></h2>
                             <div class="form-actions right" >
                                 <button type="button" class="btn green" id="btn_guardarD"><i class="fa fa-save"></i> Guardar</button>
                                 <button type="button" class="btn purple" disabled id="btn_nuevoD"><i class="fa fa-file-o"></i> Nuevo</button>
@@ -227,7 +227,7 @@ $link = conectar();
                                 </div>
 
                             </div>
-                            <center><h2 class='form-section'></h2></center>
+                            <h2 class='form-section'></h2>
                             <div class="form-actions right" >
                                 <button type="button" class="btn green" id="btn_guardarF"><i class="fa fa-save"></i> Guardar</button>
                                 <button type="button" class="btn purple" disabled id="btn_nuevoF"><i class="fa fa-file-o"></i> Nuevo</button>
@@ -268,7 +268,7 @@ $link = conectar();
                                                 </div>
                                             </div>
                                         </div>
-                                        <center><h4 class='form-section'></h4></center>
+                                      <h4 class='form-section'></h4>
                                     </div>
 
                                 </div>
@@ -380,7 +380,7 @@ $link = conectar();
 
                                                             </div>
                                                         </div>
-                                                        <center><h4 class='form-section'></h4></center>
+                                                        <h4 class='form-section'></h4>
 
                                                     </div>
 

@@ -4,6 +4,9 @@ $(document).ready(function () {
   $("#menu_op_Presupuesto").addClass("active");
   var Op_Validar = [];
   var Op_Vali = "Ok";
+  let valTotalPresupuesto = 0;
+  let Dat_Subfuente = [];
+
 
   $("#CbPeriodoI,#CbPeriodoF").datepicker({
     autoclose: true,
@@ -27,7 +30,7 @@ $(document).ready(function () {
   $.extend({
     Presupuesto: function (val) {
       var datos = {
-        bus: val
+        bus: val,
       };
 
       console.log(datos);
@@ -47,7 +50,7 @@ $(document).ready(function () {
     },
     busqPresu: function (val) {
       var datos = {
-        bus: val
+        bus: val,
       };
 
       $.ajax({
@@ -65,11 +68,216 @@ $(document).ready(function () {
         },
       });
     },
+    NewSubfinanciacion: function () {
+      if ($("#fuente").val() == " ") {
+        $.Alert(
+          "#msg",
+          "Debes seleccionar la fuente de financiación...",
+          "warning",
+          "warning"
+        );
+      } else {
+        $("#titformisubfin").html(
+          "Detalles del presupuesto - " + $("#fuente option:selected").text()
+        );
+        $("#responsive").modal("toggle");
+        $("#responsiveSubfinanciacion").modal({
+          backdrop: "static",
+          keyboard: false,
+        });
+        $.buscarSubfuente();
+      }
+    },
+    guardarSubfuente: function () {
+
+      let subfuentes = document.getElementsByClassName("filasSubfuentes");
+      if (subfuentes.length > 0) {
+       
+        $("#responsiveSubfinanciacion").modal("toggle");
+        $("#responsive").modal({
+          backdrop: "static",
+          keyboard: false,
+        });
+        $("#txt_PresTotalVis").val(
+          formatCurrency(valTotalPresupuesto, "es-CO", "COP")
+        );
+        $("#txt_PresTotal").val(valTotalPresupuesto);
+      } else {
+        $.Alert(
+          "#msgSubfuente",
+          "Debe agregar una subfuente de financiación...",
+          "warning",
+          "warning"
+        );
+      }
+    },
+    cerrarSubfuente: function () {
+      $("#responsiveSubfinanciacion").modal("toggle");
+      $("#responsive").modal({
+        backdrop: "static",
+        keyboard: false,
+      });
+
+      $("#subfuente").select2("val", " ");
+      $("#td_subfuentes").html("");
+    },
+    AddSubfuentes: function () {
+      var subFuente = $("#subfuente").val();
+      var text_subFuente = $("#subfuente option:selected").text();
+      var valorSub = $("#txt_valorSub").val();
+      if (subFuente == "") {
+        $.Alert(
+          "#msgSubfuente",
+          "Por Favor ingrese la subfuente...",
+          "warning",
+          "warning"
+        );
+        $("#txt_Subfuente").focus();
+        return;
+      }
+
+      if (valorSub == "") {
+        $.Alert(
+          "#msgSubfuente",
+          "Por Favor ingrese el valor...",
+          "warning",
+          "warning"
+        );
+        $("#txt_valorSubVis").focus();
+        return;
+      }
+
+      valTotalPresupuesto += parseFloat(valorSub);
+
+      let contSubfuente = $("#contSubfuentes").val();
+      contSubfuente++;
+      var fila =
+        '<tr class="selected filasSubfuentes" id="filaSubfuente' +
+        contSubfuente +
+        '" >';
+
+      fila += "<td>" + contSubfuente + "</td>";
+      fila += "<td>" + text_subFuente + "</td>";
+      fila += "<td>" + formatCurrency(valorSub, "es-CO", "COP") + "</td>";
+      fila +=
+        "<td><input type='hidden' id='idSubfuente" +
+        contSubfuente +
+        "' name='terce' value='" +
+        subFuente +
+        "//" +
+        valorSub +
+        "//' /><a data-fila='" +
+        contSubfuente +
+        "' data-id='' onclick='$.EditarSubfuente(this)' class='btn default btn-xs blue'><i class='fa fa-edit'></i> Editar</a><a data-fila='" +
+        contSubfuente +
+        "' data-id='' data-valor='" +
+        valorSub +
+        "' onclick='$.QuitarSubfuente(this)' class='btn default btn-xs red'><i class='fa fa-trash-o'></i> Quitar</a></td></tr>";
+      $("#tb_Subfuente").append(fila);
+      $.reordenarSubfuente();
+      $("#contSubfuentes").val(contSubfuente);
+
+      $("#subfuente").select2("val", " ");
+      $("#txt_valorSubVis").val("$ 0,00");
+      $("#txt_valorSub").val("0");
+      $("#opbSub").val("guardar");
+    },
+    reordenarSubfuente: function () {
+      var num = 1;
+
+      // Reordenar los números de las filas
+      $("#td_subfuentes tr").each(function () {
+          $(this).find("td").eq(0).text(num);
+          $(this).attr("id", "filaSubfuente" + num);
+          $(this).find("a").each(function() {
+              $(this).attr("data-fila", num);
+          });
+          $(this).find("input").each(function() {
+              $(this).attr("id", "idSubfuente" + num);
+          });
+          num++;
+      });
+    },
+    EditarSubfuente: function (element) {
+      $("#opbSub").val("editar");
+      trelementoSel = element.getAttribute("data-fila");
+      let idSubfuente = element.getAttribute("data-id");
+      let paraSubfuente = $("#idSubfuente" + trelementoSel).val().split("//");
+      
+      var selectElement = document.getElementById("subfuente");
+      selectElement.value = paraSubfuente[0];
+      var event = new Event("change", { bubbles: true });
+      selectElement.dispatchEvent(event);
+     
+      $("#txt_valorSubVis").val(
+        formatCurrency(paraSubfuente[1], "es-CO", "COP")
+      );
+      $("#txt_valorSub").val(paraSubfuente[1]);
+
+      valTotalPresupuesto -= paraSubfuente[1];
+      $("#filaSubfuente" + trelementoSel).remove();
+      $.reordenarSubfuente();
+      let contSubfuente = $("#contSubfuentes").val();
+      contSubfuente = contSubfuente - 1;
+      $("#contSubfuentes").val(contSubfuente);
+    },
+    QuitarSubfuente: function (element) {
+      let trelemento = element.getAttribute("data-fila");
+      let idSubfuente = element.getAttribute("data-id");
+      let valor = element.getAttribute("data-valor");
+
+      if (idSubfuente == "") {
+        $("#filaSubfuente" + trelemento).remove();
+        valTotalPresupuesto -= valor;
+        $.reordenarSubfuente();
+        let contSubfuente = $("#contSubfuentes").val();
+        contSubfuente = contSubfuente - 1;
+        $("#contSubfuentes").val(contSubfuente);
+      } else {
+        var datos = {
+          ope: "eliminarSubFuente",
+          idf: idSubfuente,
+        };
+
+        $.ajax({
+          type: "POST",
+          url: "../All.php",
+          data: datos,
+          success: function (data) {
+            if (data == "Bien") {
+              $.Alert(
+                "#msgCodPol",
+                "Registro eliminado correctamente",
+                "success",
+                "success"
+              );
+              $("#" + trelemento).remove();
+              $.reordenarSubfuente();
+              let contSubfuente = $("#contSubfuentes").val();
+              contSubfuente = contSubfuente - 1;
+              $("#contSubfuentes").val(contSubfuente);
+            } else if (data == "Asigando") {
+              $.Alert(
+                "#msgCodPol",
+                "La subfuente de financiación le fue cargado un presupuesto, no se puede eliminar.",
+                "warning",
+                "warning"
+              );
+            } else {
+            }
+          },
+          error: function (error_messages) {
+            alert("HA OCURRIDO UN ERROR");
+          },
+        });
+      }
+      console.log(valTotalPresupuesto);
+    },
     editPresupuesto: function (cod) {
       $("#acc").val("2");
       $("#btn_nuevo2").prop("disabled", true);
       $("#btn_guardar").prop("disabled", false);
-    
+
       var datos = {
         ope: "BusqEditPresupuesto",
         cod: cod,
@@ -81,10 +289,11 @@ $(document).ready(function () {
         data: datos,
         dataType: "JSON",
         success: function (data) {
-       
           $("#fuente").select2("val", data["fuente"]);
           $("#txt_PresTotal").val(data["valor"]);
-          $("#txt_PresTotalVis").val(formatCurrency(data["valor"], "es-CO", "COP"));
+          $("#txt_PresTotalVis").val(
+            formatCurrency(data["valor"], "es-CO", "COP")
+          );
           $("#txtFecRegistro").val(data["fecha_recepcion"]);
           $("#CbPeriodoI").val(data["periodo_ini"]);
           $("#CbPeriodoF").val(data["periodo_fin"]);
@@ -97,7 +306,6 @@ $(document).ready(function () {
       });
       $("#responsive").modal({ backdrop: "static", keyboard: false });
       $("#mopc").show();
-   
     },
     VerPresupuesto: function (cod) {
       var datos = {
@@ -112,7 +320,9 @@ $(document).ready(function () {
         dataType: "JSON",
         success: function (data) {
           $("#fuente").select2("val", data["fuente"]);
-          $("#txt_PresTotalVis").val(formatCurrency(data["valor"], "es-CO", "COP"));
+          $("#txt_PresTotalVis").val(
+            formatCurrency(data["valor"], "es-CO", "COP")
+          );
           $("#txtFecRegistro").val(data["fecha_recepcion"]);
           $("#CbPeriodoI").val(data["periodo_ini"]);
           $("#CbPeriodoF").val(data["periodo_fin"]);
@@ -124,27 +334,23 @@ $(document).ready(function () {
       });
       $("#responsive").modal({ backdrop: "static", keyboard: false });
       $("#mopc").hide();
-
     },
     deletPresupuesto: function (cod) {
-
       Swal.fire({
-        title: '¿Estás seguro de eliminar este registro?',
+        title: "¿Estás seguro de eliminar este registro?",
         text: "¡No podrás revertir esto!",
-        icon: 'warning',
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: '¡Sí, eliminar!'
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "¡Sí, eliminar!",
       }).then((result) => {
         if (result.isConfirmed) {
-
-
           var datos = {
             acc: "3",
             id: cod,
           };
-  
+
           $.ajax({
             type: "POST",
             url: "../Administracion/GuardarRubroPresup.php",
@@ -152,10 +358,10 @@ $(document).ready(function () {
             success: function (data) {
               if (data === "bien") {
                 Swal.fire(
-                  '¡Eliminado!',
-                  'El registro fue eliminado exitosamente.',
-                  'success'
-                )
+                  "¡Eliminado!",
+                  "El registro fue eliminado exitosamente.",
+                  "success"
+                );
                 $.Presupuesto();
               }
             },
@@ -163,13 +369,28 @@ $(document).ready(function () {
               alert("HA OCURRIDO UN ERROR");
             },
           });
-
-         
         }
-      })
-            
+      });
     },
-   
+    buscarSubfuente: function () {
+      var datos = {
+        ope: "buscarSubfuente",
+        cod: $("#fuente").val(),
+      };
+
+      $.ajax({
+        type: "POST",
+        url: "../All.php",
+        data: datos,
+        dataType: "json",
+        success: function (data) {
+          $("#subfuente").html(data["subfi"]);
+        },
+        error: function (error_messages) {
+          alert("HA OCURRIDO UN ERROR");
+        },
+      });
+    },
     Validar: function () {
       var Id = "",
         Value = "";
@@ -246,14 +467,12 @@ $(document).ready(function () {
     },
     cambioFormato: function (id) {
       var numero = $("#" + id).val();
-      $("#txt_PresTotal").val(numero);
+      $("#txt_valorSub").val(numero);
       var formatoMoneda = formatCurrency(numero, "es-CO", "COP");
       $("#" + id).val(formatoMoneda);
     },
     nuevo: function (element) {
       let id = element.getAttribute("id");
-
-      
 
       if (id == "btn_nuevo1") {
         $("#responsive").modal({ backdrop: "static", keyboard: false });
@@ -263,14 +482,20 @@ $(document).ready(function () {
       $("#acc").val("1");
       $("#fuente").select2("val", " ");
       $("#txt_PresTotalVis").val("$ 0,00");
-      $("#txtFecRegistro").val("");      
+      $("#txtFecRegistro").val("");
       $("#CbPeriodoI").val(anoActual);
       $("#CbPeriodoF").val(anoActual);
       $("#txt_obser").val("");
-  
+
       $("#btn_nuevo2").prop("disabled", true);
       $("#btn_guardar").prop("disabled", false);
-
+    },
+    Dta_Subfuentes: function () {
+      $("#tb_Subfuente")
+        .find(":input")
+        .each(function () {
+          Dat_Subfuente.push($(this).val());
+        });
     },
   });
   //======FUNCIONES========\\
@@ -308,10 +533,19 @@ $(document).ready(function () {
     var url = form.attr("action");
     var datos = form.serialize();
 
+    Dat_Subfuente = [];
+
+    $.Dta_Subfuentes();
+
+    var datosAll = {
+      datos: datos,
+      Dat_Subfuente: Dat_Subfuente
+    }
+
     $.ajax({
       type: "POST",
       url: url,
-      data: datos,
+      data: datosAll,
       success: function (data) {
         if (trimAll(data) === "bien") {
           $.Alert(

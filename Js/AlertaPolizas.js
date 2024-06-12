@@ -174,7 +174,7 @@ $(document).ready(function () {
                         }
                     }
                 } else {
-                    $("#contenido").html("<tr><td colspan='8'><center><h1>NO EXISTEN CONTRATOS</h1></center></td></tr>");
+                    $("#contenido").html("<tr><td colspan='8'><h1>NO EXISTEN CONTRATOS</h1></td></tr>");
                 }
             }
 
@@ -200,7 +200,7 @@ $(document).ready(function () {
                         }
                     }
                 } else {
-                    $("#contenido").html("<tr><td colspan='8'><center><h1>NO EXISTEN CONTRATOS</h1></center></td></tr>");
+                    $("#contenido").html("<tr><td colspan='8'><h1>NO EXISTEN CONTRATOS</h1></td></tr>");
                 }
             }
 
@@ -226,7 +226,7 @@ $(document).ready(function () {
                         }
                     }
                 } else {
-                    $("#contenido").html("<tr><td colspan='8'><center><h1>NO EXISTEN CONTRATOS</h1></center></td></tr>");
+                    $("#contenido").html("<tr><td colspan='8'><h1>NO EXISTEN CONTRATOS</h1></td></tr>");
                 }
             }
             $("#modalFinCon").modal("show");

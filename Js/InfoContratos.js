@@ -70,10 +70,10 @@ $(document).ready(function () {
                                     $("#contenidoEvolucion").append(campo);
                                 }
                             } else {
-                                $("#contenidoEvolucion").html("<tr><td colspan='11'><center><h1>NO EXISTEN EVOLUCIONES</h1></center></td></tr>");
+                                $("#contenidoEvolucion").html("<tr><td colspan='11'><h1>NO EXISTEN EVOLUCIONES</h1></td></tr>");
                             }
                         } else {
-                            $("#contenidoEvolucion").html("<tr><td colspan='11'><center><h1>NO EXISTEN EVOLUCIONES</h1></center></td></tr>");
+                            $("#contenidoEvolucion").html("<tr><td colspan='11'><h1>NO EXISTEN EVOLUCIONES</h1></td></tr>");
                         }
                     },
                     error: function (error_messages) {
@@ -122,10 +122,10 @@ $(document).ready(function () {
                                     $("#contenidoEvolucion").append(campo);
                                 }
                             } else {
-                                $("#contenidoEvolucion").html("<tr><td colspan='11'><center><h1>NO EXISTEN EVOLUCIONES</h1></center></td></tr>");
+                                $("#contenidoEvolucion").html("<tr><td colspan='11'><h1>NO EXISTEN EVOLUCIONES</h1></td></tr>");
                             }
                         } else {
-                            $("#contenidoEvolucion").html("<tr><td colspan='11'><center><h1>NO EXISTEN EVOLUCIONES</h1></center></td></tr>");
+                            $("#contenidoEvolucion").html("<tr><td colspan='11'><h1>NO EXISTEN EVOLUCIONES</h1></td></tr>");
                         }
                     },
                     error: function (error_messages) {
@@ -197,10 +197,10 @@ $(document).ready(function () {
                             $("#contenidoContratos").append(campo);
                         }
                     } else {
-                        $("#contenidoContratos").html("<tr><td colspan='8'><center><h1>NO EXISTEN CONTRATOS</h1></center></td></tr>");
+                        $("#contenidoContratos").html("<tr><td colspan='8'><h1>NO EXISTEN CONTRATOS</h1></td></tr>");
                     }
                 } else {
-                    $("#contenidoContratos").html("<tr><td colspan='8'><center><h1>NO EXISTEN CONTRATOS</h1></center></td></tr>");
+                    $("#contenidoContratos").html("<tr><td colspan='8'><h1>NO EXISTEN CONTRATOS</h1></td></tr>");
                 }
             },
             error: function (error_messages) {

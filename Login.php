@@ -100,7 +100,6 @@ if ($_POST['opc'] == "vercompa") {
                              <span class='username'>
                                 ---
                             </span>
-                             
                          </a>
                      </li>
                      <li class='dropdown dropdown-user' >
@@ -1430,7 +1429,7 @@ Mostrar Contratos</a>
                 $Menu_SubLeft .= "<li class = 'nav-item' id = 'menu_op_ffina'>
                                     <a href = '../FuentesFinanciacion/'>
                                     <i class = 'fa fa-sitemap'></i>
-                                    Gesti&oacute;n de Fuentes
+                                    Gesti&oacute;n de Fuentes de financiación
                                     </a>
                                     </li>";
 
