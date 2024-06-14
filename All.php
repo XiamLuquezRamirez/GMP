@@ -1188,9 +1188,12 @@ FROM
         }
     }
 
-    $consulta = "SELECT da.origen_financiacion,fu.nombre,da.gastos_presupuesto, da.desc_gasto, da.valor  FROM detalle_adicion da
+    $consulta = "SELECT da.origen_financiacion,fu.nombre,da.gastos_presupuesto, da.desc_gasto, da.valor, da.origen_subfinanciacion, subf.descripcion
+    FROM detalle_adicion da
     LEFT JOIN fuentes fu on da.origen_financiacion = fu.id
+    LEFT JOIN subfinanciacion subf on da.origen_subfinanciacion=subf.id
      WHERE da.adicion = " . $_POST['idAdi'];
+    
     $resultado1 = mysqli_query($link, $consulta);
     $tabDetAddiciones = "";
     $cont = 0;
@@ -1203,9 +1206,10 @@ FROM
             $tabDetAddiciones .= '<tr class="selected" id="filaPresup' . $cont . '">';
             $tabDetAddiciones .= '<td>' . $cont . '</td>';
             $tabDetAddiciones .= '<td>' . $fila1['nombre'] . '</td>';
+            $tabDetAddiciones .= '<td>' . $fila1['descripcion'] . '</td>';
             $tabDetAddiciones .= '<td>' . $fila1['gastos_presupuesto'] . ' - ' . $fila1['desc_gasto'] . '</td>';
             $tabDetAddiciones .= '<td>' . number_format($fila1['valor'], 2, ",", ".") . '</td>';
-            $tabDetAddiciones .= '<td><input type="hidden" id="idDetAdicion' . $cont . '" value="' . $fila1['origen_financiacion'] . '//' . $fila1['gastos_presupuesto'] . '//' . $fila1['desc_gasto'] . '//' . $fila1['valor'] . '" /><a data-conse="filaPresup' . $cont . '" data-valor="' . $fila1['valor'] . '" onclick="$.QuitardetAdicion(this)" class="btn default btn-xs red"><i class="fa fa-trash-o"></i> Quitar</a></td>';
+            $tabDetAddiciones .= '<td><input type="hidden" id="idDetAdicion' . $cont . '" value="' . $fila1['origen_financiacion'] .'//'. $fila1['origen_subfinanciacion'] .'//' . $fila1['gastos_presupuesto'] . '//' . $fila1['desc_gasto'] . '//' . $fila1['valor'] . '" /><a data-conse="filaPresup' . $cont . '" data-valor="' . $fila1['valor'] . '" onclick="$.QuitardetAdicion(this)" class="btn default btn-xs red"><i class="fa fa-trash-o"></i> Quitar</a></td>';
             $tabDetAddiciones .= '</tr>';
         }
     }
@@ -2375,22 +2379,29 @@ FROM
 
     ////financiacion
 
-    $consulta = "SELECT bf.origen,fuen.nombre,bf.valor FROM banco_proyec_financiacion bf LEFT JOIN fuentes fuen ON  bf.origen = fuen.id  WHERE bf.id_proyect = '" . $_POST["cod"] . "' ";
+    $consulta = "SELECT bf.origen,bf.suborigen,fuen.nombre,bf.valor,subfue.descripcion 
+    FROM banco_proyec_financiacion bf LEFT JOIN fuentes fuen ON bf.origen = fuen.id 
+    LEFT JOIN subfinanciacion subfue ON bf.suborigen = subfue.id 
+    WHERE bf.id_proyect  = '" . $_POST["cod"] . "' ";
+
     $resultado1 = mysqli_query($link, $consulta);
 
     $Tab_Financia = "<thead>\n" .
         "      <tr>\n" .
         "          <td>\n" .
-        "              <i class='fa fa-angle-right'></i> #\n" .
+        "               #\n" .
         "          </td>\n" .
         "          <td>\n" .
-        "              <i class='fa fa-angle-right'></i> Origen de la Financiaci&oacute;n\n" .
+        "               Origen de la fuente Financiación\n" .
         "          </td>\n" .
         "          <td>\n" .
-        "              <i class='fa fa-angle-right'></i> Valor\n" .
+        "               Origen de la fuente Financiación\n" .
         "          </td>\n" .
         "          <td>\n" .
-        "              <i class='fa fa-angle-right'></i> Acci&oacute;n\n" .
+        "             Valor\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "              Acci&oacute;n\n" .
         "          </td>\n" .
         "      </tr>\n" .
         "  </thead>" . "   <tbody >\n";
@@ -2404,13 +2415,14 @@ FROM
             $TotFinancia = $TotFinancia + $fila["valor"];
             $Tab_Financia .= "<tr class='selected' id='filaFinancia" . $contFinancia . "' ><td>" . $contFinancia . "</td>";
             $Tab_Financia .= "<td>" . $fila["nombre"] . "</td>";
+            $Tab_Financia .= "<td>" . $fila["descripcion"] . "</td>";
             $Tab_Financia .= "<td>" . $valor . "</td>";
-            $Tab_Financia .= "<td><input type='hidden' id='idFinancia" . $contFinancia . "' name='terce' value='" . $fila["origen"] . "//" . $fila["valor"] . "' /><a onclick=\"$.QuitarFinancia('filaFinancia" . $contFinancia . "//" .  $fila["valor"] . "')\" class=\"btn default btn-xs red\">" . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
+            $Tab_Financia .= "<td><input type='hidden' id='idFinancia" . $contFinancia . "' name='terce' value='" . $fila["origen"] . "//".$fila["suborigen"] . "//" . $fila["valor"] . "' /><a onclick=\"$.QuitarFinancia('filaFinancia" . $contFinancia . "//" .  $fila["valor"] . "')\" class=\"btn default btn-xs red\">" . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
         }
     }
     $Tab_Financia .= "</tbody><tfoot>
     <tr>
-        <th colspan='2' style='text-align: right;'>Total:</th>
+        <th colspan='3' style='text-align: right;'>Total:</th>
         <th colspan='1'><label id='gtotalFinanc' style='font-weight: bold;'>$ " . number_format($TotFinancia, 2, ",", ".") . "</label></th>
     </tr>
   </tfoot>";
@@ -3601,6 +3613,56 @@ ORDER BY id_contrato";
         }
     }
 
+
+
+    $consulta = "select dp.id iddet, dp.subfuente idsuf, subf.descripcion nsubf, dp.valor val from detalle_presupuesto dp LEFT JOIN  subfinanciacion subf on dp.subfuente=subf.id
+    where presupuesto='" . $_POST["cod"] . "'";
+
+    $resultado = mysqli_query($link, $consulta);
+    $Tab_Subfuente = "<thead>\n" .
+        "     <tr>\n" .
+        "         <td>\n" .
+        "              #\n" .
+        "         </td>\n" .
+        "         <td>\n" .
+        "             Subfuente de financiación \n" .
+        "         </td>\n" .
+        "         <td>\n" .
+        "             Valor \n" .
+        "         </td>\n" .
+        "         <td>\n" .
+        "             Acci&oacute;n\n" .
+        "         </td>\n" .
+        "     </tr>\n" .
+        " </thead>"
+        . "   <tbody >\n";
+    $contSubfuente = 0;
+    $valorTotalDet = 0;
+    $resultado = mysqli_query($link, $consulta);
+    if (mysqli_num_rows($resultado) > 0) {
+        while ($fila = mysqli_fetch_array($resultado)) {
+            $contSubfuente++;
+            $valorTotalDet += $fila["val"];
+            $Tab_Subfuente .= "<tr class='selected filasSubfuentes' id='filaSubfuente" . $contSubfuente . "' ><td>" . $contSubfuente . "</td>";
+            $Tab_Subfuente .= "<td>" . $fila["nsubf"] . "</td>";
+            $Tab_Subfuente .= "<td>$ " . number_format($fila["val"], 2, ",", ".") . "</td>";
+            $Tab_Subfuente .= "<td>
+            <input type='hidden' id='idSubfuente" . $contSubfuente . "' name='terce' value='" . $fila["idsuf"] . "//" . $fila["val"] . "//" . $fila["iddet"] . "' />
+            <a data-fila='" . $contSubfuente . "' data-id='" . $fila["iddet"] . "' onclick=\"$.EditarSubfuente(this)\" class=\"btn default btn-xs blue\">"
+                . "<i class=\"fa fa-edit\"></i> Editar</a>
+            <a data-fila='" . $contSubfuente . "' data-id='" . $fila["iddet"] . "' onclick=\"$.QuitarSubfuente(this)\" class=\"btn default btn-xs red\">"
+                . "<i class=\"fa fa-trash-o\"></i> Borrar</a>
+            </td></tr>";
+        }
+    }
+    $Tab_Subfuente .= "</tbody>";
+
+
+    $myDat->Tab_Subfuente = $Tab_Subfuente;
+    $myDat->contSubfuentes = $contSubfuente;
+    $myDat->valorTotalDet = $valorTotalDet;
+
+
     $myJSONDat = json_encode($myDat);
     echo $myJSONDat;
 } else if ($_POST['ope'] == "BusqEditfuenteInf") {
@@ -3619,6 +3681,40 @@ ORDER BY id_contrato";
 
     $myJSONDat = json_encode($myDat);
     echo $myJSONDat;
+} else if ($_POST['ope'] == "GrafDetPresupuesto") {
+    $myDat = new stdClass();
+    $consulta = "SELECT SUM(dp.valor) valor, subf.descripcion descr  FROM detalle_presupuesto dp LEFT JOIN subfinanciacion subf ON dp.subfuente=subf.id
+    WHERE dp.presupuesto = '".$_POST['idPre'] ."' GROUP BY dp.subfuente";
+    
+
+    //echo $consulta;
+    $resultado1 = mysqli_query($link, $consulta);
+    $rawdata = array(); //creamos un array
+    if (mysqli_num_rows($resultado1) > 0) {
+        while ($fila = mysqli_fetch_array($resultado1)) {
+            $codpro = $fila['descr'];
+            $valor = $fila['valor'];
+
+            $rawdata[] = array(
+                "Cate" => $codpro,
+                "cant" => $valor
+            );
+        }
+        $myDat->detPresupuesto = $rawdata;
+    }
+
+    $consulta = "select fue.nombre nom from presupuesto_total pt left join fuentes fue on pt.fuente=fue.id where pt.id='" . $_POST["idPre"] . "'";
+  
+    $resultado = mysqli_query($link, $consulta);
+    if (mysqli_num_rows($resultado) > 0) {
+        while ($fila = mysqli_fetch_array($resultado)) {
+            $myDat->nombre = $fila["nom"];
+        }
+    }
+
+    $myJSONDat = json_encode($myDat);
+    echo $myJSONDat;
+
 } else if ($_POST['ope'] == "DelImgProy") {
 
     mysqli_query($link, "BEGIN");
@@ -3912,7 +4008,7 @@ ORDER BY id_contrato";
 
 
     //////////////////////CONSULTAR DIMENSIONES
-    $consulta = "select * from subfinanciacion where financiacion='".$_POST['cod']."'";
+    $consulta = "select * from subfinanciacion where financiacion='" . $_POST['cod'] . "'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -7647,7 +7743,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
 
     echo "Bien";
 } else if ($_POST['ope'] == "eliminarSubFuente") {
-   /* $consulta = "UPDATE adicion_contrato SET estado='ELIMINADO' WHERE id=" . $_POST['id'];
+    /* $consulta = "UPDATE adicion_contrato SET estado='ELIMINADO' WHERE id=" . $_POST['id'];
     mysqli_query($link, $consulta);
 
     ///ELIMINAR ADICION AGREGADA AL PRESUPUESTO DEL PROYECTO
@@ -8822,23 +8918,23 @@ AND contr.id_contrato IN
 } else if ($_POST['ope'] == "cargarSubFuentes") {
 
     $myDat = new stdClass();
-    $consulta = "select * from subfinanciacion where financiacion='".$_POST['idf']."'";
+    $consulta = "select * from subfinanciacion where financiacion='" . $_POST['idf'] . "'";
     //echo $consulta;
     $Tab_Subfuente = "<thead>\n" .
-    "     <tr>\n" .
-    "         <td>\n" .
-    "              #\n" .
-    "         </td>\n" .
-    "         <td>\n" .
-    "             Descripci&oacute;n\n" .
-    "         </td>\n" .
-    "         <td>\n" .
-    "             Acci&oacute;n\n" .
-    "         </td>\n" .
-    "     </tr>\n" .
-    " </thead>"
-    . "   <tbody >\n";
-    $contSubfuente=0;
+        "     <tr>\n" .
+        "         <td>\n" .
+        "              #\n" .
+        "         </td>\n" .
+        "         <td>\n" .
+        "             Descripci&oacute;n\n" .
+        "         </td>\n" .
+        "         <td>\n" .
+        "             Acci&oacute;n\n" .
+        "         </td>\n" .
+        "     </tr>\n" .
+        " </thead>"
+        . "   <tbody >\n";
+    $contSubfuente = 0;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -8846,11 +8942,11 @@ AND contr.id_contrato IN
             $Tab_Subfuente .= "<tr class='selected filasSubfuentes' id='filaSubfuente" . $contSubfuente . "' ><td>" . $contSubfuente . "</td>";
             $Tab_Subfuente .= "<td>" . $fila["descripcion"] . "</td>";
             $Tab_Subfuente .= "<td>
-            <input type='hidden' id='idSubfuente" . $contSubfuente . "' name='terce' value='" . $fila["descripcion"] . "//".$fila["id"]."' />
-            <a data-fila='" . $contSubfuente . "' data-id='".$fila["id"]."' onclick=\"$.EditarSubfuente(this)\" class=\"btn default btn-xs blue\">"
-            . "<i class=\"fa fa-edit\"></i> Editar</a>
-            <a data-fila='" . $contSubfuente . "' data-id='".$fila["id"]."' onclick=\"$.QuitarSubfuente(this)\" class=\"btn default btn-xs red\">"
-            . "<i class=\"fa fa-trash-o\"></i> Borrar</a>
+            <input type='hidden' id='idSubfuente" . $contSubfuente . "' name='terce' value='" . $fila["descripcion"] . "//" . $fila["id"] . "' />
+            <a data-fila='" . $contSubfuente . "' data-id='" . $fila["id"] . "' onclick=\"$.EditarSubfuente(this)\" class=\"btn default btn-xs blue\">"
+                . "<i class=\"fa fa-edit\"></i> Editar</a>
+            <a data-fila='" . $contSubfuente . "' data-id='" . $fila["id"] . "' onclick=\"$.QuitarSubfuente(this)\" class=\"btn default btn-xs red\">"
+                . "<i class=\"fa fa-trash-o\"></i> Borrar</a>
             </td></tr>";
         }
     }

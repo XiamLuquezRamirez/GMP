@@ -299,6 +299,14 @@ $(document).ready(function () {
           $("#CbPeriodoF").val(data["periodo_fin"]);
           $("#txt_obser").val(data["observacion"]);
           $("#id").val(cod);
+
+          ///cargar detalles
+
+          $("#tb_Subfuente").html(data['Tab_Subfuente']);
+          $("#contSubfuentes").val(data['contSubfuentes']);
+
+          valTotalPresupuesto = data['valorTotalDet'];
+
         },
         error: function (error_messages) {
           alert("HA OCURRIDO UN ERROR");
@@ -527,27 +535,25 @@ $(document).ready(function () {
     var url = form.attr("action");
     var token = $("#token").val();
     $("#idtoken").remove();
-    form.append(
-      "<input type='hidden' id='idtoken' name='_token'  value='" + token + "'>"
+    form.append("<input type='hidden' id='idtoken' name='_token'  value='" + token + "'>"
     );
+
+    Dat_Subfuente = [];
+    $.Dta_Subfuentes();
+
+    form.append("<input type='hidden' id='Dat_Subfuente' name='Dat_Subfuente' value='" + JSON.stringify(Dat_Subfuente) + "'>");
     var url = form.attr("action");
     var datos = form.serialize();
 
-    Dat_Subfuente = [];
-
-    $.Dta_Subfuentes();
-
-    var datosAll = {
-      datos: datos,
-      Dat_Subfuente: Dat_Subfuente
-    }
+      
 
     $.ajax({
       type: "POST",
       url: url,
-      data: datosAll,
+      data: datos,
       success: function (data) {
         if (trimAll(data) === "bien") {
+         
           $.Alert(
             "#msg",
             "Datos Guardados Exitosamente...",

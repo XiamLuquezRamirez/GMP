@@ -936,15 +936,24 @@ $link = conectar();
                                             </div>
                                         </div>
 
-                                        <div class='col-md-5'>
+                                        <div class='col-md-6'>
                                             <div class='form-group' id="From_fuenteAdd">
                                                 <label class='control-label'>Fuente de financiación:</label><span class="required">* </span>
-                                                <select class="form-control select2" id="CbFuenteFinanciacion" name="options2">
+                                                <select class="form-control select2" onchange="$.buscaSubfinanciacion();" id="CbFuenteFinanciacion" name="options2">
 
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class='col-md-7'>
+
+                                        <div class='col-md-6'>
+                                            <div class='form-group' id="From_Subfuente">
+                                                <label class='control-label'>Subfuente de financiación:</label><span class="required">* </span>
+                                                <select class='form-control select2' id="subfuente" name="subfuente">
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-6'>
                                             <div class='form-group'>
                                                 <label class='control-label'>Gasto:</label>
                                                 <div class="input-group">
@@ -958,14 +967,14 @@ $link = conectar();
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class='col-md-3'>
+                                        <div class='col-md-4'>
                                             <div class='form-group' id="From_FechaAdd">
                                                 <label class='control-label'>Valor:</label><span class="required">* </span>
                                                 <input type='text' id='txt_valorDetAdicV' onclick="this.select();" value="$ 0,00" onchange="$.cambioFormato(this.id,'txt_valorDetAdic');" class='form-control' />
                                                 <input type='hidden' id='txt_valorDetAdic' class='form-control' />
                                             </div>
                                         </div>
-                                        <div class="col-md-9">
+                                        <div class="col-md-2">
                                             <div class="form-actions right">
                                                 <button type="button" class="btn blue" onclick="$.AddDeltalleAdicionContrato()" id="btn_guardarAdici"><i class="fa fa-plus"></i> Agregar</button>
                                             </div>
@@ -988,21 +997,24 @@ $link = conectar();
                                                 <input type="hidden" id="contAdicion" value="0" />
                                                 <table class='table table-striped table-hover table-bordered' id="tb_AdicionContrato">
                                                     <thead>
-                                                        <tr>
+                                                        <tr style="font-weight: bold;">
                                                             <td>
-                                                                <i class='fa fa-angle-right'></i> #
+                                                                #
                                                             </td>
                                                             <td>
-                                                                <i class='fa fa-angle-right'></i> Fuentes de financiación
+                                                                 Fuente de financiación
                                                             </td>
                                                             <td>
-                                                                <i class='fa fa-angle-right'></i> Gastos
+                                                                 Subfuente de financiación
                                                             </td>
                                                             <td>
-                                                                <i class='fa fa-angle-right'></i> Valor
+                                                                 Gastos
                                                             </td>
                                                             <td>
-                                                                <i class='fa fa-angle-right'></i> Acción
+                                                               Valor
+                                                            </td>
+                                                            <td>
+                                                                 Acción
                                                             </td>
                                                         </tr>
                                                     </thead>
@@ -1012,7 +1024,7 @@ $link = conectar();
                                                     </tbody>
                                                     <tfoot>
                                                         <tr>
-                                                            <th colspan='3' style='text-align: right;'>Total items:</th>
+                                                            <th colspan='4' style='text-align: right;'>Total items:</th>
                                                             <th colspan='1'><label id='gtotalPresTota' style='font-weight: bold;'>$ 0,00</label></th>
                                                         </tr>
                                                     </tfoot>
@@ -1620,9 +1632,9 @@ $link = conectar();
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
-                                                        <h4 class='form-section'></h4>
-                                                   
+
+                                                    <h4 class='form-section'></h4>
+
                                                 </div>
                                             </div>
                                         </div>

@@ -470,7 +470,7 @@ include "Conectar.php";
                                                                     </div>
                                                                 </div>
 
-                                                                <div class="desc" style='text-align:center;font-weight:bold;font-size:12px;margin-top: 10px;'>% Presupuesto Gastado <br>(<i class='fa fa-dollar'></i> <label id="vpregat"></label>)</div>
+                                                                <div class="desc" style='text-align:center;font-weight:bold;font-size:12px;margin-top: 10px;'>% Presupuesto Ejecutado <br>(<i class='fa fa-dollar'></i> <label id="vpregat"></label>)</div>
                                                             </div>
                                                             <div class="col-md-3" style='text-align:center;padding-left: 10px; padding-right: 10px;'>
 
@@ -490,7 +490,7 @@ include "Conectar.php";
                                                                     </div>
                                                                 </div>
 
-                                                                <div class="desc" style='text-align:center;font-weight:bold;font-size:12px;margin-top: 10px;'>% Presupuesto comp. gastado<br>(<i class='fa fa-dollar'></i> <label id="vpreCompGast"></label>)</div>
+                                                                <div class="desc" style='text-align:center;font-weight:bold;font-size:12px;margin-top: 10px;'>% Presupuesto comp. ejecutado<br>(<i class='fa fa-dollar'></i> <label id="vpreCompGast"></label>)</div>
                                                             </div>
                                                         </div>
 
@@ -527,10 +527,10 @@ include "Conectar.php";
 
                                         </div>
                                         <div class="col-md-7">
-                                        <div class='portlet box red'>
+                                            <div class='portlet box red'>
                                                 <div class='portlet-title'>
                                                     <div class='caption'>
-                                                        <i class='fa fa-angle-right'></i>Presupuesto Comprometido vs Gastado
+                                                        <i class='fa fa-angle-right'></i>Presupuesto Comprometido vs Ejecutado
                                                     </div>
                                                     <div class='tools'>
                                                         <a href='javascript:;' class='collapse'></a>
@@ -549,13 +549,13 @@ include "Conectar.php";
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
 
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-6">
-                                        <div class='portlet box red-intense'>
+                                        <div class="col-md-5">
+                                            <div class='portlet box red-intense'>
                                                 <div class='portlet-title'>
                                                     <div class='caption'>
                                                         <i class='fa fa-angle-right'></i>Proyectos por Estado
@@ -581,8 +581,8 @@ include "Conectar.php";
 
                                         </div>
 
-                                        <div class="col-md-6">
-                                        <div class='portlet box red-intense'>
+                                        <div class="col-md-7">
+                                            <div class='portlet box red-intense'>
                                                 <div class='portlet-title'>
                                                     <div class='caption'>
                                                         <i class='fa fa-angle-right'></i> Distribución de presupuesto
@@ -597,6 +597,9 @@ include "Conectar.php";
                                                             <div class='form-body'>
                                                                 <div id='PresuDist' style="width: 100%;  height: 55vh;max-height: 55vh;">
 
+                                                                </div>
+                                                                <div class="form-actions right" style="display: none;" id="btn_volver2">
+                                                                    <button type="button" class="btn btn-info btn-sm" onclick="$.VolverGrafAnte();" id="btn_informe"><i class="fa fa-reply"></i> Volver</button>
                                                                 </div>
                                                             </div>
                                                         </div>

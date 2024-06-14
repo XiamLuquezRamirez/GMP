@@ -2527,6 +2527,8 @@ $(document).ready(function () {
     AddFinancia: function () {
       var CbOriFinancia = $("#CbOriFinancia").val();
       var textTiplog = $("#CbOriFinancia option:selected").text();
+      var CbOriSubfinancia = $("#subfuente").val();
+      var textSubfinancia = $("#subfuente option:selected").text();
       var txt_cosFin = $("#txt_cosFin").val();
       var txt_cosFinVi = $("#txt_cosFinVi").val();
 
@@ -2534,6 +2536,15 @@ $(document).ready(function () {
         $.Alert(
           "#msg",
           "Debes seleccionar el origen de la financiación del proyecto. Verifique...",
+          "warning"
+        );
+        return;
+      }
+
+      if (CbOriSubfinancia == " ") {
+        $.Alert(
+          "#msg",
+          "Debes seleccionar la subfuente de financiación del proyecto. Verifique...",
           "warning"
         );
         return;
@@ -2554,15 +2565,12 @@ $(document).ready(function () {
 
       fila += "<td>" + contFinancia + "</td>";
       fila += "<td>" + textTiplog + "</td>";
+      fila += "<td>" + textSubfinancia + "</td>";
       fila += "<td>" + txt_cosFinVi + "</td>";
       fila +=
         "<td><input type='hidden' id='idFinancia" +
         contFinancia +
-        "' name='terce' value='" +
-        CbOriFinancia +
-        "//" +
-        txt_cosFin +
-        "' /><a onclick=\"$.QuitarFinancia('filaFinancia" +
+        "' name='terce' value='" + CbOriFinancia + "//"  + CbOriSubfinancia + "//" + txt_cosFin + "' /><a onclick=\"$.QuitarFinancia('filaFinancia" +
         contFinancia +
         "//" +
         txt_cosFin +
@@ -3509,6 +3517,25 @@ $(document).ready(function () {
         },
       });
     },
+    buscaSubfinanciacion: function () {
+      var datos = {
+        ope: "buscarSubfuente",
+        cod: $("#CbOriFinancia").val(),
+      };
+
+      $.ajax({
+        type: "POST",
+        url: "../All.php",
+        data: datos,
+        dataType: "json",
+        success: function (data) {
+          $("#subfuente").html(data["subfi"]);
+        },
+        error: function (error_messages) {
+          alert("HA OCURRIDO UN ERROR");
+        },
+      });
+    },
     UploadCompPre: function () {
       var archivos = document.getElementById("archivosComp"); //Creamos un objeto con el elemento que contiene los archivos: el campo input file, que tiene el id = 'archivos'
       var archivo = archivos.files; //Obtenemos los archivos seleccionados en el imput
@@ -3520,7 +3547,7 @@ $(document).ready(function () {
       for (i = 0; i < archivo.length; i++) {
         archivos.append("archivosComp" + i, archivo[i]); //Añadimos cada archivo a el arreglo con un indice direfente
       }
-
+      
       var ruta = "../Proyecto/SubirDocuComp.php";
 
       $.ajax({

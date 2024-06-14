@@ -68,7 +68,7 @@ $link = conectar();
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZ_FNKVfd7vx76ykD4XbVjATqK5sVp8AQ&sensor=false">
     </script>
 
-<script src="../Js/sweetalert2.all.min.js"></script>
+    <script src="../Js/sweetalert2.all.min.js"></script>
     <link href="../Css/Global/css/sweetalert2.min.css" rel="stylesheet">
     <script src="../Js/jquery-3.1.1.min.js" type="text/javascript"></script>
     <script src="../Js/Proyectos.js" type="text/javascript"></script>
@@ -80,7 +80,7 @@ $link = conectar();
     <script src="../Js/ckeditor/ckeditor.js" type="text/javascript"></script>
     <script src="../Js/ckeditor/styles.js" type="text/javascript"></script>
 
-  </head>
+</head>
 <!-- END HEAD -->
 
 <!-- BEGIN BODY -->
@@ -112,18 +112,18 @@ $link = conectar();
         <div class="page-content-wrapper">
             <div class="page-content">
                 <div class="page-bar">
-                <ul class="page-breadcrumb">
-                            <li>
-                                <i class="fa fa-home"></i>
-                                <a href="Administracion.php">Administración</a>
-                                <i class="fa fa-circle"></i>
-                            </li>
-                            <li>
-                                <i style="color: yellow;"  class="fa fa-star"></i>
-                                <a href="Perfil/">Mi perfil </a>
+                    <ul class="page-breadcrumb">
+                        <li>
+                            <i class="fa fa-home"></i>
+                            <a href="Administracion.php">Administración</a>
+                            <i class="fa fa-circle"></i>
+                        </li>
+                        <li>
+                            <i style="color: yellow;" class="fa fa-star"></i>
+                            <a href="Perfil/">Mi perfil </a>
 
-                            </li>
-                        </ul>
+                        </li>
+                    </ul>
                 </div>
 
                 <h3 class="page-title"> </h3>
@@ -816,7 +816,7 @@ $link = conectar();
                                                                         </select>
                                                                         <span class="input-group-btn">
                                                                             <button type="button" id="btn_new_resp" onclick="$.NewTipo();" title="Crear Nueva Tipologia" class="btn green-meadow">
-                                                                                <i class="fa fa-plus" ></i>
+                                                                                <i class="fa fa-plus"></i>
                                                                             </button>
                                                                         </span>
 
@@ -833,7 +833,7 @@ $link = conectar();
                                                                         </select>
                                                                         <span class="input-group-btn">
                                                                             <button type="button" id="btn_new_resp" onclick="$.NewSecre();" title="Crear Nueva Secretaria" class="btn green-meadow">
-                                                                                <i class="fa fa-plus" ></i>
+                                                                                <i class="fa fa-plus"></i>
                                                                             </button>
                                                                         </span>
                                                                     </div>
@@ -1699,12 +1699,12 @@ $link = conectar();
                                                                     </select>
                                                                     <span class="input-group-btn">
                                                                         <button type="button" id="btn_new_resp" onclick="$.UpdateRespon('2');" title="Crear Nuevo Responsable" class="btn blue-soft">
-                                                                            <i class="fa fa-refresh" /></i>
+                                                                            <i class="fa fa-refresh"></i>
                                                                         </button>
                                                                     </span>
                                                                     <span class="input-group-btn">
                                                                         <button type="button" id="btn_new_resp" onclick="$.NewRespon();" title="Crear Nuevo Responsable" class="btn green-meadow">
-                                                                            <i class="fa fa-plus" /></i>
+                                                                            <i class="fa fa-plus"></i>
                                                                         </button>
                                                                     </span>
 
@@ -1838,7 +1838,7 @@ $link = conectar();
                                                                     <div class="input-group">
                                                                         <span class="input-group-btn">
                                                                             <button type="button" id="btn_paraMet" title="Busqueda del Indicador" class="btn green-meadow">
-                                                                                <i class="fa fa-search fa-fw" /></i>
+                                                                                <i class="fa fa-search fa-fw"></i>
                                                                             </button>
                                                                         </span>
                                                                         <input type='text' id='txt_CodMeta' disabled="" value="" class='form-control' />
@@ -1929,7 +1929,7 @@ $link = conectar();
                                                                     <div class="input-group">
                                                                         <span class="input-group-btn">
                                                                             <button type="button" id="btn_paraMetP" title="Busqueda del Indicador" class="btn green-meadow">
-                                                                                <i class="fa fa-search fa-fw" /></i>
+                                                                                <i class="fa fa-search fa-fw"></i>
                                                                             </button>
                                                                         </span>
                                                                         <input type='text' id='txt_CodMetaP' disabled="" value="" class='form-control' />
@@ -2023,13 +2023,13 @@ $link = conectar();
                                                     <div class='form-body'>
                                                         <div class='row'>
 
-                                                            <div class='col-md-9'>
+                                                            <div class='col-md-4'>
                                                                 <div class='form-group'>
                                                                     <label class='control-label'>Origen de la Financiación:</label>
                                                                     <div class="input-group">
                                                                         <span class="input-group-btn">
-                                                                            <select class="form-control select2" data-placeholder="Seleccione..." id="CbOriFinancia" name="options2">
-                                                                             
+                                                                            <select class="form-control select2" onchange="$.buscaSubfinanciacion();" data-placeholder="Seleccione..." id="CbOriFinancia" name="options2">
+
                                                                             </select>
                                                                         </span>
 
@@ -2037,11 +2037,20 @@ $link = conectar();
 
                                                                 </div>
                                                             </div>
+
+                                                            <div class='col-md-5'>
+                                                                <div class='form-group' id="From_Subfuente">
+                                                                    <label class='control-label'>Subfuente de financiación:</label><span class="required">* </span>
+                                                                    <select class='form-control select2' id="subfuente" name="subfuente">
+
+                                                                    </select>
+                                                                </div>
+                                                            </div>
                                                             <div class='col-md-3'>
                                                                 <div class='form-group'>
                                                                     <label class='control-label'>Valor:</label>
                                                                     <input type='hidden' id='txt_FinanciaTotal' value="0" class='form-control' />
-                                                                    <input type='text' id='txt_cosFinVi' value="$ 0,00" class='form-control' onclick="this.select();" value="$ 0,00"  onkeyup="restrictInput(event);"  onchange="$.cambioFormato(this.id,'txt_cosFin');" />
+                                                                    <input type='text' id='txt_cosFinVi' value="$ 0,00" class='form-control' onclick="this.select();" value="$ 0,00" onkeyup="restrictInput(event);" onchange="$.cambioFormato(this.id,'txt_cosFin');" />
                                                                     <input type='hidden' id='txt_cosFin' value="" class='form-control' />
 
                                                                 </div>
@@ -2062,19 +2071,22 @@ $link = conectar();
                                                                 <div class='form-group'>
                                                                     <table class='table table-striped table-hover table-bordered' id="tb_Financia">
                                                                         <thead>
-                                                                            <tr>
+                                                                            <tr style="font-weight: bold;">
                                                                                 <td>
-                                                                                    <i class='fa fa-angle-right'></i> #
+                                                                                   #
                                                                                 </td>
                                                                                 <td>
-                                                                                    <i class='fa fa-angle-right'></i> Origen de la Financiación
-                                                                                </td>                                                                              
+                                                                                   Origen de la fuente Financiación
+                                                                                </td>
                                                                                 <td>
-                                                                                    <i class='fa fa-angle-right'></i> Valor
+                                                                                Subfuente de financiación
+                                                                                </td>
+                                                                                <td>
+                                                                                    Valor
                                                                                 </td>
 
                                                                                 <td>
-                                                                                    <i class='fa fa-angle-right'></i> Acción
+                                                                                    Acción
                                                                                 </td>
                                                                             </tr>
                                                                         </thead>
@@ -2084,7 +2096,7 @@ $link = conectar();
                                                                         </tbody>
                                                                         <tfoot>
                                                                             <tr>
-                                                                                <th colspan='2' style='text-align: right;'>Total Financiación:</th>
+                                                                                <th colspan='3' style='text-align: right;'>Total Financiación:</th>
                                                                                 <th colspan='1'><label id='gtotalFinanc' style='font-weight: bold;'>0,00</label></th>
                                                                             </tr>
                                                                         </tfoot>
@@ -2375,7 +2387,7 @@ $link = conectar();
                                                                             <div class="col-md-12">
                                                                                 <div class="form-group" style="float: right">
                                                                                     <button type="button" id="Anx_Doc" class="btn green-meadow" title="Anexar Documento">
-                                                                                        <i class="fa fa-plus-circle" ></i> Anexar Documento
+                                                                                        <i class="fa fa-plus-circle"></i> Anexar Documento
                                                                                     </button>
                                                                                 </div>
                                                                             </div>

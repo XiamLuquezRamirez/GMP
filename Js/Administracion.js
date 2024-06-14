@@ -1,6 +1,7 @@
 $(document).ready(function () {
     var mapa, mapa1, latitud, longitud;
     var conGlobal = 0;
+    let grafiPresupuestoGlobalData = [];
 
    
     $.extend({
@@ -271,7 +272,7 @@ $(document).ready(function () {
 
 
                         chartProEzt.legend = new am4charts.Legend();
-                        chartProEzt.legend.fontSize = 12;
+                        chartProEzt.legend.fontSize = 10;
                         chartProEzt.innerRadius = am4core.percent(20);
                         chartProEzt.paddingTop = 0;
                         chartProEzt.marginTop = 0;
@@ -285,7 +286,14 @@ $(document).ready(function () {
                         pieSeries.dataFields.category = "Cate";
                         pieSeries.slices.template.cornerRadius = 10;
                         pieSeries.labels.template.fontSize = 10; // Cambia el tamaño de la fuente aquí
-                        pieSeries.labels.template.text = "{category}: {value} ({value.percent.formatNumber('#.0')}%)";
+                        pieSeries.labels.template.text = "{category}:\n {value} ({value.percent.formatNumber('#.0')}%)";
+                        pieSeries.labels.template.textAlign = 'middle';
+                        pieSeries.labels.template.align = 'center';
+
+
+                        //DETALLE DE PRESUPUESTO TOTAL
+                        grafiPresupuestoGlobalData = data.presupuesto;
+                      $.graficaPresupeusto();
                 
 
                         ////////////////PRESUPUESTO COMPROMETIDO VS PRESUPUESTO GASTATO
@@ -321,7 +329,7 @@ $(document).ready(function () {
                         }
 
                         var series1 = createSeries("value", "Presupuesto Comprometido");
-                        var series2 = createSeries("value2", "Presupuesto Gastado");
+                        var series2 = createSeries("value2", "Presupuesto Ejecutado");
                         var series4 = createSeries("void", "Ocultar Todas");
 
                         series4.events.on("hidden", function () {
@@ -342,12 +350,118 @@ $(document).ready(function () {
                         $("#nodatos").show();
                         $("#sidatos").hide();
                     }
-
                 },
                 error: function (error_messages) {
                     alert('HA OCURRIDO UN ERROR');
                 }
             });
+        },
+        graficaPresupeusto: function (){
+            let data = grafiPresupuestoGlobalData;
+            function am4themes_myTheme(target) { 
+                if (target instanceof am4core.ColorSet) { 
+                    target.list = [ 
+                        am4core.color("#e83e8c") 
+                    ]; 
+                } 
+            } 
+            am4core.useTheme(am4themes_myTheme);
+     
+            var chart = am4core.createFromConfig({
+                "data": data,
+                "legend": {
+                    "fontSize": 10, // Tamaño de fuente de las leyendas
+                    "position": "bottom", // Posición de las leyendas (en este caso, abajo)
+                    "useDefaultMarker": true // Usa marcadores predeterminados en las leyendas
+                },
+                "innerRadius": "20%",
+                "series": [{
+                        "type": "PieSeries3D",
+                        "dataFields": {
+                            "value": "cant",
+                            "category": "Cate",
+                        },
+                        "fontSize": 10,
+                        "tooltip": {
+                            "keepTargetHover": true,
+                            "label": {
+                                "interactionsEnabled": true,
+                                "fontSize": 10
+                            }
+                        },
+                        "labels": {
+                            "text": "{category}: \n {value} ({value.percent.formatNumber('#.0')}%)",
+                            "fontSize": 10,
+                            "textAlign": "middle", // Alinea el texto en el centro horizontalmente
+                            "align": "center" // Alinea el texto en el centro horizontalmente
+                        },
+                        "slices": {
+                            "tooltipHTML": '<b>{category}: {value}</b><br><a id="{idp}" style="color:#ffffff" onclick="$.MostDetPresupuesto(this.id)">Ver detalle</a>'
+                        },
+                    }]
+            }, "PresuDist", "PieChart3D");
+        },
+        VolverGrafAnte: function () {
+            $.graficaPresupeusto();
+            $('#btn_volver2').hide();
+        },
+        MostDetPresupuesto: function (val) {
+                $('#btn_volver2').show();
+    
+                var datos = {
+                    idPre: val,
+                    ope: "GrafDetPresupuesto"
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "All.php",
+                    data: datos,
+                    dataType: 'JSON',
+                    success: function (data) {
+                        am4core.useTheme(am4themes_animated);
+                        var chart = am4core.createFromConfig({
+                            "data": data.detPresupuesto,
+                            "legend": {
+                                "fontSize": 10, // Tamaño de fuente de las leyendas
+                                "position": "bottom", // Posición de las leyendas (en este caso, abajo)
+                                "useDefaultMarker": true // Usa marcadores predeterminados en las leyendas
+                            },
+                            "innerRadius": "20%",
+                            "titles": [{
+                                    "text": "Detalle del presupuesto - "+data.nombre,
+                                    "fontSize": 20,
+                                    "marginTop": 15
+    
+                                }],
+                            "series": [{
+                                    "type": "PieSeries3D",
+                                    "dataFields": {
+                                        "value": "cant",
+                                        "category": "Cate"
+                                    },
+                                    "tooltip": {
+                                        "keepTargetHover": true,
+                                        "label": {
+                                            "interactionsEnabled": true
+                                        }
+                                    },                                    
+                                    "labels": {
+                                        "text": "{category}: \n {value} ({value.percent.formatNumber('#.0')}%)",
+                                        "fontSize": 10,
+                                        "textAlign": "middle", // Alinea el texto en el centro horizontalmente
+                                        "align": "center" // Alinea el texto en el centro horizontalmente
+                                    },
+                                    "slices": {
+                                        "tooltipHTML": '<b>{category}: \n {value}</b><br><a id="{category}" style="color:#ffffff" onclick="$.MostDetaProyecto(this.id)">Ver Detalle</a>'
+                                    },
+                                }]
+                        }, "PresuDist", "PieChart3D");
+                        
+                    },
+                    error: function (error_messages) {
+                        alert('HA OCURRIDO UN ERROR');
+                    }
+                });
         },
         capitalizeWords: function (secre) {
             return secre.toLowerCase().replace(/\b\w/g, function(char) {

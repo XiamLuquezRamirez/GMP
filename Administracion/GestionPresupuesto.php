@@ -80,7 +80,6 @@ include("../Plantilla/head.php");
 
                 <div id="responsive" class="modal fade" tabindex="-1" data-width="760">
                     <div class="modal-header">
-                        <button type="button" class="close" onclick="$.cerrarSubfuente()"  aria-hidden="true"></button>
                         <h4 class="modal-title" id='titformi'>Datos del Presupuesto</h4>
 
                     </div>
@@ -198,7 +197,6 @@ include("../Plantilla/head.php");
                 <!-- ventana subfinanciacion -->
                 <div id="responsiveSubfinanciacion" class="modal fade" tabindex="-1" data-width="760">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                         <h4 class="modal-title" id='titformisubfin'>Detalles del presupuesto</h4>
 
                     </div>

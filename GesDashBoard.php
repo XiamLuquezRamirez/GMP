@@ -461,6 +461,27 @@ WHERE proy.estado='ACTIVO'";
   }
   $myDat->ProyEst = $rawdata;
 
+  ///////////////////// PRESUPUESTO TOTAL
+
+  $consulta = "SELECT SUM(valor) valor,fue.nombre nfue,pt.id idp  FROM presupuesto_total pt LEFT JOIN  fuentes fue ON pt.fuente= fue.id
+  WHERE pt.estado='ACTIVO' GROUP BY pt.fuente";
+  $resultado = mysqli_query($link, $consulta);
+  $rawdataPre = array(); //creamos un array
+  if (mysqli_num_rows($resultado) > 0) {
+      while ($fila = mysqli_fetch_array($resultado)) {
+          $Cate = $fila['nfue'];
+          $cant = $fila['valor'];
+          $idp = $fila['idp'];
+
+          $rawdataPre[] = array(
+              "Cate" => $Cate,
+              "cant" => $cant,
+              "idp" => $idp,
+          );
+      }
+  }
+
+  $myDat->presupuesto = $rawdataPre;
 
   ////////////////////// PRESUPUESTO COMPROMETIDO VS PRESUPUESTO GASTADO
 

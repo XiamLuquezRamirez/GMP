@@ -80,6 +80,7 @@ if ($busq != "") {
   num_contrato,
   obj_contrato,
   vcontr_contrato,
+  vfin_contrato,
   veje_contrato,
   descontrati_contrato,
   estad_contrato,  
@@ -122,6 +123,7 @@ ORDER BY id_contrato DESC  LIMIT " . $regemp . "," . $regmos;
   num_contrato,
   obj_contrato,
   vcontr_contrato,
+  vfin_contrato,
   veje_contrato,
   descontrati_contrato,
   estad_contrato,
@@ -161,7 +163,7 @@ if (mysqli_num_rows($resultado) > 0) {
    
         . "<td class=\"highlight\" style='vertical-align: middle; font-size: x-small;
         line-height: 1.3em;'>"
-        . "$ " . number_format($fila["vcontr_contrato"], 2, ",", ".") . ""
+        . "$ " . number_format($fila["vfin_contrato"], 2, ",", ".") . ""
         . "</td>"
         . "<td class=\"highlight\" style='vertical-align: middle; font-size: x-small;
         line-height: 1.3em;'>"

@@ -2998,6 +2998,8 @@ $(document).ready(function () {
         AddDeltalleAdicionContrato: function () {
             var CbFuenteFinanciacion = $("#CbFuenteFinanciacion").val(); 
             var desCbFuenteFinanciacion =$("#CbFuenteFinanciacion option:selected").text();
+            var CbFuentesubfinanciacion = $("#subfuente").val(); 
+            var desCbSubfuenteFinanciacion =$("#subfuente option:selected").text();
             var CbGastos =  $("#CbGastos").val(); 
             var txt_DesGastos =  $("#txt_DesGastos").val(); 
             var txt_valorDetAdic = $("#txt_valorDetAdic").val();
@@ -3008,6 +3010,15 @@ $(document).ready(function () {
               $.Alert(
                 "#msgAdicion",
                 "Debe de seleccionar la fuente de financiación",
+                "warning",
+                "warning"
+              );
+              return;
+            }
+            if ($("#CbFuenteFinanciacion").val() === " ") {
+              $.Alert(
+                "#msgAdicion",
+                "Debe de seleccionar la subfuente de financiación",
                 "warning",
                 "warning"
               );
@@ -3031,9 +3042,10 @@ $(document).ready(function () {
       
             fila += "<td>" + contAdicion + "</td>";
             fila += "<td>" + desCbFuenteFinanciacion+ "</td>";
+            fila += "<td>" + desCbSubfuenteFinanciacion+ "</td>";
             fila += "<td>" + CbGastos+" - "+txt_DesGastos+ "</td>";
             fila += "<td>" + formatCurrency(txt_valorDetAdic, "es-CO", "COP") + "</td>";
-            fila += "<td ><input type='hidden' id='idDetAdicion" +contAdicion + "' name='terce' value='" + CbFuenteFinanciacion +"//" +  CbGastos +"//" +  txt_DesGastos +"//" +  txt_valorDetAdic +"' /><a data-conse='filaPresup"+contAdicion+"' data-valor='"+  txt_valorDetAdic +"'  onclick='$.QuitardetAdicion(this)' class='btn default btn-xs red'>";
+            fila += "<td ><input type='hidden' id='idDetAdicion" +contAdicion + "' name='terce' value='" + CbFuenteFinanciacion +"//" + CbFuentesubfinanciacion +"//" +  CbGastos +"//" +  txt_DesGastos +"//" +  txt_valorDetAdic +"' /><a data-conse='filaPresup"+contAdicion+"' data-valor='"+  txt_valorDetAdic +"'  onclick='$.QuitardetAdicion(this)' class='btn default btn-xs red'>";
             fila += "<i class='fa fa-trash-o'></i> Quitar</a></td></tr>";
             $("#td-DetAdicionContrato").append(fila);
            
@@ -3069,7 +3081,25 @@ $(document).ready(function () {
            $("#txt_valorAdic").val(PreTotalAdicion);
          
           },
-      
+          buscaSubfinanciacion: function(){
+            var datos = {
+                ope: "buscarSubfuente",
+                cod: $("#CbFuenteFinanciacion").val()
+              };
+        
+              $.ajax({
+                type: "POST",
+                url: "../All.php",
+                data: datos,
+                dataType: "json",
+                success: function (data) {
+                  $("#subfuente").html(data["subfi"]);
+                },
+                error: function (error_messages) {
+                  alert("HA OCURRIDO UN ERROR");
+                },
+              });
+          },
           reordenarAdicion: function () {
             var num = 1;
             $("#tb_Presup tbody tr").each(function () {
