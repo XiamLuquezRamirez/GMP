@@ -534,7 +534,7 @@ mysqli_query($link, $consulta);
 
 $rawPCvsPG = array(); //creamos un array
 
-// Obtener meses con gastos
+// Obtener meses con gastos  claro
 $gastosQuery = "SELECT DISTINCT MONTH(gast.fecha) mes
 FROM gastos_contrato gast
 left join contratos contr on  gast.contrato = contr.num_contrato
