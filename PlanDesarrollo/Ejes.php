@@ -181,7 +181,7 @@ $link = conectar();
                                                     <input type='text'   id='txt_Desc' class='form-control'/>
                                                 </div>
                                             </div>
-                                            <div class='col-md-12'>
+                                            <div style='display: none;' class='col-md-12'>
                                                 <div class='form-group' id="From_Dimension">
                                                     <label class='control-label'>Dimensión:</label><span class="required">* </span>
                                                     <select class="form-control select2" id="Cbx_Dime"  name="options2">

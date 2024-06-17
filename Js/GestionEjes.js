@@ -264,15 +264,15 @@ $(document).ready(function () {
                 $("#From_Descripcion").removeClass("has-error");
                 Op_Validar.push("Ok");
             }
-            Id = "#Cbx_Dime";
-            Value = $(Id).val();
-            if (Value === "" || Value === " ") {
-                Op_Validar.push("Fail");
-                $("#From_Dimension").addClass("has-error");
-            } else {
-                $("#From_Dimension").removeClass("has-error");
-                Op_Validar.push("Ok");
-            }
+            // Id = "#Cbx_Dime";
+            // Value = $(Id).val();
+            // if (Value === "" || Value === " ") {
+            //     Op_Validar.push("Fail");
+            //     $("#From_Dimension").addClass("has-error");
+            // } else {
+            //     $("#From_Dimension").removeClass("has-error");
+            //     Op_Validar.push("Ok");
+            // }
 
             for (var i = 0; i <= Op_Validar.length - 1; i++) {
                 if (Op_Validar[i] == "Fail") {

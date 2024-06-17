@@ -32,11 +32,9 @@ $(document).ready(function () {
                 success: function (data) {
 
                     if (data == 0) {
-
                         $.Alert("#msg", "Bienvenido...", "success");
                         window.location.href = 'Administracion.php';
                     } else {
-                        alert(data);
                         $.Alert("#msg", "Usuario Y Contraseña Incorrecta... Verifique Por Favor", "danger");
                     }
                 },
@@ -128,9 +126,9 @@ $(document).ready(function () {
                 data: datos,
                 dataType: 'JSON',
                 success: function (data) {
-                    $("#CbSecre").html(data['Secre']);
-                    $("#CbEje").html(data['Ejes']);
-                    $("#CbFFinanc").html(data['Fina']);
+                    $("#CbN1").html(data['Secre']);
+                    $("#CbN2").html(data['Ejes']);
+                    $("#CbN3").html(data['Fina']);
                 },
                 error: function (error_messages) {
                     alert('HA OCURRIDO UN ERROR');
@@ -185,7 +183,7 @@ $(document).ready(function () {
                         PresComprom = parseFloat(data.TotProyPriori);
                         $("#vprecomp").html(number_format2(PresComprom, 2, ',', '.'));
 
-                        //PRESUPUESTO GASTADO
+                        //PRESUPUESTO EJECUTADO
                         PresGastado = parseFloat(data.PresEjecutado) + parseFloat(data.TotContEje);
                         $("#vpregat").html(number_format2(PresGastado, 2, ',', '.'));
                        
@@ -194,7 +192,8 @@ $(document).ready(function () {
                         
                         $("#vprenafec").html(number_format2(PresNoAfect, 2, ',', '.'));
 
-                        PresGasComp = PresComprom - parseFloat(data.TotContEje)
+                             //PRESUPUESTO EJECUTADO
+                        PresGasComp = PresComprom - parseFloat(data.TotContEje);
                         $("#vpreCompGast").html(number_format2(PresGasComp, 2, ',', '.'));
 
                         ///CALCULAR PORCENTAJES
@@ -212,8 +211,7 @@ $(document).ready(function () {
                             $.llenarCirculos(ValorFinal, "#prec1", activeBorder, valor1, "#39B4CC");
                         }, 800);
 
-                        setTimeout(function () {
-                           
+                         setTimeout(function () {                           
                             var valor2 = (Number(pgasta.toFixed(2)) * 360) / 100;
                             var activeBorder = $("#activeBorder2");
                             conGlobal = 0;

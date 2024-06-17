@@ -706,8 +706,8 @@ Mostrar Contratos</a>
 
             $User_SubLogin .= "<li style='background-color:#F6F6F6;'>
                                    <a href='../Proyecto/Contratos.php?Ori=CV'>
-<span class='label label-info'><i class='fa fa-hand-o-right'></i></span>
-Mostrar Contratos</a>
+                                    <span class='label label-info'><i class='fa fa-hand-o-right'></i></span>
+                                    Mostrar Contratos</a>
                                </li></ul>
                        </li>
 
@@ -762,7 +762,7 @@ Mostrar Contratos</a>
                                 <span class='arrow '></span>
                             </a>
                             <ul class='sub-menu'>";
-                $Menu_Left .= " <li class='nav-item' id='menu_plan_dime'>
+                $Menu_Left .= " <li style='display: none;' class='nav-item' id='menu_plan_dime'>
                                     <a href='Dimensiones/'>
                                         <i class='fa fa-file-text-o'></i>
                                         Dimensiones
@@ -806,6 +806,13 @@ Mostrar Contratos</a>
                     }
                     $Menu_Left .= "</li>";
                 }
+
+                $Menu_Left .= "<li class='nav-item'  id='menu_plan_parametrizar'>
+                <a href='ParametrizacionPlanDesarrollo/'>
+                    <i class='fa fa-gears'></i>
+                  Parametrizar
+                 </a>
+                </li>";
 
                 $Menu_Left .= "</ul>
                         </li>";
@@ -859,34 +866,7 @@ Mostrar Contratos</a>
                 $Menu_Left .= " 		</ul>
 				</li>";
             }
-
-            /////////////////OPCIONES PROYECTO RAPIDO
-            //            if ($permproy == "s") {
-            //                $Menu_Left .= "<li class='nav-item' id='menu_p_proyExp'>
-            //                    <a href='javascript:;' class='nav-link nav-toggle'>
-            //                    <i class='icon-folder'></i>
-            //                    <span class='title'>Empalme Rapido</span>
-            //                    <span class='arrow '></span>
-            //                    </a>
-            //                    <ul class='sub-menu'>";
-            //
-            //                if ($_SESSION['GesProyVPr'] == "s") {
-            //                    $Menu_Left .= " <li  id='menu_p_proy_exp'>
-            //                            <a href='ProyectosExpres/'>
-            //                            <i class='fa fa-file-text-o'></i>
-            //                             Proyectos y Contratos </a>
-            //                        </li>";
-            //                }
-            //                if ($_SESSION['GesProyVCo'] == "s") {
-            //                    $Menu_Left .= "  <li  id='menu_p_Consul_exp'>
-            //                            <a href='ConsultasExpres/'>
-            //                            <i class='fa fa-file-text-o'></i>
-            //                            Consultas</a>
-            //                        </li>";
-            //                }
-            //                 $Menu_Left .= "         </ul>
-            //                </li>";
-            //            }
+   
             //////////////AVANCES
             if ($permava == "s") {
                 $Menu_Left .= " <li class='nav-item' id='menu_avances'>
@@ -1146,7 +1126,7 @@ Mostrar Contratos</a>
                             </a>
                             <ul class='sub-menu'>";
 
-                $Menu_SubLeft .= " <li class='nav-item' id='menu_plan_dime'>
+                $Menu_SubLeft .= " <li style='display: none;' class='nav-item' id='menu_plan_dime'>
                                     <a href='../Dimensiones/'>
                                         <i class='fa fa-file-text-o'></i>
                                         Dimensiones
@@ -1190,6 +1170,14 @@ Mostrar Contratos</a>
                     }
                     $Menu_SubLeft .= "</li>";
                 }
+
+
+                $Menu_SubLeft .= "<li class='nav-item'  id='menu_plan_parametrizar'>
+                <a href='../ParametrizacionPlanDesarrollo/'>
+                    <i class='fa fa-gears'></i>
+                  Parametrizar
+                 </a>
+                </li>";
 
                 $Menu_SubLeft .= "              </ul>
                         </li>";

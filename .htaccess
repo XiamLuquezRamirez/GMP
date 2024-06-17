@@ -10,6 +10,7 @@ RewriteRule ^SubProgramas/$ PlanDesarrollo/Programas.php [L]
 RewriteRule ^Metas/$ PlanDesarrollo/Metas.php [L]
 RewriteRule ^Plan_de_Desarrollo/$ PlanDesarrollo/AdminPlanDesarrollo.php [L]
 RewriteRule ^MetasProducto/$ PlanDesarrollo/Metas_Productos.php [L]
+RewriteRule ^ParametrizacionPlanDesarrollo/$ PlanDesarrollo/Pramatrizar.php [L]
 
 #Proyectos
 RewriteRule ^Proyectos/$ Proyecto/Proyectos.php [L]

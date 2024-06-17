@@ -826,7 +826,6 @@ $link = conectar();
                                                             <div class='col-md-6'>
                                                                 <div class='form-group' id="From_Secreta">
                                                                     <label class='control-label'>Secretaria:<span class="required">* </span></label>
-
                                                                     <div class="input-group ">
                                                                         <select class="form-control select2" data-placeholder="Seleccione..." id="CbSecre" name="options2">
 

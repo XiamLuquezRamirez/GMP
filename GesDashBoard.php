@@ -281,11 +281,10 @@ WHERE proy.estado_proyect IN ('En Ejecucion','Ejecutado')";
   $resultado = mysqli_query($link, $consulta);
   if (mysqli_num_rows($resultado) > 0) {
     while ($filaPR = mysqli_fetch_array($resultado)) {
-
-      $Consulta = "SELECT 
+      $Consulta = "SELECT
             SUM(pproy.total) total
            FROM
-             proyectos proy 
+             proyectos proy
              LEFT JOIN banco_proyec_presupuesto pproy
              ON proy.id_proyect=pproy.id_proyect 
            WHERE  proy.id_proyect='" . $filaPR['id_proyect'] . "'
@@ -293,7 +292,7 @@ WHERE proy.estado_proyect IN ('En Ejecucion','Ejecutado')";
       $resultadoVP = mysqli_query($link, $Consulta);
       if (mysqli_num_rows($resultadoVP) > 0) {
         while ($filaVP = mysqli_fetch_array($resultadoVP)) {
-          $TotProyEjecutado = $TotProyEjecutado + $filaVP['total'];
+          $TotProyEjecutado +=  $filaVP['total'];
         }
       }
     }
@@ -376,18 +375,14 @@ SELECT
       $Val = $fila['valor'];
 
       $consultaPRoy = "select sec,sum(totgast) tcomp from(
-        select 
+        select
           proy.secretaria_proyect sec, ifnull(sum(preproy.total),0) totgast
         from
           proyectos proy
           left join  banco_proyec_presupuesto preproy
           on proy.id_proyect=preproy.id_proyect
-        where proy.secretaria_proyect = '" . $IdSec . "' and proy.estado='ACTIVO'
-          and estado_proyect NOT IN (
-            'Radicado',
-            'Registrado',
-            'No Viabilizado'
-          )
+        where proy.secretaria_proyect = '" . $IdSec . "' and comp_pres='si' and proy.estado='ACTIVO'
+          and estado_proyect='En Ejecucion'
           group by preproy.id_proyect) t group by sec";
       $valComp = 0;
       $resultadoComp = mysqli_query($link, $consultaPRoy);

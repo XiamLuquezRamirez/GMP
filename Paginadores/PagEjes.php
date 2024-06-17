@@ -41,7 +41,7 @@ $cad = "<table id='testTable' class=\"table table-bordered table-striped table-h
         . "<th>"
         . "<i class=\"fa fa-angle-right\"></i> Descripción"
         . "</th>"
-        . "<th>"
+        . "<th style='display: none;'>"
         . "<i class=\"fa fa-angle-right\"></i> Dimensión"
         . "</th>"
         . "<th>"
@@ -90,7 +90,7 @@ if (mysqli_num_rows($resultado) > 0) {
                 . "<td class=\"highlight\">"
                 . $fila["NOMBRE"] . ""
                 . "</td>"
-                . "<td class=\"highlight\">"
+                . "<td style='display: none;' class=\"highlight\">"
                 . $fila["descripcion"] . ""
                 . "</td>"
                 . "<td class=\"highlight\">";

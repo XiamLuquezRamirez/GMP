@@ -86,7 +86,7 @@ include("../Plantilla/head.php");
                     <div class="modal-body">
                         <div class="row">
                             <div class='portlet-body form'>
-                                <form class="form" method="post" id="formGuardarPresupuesto" action="../Administracion/GuardarRubroPresup.php">
+                                <form class="form" method="post" id="formGuardarNivel" action="../PlanDesarrollo/GuardarNiveles.php">
                                     <div class='form-body'>
                                         <div class="row">
                                             <div class="col-md-3">

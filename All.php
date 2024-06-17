@@ -403,6 +403,36 @@ FROM
 
     $myJSONDat = json_encode($myDat);
     echo $myJSONDat;
+} else if ($_POST['ope'] == "buscarNiveles") {
+
+    $myDat = new stdClass();
+    $nivel1 = "<option value=' '>Seleccione...</option>";
+    $nivel2 = "<option value=' '>Seleccione...</option>";
+    $nivel3 = "<option value=' '>Seleccione...</option>";
+
+    $consulta = "select * from niveles_plan_desarrollo";
+    //echo $consulta;
+    $resultado = mysqli_query($link, $consulta);
+    if (mysqli_num_rows($resultado) > 0) {
+        while ($fila = mysqli_fetch_array($resultado)) {
+        if($fila['nivel'] == "1"){
+            $nivel1 .= "<option value='".$fila['id']."' >".$fila['descripcion']."</option>";
+        }
+        if($fila['nivel'] == "2"){
+            $nivel2 .= "<option value='".$fila['id']."' >".$fila['descripcion']."</option>";
+        }
+        if($fila['nivel'] == "3"){
+            $nivel3 .= "<option value='".$fila['id']."' >".$fila['descripcion']."</option>";
+        }
+        }
+    }
+
+    $myDat->nivel1 = $nivel1;
+    $myDat->nivel2 = $nivel2;
+    $myDat->nivel3 = $nivel3;
+
+    $myJSONDat = json_encode($myDat);
+    echo $myJSONDat;
 } else if ($_POST['ope'] == "BusqEdperfil") {
 
     $myDat = new stdClass();
@@ -7697,6 +7727,25 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     $myDat->img = $_POST['img'];
     $myJSONDat = json_encode($myDat);
     echo $myJSONDat;
+} else if ($_POST['ope'] == "guardarNiveles") {
+    $myDat = new stdClass();
+    $consulta = "INSERT INTO niveles_plan_desarrollo VALUES(null,'" . $_POST['nombre'] . "','".$_POST['nivelSel']."')";
+    mysqli_query($link, $consulta);
+   
+    //CONSULTAR NIVELES
+    $niveles = "<option value=' '>Seleccione...</option>";
+    $consulta = "select * from niveles_plan_desarrollo where nivel= '".$_POST['nivelSel']."'";
+    $resultado = mysqli_query($link, $consulta);
+    if (mysqli_num_rows($resultado) > 0) {
+        while ($fila = mysqli_fetch_array($resultado)) {
+            $niveles .= "<option value='" . $fila["id"] . "'>" . $fila["descripcion"] . "</option>";
+        }
+    }
+    $myDat->niveles = $niveles;
+
+
+    $myJSONDat = json_encode($myDat);
+    echo $myJSONDat;
 } else if ($_POST['ope'] == "InserImgProy") {
     $myDat = new stdClass();
     $consulta = "INSERT INTO aux_inf_gen_proy VALUES(null,'" . $_POST['img'] . "')";
@@ -7706,6 +7755,11 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     echo $myJSONDat;
 } else if ($_POST['ope'] == "UdParEval") {
     $consulta = "UPDATE para_calf_contratista SET PorCO='" . $_POST['PCCO'] . "',PorCE='" . $_POST['PCEC'] . "',PorCC='" . $_POST['PCC'] . "'";
+    mysqli_query($link, $consulta);
+
+    echo "Bien";
+} else if ($_POST['ope'] == "updateNivelesPlanDesarrollo") {
+    $consulta = "UPDATE nombre_niveles_plan_desarrollo SET nivel1='" . $_POST['CbN1'] . "',nivel2='" . $_POST['CbN2'] . "',nivel3='" . $_POST['CbN3'] . "'";
     mysqli_query($link, $consulta);
 
     echo "Bien";
