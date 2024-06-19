@@ -15,6 +15,8 @@ if ($_REQUEST["OPCION"] == "CONSULTAR") {
                     ps.id AS IDSP,
                     f.id AS IDFUENTE,
                     f.nombre AS FUENTE,
+                    sf.id AS IDSUBFUENTE,
+                    sf.descripcion AS SUBFUENTE,
                     ps.valor AS VALOR,
                     ps.fecha AS FECHA,
                     ps.estado AS ESTADO
@@ -24,8 +26,10 @@ if ($_REQUEST["OPCION"] == "CONSULTAR") {
                     presupuesto_secretarias AS ps ON s.idsecretarias = ps.id_secretaria
                 INNER JOIN
                     fuentes AS f ON f.id = ps.id_fuente
+                INNER JOIN
+                subfinanciacion AS sf ON sf.id = ps.id_subfuente
                 WHERE s.idsecretarias = '" . $_REQUEST['id_secretaria'] . "' AND ps.estado = 'ACTIVO'";
-    // echo $consulta;die;
+    //  echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     $presupuestar = [];
     $TIENE = 0;
@@ -37,6 +41,8 @@ if ($_REQUEST["OPCION"] == "CONSULTAR") {
             $presupuestar['IDSP'][$i] = $fila["IDSP"];
             $presupuestar['IDFUENTE'][$i] = $fila["IDFUENTE"];
             $presupuestar['FUENTE'][$i] = $fila["FUENTE"];
+            $presupuestar['IDSUBFUENTE'][$i] = $fila["IDSUBFUENTE"];
+            $presupuestar['SUBFUENTE'][$i] = $fila["SUBFUENTE"];
             $presupuestar['VALOR'][$i] = $fila["VALOR"];
             $presupuestar['FECHA'][$i] = $fila["FECHA"];
             $presupuestar['ESTADO'][$i] = $fila["ESTADO"];
@@ -52,6 +58,7 @@ if ($_REQUEST["OPCION"] == "CONSULTAR") {
 
     $consulta = "SELECT
                     f.nombre AS FUENTE,
+                    sf.descripcion AS SUBFUENTE,
                     SUM(ps.valor) AS VALOR
                 FROM
                     secretarias AS s
@@ -59,6 +66,8 @@ if ($_REQUEST["OPCION"] == "CONSULTAR") {
                     presupuesto_secretarias AS ps ON s.idsecretarias = ps.id_secretaria
                 INNER JOIN
                     fuentes AS f ON f.id = ps.id_fuente
+                    INNER JOIN
+                subfinanciacion AS sf ON sf.id = ps.id_subfuente
                 WHERE s.idsecretarias = '" . $_REQUEST['id_secretaria'] . "' AND ps.estado = 'ACTIVO'
                 GROUP BY f.id";
 
@@ -70,6 +79,7 @@ if ($_REQUEST["OPCION"] == "CONSULTAR") {
         $i = 1;
         while ($fila = mysqli_fetch_array($resultado)) {
             $grantotal['FUENTE'][$i] = $fila["FUENTE"];
+            $grantotal['SUBFUENTE'][$i] = $fila["SUBFUENTE"];
             $grantotal['VALOR'][$i] = $fila["VALOR"];
             $TIENE2 = 1;
             $contador2++;
@@ -92,12 +102,12 @@ if ($_REQUEST["OPCION"] == "GUARDAR") {
         if ($_REQUEST["txtid"] == "0") {
             $sql = "INSERT INTO presupuesto_secretarias VALUES(
                 null,'" . $_REQUEST["txtid_fuente"][$key] . "','" . $_REQUEST["txtid_secretaria"][$key] . "',
-                '" . $_REQUEST["txtvalor"][$key] . "','" . $_REQUEST["txtfecha"][$key] . "','ACTIVO'
+                '" . $_REQUEST["txtvalor"][$key] . "','" . $_REQUEST["txtfecha"][$key] . "','ACTIVO','" . $_REQUEST["txtid_subfuente"][$key] . "'
             )";
         } else {
             $sql = "REPLACE INTO presupuesto_secretarias VALUES(
                 '" . $_REQUEST["txtid"][$key] . "','" . $_REQUEST["txtid_fuente"][$key] . "','" . $_REQUEST["txtid_secretaria"][$key] . "',
-                '" . $_REQUEST["txtvalor"][$key] . "','" . $_REQUEST["txtfecha"][$key] . "','ACTIVO'
+                '" . $_REQUEST["txtvalor"][$key] . "','" . $_REQUEST["txtfecha"][$key] . "','ACTIVO','" . $_REQUEST["txtid_subfuente"][$key] . "'
             )";
         }
         $qc = mysqli_query($link, $sql);

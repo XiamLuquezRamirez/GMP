@@ -723,12 +723,12 @@ $link = conectar();
                                         <li id="tab_pp8">
                                             <a href="#tab_8" data-toggle="tab"> Metas </a>
                                         </li>
-                                        <li id="tab_pp9">
-                                            <a href="#tab_9" data-toggle="tab"> Financiación </a>
-                                        </li>
                                         <li id="tab_pp10">
                                             <a href="#tab_10" data-toggle="tab"> Presupuesto </a>
                                         </li>
+                                        <li id="tab_pp9">
+                                            <a href="#tab_9" data-toggle="tab"> Financiación </a>
+                                        </li> 
                                         <li id="tab_pp11">
                                             <a href="#tab_11" data-toggle="tab"> Ingresos </a>
                                         </li>
@@ -823,11 +823,11 @@ $link = conectar();
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div class='col-md-6'>
+                                                            <div style="display: none;" class='col-md-6'>
                                                                 <div class='form-group' id="From_Secreta">
                                                                     <label class='control-label'>Secretaria:<span class="required">* </span></label>
                                                                     <div class="input-group ">
-                                                                        <select class="form-control select2" data-placeholder="Seleccione..." id="CbSecre" name="options2">
+                                                                        <select class="form-control select2" data-placeholder="Seleccione..." id="CbSecre2" name="options2">
 
                                                                         </select>
                                                                         <span class="input-group-btn">
@@ -2022,6 +2022,20 @@ $link = conectar();
                                                     <div class='form-body'>
                                                         <div class='row'>
 
+                                                            <div class='col-md-3'>
+                                                                <div class='form-group'>
+                                                                    <label class='control-label'>Secretaria:</label>
+                                                                    <div class="input-group">
+                                                                        <span class="input-group-btn">
+                                                                        <select class="form-control select2" onchange="$.buscarFuente();" data-placeholder="Seleccione..." id="CbSecre" name="options2">
+
+                                                                        </select>
+                                                                        </span>
+
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
                                                             <div class='col-md-4'>
                                                                 <div class='form-group'>
                                                                     <label class='control-label'>Origen de la Financiación:</label>
@@ -2040,7 +2054,7 @@ $link = conectar();
                                                             <div class='col-md-5'>
                                                                 <div class='form-group' id="From_Subfuente">
                                                                     <label class='control-label'>Subfuente de financiación:</label><span class="required">* </span>
-                                                                    <select class='form-control select2' id="subfuente" name="subfuente">
+                                                                    <select class='form-control select2' data-placeholder="Seleccione..." id="subfuente" name="subfuente">
 
                                                                     </select>
                                                                 </div>
@@ -2049,8 +2063,19 @@ $link = conectar();
                                                                 <div class='form-group'>
                                                                     <label class='control-label'>Valor:</label>
                                                                     <input type='hidden' id='txt_FinanciaTotal' value="0" class='form-control' />
-                                                                    <input type='text' id='txt_cosFinVi' value="$ 0,00" class='form-control' onclick="this.select();" value="$ 0,00" onkeyup="restrictInput(event);" onchange="$.cambioFormato(this.id,'txt_cosFin');" />
+                                                                    <input type='text' id='txt_cosFinVi' value="$ 0,00" class='form-control'  onclick="this.select();" value="$ 0,00" onkeyup="restrictInput(event);" onchange="$.cambioFormato(this.id,'txt_cosFin');" />
                                                                     <input type='hidden' id='txt_cosFin' value="" class='form-control' />
+
+                                                                </div>
+                                                            </div>
+                                                            <div class='col-md-5'>
+                                                               
+                                                            </div>
+                                                            <div class='col-md-4'>
+                                                                <div class='form-group'>
+                                                                    <label class='control-label'>Presupuesto asignado al proyecto:</label>
+                                                                    <input type='text' disabled id='txt_PresProyV' value="$ 0,00" class='form-control'onclick="this.select();" value="$ 0,00" />
+                                                                    <input type='hidden' id='txt_PresProy' value="" class='form-control' />
 
                                                                 </div>
                                                             </div>
@@ -2075,6 +2100,9 @@ $link = conectar();
                                                                                    #
                                                                                 </td>
                                                                                 <td>
+                                                                                   Secretaria
+                                                                                </td>
+                                                                                <td>
                                                                                    Origen de la fuente Financiación
                                                                                 </td>
                                                                                 <td>
@@ -2095,8 +2123,9 @@ $link = conectar();
                                                                         </tbody>
                                                                         <tfoot>
                                                                             <tr>
-                                                                                <th colspan='3' style='text-align: right;'>Total Financiación:</th>
+                                                                                <th colspan='4' style='text-align: right;'>Total Financiación:</th>
                                                                                 <th colspan='1'><label id='gtotalFinanc' style='font-weight: bold;'>0,00</label></th>
+                                                                                
                                                                             </tr>
                                                                         </tfoot>
                                                                     </table>

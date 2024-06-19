@@ -45,7 +45,7 @@ $cad = "<table class=\"table table-bordered table-striped table-hover table-cond
         . "<i class=\"fa fa-angle-right\"></i> Descripción"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Eje"
+        . "<i class=\"fa fa-angle-right\"></i> ". $_SESSION['nivel1']
         . "</th>"
         . "<th>"
         . "<i class=\"fa fa-angle-right\"></i> Acci&oacute;n"

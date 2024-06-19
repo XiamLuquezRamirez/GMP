@@ -26,7 +26,7 @@ $link = conectar();
     <!-- BEGIN HEAD -->
     <head>
         <meta charset="utf-8"/>
-        <title> Gestión de Ejes | GMP - Gestor Monitoreo Público</title>
+        <title> Gestión de <?php echo $_SESSION['nivel1']; ?> | GMP - Gestor Monitoreo Público</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <meta content="" name="description" />
@@ -110,7 +110,7 @@ $link = conectar();
                             </li>
                             <li>
                                 <i style="color: yellow;"  class="fa fa-star"></i>
-                                <a href="../Ejes_Estrategicos/">Gestión de Ejes </a>
+                                <a href="../Ejes_Estrategicos/">Gestión de <?php echo $_SESSION['nivel1']; ?> </a>
 
                             </li>
                         </ul>
@@ -151,7 +151,7 @@ $link = conectar();
                     <div id="responsive" class="modal fade" tabindex="-1" data-width="760">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                            <h4 class="modal-title" id='titformi'>Datos del Eje</h4>
+                            <h4 class="modal-title" id='titformi'>Datos de <?php echo $_SESSION['nivel1']; ?></h4>
 
 
                         </div>
@@ -243,7 +243,7 @@ $link = conectar();
                     <div class="portlet box blue-soft">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-angle-right"></i>Gestión de Ejes.
+                                <i class="fa fa-angle-right"></i>Gestión de <?php echo $_SESSION['nivel1']; ?>.
                             </div>
                             <div class="tools">
                                 <a href="javascript:;" class="collapse"></a>
@@ -282,7 +282,7 @@ $link = conectar();
                                                                             </li>
                                                                             <li>
                                                                                 <a onclick="$.ExcelMet()">
-                                                                                    Ejes Estrategicos </a>
+                                                                                <?php  echo  $_SESSION['nivel1']; ?></a>
                                                                             </li>
 
 

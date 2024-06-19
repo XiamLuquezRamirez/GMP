@@ -364,7 +364,6 @@ SELECT
     $Consulta .= "AND IFNULL(pre.id_fuente, '') = '" . $_POST["CbFin"] . "'";
   }
   $Consulta .= " GROUP BY pre.id_secretaria";
-  //    echo $Consulta;
   $rawdata = array(); //creamos un array
 
   $resultado = mysqli_query($link, $Consulta);

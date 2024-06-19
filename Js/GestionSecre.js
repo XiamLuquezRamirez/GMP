@@ -32,6 +32,25 @@ $(document).ready(function () {
                 }
             });
         },
+        cargarSubfuente: function () {
+            var datos = {
+              ope: "buscarSubfuente",
+              cod: $("#fuente").val(),
+            };
+      
+            $.ajax({
+              type: "POST",
+              url: "../All.php",
+              data: datos,
+              dataType: "json",
+              success: function (data) {
+                $("#subfuente").html(data["subfi"]);
+              },
+              error: function (error_messages) {
+                alert("HA OCURRIDO UN ERROR");
+              },
+            });
+          },
         busqDepen: function (val) {
 
 
@@ -103,6 +122,25 @@ $(document).ready(function () {
 
 
         },
+        buscarSubfuente: function () {
+            var datos = {
+              ope: "buscarSubfuente",
+              cod: $("#fuente").val(),
+            };
+      
+            $.ajax({
+              type: "POST",
+              url: "../All.php",
+              data: datos,
+              dataType: "json",
+              success: function (data) {
+                $("#subfuente").html(data["subfi"]);
+              },
+              error: function (error_messages) {
+                alert("HA OCURRIDO UN ERROR");
+              },
+            });
+          },
         VerSecre: function (cod) {
 
             var datos = {

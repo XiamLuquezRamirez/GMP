@@ -1161,12 +1161,31 @@ $(document).ready(function () {
         dataType: "JSON",
         success: function (data) {
           $("#CbTiplog").html(data["Tipolog"]);
-          $("#CbOriFinancia").html(data["fFin"]);
+          //$("#CbOriFinancia").html(data["fFin"]);
           $("#CbSecre").html(data["Secre"]);
           $("#CbRespoAct").html(data["Respons"]);
           $("#CbDepa").html(data["dpto"]);
           $("#CbBarrio").html(data["barrio"]);
           $("#CbUsuarios").html(data["usuarios"]);
+        },
+        error: function (error_messages) {
+          alert("HA OCURRIDO UN ERROR");
+        },
+      });
+    },
+    buscarFuente: function () {
+      var datos = {
+        ope: "CargaFuentFinanciacion",
+        idSec: $("#CbSecre").val(),
+      };
+
+      $.ajax({
+        type: "POST",
+        url: "../All.php",
+        data: datos,
+        dataType: "JSON",
+        success: function (data) {
+          $("#CbOriFinancia").html(data["fFin"]);
         },
         error: function (error_messages) {
           alert("HA OCURRIDO UN ERROR");
@@ -2524,13 +2543,154 @@ $(document).ready(function () {
       contIndicad = contIndicad - 1;
       $("#contIndicad").val(contIndicad);
     },
+    verifDisponibilidad: function (secre, fin, subfin) {},
     AddFinancia: function () {
       var CbOriFinancia = $("#CbOriFinancia").val();
       var textTiplog = $("#CbOriFinancia option:selected").text();
       var CbOriSubfinancia = $("#subfuente").val();
       var textSubfinancia = $("#subfuente option:selected").text();
+      var CbSecre = $("#CbSecre").val();
+      var textSecre = $("#CbSecre option:selected").text();
+
       var txt_cosFin = $("#txt_cosFin").val();
       var txt_cosFinVi = $("#txt_cosFinVi").val();
+
+      let varFina = CbSecre + "//" + CbOriFinancia + "//" + CbOriSubfinancia;
+      let control = false;
+      let idexistente;
+      let verBolsa;
+
+      const elements = document.querySelectorAll('[name="terce[]"]');
+      let valorTotalActual = 0;
+      elements.forEach((element) => {
+        // Haz algo con cada elemento
+        let parfin = element.value.split("//");
+        valorTotalActual += parfin[3];
+        let valold = parfin[0] + "//" + parfin[1] + "//" + parfin[2];
+        if (valold == varFina) {
+          control = true;
+          idexistente = element.id;
+        }
+      });
+
+      if (control) {
+        Swal.fire({
+          title:
+            "Esta fuente de financiación ya fue agregada, ¿Quiere actualizar el valor de la fuente de financiación existente?",
+          text: "Parametros existentes",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "¡Sí, actualizar!",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            let Financ = document.getElementById(idexistente);
+            let parfina = Financ.value.split("//");
+
+            valorTotalActual = valorTotalActual + parseFloat(txt_cosFin);
+
+            if (valorTotalActual > parseFloat($("#txt_PresProy").val())) {
+              $.Alert(
+                "#msg",
+                "Las fuentes de financiación agregadas superan el valor del presupuesto del proyecto. Verifique...",
+                "warning"
+              );
+              return;
+            }
+
+            txt_cosFin = parseFloat(parfina[3]) + parseFloat(txt_cosFin);
+
+            //  verBolsa  = $.verifDisponibilidad(CbSecre,CbOriFinancia,CbOriSubfinancia,txt_cosFin);
+            if (verBolsa == "sinPres") {
+              $.Alert(
+                "#msg",
+                "Esta bolsa de financiacipón no cuenta con este presupuesto. Verifique...",
+                "warning"
+              );
+              return;
+            }
+
+            //// ACTUALIZAR VALORES EN TABLA
+
+            document.getElementById(idexistente).value =
+              CbSecre +
+              "//" +
+              CbOriFinancia +
+              "//" +
+              CbOriSubfinancia +
+              "//" +
+              txt_cosFin;
+            var trId = Financ.getAttribute("data-tr");
+            Financ.setAttribute("data-valor", txt_cosFin);
+            var fila = document.getElementById(trId);
+
+            // Accedemos a la celda que contiene el valor (la cuarta celda, índice 3)
+            var celdaValor = fila.getElementsByTagName("td")[4];
+
+            // Cambiamos el contenido de la celda
+            celdaValor.innerHTML = formatCurrency(txt_cosFin, "es-CO", "COP");
+            let vtotal = 0;
+            elements.forEach((element) => {
+              vtotal += parseFloat(element.getAttribute("data-valor"));
+            });
+
+            document.getElementById("gtotalFinanc").innerHTML = formatCurrency(
+              vtotal,
+              "es-CO",
+              "COP"
+            );
+
+            $.Alert(
+              "#msg",
+              "La fuente de fianciación fue actualizada exitosamente. Verifique...",
+              "success",
+              "success"
+            );
+
+            $("#CbSecre").select2("val", " ");
+            $("#CbOriFinancia").html("");
+            $("#subfuente").html("");
+            $("#txt_cosFinVi").val("$ 0,00");
+            $("#txt_cosFin").val("0");
+          }
+        });
+      } else {
+
+        const elements = document.querySelectorAll('[name="terce[]"]');
+        let valorTotalActual = 0;
+        elements.forEach((element) => {
+          // Haz algo con cada elemento
+          let parfin = element.value.split("//");
+          valorTotalActual += parfin[3];          
+        });
+
+        valorTotalActual = valorTotalActual + parseFloat(txt_cosFin);
+
+        if (valorTotalActual > parseFloat($("#txt_PresProy").val())) {
+          $.Alert(
+            "#msg",
+            "Las fuentes de financiación agregadas superan el valor del presupuesto del proyecto. Verifique...",
+            "warning"
+          );
+          return;
+        }
+
+        //   verBolsa = $.verifDisponibilidad(CbSecre,CbOriFinancia,CbOriSubfinancia,txt_cosFin);
+      }
+
+      if (control) {
+        return;
+      }
+
+      if (verBolsa == "sinPres") {
+        $.Alert(
+          "#msg",
+          "esta bolsa de financiacipón no cuenta con este presupuesto. Verifique...",
+          "warning"
+        );
+        return;
+      }
 
       if (CbOriFinancia == " ") {
         $.Alert(
@@ -2564,13 +2724,26 @@ $(document).ready(function () {
       var fila = '<tr class="selected" id="filaFinancia' + contFinancia + '" >';
 
       fila += "<td>" + contFinancia + "</td>";
+      fila += "<td>" + textSecre + "</td>";
       fila += "<td>" + textTiplog + "</td>";
       fila += "<td>" + textSubfinancia + "</td>";
       fila += "<td>" + txt_cosFinVi + "</td>";
       fila +=
         "<td><input type='hidden' id='idFinancia" +
         contFinancia +
-        "' name='terce' value='" + CbOriFinancia + "//"  + CbOriSubfinancia + "//" + txt_cosFin + "' /><a onclick=\"$.QuitarFinancia('filaFinancia" +
+        "' name='terce[]' data-valor='" +
+        txt_cosFin +
+        "' data-tr='filaFinancia" +
+        contFinancia +
+        "' value='" +
+        CbSecre +
+        "//" +
+        CbOriFinancia +
+        "//" +
+        CbOriSubfinancia +
+        "//" +
+        txt_cosFin +
+        "' /><a onclick=\"$.QuitarFinancia('filaFinancia" +
         contFinancia +
         "//" +
         txt_cosFin +
@@ -2583,7 +2756,9 @@ $(document).ready(function () {
       $("#txt_FinanciaTotal").val(financi);
       $("#gtotalFinanc").html("$ " + number_format2(financi, 2, ",", "."));
 
-      $("#CbOriFinancia").select2("val", " ");
+      $("#CbSecre").select2("val", " ");
+      $("#CbOriFinancia").html("");
+      $("#subfuente").html("");
       $("#txt_cosFinVi").val("$ 0,00");
       $("#txt_cosFin").val("0");
     },
@@ -2656,7 +2831,8 @@ $(document).ready(function () {
         '<i class="fa fa-trash-o"></i> Quitar</a></td></tr>';
       $("#tb_Presup").append(fila);
       $("#gtotalPresTota").html(formatCurrency(PreTotal, "es-CO", "COP"));
-      $;
+      $("#txt_PresProyV").val(formatCurrency(PreTotal, "es-CO", "COP"));
+      $("#txt_PresProy").val(PreTotal);
 
       $.reordenarPresup();
       $("#contPresup").val(contPresup);
@@ -2850,11 +3026,9 @@ $(document).ready(function () {
         });
     },
     Dta_PobObjet: function () {
-     
       $("#tb_Pobla")
         .find(":input")
         .each(function () {
-         
           Dat_PobObjet.push($(this).val());
         });
     },
@@ -3520,6 +3694,7 @@ $(document).ready(function () {
     buscaSubfinanciacion: function () {
       var datos = {
         ope: "buscarSubfuente",
+        sec: $("#CbSecre").val(),
         cod: $("#CbOriFinancia").val(),
       };
 
@@ -3547,7 +3722,7 @@ $(document).ready(function () {
       for (i = 0; i < archivo.length; i++) {
         archivos.append("archivosComp" + i, archivo[i]); //Añadimos cada archivo a el arreglo con un indice direfente
       }
-      
+
       var ruta = "../Proyecto/SubirDocuComp.php";
 
       $.ajax({
@@ -4270,29 +4445,26 @@ $(document).ready(function () {
       $.Alert("#msg", "Por Favor Llene Los Campos Obligatorios...", "warning");
       return;
     }
-    
 
-     Dat_Img = [];
-     Dat_Usu = [];
-     Dat_Metas = [];
-     Dat_MetasP = [];
+    Dat_Img = [];
+    Dat_Usu = [];
+    Dat_Metas = [];
+    Dat_MetasP = [];
     ///
-     Dat_Causas = [];
-     Dat_Efectos = [];
-     Dat_ObjEspec = [];
-     Dat_Productos = [];
-     Dat_PobObjet = [];
-     Dat_CostAsoc = [];
-     Dat_Estudios = [];
-     Dat_Localiza = [];
-     Dat_Actividades = [];
-     Dat_Indicadores = [];
-     Dat_Financiacion = [];
-     Dat_Presupuesto = [];
-     Dat_Anexos = [];
-     Dat_Ingresos = [];
-
-    
+    Dat_Causas = [];
+    Dat_Efectos = [];
+    Dat_ObjEspec = [];
+    Dat_Productos = [];
+    Dat_PobObjet = [];
+    Dat_CostAsoc = [];
+    Dat_Estudios = [];
+    Dat_Localiza = [];
+    Dat_Actividades = [];
+    Dat_Indicadores = [];
+    Dat_Financiacion = [];
+    Dat_Presupuesto = [];
+    Dat_Anexos = [];
+    Dat_Ingresos = [];
 
     /////2 identificacion
     $.Dta_Causas();

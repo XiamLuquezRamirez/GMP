@@ -118,6 +118,8 @@ if ($_POST['opc'] == "vercompa") {
                      </ul>
                      </li>";
 
+
+
             $Menu_Left = "<div class='page-sidebar-wrapper'>
                 <div class='page-sidebar navbar-collapse collapse'>
                     <!-- BEGIN MENU LATERAL -->
@@ -354,6 +356,23 @@ WHERE comp.companias_login = '" . $_POST['COMP'] . "'
             if (mysqli_num_rows($resultado) > 0) {
                 while ($fila = mysqli_fetch_array($resultado)) {
                     $idperfil = $fila['idperfil'];
+                }
+            }
+
+            
+
+            // conultar parametros de plan de desarrollo
+            
+            $consulta = "select np1.descripcion lv1,np2.descripcion lv2,np3.descripcion lv3  from nombre_niveles_plan_desarrollo nn 
+            left join niveles_plan_desarrollo np1 on nn.nivel1=np1.id
+            left join niveles_plan_desarrollo np2 on nn.nivel2=np2.id
+            LEFT JOIN niveles_plan_desarrollo np3 ON nn.nivel3=np3.id";
+            $resultado = mysqli_query($link, $consulta);
+            if(mysqli_num_rows($resultado) > 0){
+                while ($fila = mysqli_fetch_array($resultado)) {                   
+                    $_SESSION['nivel1'] = $fila['lv1'];
+                    $_SESSION['nivel2'] = $fila['lv2'];
+                    $_SESSION['nivel3'] = $fila['lv3'];
                 }
             }
 
@@ -773,7 +792,7 @@ Mostrar Contratos</a>
                     $Menu_Left .= " <li class='nav-item' id='menu_plan_ejes'>
                                     <a href='Ejes_Estrategicos/'>
                                         <i class='fa fa-file-text-o'></i>
-                                        Ejes
+                                        ".$_SESSION['nivel1']."
                                     </a>
                                 </li>";
                 }
@@ -781,7 +800,7 @@ Mostrar Contratos</a>
                     $Menu_Left .= " <li class='nav-item'  id='menu_plan_Comp'>
                                     <a href='Programas/'>
                                         <i class='fa fa-file-text-o'></i>
-                                      Programas
+                                        ".$_SESSION['nivel2']."
                                     </a>
                                 </li>";
                 }
@@ -789,12 +808,12 @@ Mostrar Contratos</a>
                 if ($_SESSION['GesPlaVPr'] == "s") {
                     $Menu_Left .= " <li class='nav-item' id='menu_subPrograma'>
 							<a href='javascript:;' class='nav-link nav-toggle'>
-							<i class='fa fa-file-text-o'></i> SubProgramas<span class='arrow'></span>
+							<i class='fa fa-file-text-o'></i>  ".$_SESSION['nivel3']."<span class='arrow'></span>
 							</a>";
                     if ($_SESSION['GesPlaVMe'] == "s") {
                         $Menu_Left .= "<ul class='sub-menu'>
                                 <li id='menu_GesSubPrograma'>
-                                        <a href='SubProgramas/'><i class='fa fa-file-text-o'></i> Gestión SubProgramas</a>
+                                        <a href='SubProgramas/'><i class='fa fa-file-text-o'></i> Gestiónar ".$_SESSION['nivel3']."</a>
                                 </li>
                                 <li id='menu_Metas'>
                                         <a href='Metas/'><i class='fa fa-file-text-o'></i> Metas Trazadoras</a>
@@ -1137,7 +1156,7 @@ Mostrar Contratos</a>
                     $Menu_SubLeft .= " <li class='nav-item' id='menu_plan_ejes'>
                                     <a href='../Ejes_Estrategicos/'>
                                         <i class='fa fa-file-text-o'></i>
-                                        Ejes
+                                        ".$_SESSION['nivel1']."
                                     </a>
                                 </li>";
                 }
@@ -1145,7 +1164,7 @@ Mostrar Contratos</a>
                     $Menu_SubLeft .= " <li class='nav-item'  id='menu_plan_Comp'>
                                     <a href='../Programas/'>
                                         <i class='fa fa-file-text-o'></i>
-                                      Programas
+                                        ".$_SESSION['nivel2']."
                                     </a>
                                 </li>";
                 }
@@ -1153,12 +1172,12 @@ Mostrar Contratos</a>
                 if ($_SESSION['GesPlaVPr'] == "s") {
                     $Menu_SubLeft .= " <li class='nav-item' id='menu_subPrograma'>
 							<a href='javascript:;' class='nav-link nav-toggle'>
-							<i class='fa fa-file-text-o'></i> SubProgramas<span class='arrow'></span>
+							<i class='fa fa-file-text-o'></i> ".$_SESSION['nivel3']."<span class='arrow'></span>
 							</a>";
                     if ($_SESSION['GesPlaVMe'] == "s") {
                         $Menu_SubLeft .= "<ul class='sub-menu'>
                                 <li id='menu_GesSubPrograma'>
-                                        <a href='../SubProgramas/'><i class='fa fa-file-text-o'></i> Gestión SubProgramas</a>
+                                        <a href='../SubProgramas/'><i class='fa fa-file-text-o'></i> Gestiónar ".$_SESSION['nivel3']."</a>
                                 </li>
                                 <li id='menu_Metas'>
                                         <a href='../Metas/'><i class='fa fa-file-text-o'></i> Metas Trazadoras</a>

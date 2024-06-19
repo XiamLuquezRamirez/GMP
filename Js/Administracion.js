@@ -126,9 +126,9 @@ $(document).ready(function () {
                 data: datos,
                 dataType: 'JSON',
                 success: function (data) {
-                    $("#CbN1").html(data['Secre']);
-                    $("#CbN2").html(data['Ejes']);
-                    $("#CbN3").html(data['Fina']);
+                    $("#CbSecre").html(data.Secre);
+                    $("#CbEje").html(data.Ejes);
+                    $("#CbFFinanc").html(data.Fina);
                 },
                 error: function (error_messages) {
                     alert('HA OCURRIDO UN ERROR');

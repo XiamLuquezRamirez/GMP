@@ -41,10 +41,10 @@ $cad = "<table class=\"table table-striped table-bordered table-hover table-adva
                 Num
             </th>
             <th colspan='2' style='vertical-align: middle; text-align:center;'>
-                Ejes
+            ". $_SESSION['nivel1']."
             </th>
             <th colspan='2' style='vertical-align: middle; text-align:center;'>
-                Programas
+            ". $_SESSION['nivel2']."
             </th>
         </tr>
         <tr>

@@ -32,7 +32,9 @@ $(document).ready(function () {
                 $("#detalle_presupuestar").html("");
                 if (data.TIENE === 1) {
                     for (var i = 1; i <= data.tam; i++) {
-                        agregar(data.presupuestar.IDSP[i], data.presupuestar.IDSECRE[i], data.presupuestar.IDFUENTE[i], data.presupuestar.FUENTE[i], data.presupuestar.FECHA[i], data.presupuestar.VALOR[i]);
+                        
+                        agregar(data.presupuestar.IDSP[i], data.presupuestar.IDSECRE[i], data.presupuestar.IDFUENTE[i],data.presupuestar.IDSUBFUENTE[i], data.presupuestar.FUENTE[i],data.presupuestar.SUBFUENTE[i], data.presupuestar.FECHA[i], data.presupuestar.VALOR[i]);
+                   
                     }
                 } else {
                     $("#detalle_presupuestar").html("");
@@ -41,7 +43,7 @@ $(document).ready(function () {
                 if (data.TIENE2 === 1) {
                     $("#detalle_grantotal").html("");
                     for (var i = 1; i <= data.tam2; i++) {
-                        agregar2(data.grantotal.FUENTE[i], data.grantotal.VALOR[i]);
+                        agregar2(data.grantotal.FUENTE[i], data.grantotal.VALOR[i],data.grantotal.SUBFUENTE[i],);
                     }
                 } else {
                     $("#detalle_grantotal").html("");
@@ -79,7 +81,7 @@ $(document).ready(function () {
                 $("#detalle_presupuestar").html("");
                 if (data.TIENE === 1) {
                     for (var i = 1; i <= data.tam; i++) {
-                        agregar(data.presupuestar.IDSP[i], data.presupuestar.IDSECRE[i], data.presupuestar.IDFUENTE[i], data.presupuestar.FUENTE[i], data.presupuestar.FECHA[i], data.presupuestar.VALOR[i]);
+                        agregar(data.presupuestar.IDSP[i], data.presupuestar.IDSECRE[i], data.presupuestar.IDFUENTE[i],data.presupuestar.IDSUBFUENTE[i], data.presupuestar.FUENTE[i],  data.presupuestar.SUBFUENTE[i], data.presupuestar.FECHA[i], data.presupuestar.VALOR[i]);
                     }
                 } else {
                     $("#detalle_presupuestar").html("");
@@ -88,7 +90,7 @@ $(document).ready(function () {
                 if (data.TIENE2 === 1) {
                     $("#detalle_grantotal").html("");
                     for (var i = 1; i <= data.tam2; i++) {
-                        agregar2(data.grantotal.FUENTE[i], data.grantotal.VALOR[i]);
+                        agregar2(data.grantotal.FUENTE[i], data.grantotal.VALOR[i],data.grantotal.SUBFUENTE[i],);
                     }
                 } else {
                     $("#detalle_grantotal").html("");
@@ -137,6 +139,16 @@ $(document).ready(function () {
                 Op_Validar.push("Ok");
             }
 
+            Id = "#subfuente";
+            Value = $(Id).val();
+            if (Value === "" || Value === " ") {
+                Op_Validar.push("Fail");
+                $("#From_Subfuente").addClass("has-error");
+            } else {
+                $("#From_Subfuente").removeClass("has-error");
+                Op_Validar.push("Ok");
+            }
+
             Id = "#fecha";
             Value = $(Id).val();
             if (Value === "" || Value === " ") {
@@ -173,21 +185,27 @@ $(document).ready(function () {
             var id = 0;
             var id_secre = $("#id_secretaria").val();
             var id_fue = $("#fuente").val();
+            var id_subfue = $("#subfuente").val();
             var fuente = $('#fuente option:selected').html();
+            var subfuente = $('#subfuente option:selected').html();
             var fecha = $("#fecha").val();
             var valor = $("#valor").val();
             $("#fecha,#valor").val("");
-            agregar(id, id_secre, id_fue, fuente, fecha, valor);
+            agregar(id, id_secre, id_fue,id_subfue, fuente,subfuente, fecha, valor);
         }
     });
-    function agregar(id, id_secre, id_fue, fuente, fecha, valor) {
+    function agregar(id, id_secre, id_fue,id_subfue, fuente, subfuente, fecha, valor) {
         var campo = "";
         campo += "<tr data-id='" + id + "'>";
         campo += "<td>";
         campo += "<input type='hidden' name='txtid[]' id='txtid' value='" + id + "'><input type='hidden' name='txtidSec' id='txtidSec' value='" + id_secre + "'>";
         campo += "<input type='hidden' name='txtid_secretaria[]' id='txtid_secretaria' value='" + id_secre + "'>";
         campo += "<input type='hidden' name='txtid_fuente[]' id='txtid_fuente' value='" + id_fue + "'>";
+        campo += "<input type='hidden' name='txtid_subfuente[]' id='txtid_subfuente' value='" + id_subfue + "'>";
         campo += "<input type='text' class='form-control' readonly name='txtfuente[]' id='txtfuente' style='background-color:white;' value='" + fuente + "'>";
+        campo += "</td>";
+        campo += "<td>";
+        campo += "<input type='text' class='form-control' readonly name='txtsubfuente[]' id='txtsubfuente' style='background-color:white;' value='" + subfuente + "'>";
         campo += "</td>";
         campo += "<td>";
         campo += "<input type='text' class='form-control' readonly name='txtfecha[]' id='txtfecha' style='background-color:white;' value='" + fecha + "'>";
@@ -202,11 +220,14 @@ $(document).ready(function () {
         $("#detalle_presupuestar").append(campo);
         recorrerTabla($("#detalle_presupuestar"));
     }
-    function agregar2(fuente, valor) {
+    function agregar2(fuente, valor,subfuente) {
         var campo = "";
         campo += "<tr>";
         campo += "<td>";
         campo += "<input type='text' class='form-control' readonly name='txtfuente[]' id='txtfuente' style='background-color:white;font-weight:bold;' value='" + fuente + "'>";
+        campo += "</td>";
+        campo += "<td>";
+        campo += "<input type='text' class='form-control' readonly name='txtsubfuente[]' id='txtsubfuente' style='background-color:white;font-weight:bold;' value='" + subfuente + "'>";
         campo += "</td>";
         campo += "<td>";
         campo += "<input type='text' class='form-control' readonly name='txtvalor[]' id='txtvalor' style='background-color:white;text-align:right;font-weight:bold;' value='" + valor + "'>";
@@ -267,7 +288,9 @@ $(document).ready(function () {
         var filas = tabla.find("tr");
         for (var i = 0; i < filas.length; i++) {
             var celdas = $(filas[i]).find("td");
-            var valor = $($(celdas[2]).children("input")[0]).val();
+        
+            var valor = $($(celdas[3]).children("input")[0]).val();
+          
             valor = accounting.unformat("$ " + valor);
             suma = suma + valor;
         }
@@ -282,7 +305,8 @@ $(document).ready(function () {
         var filas = tabla.find("tr");
         for (var i = 0; i < filas.length; i++) {
             var celdas = $(filas[i]).find("td");
-            var valor = $($(celdas[1]).children("input")[0]).val();
+            var valor = $($(celdas[2]).children("input")[0]).val();
+             
             valor = accounting.unformat("$ " + valor);
             suma = suma + valor;
         }
@@ -296,8 +320,9 @@ $(document).ready(function () {
         var filas = tabla.find("tr");
         for (var i = 0; i < filas.length; i++) {
             var celdas = $(filas[i]).find("td");
-            var valo = accounting.unformat("$ " + $($(celdas[2]).children("input")[0]).val());
-            $($(celdas[2]).children("input")[0]).val(valo);
+            
+            var valo = accounting.unformat("$ " + $($(celdas[3]).children("input")[0]).val());
+            $($(celdas[3]).children("input")[0]).val(valo);
         }
         return true;
     }
@@ -306,9 +331,10 @@ $(document).ready(function () {
         var filas = tabla.find("tr");
         for (var i = 0; i < filas.length; i++) {
             var celdas = $(filas[i]).find("td");
-            var valo = $($(celdas[2]).children("input")[0]).val();
+            
+            var valo = $($(celdas[3]).children("input")[0]).val();
             valo = accounting.formatMoney(valo, "$", 2, ",", ".");
-            $($(celdas[2]).children("input")[0]).val(valo);
+            $($(celdas[3]).children("input")[0]).val(valo);
         }
         return true;
     }
@@ -318,9 +344,10 @@ $(document).ready(function () {
         var filas = tabla.find("tr");
         for (var i = 0; i < filas.length; i++) {
             var celdas = $(filas[i]).find("td");
-            var valo = $($(celdas[1]).children("input")[0]).val();
+           
+            var valo = $($(celdas[2]).children("input")[0]).val();
             valo = accounting.formatMoney(valo, "$", 2, ",", ".");
-            $($(celdas[1]).children("input")[0]).val(valo);
+            $($(celdas[2]).children("input")[0]).val(valo);
         }
         return true;
     }

@@ -45,10 +45,10 @@ $cad = "<table class=\"table table-striped table-bordered table-hover dataTable 
         . "<i class=\"fa fa-angle-right\"></i> Descripción"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Eje"
+        . "<i class=\"fa fa-angle-right\"></i> ". $_SESSION['nivel1']
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Programas"
+        . "<i class=\"fa fa-angle-right\"></i> ". $_SESSION['nivel2']
         . "</th>"
         . "<th>"
         . "<i></i> Acci&oacute;n"

@@ -4038,7 +4038,9 @@ ORDER BY id_contrato";
 
 
     //////////////////////CONSULTAR DIMENSIONES
-    $consulta = "select * from subfinanciacion where financiacion='" . $_POST['cod'] . "'";
+    $consulta = "SELECT fue.id, fue.descripcion FROM presupuesto_secretarias ps
+    LEFT JOIN subfinanciacion fue ON ps.id_subfuente=fue.id
+    WHERE ps.id_secretaria = ".$_POST['sec']." AND ps.id_fuente=".$_POST['cod'];
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
@@ -7760,6 +7762,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     echo "Bien";
 } else if ($_POST['ope'] == "updateNivelesPlanDesarrollo") {
     $consulta = "UPDATE nombre_niveles_plan_desarrollo SET nivel1='" . $_POST['CbN1'] . "',nivel2='" . $_POST['CbN2'] . "',nivel3='" . $_POST['CbN3'] . "'";
+   
     mysqli_query($link, $consulta);
 
     echo "Bien";
@@ -8807,6 +8810,25 @@ FROM
     }
 
     $myDat->Secre = $Secre;
+    $myJSONDat = json_encode($myDat);
+    echo $myJSONDat;
+} else if ($_POST['ope'] == "CargaFuentFinanciacion") {
+
+    $myDat = new stdClass();
+    $fFin = "<option value=' '>Seleccione...</option>";
+    //////////////////////CONSULTAR FUENTE DE FINANCIACION
+    $consulta = "SELECT fue.id, fue.nombre FROM presupuesto_secretarias ps
+    LEFT JOIN fuentes fue ON ps.id_fuente=fue.id
+    WHERE ps.id_secretaria = '".$_POST['idSec']."'";
+   
+    $resultado = mysqli_query($link, $consulta);
+    if (mysqli_num_rows($resultado) > 0) {
+        while ($fila = mysqli_fetch_array($resultado)) {
+            $fFin .= "<option value='" . $fila["id"] . "'>" . $fila["nombre"] . "</option>";
+        }
+    }
+
+    $myDat->fFin = $fFin;
     $myJSONDat = json_encode($myDat);
     echo $myJSONDat;
 } else if ($_POST['ope'] == "CargSecre2") {

@@ -44,7 +44,7 @@ $cad = "<table class=\"table table-bordered table-striped table-hover table-cond
     . "<i ></i> <b>Meta</b>"
     . "</th>"
     . "<th>"
-    . "<i ></i> <b>Sub Programa</b>"
+    . "<i ></i> <b>".$_SESSION['nivel3'] ."</b>"
     . "</th>"
     . "<th>"
     . "<i></i> <b>Responsable</b>"

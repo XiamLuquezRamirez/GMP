@@ -103,7 +103,7 @@ include("../Plantilla/head.php");
                                                 <div class='form-group' id="From_Fuente">
                                                     <label class='control-label'>Fuente de financiación:</label><span class="required">* </span>
                                                     <select class='form-control select2' id="fuente" name="fuente">
-                                                        <option value=''>(Seleccione)</option>
+                                                        <option value=''>Seleccione...</option>
                                                         <?php
                                                         $link = conectar();
                                                         $sql = "SELECT * FROM fuentes WHERE estado='ACTIVO'";

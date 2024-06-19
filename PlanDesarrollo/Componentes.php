@@ -26,7 +26,7 @@ $link = conectar();
     <!-- BEGIN HEAD -->
     <head>
         <meta charset="utf-8"/>
-        <title> Gestión de Programas | GMP - Gestor Monitoreo Público</title>
+        <title> Gestión de <?php echo $_SESSION['nivel2']; ?> | GMP - Gestor Monitoreo Público</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <meta content="" name="description" />
@@ -109,7 +109,7 @@ $link = conectar();
                             </li>
                             <li>
                                 <i style="color: yellow;"  class="fa fa-star"></i>
-                                <a href="../Programas/">Gestión de Programas </a>
+                                <a href="../Programas/">Gestión de <?php echo $_SESSION['nivel2']; ?> </a>
 
                             </li>
                         </ul>
@@ -148,7 +148,7 @@ $link = conectar();
                     <div id="responsive" class="modal fade" tabindex="-1" data-width="900">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                            <h4 class="modal-title" id='titformi'>Datos del Programa</h4>
+                            <h4 class="modal-title" id='titformi'>Datos de <?php echo $_SESSION['nivel2']; ?></h4>
 
 
                         </div>
@@ -199,7 +199,7 @@ $link = conectar();
                                         <div class="row" id="nestr" style="display: none">
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <label class="control-label">Eje:</label>
+                                                    <label class="control-label"><?php  echo  $_SESSION['nivel1']; ?></label>
                                                     <input type="hidden" id="txt_id_pp"  class="form-control" disabled />
                                                     <textarea id="txt_nomb_est" cols="2" class="form-control txt" disabled></textarea>
                                                 </div>
@@ -315,7 +315,7 @@ $link = conectar();
                     <div class="portlet box blue-soft">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-angle-right"></i>Gestión de Programas.
+                                <i class="fa fa-angle-right"></i>Gestión de <?php echo $_SESSION['nivel2']; ?>.
                             </div>
                             <div class="tools">
                                 <a href="javascript:;" class="collapse"></a>
@@ -353,8 +353,8 @@ $link = conectar();
                                                                                     Plan de Desarrollo </a>
                                                                             </li>
                                                                             <li>
-                                                                                <a onclick="$.ExcelComp();">
-                                                                                    Programas </a>
+                                                                                <a onclick="$.ExcelComp() ;">
+                                                                                <?php echo $_SESSION['nivel2']; ?> </a>
                                                                             </li>
 
 

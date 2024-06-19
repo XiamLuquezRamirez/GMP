@@ -615,7 +615,7 @@ $link = conectar();
                                                             <div class='row'>
                                                                 <div class='col-md-12'>
                                                                     <div class='form-group' id="From_Eje">
-                                                                        <label class='control-label'>Eje:<span class="required">* </span></label>
+                                                                        <label class='control-label'><?php  echo  $_SESSION['nivel1']; ?>:<span class="required">* </span></label>
                                                                         <select class="form-control select2" data-placeholder="Seleccione..." onchange="$.CargEstrategia(this.value);"  id="CbEjes" name="options2">
 
                                                                         </select>
@@ -624,7 +624,7 @@ $link = conectar();
 
                                                                 <div class='col-md-12'>
                                                                     <div class='form-group' id="From_Est">
-                                                                        <label class='control-label'>Programa:<span class="required">* </span></label>
+                                                                        <label class='control-label'><?php  echo  $_SESSION['nivel2']; ?>:<span class="required">* </span></label>
                                                                         <select class="form-control select2" disabled data-placeholder="Seleccione..." onchange="$.CargProgramas(this.value);" id="CbEtrategias" name="options2">
 
                                                                         </select>
@@ -632,7 +632,7 @@ $link = conectar();
                                                                 </div>
                                                                 <div class='col-md-12'>
                                                                     <div class='form-group' id="From_Pro">
-                                                                        <label class='control-label'>SubPrograma:<span class="required">* </span></label>
+                                                                        <label class='control-label'><?php  echo  $_SESSION['nivel3']; ?>:<span class="required">* </span></label>
                                                                         <select class="form-control select2" disabled data-placeholder="Seleccione..."  id="CbProgramas" name="options2">
 
                                                                         </select>

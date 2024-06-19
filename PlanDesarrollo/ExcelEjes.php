@@ -25,7 +25,7 @@ header("Content-Disposition: attachment; filename=EjesPlanDesarrollo$hoy.xls");
     <thead>
         <tr>
             <th class="tg-7fle" colspan="2" rowspan="3"><img src="http://gmp.leeringenieria.com/Img/logo-big.png" width="150" height="50" align="top"></th>
-            <th class="tg-0lax" colspan="2" rowspan="3">LISTADO DE EJES DEL PLAN DE DESAROLLO  - <?php echo $hoy;?></th>
+            <th class="tg-0lax" colspan="1" rowspan="3">LISTADO DE <?php  echo  $_SESSION['nivel1']; ?> DEL PLAN DE DESAROLLO  - <?php echo $hoy;?></th>
         </tr>
         <tr>
         </tr>
@@ -37,7 +37,6 @@ header("Content-Disposition: attachment; filename=EjesPlanDesarrollo$hoy.xls");
             <td class="tg-1wig" style="border: #000 1px solid;"><b>CÓDIGO</b></td>
             <td class="tg-1wig" style="border: #000 1px solid;"><b>DESCRIPCIÓN</b></td>
             <td class="tg-1wig" style="border: #000 1px solid;"><b>OBSERVACIÓN</b></td>
-            <td class="tg-1wig" style="border: #000 1px solid;"><b>DIMENSION</b></td>
         </tr>
         <?php
         $total = 0;
@@ -51,7 +50,6 @@ header("Content-Disposition: attachment; filename=EjesPlanDesarrollo$hoy.xls");
                 <td style="vertical-align: middle;border: #000 1px solid;"><?php echo $data["cod"]; ?></td>
                 <td style="vertical-align: middle;border: #000 1px solid;text-align: justify;"><?php echo $data["nomb"]; ?></td>
                 <td style="vertical-align: middle;border: #000 1px solid;text-align: justify;"><?php echo $data["obs"]; ?></td>
-                <td style="vertical-align: middle;border: #000 1px solid;"><?php echo $data["dim"]; ?></td>
             </tr>
             <?php
         }

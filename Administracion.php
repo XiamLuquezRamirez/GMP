@@ -674,7 +674,7 @@ include "Conectar.php";
                         </div>
                         <div class='col-md-6'>
                             <div class='form-group' style="margin-bottom:0px;">
-                                <label class='control-label'>Eje:</label>
+                                <label class='control-label'><?php  echo  $_SESSION['nivel1']; ?>:</label>
                                 <select class="form-control select2" id="CbEje" name="options2">
 
                                 </select>

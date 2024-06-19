@@ -44,7 +44,7 @@ $cad = "<table class=\"table table-bordered table-striped table-hover table-cond
         . "<i class=\"fa fa-angle-right\"></i> Nombre"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Responsable"
+        . "<i class=\"fa fa-angle-right\"></i> Presupuesto"
         . "</th>"
         . "<th>"
         . "<i class=\"fa fa-angle-right\"></i> Acci&oacute;n"
@@ -59,7 +59,7 @@ if ($busq != "") {
     $busq = str_replace("+", " ", $busq);
     $buscar = explode(" ", $busq);
 
-    $consulta = "SELECT * FROM  secretarias sec left join responsables resp on sec.responsanble_secretarias=resp.id_responsable  WHERE ";
+    $consulta = "SELECT sec.*, sum(valor) pres FROM  secretarias sec left join presupuesto_secretarias ps on sec.idsecretarias=ps.id_secretaria  WHERE ";
 
     for ($i = 0; $i < count($buscar, 1); $i++) {
         $consulta .= "CONCAT( "
@@ -75,11 +75,11 @@ if ($busq != "") {
             $consulta .= " AND ";
         }
     }
-    $consulta .= " AND  sec.estado_secretaria='ACTIVO' order by  sec.des_secretarias ASC LIMIT " . $regemp . "," . $regmos;
+    $consulta .= " AND  sec.estado_secretaria='ACTIVO' group by sec.idsecretarias order by  sec.des_secretarias ASC LIMIT " . $regemp . "," . $regmos;
 } else {
 
-    $consulta = "SELECT * FROM secretarias sec left join responsables resp on sec.responsanble_secretarias=resp.id_responsable"
-            . " WHERE sec.estado_secretaria='ACTIVO' order by sec.des_secretarias ASC  LIMIT " . $regemp . "," . $regmos;
+    $consulta = "SELECT sec.*, sum(valor) pres  FROM secretarias sec left join presupuesto_secretarias ps on sec.idsecretarias=ps.id_secretaria"
+            . " WHERE sec.estado_secretaria='ACTIVO' group by sec.idsecretarias order by sec.des_secretarias ASC  LIMIT " . $regemp . "," . $regmos;
 }
 
 //echo $consulta;
@@ -89,6 +89,8 @@ if (mysqli_num_rows($resultado) > 0) {
 
     while ($fila = mysqli_fetch_array($resultado)) {
 
+
+
         $cod = $fila["idsecretarias"];
         $cad .= "<tr>"
                 . "<td class=\"highlight\">"
@@ -97,8 +99,8 @@ if (mysqli_num_rows($resultado) > 0) {
                 . "<td class=\"highlight\">"
                 . $fila["des_secretarias"] . ""
                 . "</td>"
-                . "<td class=\"highlight\">"
-                . $fila["nom_responsable"] . ""
+                . "<td class=\"highlight\">$ "
+                . number_format($fila["pres"], 2, ",", ".")  . ""
                 . "</td>"
                 . "<td class=\"highlight\">"
                 . "<table>"
