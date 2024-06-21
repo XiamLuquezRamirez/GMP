@@ -1,5 +1,6 @@
 $(document).ready(function () {
     var Order = "b.nom_proyect ASC";
+    let verBolsa = {};
     // $("#fecha").inputmask("d/m/y", {autoUnmask: true});
     $("#home").removeClass("start active open");
     $("#menu_p_proy").addClass("start active open");
@@ -129,6 +130,26 @@ $(document).ready(function () {
                 }
             });
         },
+        buscarFuente: function () {
+            var datos = {
+              ope: "CargaFuentFinanciacion",
+              idSec: $("#CbSecre").val(),
+            };
+      
+            $.ajax({
+              type: "POST",
+              url: "../All.php",
+              data: datos,
+              dataType: "JSON",
+              success: function (data) {
+                $("#CbFuenteFinanciacion").html(data["fFin"]);
+              },
+              error: function (error_messages) {
+                alert("HA OCURRIDO UN ERROR");
+              },
+            });
+          },
+         
         AddAvaces: function (cod) {
             $('#acc').val("1");
             $("#txt_id").val(cod);
@@ -160,6 +181,7 @@ $(document).ready(function () {
                     $("#txt_VaAdiV").val('$ ' + number_format2(data['vadic_contrato'], 2, ',', '.'));
                     $("#txt_VaAdi").val(data['vadic_contrato']);
                     $("#txt_VaFin").val('$ ' + number_format2(data['vfin_contrato'], 2, ',', '.'));
+                    $("#txt_VaFinVal").val(data['vfin_contrato']);
                     $("#txt_VaEjeV").val('$ ' + number_format2(data['veje_contrato'], 2, ',', '.'));
                     $("#txt_VaEje").val(data['veje_contrato']);
                     $("#txt_Fpago").val(data['forpag_contrato']);
@@ -219,6 +241,11 @@ $(document).ready(function () {
                     $("#txt_Url").val(data['secop_contrato']);
 
                     $("#CbEstado").selectpicker("val", data['estad_contrato']);
+                    if(data['estad_contrato'] == "Ejecucion"){
+                        $("#btn_new_gasto").show();
+                    }else{
+                        $("#btn_new_gasto").hide();
+                    }
                     $("#CbEstadoProc").selectpicker("val", data['estcont_contra']);
 
                     $("#tb_Galeria").html(data['Tab_Img']);
@@ -958,7 +985,7 @@ $(document).ready(function () {
                     $("#CbSuper").html(data['Superv']);
                     $("#CbInter").html(data['Interv']);
                     $("#CbDepa").html(data['dpto']);
-                    $("#CbFuenteFinanciacion").html(data['fuenteFinanciacion']);
+                    $("#CbSecre").html(data["Secre"]);
                     $("#CbCategoriaGasto").html(data['catGastos']);
 
                 },
@@ -992,7 +1019,6 @@ $(document).ready(function () {
             }
         },
         verEstadoProyecto: function (val) {
-            
 
                 var datos = {
                     ope: "BusEstProy",
@@ -1006,12 +1032,14 @@ $(document).ready(function () {
                     dataType: 'JSON',
                     success: function (data) {
                         $("#text_estadoProyecto").val(data['estado']);
+                        $("#txt_VaPresProecto").val(data['pptoAsig']);
+                        $("#txt_VaPresProectoV").val(formatCurrency(data['pptoAsig'], "es-CO", "COP"));
                     },
                     error: function (error_messages) {
                         alert('HA OCURRIDO UN ERROR');
                     }
                 });
-          
+
         },
         BusMun: function (val) {
 
@@ -2339,6 +2367,31 @@ $(document).ready(function () {
               })
               
         },
+        validaSelProy: function(element){
+            element.select();
+            console.log($("#CbProy").val());
+            if($("#CbProy").val() == " "){
+                    $.Alert("#msg", "Por Favor seleccione el proyecto asociado...", "warning", "warning");
+                    $("#From_Proyect").addClass("has-error");
+                    $("#CbProy").focus();
+                    setTimeout(()=>{
+                        $("#From_Proyect").removeClass("has-error");
+                    },3000);
+                    return;
+                
+            }else{
+                if(parseFloat($("#txt_VaPresProecto").val()) == 0){
+                    $.Alert("#msg", "El proyecto asociado no tiene un presupuesto asignado, Verifique..", "warning", "warning");
+                    $("#From_Proyect").addClass("has-error");
+                    $("#CbProy").focus();
+                    setTimeout(()=>{
+                        $("#From_Proyect").removeClass("has-error");
+                    },3000);
+                    return;
+                }
+                
+            }
+        },
         QuitarGasto: function(id){
             Swal.fire({
                 title: '¿Estás seguro de eliminar este registro?',
@@ -2377,11 +2430,8 @@ $(document).ready(function () {
                       alert("HA OCURRIDO UN ERROR");
                     },
                   });
-        
-                 
                 }
-              })
-              
+              });
         },
         EditarAdicion: function (id) {
             $("#txt_idAdicion").val(id)
@@ -2509,6 +2559,7 @@ $(document).ready(function () {
                 success: function (data) {
                     $("#td-GastoContrato").html(data['CadGastos']);
                     $("#gtotalGasto").html(formatCurrency(data['total'],"es-CO", "COP"));
+                    $("#gtotalGastoVal").val(data['total'],"es-CO", "COP");
                     $("#txt_VaEjeV").val(formatCurrency(data['total'],"es-CO", "COP"));
                     $("#txt_VaEje").val(data['total']);
                 },
@@ -2870,6 +2921,18 @@ $(document).ready(function () {
             return;
           }
 
+          let valGastos = parseFloat($("#gtotalGastoVal").val()) + parseFloat($("#txt_valorGasto").val());
+          if(valGastos > parseFloat($("#txt_VaFinVal").val())){
+            $.Alert(
+                "#msgGastoGen",
+                "EL total de los gastos supera el valor final del contrato ("+formatCurrency(parseFloat($("#txt_VaFinVal").val()), "es-CO", "COP")+")",
+                "warning",
+                "warning"
+              );
+              return;
+          }
+
+
           $.UploadDocGasto();
 
           var datos = "txt_fechaGasto=" + $("#txt_fechaGasto").val()
@@ -2960,7 +3023,7 @@ $(document).ready(function () {
            //limpiar campos
            $("#txt_fechaAdd").val("");
            $("#txt_valorAdicV").val("$ 0,00");
-           $("#txt_valorAdic").val("");
+           $("#txt_valorAdic").val("0");
            $("#archivosAdicion").val("");
            $("#Src_FileAdicion").val("");
 
@@ -2996,15 +3059,33 @@ $(document).ready(function () {
             $("#listGastos").show();
         },
         AddDeltalleAdicionContrato: function () {
-            var CbFuenteFinanciacion = $("#CbFuenteFinanciacion").val(); 
-            var desCbFuenteFinanciacion =$("#CbFuenteFinanciacion option:selected").text();
-            var CbFuentesubfinanciacion = $("#subfuente").val(); 
-            var desCbSubfuenteFinanciacion =$("#subfuente option:selected").text();
-            var CbGastos =  $("#CbGastos").val(); 
-            var txt_DesGastos =  $("#txt_DesGastos").val(); 
-            var txt_valorDetAdic = $("#txt_valorDetAdic").val();
-      
-            PreTotalAdicion += parseFloat(txt_valorDetAdic);
+            let CbSecre = $("#CbSecre").val(); 
+            let desCbSecre =$("#CbSecre option:selected").text();
+
+            let CbFuenteFinanciacion = $("#CbFuenteFinanciacion").val(); 
+            let desCbFuenteFinanciacion =$("#CbFuenteFinanciacion option:selected").text();
+
+            let CbFuentesubfinanciacion = $("#subfuente").val(); 
+            let desCbSubfuenteFinanciacion =$("#subfuente option:selected").text();
+
+            let CbGastos =  $("#CbGastos").val(); 
+            let txt_DesGastos =  $("#txt_DesGastos").val(); 
+            let txt_valorDetAdic = parseFloat($("#txt_valorDetAdic").val());
+            
+            let PreTotalAdicion=0;
+
+          let bolsa = validarBolsa(CbSecre,CbFuenteFinanciacion,CbFuentesubfinanciacion,txt_valorDetAdic);
+
+       
+            if ($("#CbSecre").val() === " ") {
+              $.Alert(
+                "#msgAdicion",
+                "Debe de seleccionar la secretaria",
+                "warning",
+                "warning"
+              );
+              return;
+            }
       
             if ($("#CbFuenteFinanciacion").val() === " ") {
               $.Alert(
@@ -3015,7 +3096,8 @@ $(document).ready(function () {
               );
               return;
             }
-            if ($("#CbFuenteFinanciacion").val() === " ") {
+            
+            if ($("#subfuente").val() === " ") {
               $.Alert(
                 "#msgAdicion",
                 "Debe de seleccionar la subfuente de financiación",
@@ -3034,45 +3116,68 @@ $(document).ready(function () {
               );
               return;
             }
-      
-      
+
+           
+            if (bolsa.estado == "nPres") {
+                $.Alert(
+                  "#msgAdicion",
+                  "El proyecto relacionado al este contrato no cuenta con el presupuesto suficiente. el presupuesto actual es <b>"+formatCurrency(bolsa.valorBolsa, "es-CO", "COP")+"</b>,  Verifique...",
+                  "warning",
+                  "warning",
+                );
+                return;
+              }
+            if (bolsa.estado == "sinPres") {
+                $.Alert(
+                  "#msgAdicion",
+                  "Esta bolsa de financiación no cuenta con este presupuesto. el presupuesto actual es <b>"+formatCurrency(bolsa.valorBolsa, "es-CO", "COP")+"</b>,  Verifique...",
+                  "warning",
+                  "warning",
+                );
+                return;
+              }
+
             contAdicion = $("#contAdicion").val();
             contAdicion++;
             var fila = '<tr class="selected" id="filaPresup' + contAdicion + '" >';
-      
+
             fila += "<td>" + contAdicion + "</td>";
+            fila += "<td>" + desCbSecre+ "</td>";
             fila += "<td>" + desCbFuenteFinanciacion+ "</td>";
             fila += "<td>" + desCbSubfuenteFinanciacion+ "</td>";
-            fila += "<td>" + CbGastos+" - "+txt_DesGastos+ "</td>";
             fila += "<td>" + formatCurrency(txt_valorDetAdic, "es-CO", "COP") + "</td>";
-            fila += "<td ><input type='hidden' id='idDetAdicion" +contAdicion + "' name='terce' value='" + CbFuenteFinanciacion +"//" + CbFuentesubfinanciacion +"//" +  CbGastos +"//" +  txt_DesGastos +"//" +  txt_valorDetAdic +"' /><a data-conse='filaPresup"+contAdicion+"' data-valor='"+  txt_valorDetAdic +"'  onclick='$.QuitardetAdicion(this)' class='btn default btn-xs red'>";
+            fila += "<td ><input type='hidden' id='idDetAdicion" +contAdicion + "' name='fuentFin[]' value='" + CbSecre +"//" + CbFuenteFinanciacion +"//" +  CbFuentesubfinanciacion+"//" +  txt_valorDetAdic +"' /><a data-conse='filaPresup"+contAdicion+"' data-valor='"+  txt_valorDetAdic +"'  onclick='$.QuitardetAdicion(this)' class='btn default btn-xs red'>";
             fila += "<i class='fa fa-trash-o'></i> Quitar</a></td></tr>";
             $("#td-DetAdicionContrato").append(fila);
-           
+
+            PreTotalAdicion=parseFloat($("#txt_valorAdic").val()) +txt_valorDetAdic;
+
             $("#gtotalPresTota").html(formatCurrency(PreTotalAdicion, "es-CO", "COP"));
             $("#txt_valorAdicV").val(formatCurrency(PreTotalAdicion, "es-CO", "COP"));
             $("#txt_valorAdic").val(PreTotalAdicion);
-                        
+
             $.reordenarAdicion();
             $("#contAdicion").val(contAdicion);
-      
-            $("#CbFuenteFinanciacion").select2("val", " ");          
+
+            $("#CbSecre").select2("val", " ");
+            $("#CbFuenteFinanciacion").html("");
+            $("#subfuente").html("");
             $("#CbGastos").selectpicker("val", "GASTOS INDIRECTOS");
             $("#txt_DesGastos").val("");
             $("#txt_valorDetAdicV").val("$ 0,00");
             $("#txt_valorDetAdic").val("0");
           },
           QuitardetAdicion: function (element) {
-            
+
             let idElement = element.getAttribute("data-conse");
             let valor = element.getAttribute("data-valor");
-            
+
             console.log(idElement);
             $("#" + idElement).remove();
             $.reordenarAdicion();
             contPresup = $("#contAdicion").val();
             contPresup = contPresup - 1;
-            $("#contAdicion").val(contPresup);      
+            $("#contAdicion").val(contPresup);
       
             PreTotalAdicion = PreTotalAdicion - parseFloat(valor);
           
@@ -3081,24 +3186,25 @@ $(document).ready(function () {
            $("#txt_valorAdic").val(PreTotalAdicion);
          
           },
-          buscaSubfinanciacion: function(){
+          buscaSubfinanciacion: function () {
             var datos = {
-                ope: "buscarSubfuente",
-                cod: $("#CbFuenteFinanciacion").val()
-              };
-        
-              $.ajax({
-                type: "POST",
-                url: "../All.php",
-                data: datos,
-                dataType: "json",
-                success: function (data) {
-                  $("#subfuente").html(data["subfi"]);
-                },
-                error: function (error_messages) {
-                  alert("HA OCURRIDO UN ERROR");
-                },
-              });
+              ope: "buscarSubfuente",
+              sec: $("#CbSecre").val(),
+              cod: $("#CbFuenteFinanciacion").val(),
+            };
+ 
+            $.ajax({
+              type: "POST",
+              url: "../All.php",
+              data: datos,
+              dataType: "json",
+              success: function (data) {
+                $("#subfuente").html(data["subfi"]);
+              },
+              error: function (error_messages) {
+                alert("HA OCURRIDO UN ERROR");
+              },
+            });
           },
           reordenarAdicion: function () {
             var num = 1;
@@ -3953,6 +4059,56 @@ $(document).ready(function () {
         return false;
     });
 
+
+    function validarBolsa(sec, fuent,subfuent, valor){
+
+        const elements = document.querySelectorAll('[name="fuentFin[]"]');
+        let valorTotalActual = 0;
+        elements.forEach((element) => {          
+          let parfin = element.value.split("//");
+          let parametroAValidar = parfin[0]+"//" + parfin[1] + "//" + parfin[2];
+          let parametroActual = sec+"//" + fuent + "//" + subfuent;
+          if(parametroAValidar == parametroActual){
+            valorTotalActual+=parseFloat(parfin[3]);
+          }
+        });
+
+        let valTotalfuenteFin = valorTotalActual + valor;
+
+        let valorPresCont = valTotalfuenteFin+ parseFloat($("#txt_VaFinVal").val());
+
+        if(valorPresCont > parseFloat($("#txt_VaPresProecto").val())){
+            verBolsa ={
+                estado: "nPres",
+                valorBolsa: parseFloat($("#txt_VaPresProecto").val())
+            }
+        }else{
+        var datos = {
+            ope: "verificarBolsaFinanciacion",
+            secre: sec,
+            fin: fuent,
+            subfin: subfuent,
+            valor: valTotalfuenteFin
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "../All.php",
+            data: datos,
+            dataType: "json",
+            async:false,
+            success: function (data) {
+                verBolsa = data;               
+            },
+            error: function (error_messages) {
+                alert('HA OCURRIDO UN ERROR');
+            }
+        });
+    }
+
+      return verBolsa;
+
+    }
 
     //BOTON GUARDAR CONTRATO
     $("#btn_guardar").on("click", function () {

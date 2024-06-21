@@ -581,7 +581,7 @@ $link = conectar();
                                                                             <select class="form-control select2" data-placeholder="Seleccione..." id="CbProceso" name="options2">
 
                                                                             </select>
-                                                                            <span class="input-group-btn">
+                                                                            <!-- <span class="input-group-btn">
                                                                                 <button type="button" id="btn_new_resp" onclick="$.UpdateProceso();" title="Actualizar Fuentes de Datos" class="btn blue-soft">
                                                                                     <i class="fa fa-refresh"/></i>
                                                                                 </button>
@@ -590,7 +590,7 @@ $link = conectar();
                                                                                 <button type="button" id="btn_new_resp" onclick="$.NewProceso();" title="Crear Nueva Fuente de Datos" class="btn green-meadow">
                                                                                     <i class="fa fa-plus"/></i>
                                                                                 </button>
-                                                                            </span>
+                                                                            </span> -->
 
                                                                         </div>
                                                                     </div>

@@ -1,5 +1,6 @@
 $(document).ready(function () {
   var Order = "b.nom_proyect ASC";
+  let verBolsa = {};
   // $("#fecha").inputmask("d/m/y", {autoUnmask: true});
   $("#home").removeClass("start active open");
   $("#menu_p_proy").addClass("start active open");
@@ -326,7 +327,7 @@ $(document).ready(function () {
           $("#txt_Nomb").val(data["nom_proyect"]);
           $("#CbTiplog").val(data["tipo_proyect"]).change();
 
-          $("#CbSecre").val(data["secretaria_proyect"]).change();
+        //  $("#CbSecre").val(data["secretaria_proyect"]).change();
 
           $("#CbCrono").selectpicker("val", data["cron_proyect"]);
 
@@ -419,6 +420,8 @@ $(document).ready(function () {
           $("#tb_Presup").html(data["Tab_Presupuesto"]);
           PreTotal = data["Total"];
           $("#gtotalPresTota").html(formatCurrency(PreTotal, "es-CO", "COP"));
+          $("#txt_PresProyV").val(formatCurrency(PreTotal, "es-CO", "COP"));
+          $("#txt_PresProy").val(PreTotal);
           $("#contPresup").val(data["contPresupuesto"]);
 
           //
@@ -1937,7 +1940,7 @@ $(document).ready(function () {
         close: true, // make alert closable [true, false]
         reset: true, // close all previouse alerts first [true, false]
         focus: true, // auto scroll to the alert after shown [true, false]
-        closeInSeconds: "5", // auto close after defined seconds [0, 1, 5, 10]
+        closeInSeconds: "10", // auto close after defined seconds [0, 1, 5, 10]
         icon: ico, // put icon before the message [ "" , warning, check, user]
       });
     },
@@ -2543,7 +2546,29 @@ $(document).ready(function () {
       contIndicad = contIndicad - 1;
       $("#contIndicad").val(contIndicad);
     },
-    verifDisponibilidad: function (secre, fin, subfin) {},
+    verifDisponibilidad: function (secre, fin, subfin,valor) {
+      var datos = {
+        ope: "verificarBolsaFinanciacion",
+        secre: secre,
+        fin: fin,
+        subfin: subfin,
+        valor: valor
+      };
+
+      $.ajax({
+        type: "POST",
+        url: "../All.php",
+        data: datos,
+        dataType: "JSON",
+        async: false,
+        success: function (data) {
+          verBolsa = data;
+        },
+        error: function (error_messages) {
+          alert("HA OCURRIDO UN ERROR");
+        },
+      });
+    },
     AddFinancia: function () {
       var CbOriFinancia = $("#CbOriFinancia").val();
       var textTiplog = $("#CbOriFinancia option:selected").text();
@@ -2558,14 +2583,13 @@ $(document).ready(function () {
       let varFina = CbSecre + "//" + CbOriFinancia + "//" + CbOriSubfinancia;
       let control = false;
       let idexistente;
-      let verBolsa;
 
       const elements = document.querySelectorAll('[name="terce[]"]');
       let valorTotalActual = 0;
       elements.forEach((element) => {
         // Haz algo con cada elemento
         let parfin = element.value.split("//");
-        valorTotalActual += parfin[3];
+        valorTotalActual += parseFloat(parfin[3]);
         let valold = parfin[0] + "//" + parfin[1] + "//" + parfin[2];
         if (valold == varFina) {
           control = true;
@@ -2588,7 +2612,8 @@ $(document).ready(function () {
             let Financ = document.getElementById(idexistente);
             let parfina = Financ.value.split("//");
 
-            valorTotalActual = valorTotalActual + parseFloat(txt_cosFin);
+            valorTotalActual = parseFloat(valorTotalActual) + parseFloat(txt_cosFin);
+            console.log(valorTotalActual);
 
             if (valorTotalActual > parseFloat($("#txt_PresProy").val())) {
               $.Alert(
@@ -2601,12 +2626,14 @@ $(document).ready(function () {
 
             txt_cosFin = parseFloat(parfina[3]) + parseFloat(txt_cosFin);
 
-            //  verBolsa  = $.verifDisponibilidad(CbSecre,CbOriFinancia,CbOriSubfinancia,txt_cosFin);
-            if (verBolsa == "sinPres") {
+            $.verifDisponibilidad(CbSecre,CbOriFinancia,CbOriSubfinancia,txt_cosFin);
+           
+             if (verBolsa.estado == "sinPres") {
               $.Alert(
                 "#msg",
-                "Esta bolsa de financiacipón no cuenta con este presupuesto. Verifique...",
-                "warning"
+                "Esta bolsa de financiación no cuenta con este presupuesto. el presupuesto actual es <b>"+formatCurrency(verBolsa.valorBolsa, "es-CO", "COP")+"</b>,  Verifique...",
+                "warning",
+                "warning",
               );
               return;
             }
@@ -2662,11 +2689,11 @@ $(document).ready(function () {
         elements.forEach((element) => {
           // Haz algo con cada elemento
           let parfin = element.value.split("//");
-          valorTotalActual += parfin[3];          
+          valorTotalActual += parseInt(parfin[3]);
         });
 
         valorTotalActual = valorTotalActual + parseFloat(txt_cosFin);
-
+        console.log(valorTotalActual+"-"+parseFloat($("#txt_PresProy").val()));
         if (valorTotalActual > parseFloat($("#txt_PresProy").val())) {
           $.Alert(
             "#msg",
@@ -2676,18 +2703,21 @@ $(document).ready(function () {
           return;
         }
 
-        //   verBolsa = $.verifDisponibilidad(CbSecre,CbOriFinancia,CbOriSubfinancia,txt_cosFin);
+        $.verifDisponibilidad(CbSecre,CbOriFinancia,CbOriSubfinancia,txt_cosFin);
+        
       }
 
       if (control) {
         return;
       }
 
-      if (verBolsa == "sinPres") {
+   
+      if (verBolsa.estado == "sinPres") {
         $.Alert(
           "#msg",
-          "esta bolsa de financiacipón no cuenta con este presupuesto. Verifique...",
-          "warning"
+          "Esta bolsa de financiación no cuenta con este presupuesto. el presupuesto actual es <b>"+formatCurrency(verBolsa.valorBolsa, "es-CO", "COP")+"</b>,  Verifique...",
+          "warning",
+          "warning",
         );
         return;
       }
@@ -2742,7 +2772,7 @@ $(document).ready(function () {
         "//" +
         CbOriSubfinancia +
         "//" +
-        txt_cosFin +
+        txt_cosFin + "//" +
         "' /><a onclick=\"$.QuitarFinancia('filaFinancia" +
         contFinancia +
         "//" +
@@ -3184,15 +3214,15 @@ $(document).ready(function () {
         Op_Validar.push("Ok");
       }
 
-      Id = "#CbSecre";
-      Value = $(Id).val();
-      if (Value === "" || Value === " ") {
-        Op_Validar.push("Fail");
-        $("#From_Secreta").addClass("has-error");
-      } else {
-        $("#From_Secreta").removeClass("has-error");
-        Op_Validar.push("Ok");
-      }
+      // Id = "#CbSecre";
+      // Value = $(Id).val();
+      // if (Value === "" || Value === " ") {
+      //   Op_Validar.push("Fail");
+      //   $("#From_Secreta").addClass("has-error");
+      // } else {
+      //   $("#From_Secreta").removeClass("has-error");
+      //   Op_Validar.push("Ok");
+      // }
 
       Id = "#CbEstado";
       Value = $(Id).val();

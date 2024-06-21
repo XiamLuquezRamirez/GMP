@@ -196,7 +196,7 @@ if ($_POST['acc'] == "1") {
             $consulta2 = "";
             $parFinan = explode("//", $_POST["Dat_Financiacion"][$key]);
 
-            $consulta2 = "INSERT INTO banco_proyec_financiacion VALUES(null,'" . $id_Proy . "','" . $parFinan[0] . "','" . $parFinan[1] . "'," . $parFinan[2] . ",'')";
+            $consulta2 = "INSERT INTO banco_proyec_financiacion VALUES(null,'" . $id_Proy . "','" . $parFinan[1] . "','" . $parFinan[2] . "'," . $parFinan[3] . ",'','" . $parFinan[0] . "')";
            
             $qc2 = mysqli_query($link, $consulta2);
             if (($qc2 == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
@@ -635,7 +635,7 @@ if ($_POST['acc'] == "1") {
             $consulta2 = "";
             $parFinan = explode("//", $_POST["Dat_Financiacion"][$key]);
 
-            $consulta2 = "INSERT INTO banco_proyec_financiacion VALUES(null,'" . $id_Proy . "','" . $parFinan[0] . "','" . $parFinan[1] . "'," . $parFinan[2] . ",'')";
+            $consulta2 = "INSERT INTO banco_proyec_financiacion VALUES(null,'" . $id_Proy . "','" . $parFinan[1] . "','" . $parFinan[2] . "'," . $parFinan[3] . ",'" . $parFinan[4] . "','" . $parFinan[0] . "')";
 
             // echo $consulta2;
             $qc2 = mysqli_query($link, $consulta2);

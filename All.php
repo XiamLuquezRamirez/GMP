@@ -652,15 +652,15 @@ FROM
 
     $myDat = new stdClass();
 
-    $consulta = "select * from procesos where id_proc='" . $_POST["cod"] . "'";
+    $consulta = "select * from procesos where id='" . $_POST["cod"] . "'";
     //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
-            $myDat->codi_proc = $fila["codi_proc"];
-            $myDat->nomb_proc = $fila["nomb_proc"];
-            $myDat->macropro_proc = $fila["macropro_proc"];
-            $myDat->obse_proc = $fila["obse_proc"];
+            $myDat->codi_proc = $fila["id"];
+            $myDat->nomb_proc = $fila["descripcion"];
+            $myDat->macropro_proc = $fila["clase"];
+            $myDat->obse_proc = $fila["objetivo"];
         }
     }
 
@@ -680,6 +680,31 @@ FROM
             $myDat->obs_tipolo = $fila["obs_tipolo"];
             $myDat->img_tipolo = $fila["img_tipolo"];
         }
+    }
+
+    $myJSONDat = json_encode($myDat);
+    echo $myJSONDat;
+} else if ($_POST['ope'] == "verificarBolsaFinanciacion") {
+
+    $myDat = new stdClass();
+
+    $consulta = "select valor from presupuesto_secretarias 
+    where id_secretaria='" . $_POST["secre"] . "' and id_fuente='" . $_POST["fin"] . "' and id_subfuente='" . $_POST["subfin"] . "'";
+    //echo $consulta;
+    $valorBolsa = 0;
+    $resultado = mysqli_query($link, $consulta);
+    if (mysqli_num_rows($resultado) > 0) {
+        while ($fila = mysqli_fetch_array($resultado)) {
+            $valorBolsa+= $fila['valor'];
+        }
+    }
+
+    if($_POST['valor'] > $valorBolsa){
+        $myDat->estado = "sinPres";
+        $myDat->valorBolsa = $valorBolsa;
+    }else{
+        $myDat->estado = "ok";
+        $myDat->valorBolsa = $valorBolsa;
     }
 
     $myJSONDat = json_encode($myDat);
@@ -1218,12 +1243,15 @@ FROM
         }
     }
 
-    $consulta = "SELECT da.origen_financiacion,fu.nombre,da.gastos_presupuesto, da.desc_gasto, da.valor, da.origen_subfinanciacion, subf.descripcion
+    $consulta = "SELECT da.origen_financiacion,fu.nombre,
+    da.valor, da.origen_subfinanciacion, 
+    subf.descripcion, da.secretaria, secr.des_secretarias
     FROM detalle_adicion da
+    LEFT JOIN secretarias secr on da.secretaria = secr.idsecretarias
     LEFT JOIN fuentes fu on da.origen_financiacion = fu.id
     LEFT JOIN subfinanciacion subf on da.origen_subfinanciacion=subf.id
      WHERE da.adicion = " . $_POST['idAdi'];
-    
+
     $resultado1 = mysqli_query($link, $consulta);
     $tabDetAddiciones = "";
     $cont = 0;
@@ -1235,11 +1263,11 @@ FROM
             $contTotal += $fila1['valor'];
             $tabDetAddiciones .= '<tr class="selected" id="filaPresup' . $cont . '">';
             $tabDetAddiciones .= '<td>' . $cont . '</td>';
+            $tabDetAddiciones .= '<td>' . $fila1['des_secretarias'] . '</td>';
             $tabDetAddiciones .= '<td>' . $fila1['nombre'] . '</td>';
             $tabDetAddiciones .= '<td>' . $fila1['descripcion'] . '</td>';
-            $tabDetAddiciones .= '<td>' . $fila1['gastos_presupuesto'] . ' - ' . $fila1['desc_gasto'] . '</td>';
             $tabDetAddiciones .= '<td>' . number_format($fila1['valor'], 2, ",", ".") . '</td>';
-            $tabDetAddiciones .= '<td><input type="hidden" id="idDetAdicion' . $cont . '" value="' . $fila1['origen_financiacion'] .'//'. $fila1['origen_subfinanciacion'] .'//' . $fila1['gastos_presupuesto'] . '//' . $fila1['desc_gasto'] . '//' . $fila1['valor'] . '" /><a data-conse="filaPresup' . $cont . '" data-valor="' . $fila1['valor'] . '" onclick="$.QuitardetAdicion(this)" class="btn default btn-xs red"><i class="fa fa-trash-o"></i> Quitar</a></td>';
+            $tabDetAddiciones .= '<td><input type="hidden" id="idDetAdicion' . $cont . '" value="' . $fila1['secretaria'] .'//'.$fila1['origen_financiacion'] .'//'. $fila1['origen_subfinanciacion'] .'//' .  $fila1['valor'] . '" /><a data-conse="filaPresup' . $cont . '" data-valor="' . $fila1['valor'] . '" onclick="$.QuitardetAdicion(this)" class="btn default btn-xs red"><i class="fa fa-trash-o"></i> Quitar</a></td>';
             $tabDetAddiciones .= '</tr>';
         }
     }
@@ -2409,10 +2437,12 @@ FROM
 
     ////financiacion
 
-    $consulta = "SELECT bf.origen,bf.suborigen,fuen.nombre,bf.valor,subfue.descripcion 
-    FROM banco_proyec_financiacion bf LEFT JOIN fuentes fuen ON bf.origen = fuen.id 
+    $consulta = "SELECT bf.origen,bf.suborigen,fuen.nombre,bf.valor,subfue.descripcion , bf.secretaria , sec.des_secretarias, bf.adicion
+    FROM banco_proyec_financiacion bf 
+    LEFT JOIN secretarias sec ON bf.secretaria = sec.idsecretarias				
+    LEFT JOIN fuentes fuen ON bf.origen = fuen.id 
     LEFT JOIN subfinanciacion subfue ON bf.suborigen = subfue.id 
-    WHERE bf.id_proyect  = '" . $_POST["cod"] . "' ";
+    WHERE bf.id_proyect = '" . $_POST["cod"] . "'";
 
     $resultado1 = mysqli_query($link, $consulta);
 
@@ -2422,10 +2452,13 @@ FROM
         "               #\n" .
         "          </td>\n" .
         "          <td>\n" .
-        "               Origen de la fuente Financiación\n" .
+        "               Secretaria\n" .
         "          </td>\n" .
         "          <td>\n" .
-        "               Origen de la fuente Financiación\n" .
+        "               Origen de la fuente financiación\n" .
+        "          </td>\n" .
+        "          <td>\n" .
+        "               Subfuente de financiación\n" .
         "          </td>\n" .
         "          <td>\n" .
         "             Valor\n" .
@@ -2444,15 +2477,16 @@ FROM
             $valor = '$ ' . number_format($fila["valor"], 2, ",", ".");
             $TotFinancia = $TotFinancia + $fila["valor"];
             $Tab_Financia .= "<tr class='selected' id='filaFinancia" . $contFinancia . "' ><td>" . $contFinancia . "</td>";
+            $Tab_Financia .= "<td>" . $fila["des_secretarias"] . "</td>";
             $Tab_Financia .= "<td>" . $fila["nombre"] . "</td>";
             $Tab_Financia .= "<td>" . $fila["descripcion"] . "</td>";
             $Tab_Financia .= "<td>" . $valor . "</td>";
-            $Tab_Financia .= "<td><input type='hidden' id='idFinancia" . $contFinancia . "' name='terce' value='" . $fila["origen"] . "//".$fila["suborigen"] . "//" . $fila["valor"] . "' /><a onclick=\"$.QuitarFinancia('filaFinancia" . $contFinancia . "//" .  $fila["valor"] . "')\" class=\"btn default btn-xs red\">" . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
+            $Tab_Financia .= "<td><input type='hidden' id='idFinancia" . $contFinancia . "'  data-valor='".$fila["valor"] ."' data-tr='filaFinancia" . $contFinancia . "'  name='terce[]' value='" . $fila["secretaria"] . "//". $fila["origen"] . "//".$fila["suborigen"] . "//" . $fila["valor"] . "//" . $fila["adicion"] . "' /><a onclick=\"$.QuitarFinancia('filaFinancia" . $contFinancia . "//" .  $fila["valor"] . "')\" class=\"btn default btn-xs red\">" . "<i class=\"fa fa-trash-o\"></i> Borrar</a></td></tr>";
         }
     }
     $Tab_Financia .= "</tbody><tfoot>
     <tr>
-        <th colspan='3' style='text-align: right;'>Total:</th>
+        <th colspan='4' style='text-align: right;'>Total:</th>
         <th colspan='1'><label id='gtotalFinanc' style='font-weight: bold;'>$ " . number_format($TotFinancia, 2, ",", ".") . "</label></th>
     </tr>
   </tfoot>";
@@ -6225,22 +6259,21 @@ FROM
     }
     //////////////// CONSULTAR CONTRATOS
 
-    $consulta = "SELECT proy.cod_proyect, sec.idsecretarias idsec, sec.des_secretarias secre, 
-    IFNULL(SUM(pobl.personas),'0') tpers, 
-    IFNULL((SELECT SUM(ps.valor) FROM presupuesto_secretarias ps WHERE ps.id_secretaria=proy.secretaria_proyect),'0') presupuesto, 
-    IFNULL((SELECT SUM(total) FROM banco_proyec_presupuesto WHERE id_proyect=proy.id_proyect),'0') inv 
-    FROM proyectos proy 
-        LEFT JOIN banco_proyec_pobla pobl
-      ON proy.id_proyect=pobl.id_proyect
-        LEFT JOIN secretarias sec
-      ON proy.secretaria_proyect=sec.idsecretarias
-      WHERE proy.estado_proyect IN ('En Ejecucion','Ejecutado','Priorizado') 
-    AND IFNULL(pobl.edad, '') LIKE '" . $_POST['Edad'] . "%'
+    $consulta = "SELECT bf.id_proyect,secr.des_secretarias secre,secr.idsecretarias idsec,   
+    IFNULL(SUM(pobl.personas),'0') tpers,
+    IFNULL((SELECT SUM(ps.valor) FROM presupuesto_secretarias ps WHERE ps.id_secretaria=bf.secretaria),'0') presupuesto,
+    IFNULL((SELECT SUM(valor) FROM banco_proyec_financiacion WHERE secretaria=bf.secretaria),'0') inv   
+    FROM  banco_proyec_financiacion bf
+    LEFT JOIN secretarias secr ON secr.idsecretarias = bf.secretaria
+    LEFT JOIN proyectos proy ON bf.id_proyect=proy.id_proyect
+    LEFT JOIN banco_proyec_pobla pobl ON bf.id_proyect=pobl.id_proyect
+    WHERE IFNULL(pobl.edad, '') LIKE '" . $_POST['Edad'] . "%'
     AND IFNULL(pobl.grupoetnico, '') LIKE '" . $_POST['Grupo'] . "%'
     AND IFNULL(pobl.genero, '') LIKE '" . $_POST['Genero'] . "%'
-    GROUP BY idsec";
+    AND proy.estado='ACTIVO' AND proy.estado_proyect IN('En Ejecucion','Ejecutado','Priorizado')
+    GROUP BY secretaria, id_proyect";
 
-    //    echo $consulta;
+        
     $resultado = mysqli_query($link, $consulta);
 
     $RawSec = array(); //creamos un array
@@ -6258,45 +6291,33 @@ FROM
                 "dessec" => $fila['secre']
             );
 
-
-
-            $consulta = "SELECT 
-                proy.id_proyect idproy,
-                proy.cod_proyect codproy,
-                proy.nombre_proyect nomb
-                FROM
-                  contratos contr 
-                  LEFT JOIN proyectos proy 
-                    ON contr.idproy_contrato = proy.id_proyect 
-                    LEFT JOIN banco_proyec_pobla pobl
-                  ON proy.id_proyect=pobl.id_proyect
-                  LEFT JOIN secretarias sec
-                  ON proy.secretaria_proyect=sec.idsecretarias
-                WHERE contr.estcont_contra='Verificado' AND proy.secretaria_proyect='" . $fila['idsec'] . "'
-                AND IFNULL(pobl.edad, '') LIKE '" . $_POST['Edad'] . "%'
-                AND IFNULL(pobl.grupoetnico, '') LIKE '" . $_POST['Grupo'] . "%'
-                AND IFNULL(pobl.genero, '') LIKE '" . $_POST['Genero'] . "%'
-                AND contr.id_contrato IN
-                  (SELECT
-                    MAX(id_contrato)
-                  FROM
-                    contratos
-                    WHERE estad_contrato='Ejecucion' OR estad_contrato='Terminado'
-                  GROUP BY num_contrato) GROUP BY idproy ORDER BY nomb";
+            $consulta = "SELECT   
+            proy.id_proyect idproy,
+            proy.cod_proyect codproy,
+            proy.nombre_proyect nomb
+            FROM  banco_proyec_financiacion bf
+            LEFT JOIN secretarias secr ON secr.idsecretarias = bf.secretaria
+            LEFT JOIN proyectos proy ON bf.id_proyect=proy.id_proyect
+            LEFT JOIN banco_proyec_pobla pobl ON bf.id_proyect=pobl.id_proyect
+            WHERE IFNULL(pobl.edad, '') LIKE '" . $_POST['Edad'] . "%'
+            AND IFNULL(pobl.grupoetnico, '') LIKE '" . $_POST['Grupo'] . "%'
+            AND IFNULL(pobl.genero, '') LIKE '" . $_POST['Genero'] . "%'
+            AND proy.estado='ACTIVO' and bf.secretaria='".$fila['idsec']."' AND proy.estado_proyect IN('En Ejecucion','Ejecutado','Priorizado')
+            GROUP BY bf.secretaria, bf.id_proyect";
 
 
             $resultado2 = mysqli_query($link, $consulta);
             if (mysqli_num_rows($resultado2) > 0) {
                 while ($fila2 = mysqli_fetch_array($resultado2)) {
 
-                    $consulta = "SELECT 
-                    contr.num_contrato cod,
-                    contr.obj_contrato obj, 
+                     $consulta = "SELECT 
+                     contr.num_contrato cod,
+                     contr.obj_contrato obj, 
                      contr.estad_contrato estado,
                      contr.estad_contrato estado,
                      contr.porav_contrato pava,
                      contr.vfin_contrato total
-                    FROM
+                     FROM
                       contratos contr 
                       LEFT JOIN proyectos proy 
                         ON contr.idproy_contrato = proy.id_proyect 
@@ -6304,20 +6325,21 @@ FROM
                       ON proy.id_proyect=pobl.id_proyect
                       LEFT JOIN secretarias sec
                       ON proy.secretaria_proyect=sec.idsecretarias
-                    WHERE contr.estcont_contra='Verificado' AND contr.idproy_contrato='" . $fila2['idproy'] . "'
-               AND IFNULL(pobl.edad, '') LIKE '" . $_POST['Edad'] . "%'
-                AND IFNULL(pobl.grupoetnico, '') LIKE '" . $_POST['Grupo'] . "%'
-                AND IFNULL(pobl.genero, '') LIKE '" . $_POST['Genero'] . "%'
-                    AND contr.id_contrato IN
+                     WHERE contr.estcont_contra='Verificado' AND contr.idproy_contrato='" . $fila2['idproy'] . "'
+                     AND IFNULL(pobl.edad, '') LIKE '" . $_POST['Edad'] . "%'
+                     AND IFNULL(pobl.grupoetnico, '') LIKE '" . $_POST['Grupo'] . "%'
+                     AND IFNULL(pobl.genero, '') LIKE '" . $_POST['Genero'] . "%'
+                     AND contr.id_contrato IN
                       (SELECT
                         MAX(id_contrato)
                       FROM
                         contratos
-                        WHERE estad_contrato='Ejecucion' OR estad_contrato='Terminado'
+                        WHERE estad_contrato IN('Ejecucion','Terminado') 
                       GROUP BY num_contrato)GROUP BY num_contrato ORDER BY total DESC";
-                    //                    echo $consulta;
-                    $resultado3 = mysqli_query($link, $consulta);
-                    if (mysqli_num_rows($resultado3) > 0) {
+                                   
+                     $resultado3 = mysqli_query($link, $consulta);
+                     $RawCon=[];
+                     if (mysqli_num_rows($resultado3) > 0) {
                         while ($fila3 = mysqli_fetch_array($resultado3)) {
                             $RawCon[] = array(
                                 "numcont" => $fila3['cod'],
@@ -6359,47 +6381,46 @@ FROM
   secre,
   SUM(totalPers) tpers
   
-FROM
-  (SELECT 
-    sec.idsecretarias idsec,
-    sec.des_secretarias secre,
-    pobl.personas totalPers 
-  FROM
-  proyectos proy 
-    LEFT JOIN banco_proyec_pobla pobl 
-      ON proy.id_proyect = pobl.id_proyect 
-    LEFT JOIN secretarias sec 
-      ON proy.secretaria_proyect = sec.idsecretarias 
-  WHERE  IFNULL(pobl.edad, '') LIKE '" . $_POST['Edad'] . "%'
-  AND IFNULL(pobl.grupoetnico, '') LIKE '" . $_POST['Grupo'] . "%'
-  AND IFNULL(pobl.genero, '') LIKE '" . $_POST['Genero'] . "%'
-  GROUP BY pobl.id_proyect) t 
-GROUP BY secre ";
+ FROM (SELECT 
+     sec.idsecretarias idsec,
+     sec.des_secretarias secre,
+     pobl.personas totalPers 
+     FROM
+     proyectos proy 
+     LEFT JOIN banco_proyec_pobla pobl 
+     ON proy.id_proyect = pobl.id_proyect 
+     LEFT JOIN secretarias sec 
+     ON proy.secretaria_proyect = sec.idsecretarias 
+     WHERE  IFNULL(pobl.edad, '') LIKE '" . $_POST['Edad'] . "%'
+     AND IFNULL(pobl.grupoetnico, '') LIKE '" . $_POST['Grupo'] . "%'
+     AND IFNULL(pobl.genero, '') LIKE '" . $_POST['Genero'] . "%'
+     GROUP BY pobl.id_proyect) t 
+     GROUP BY secre ";
         $resultado = mysqli_query($link, $consulta);
         if (mysqli_num_rows($resultado) > 0) {
             while ($fila = mysqli_fetch_array($resultado)) {
-                $RawSec[] = array(
+                 $RawSec[] = array(
                     "dessec" => $fila['secre']
-                );
+                 );
 
-                $consulta = "SELECT 
-                proy.id_proyect idproy,
-                proy.cod_proyect codproy,
-                proy.nombre_proyect nomb 
-              FROM
-                proyectos proy 
-                LEFT JOIN banco_proyec_pobla pobl 
-                  ON proy.id_proyect = pobl.id_proyect 
-                LEFT JOIN secretarias sec 
-                  ON proy.secretaria_proyect = sec.idsecretarias 
-              WHERE proy.secretaria_proyect='" . $fila['idsec'] . "'
-              AND IFNULL(pobl.edad, '') LIKE '" . $_POST['Edad'] . "%'
-              AND IFNULL(pobl.grupoetnico, '') LIKE '" . $_POST['Grupo'] . "%'
-              AND IFNULL(pobl.genero, '') LIKE '" . $_POST['Genero'] . "%'
-              GROUP BY idproy 
-              ORDER BY nomb ";
-                $resultado2 = mysqli_query($link, $consulta);
-                if (mysqli_num_rows($resultado2) > 0) {
+                 $consulta = "SELECT 
+                 proy.id_proyect idproy,
+                 proy.cod_proyect codproy,
+                 proy.nombre_proyect nomb 
+                 FROM
+                 proyectos proy 
+                 LEFT JOIN banco_proyec_pobla pobl 
+                 ON proy.id_proyect = pobl.id_proyect 
+                 LEFT JOIN secretarias sec 
+                 ON proy.secretaria_proyect = sec.idsecretarias 
+                 WHERE proy.secretaria_proyect='" . $fila['idsec'] . "'
+                 AND IFNULL(pobl.edad, '') LIKE '" . $_POST['Edad'] . "%'
+                 AND IFNULL(pobl.grupoetnico, '') LIKE '" . $_POST['Grupo'] . "%'
+                 AND IFNULL(pobl.genero, '') LIKE '" . $_POST['Genero'] . "%'
+                 GROUP BY idproy 
+                 ORDER BY nomb ";
+                 $resultado2 = mysqli_query($link, $consulta);
+                 if (mysqli_num_rows($resultado2) > 0) {
                     while ($fila2 = mysqli_fetch_array($resultado2)) {
 
                         $RawProy[] = array(
@@ -7494,7 +7515,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     $Interv = "<option value=' '>Seleccione...</option>";
     $ProExp = "<option value=' '>Seleccione...</option>";
     $dpto = "<option value=' '>Seleccione...</option>";
-    $fuente = "<option value=' '>Seleccione...</option>";
+    $Secre = "<option value=' '>Seleccione...</option>";
     $catGastos = "<option value=' '>Seleccione...</option>";
 
     //////////////////////CONSULTAR SUPERVISOR
@@ -7559,11 +7580,11 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     }
 
     /////////////////////CONSULTAR FUENTE DE FINANCIACION
-    $consulta = "select * from fuentes where estado='ACTIVO'";
+    $consulta = "select * from secretarias where estado_secretaria='ACTIVO'";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
-            $fuente .= "<option value='" . $fila["id"] . "'>" . $fila["nombre"] . "</option>";
+            $Secre .= "<option value='" . $fila["idsecretarias"] . "'>" . $fila["cod_secretarias"] . " - " . $fila["des_secretarias"] . "</option>";
         }
     }
 
@@ -7585,7 +7606,7 @@ WHERE pm.cod_proy='" . $_POST["cod"] . "'";
     $myDat->Superv = $Superv;
     $myDat->Interv = $Interv;
     $myDat->ProExp = $ProExp;
-    $myDat->fuenteFinanciacion = $fuente;
+    $myDat->Secre = $Secre;
     $myDat->dpto = $dpto;
     $myDat->catGastos = $catGastos;
 
@@ -8377,22 +8398,17 @@ AND contr.id_contrato IN
     $Tab_Indicad = "";
     $i = 0;
 
-    $consulta = "SELECT COUNT(*) cant,des_secretarias secre,secretaria_proyect idsec  FROM (
-SELECT 
-    COUNT(sec.des_secretarias),
-   proy.secretaria_proyect,
-   sec.des_secretarias    
-FROM
-  proyectos proy
-  LEFT JOIN banco_proyec_pobla pobl
-  ON proy.id_proyect=pobl.id_proyect
-  LEFT JOIN secretarias sec
-  ON proy.secretaria_proyect=sec.idsecretarias
-WHERE IFNULL(pobl.edad, '') LIKE '" . $_POST["Edad"] . "%'
-AND IFNULL(pobl.grupoetnico, '') LIKE '" . $_POST["Grupo"] . "%'
-AND IFNULL(pobl.genero, '') LIKE '" . $_POST["Genero"] . "%'
-AND proy.estado='ACTIVO' AND proy.estado_proyect='En Ejecucion'  
-GROUP BY pobl.id_proyect) t GROUP BY des_secretarias";
+    $consulta = "select count(*) cant, t.des_secretarias secre,t.idsecretarias idsec from (
+        select bf.id_proyect,secr.des_secretarias,secr.idsecretarias  from  banco_proyec_financiacion bf
+        left join secretarias secr on secr.idsecretarias = bf.secretaria
+        left join proyectos proy on bf.id_proyect=proy.id_proyect
+        LEFT JOIN banco_proyec_pobla pobl ON bf.id_proyect=pobl.id_proyect
+        WHERE IFNULL(pobl.edad, '') LIKE '" . $_POST["Edad"] . "%'
+        AND IFNULL(pobl.grupoetnico, '') LIKE '" . $_POST["Grupo"] . "%'
+        AND IFNULL(pobl.genero, '') LIKE '" . $_POST["Genero"] . "%'
+        AND proy.estado='ACTIVO' AND proy.estado_proyect in('En Ejecucion','Ejecutado','Priorizado')
+        group by secretaria, id_proyect) t group by secre";
+
 
 
     $resultado = mysqli_query($link, $consulta);
@@ -8793,6 +8809,22 @@ FROM
             $myDat->porce = $fila["porceEjec_proyect"];
         }
     }
+
+    //buscar Presupuesto disponible
+    $consulta = "SELECT IFNULL(SUM(vfin_contrato),0) vcont FROM contratos contr LEFT JOIN proyectos proy ON contr.idproy_contrato = proy.id_proyect 
+    WHERE contr.idproy_contrato = '" . $_POST["cod"] . "' AND  contr.id_contrato IN
+      (SELECT
+        MAX(id_contrato)
+      FROM
+        contratos WHERE num_contrato = contr.num_contrato
+      GROUP BY num_contrato)";
+
+      $resultado = mysqli_query($link, $consulta);
+      if (mysqli_num_rows($resultado) > 0) {
+          while ($fila = mysqli_fetch_array($resultado)) {
+              $myDat->pptoAsig = $fila["vcont"];
+          }
+      }
 
     $myJSONDat = json_encode($myDat);
     echo $myJSONDat;

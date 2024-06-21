@@ -782,11 +782,11 @@ $(document).ready(function () {
                                         + "   </tr>"
                                         + "</thead>"
                                         + "<tbody id='tb_Body_Contratos'>";
-                                if (itemP.Contratos === "NO") {
+                                if (itemP.Contratos.length > 0) {
                                     $("#TotProyecto").append("<div class='col-md-12'>NO TIENE RELACIOANADO NINGÚN CONTRATO</>");
                                     Inv = "NO";
                                 } else {
-
+                                    
                                     $.each(itemP.Contratos, function (i, itemC) {
                                         var colesta = "";
                                         if (itemC.estado === "Ejecucion") {

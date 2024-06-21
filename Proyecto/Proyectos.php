@@ -120,7 +120,7 @@ $link = conectar();
                         </li>
                         <li>
                             <i style="color: yellow;" class="fa fa-star"></i>
-                            <a href="Perfil/">Mi perfil </a>
+                            <a href="../Proyectos/"> Gestión de proyectos</a>
 
                         </li>
                     </ul>
@@ -1455,7 +1455,7 @@ $link = conectar();
                                             <div class='portlet box blue'>
                                                 <div class='portlet-title'>
                                                     <div class='caption'>
-                                                        <i class='fa fa-angle-right'></i>5. Estudios Que Respaldan El Proyecto
+                                                        <i class='fa fa-angle-right'></i>4. Estudios Que Respaldan El Proyecto
                                                     </div>
                                                     <div class='tools'>
                                                         <a href='javascript:;' class='collapse'></a>
@@ -1559,7 +1559,7 @@ $link = conectar();
                                             <div class='portlet box blue'>
                                                 <div class='portlet-title'>
                                                     <div class='caption'>
-                                                        <i class='fa fa-angle-right'></i>6. Localización
+                                                        <i class='fa fa-angle-right'></i>5. Localización
                                                     </div>
                                                     <div class='tools'>
                                                         <a href='javascript:;' class='collapse'></a>
@@ -1665,7 +1665,7 @@ $link = conectar();
                                             <div class='portlet box blue'>
                                                 <div class='portlet-title'>
                                                     <div class='caption'>
-                                                        <i class='fa fa-angle-right'></i>7. Actividades
+                                                        <i class='fa fa-angle-right'></i>6. Actividades
                                                     </div>
                                                     <div class='tools'>
                                                         <a href='javascript:;' class='collapse'></a>
@@ -1815,13 +1815,13 @@ $link = conectar();
 
                                         </div>
 
-                                        <!--                                       Indicadores      -->
+                                        <!--                Indicadores      -->
                                         <div class="tab-pane fade" id="tab_8">
                                             <p>
                                             <div class='portlet box blue'>
                                                 <div class='portlet-title'>
                                                     <div class='caption'>
-                                                        <i class='fa fa-angle-right'></i>8.1. Metas Trazadoras
+                                                        <i class='fa fa-angle-right'></i>7.1. Metas Trazadoras
                                                     </div>
                                                     <div class='tools'>
                                                         <a href='javascript:;' class='collapse'></a>
@@ -1912,7 +1912,7 @@ $link = conectar();
                                             <div class='portlet box blue'>
                                                 <div class='portlet-title'>
                                                     <div class='caption'>
-                                                        <i class='fa fa-angle-right'></i>8.2. Metas de Productos
+                                                        <i class='fa fa-angle-right'></i>7.2. Metas de Productos
                                                     </div>
                                                     <div class='tools'>
                                                         <a href='javascript:;' class='collapse'></a>
@@ -2011,7 +2011,7 @@ $link = conectar();
                                             <div class='portlet box blue'>
                                                 <div class='portlet-title'>
                                                     <div class='caption'>
-                                                        <i class='fa fa-angle-right'></i>9. Fuentes De Financiación:
+                                                        <i class='fa fa-angle-right'></i>8. Fuentes De Financiación:
                                                     </div>
                                                     <div class='tools'>
                                                         <a href='javascript:;' class='collapse'></a>
@@ -2031,9 +2031,7 @@ $link = conectar();
 
                                                                         </select>
                                                                         </span>
-
                                                                     </div>
-
                                                                 </div>
                                                             </div>
                                                             <div class='col-md-4'>
@@ -2125,7 +2123,6 @@ $link = conectar();
                                                                             <tr>
                                                                                 <th colspan='4' style='text-align: right;'>Total Financiación:</th>
                                                                                 <th colspan='1'><label id='gtotalFinanc' style='font-weight: bold;'>0,00</label></th>
-                                                                                
                                                                             </tr>
                                                                         </tfoot>
                                                                     </table>
@@ -2144,7 +2141,7 @@ $link = conectar();
                                             <div class='portlet box blue'>
                                                 <div class='portlet-title'>
                                                     <div class='caption'>
-                                                        <i class='fa fa-angle-right'></i>10. Presupuesto
+                                                        <i class='fa fa-angle-right'></i>9. Presupuesto
                                                     </div>
                                                     <div class='tools'>
                                                         <a href='javascript:;' class='collapse'></a>
@@ -2278,7 +2275,7 @@ $link = conectar();
                                             <div class='portlet box blue'>
                                                 <div class='portlet-title'>
                                                     <div class='caption'>
-                                                        <i class='fa fa-angle-right'></i>11. Ingresos Proyectados
+                                                        <i class='fa fa-angle-right'></i>10. Ingresos Proyectados
                                                     </div>
                                                     <div class='tools'>
                                                         <a href='javascript:;' class='collapse'></a>
@@ -2363,7 +2360,7 @@ $link = conectar();
                                             <div class='portlet box blue'>
                                                 <div class='portlet-title'>
                                                     <div class='caption'>
-                                                        <i class='fa fa-angle-right'></i>12. Registro de Anexos
+                                                        <i class='fa fa-angle-right'></i>11. Registro de Anexos
                                                     </div>
                                                     <div class='tools'>
                                                         <a href='javascript:;' class='collapse'></a>
@@ -2470,7 +2467,7 @@ $link = conectar();
                                             <div class='portlet box blue'>
                                                 <div class='portlet-title'>
                                                     <div class='caption'>
-                                                        <i class='fa fa-angle-right'></i> 13. Galeria
+                                                        <i class='fa fa-angle-right'></i> 12. Galeria
                                                     </div>
                                                     <div class='tools'>
                                                         <a href='javascript:;' class='collapse'></a>
@@ -2569,7 +2566,7 @@ $link = conectar();
                                             <div class='portlet box blue'>
                                                 <div class='portlet-title'>
                                                     <div class='caption'>
-                                                        <i class='fa fa-angle-right'></i>14. Usuarios Asignados
+                                                        <i class='fa fa-angle-right'></i>13. Usuarios Asignados
                                                     </div>
                                                     <div class='tools'>
                                                         <a href='javascript:;' class='collapse'></a>

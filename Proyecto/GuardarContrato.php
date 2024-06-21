@@ -304,7 +304,7 @@ if ($_POST['acc'] == "1") {
         $consulta2 = "";
         $ParAdicion = explode("//", $_POST['idDetAdicion' . $i]);
 
-        $consulta2 = "INSERT INTO detalle_adicion VALUES(null,'" . $id_adicion . "','" . $ParAdicion[0] . "','" . $ParAdicion[1] . "','" . $ParAdicion[2] . "','" . $ParAdicion[3] . "'," . $ParAdicion[4] . ")";
+        $consulta2 = "INSERT INTO detalle_adicion VALUES(null,'" . $id_adicion . "','" . $ParAdicion[0] . "','" . $ParAdicion[1] . "','" . $ParAdicion[2] . "'," . $ParAdicion[3] . ")";
         //echo $consulta2;
         $qc2 = mysqli_query($link, $consulta2);
         if (($qc2 == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
@@ -312,13 +312,8 @@ if ($_POST['acc'] == "1") {
             $error = 88;
         }
 
-        $consulta3 = "INSERT INTO banco_proyec_presupuesto VALUES (null,'" . $proy . "','" . $ParAdicion[2] . "','" . $ParAdicion[4] . "','" . $ParAdicion[3] . "','" . $id_adicion . "')";
-        $qc3 = mysqli_query($link, $consulta3);
-        if (($qc3 == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
-            $success = 0;
-            $error = 89;
-        }
-        $consulta4 = "INSERT INTO banco_proyec_financiacion VALUES (null,'" . $proy . "','" . $ParAdicion[0] . "','" . $ParAdicion[1] . "','" . $ParAdicion[4] . "','" . $id_adicion . "')";
+       
+        $consulta4 = "INSERT INTO banco_proyec_financiacion VALUES (null,'" . $proy . "','" . $ParAdicion[1] . "','" . $ParAdicion[2] . "'," . $ParAdicion[3] . ",'" . $id_adicion . "','" . $ParAdicion[0] . "')";
         $qc4 = mysqli_query($link, $consulta4);
         if (($qc4 == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
             $success = 0;
@@ -342,15 +337,7 @@ if ($_POST['acc'] == "1") {
         $error = 14;
     }
 
-    ///ELIMINAR ADICION AGREGADA AL PRESUPUESTO DEL PROYECTO
-    $consulta = "DELETE FROM banco_proyec_presupuesto WHERE adicion='" . $_POST['txt_idAdicion'] . "'";
-    $qc = mysqli_query($link, $consulta);
-    if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
-        $success = 0;
-        $error = 14;
-    }
-
-
+  
     ///ELIMINAR ADICION AGREGADA A LA FINANCIACION DEL PROYECTO
     $consulta = "DELETE FROM banco_proyec_financiacion WHERE adicion='" . $_POST['txt_idAdicion'] . "'";
     $qc = mysqli_query($link, $consulta);
@@ -372,7 +359,7 @@ if ($_POST['acc'] == "1") {
         $consulta2 = "";
         $ParAdicion = explode("//", $_POST['idDetAdicion' . $i]);
 
-        $consulta2 = "INSERT INTO detalle_adicion VALUES(null,'" . $_POST['txt_idAdicion'] . "','" . $ParAdicion[0] . "','" . $ParAdicion[1] . "','" . $ParAdicion[2] . "','" . $ParAdicion[3] . "'," . $ParAdicion[4] . ")";
+        $consulta2 = "INSERT INTO detalle_adicion VALUES(null,'" . $_POST['txt_idAdicion'] . "','" . $ParAdicion[0] . "','" . $ParAdicion[1] . "','" . $ParAdicion[2] . "','" . $ParAdicion[3] . "'," . $ParAdicion[4] . ",'" . $ParAdicion[5] . "')";
         //echo $consulta2;
         $qc2 = mysqli_query($link, $consulta2);
         if (($qc2 == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
@@ -380,13 +367,8 @@ if ($_POST['acc'] == "1") {
             $error = 88;
         }
 
-        $consulta3 = "INSERT INTO banco_proyec_presupuesto VALUES (null,'" . $proy . "','" . $ParAdicion[2] . "','" . $ParAdicion[4] . "','" . $ParAdicion[3] . "','" . $_POST['txt_idAdicion']. "')";
-        $qc3 = mysqli_query($link, $consulta3);
-        if (($qc3 == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
-            $success = 0;
-            $error = 89;
-        }
-        $consulta4 = "INSERT INTO banco_proyec_financiacion VALUES (null,'" . $proy . "','" . $ParAdicion[0] . "','" . $ParAdicion[1] . "','" . $ParAdicion[4] . "','" . $_POST['txt_idAdicion'] . "')";
+      
+        $consulta4 = "INSERT INTO banco_proyec_financiacion VALUES (null,'" . $proy . "','" . $ParAdicion[1] . "','" . $ParAdicion[2] . "'," . $ParAdicion[3] . ",'" . $_POST['txt_idAdicion'] . "','" . $ParAdicion[0] . "')";
         $qc4 = mysqli_query($link, $consulta4);
         if (($qc4 == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
             $success = 0;

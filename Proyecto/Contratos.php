@@ -812,7 +812,7 @@ $link = conectar();
                 </div>
                 <!-- Fin Ventana Tipologia -->
                 <!-- Ventana Adición -->
-                <div id="VentAdicion" class="modal fade" tabindex="-1" data-width="760">
+                <div id="VentAdicion" class="modal fade" tabindex="-1" data-width="900">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                         <h4 class="modal-title" id='titformi'>Agregar adición</h4>
@@ -827,8 +827,8 @@ $link = conectar();
                                         <div class="col-md-9">
                                             <h4 style="margin-left: 10px;">Adiciones agregadas.</h4>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-actions right">
+                                        <div class="col-md-3" style="text-align: end;">
+                                            <div class="right">
                                                 <button type="button" class="btn green" onclick="$.AddAdicion()" id="btn_guardarAdici"><i class="fa fa-plus"></i> Agregar adición</button>
                                             </div>
                                         </div>
@@ -896,12 +896,12 @@ $link = conectar();
                                             <div class='form-group' id="From_FechaAdd">
                                                 <label class='control-label'>Valor:</label><span class="required">* </span>
                                                 <input type='text' id='txt_valorAdicV' disabled onclick="this.select();" value="$ 0,00" onchange="$.cambioFormato(this.id,'txt_valorAdic');" class='form-control' />
-                                                <input type='hidden' id='txt_valorAdic' class='form-control' />
+                                                <input type='hidden' id='txt_valorAdic' value="0" class='form-control' />
                                             </div>
                                         </div>
                                         <div class='col-md-8'>
                                             <div class='form-group'>
-                                                <label class='control-label'>Adjuntar documento<span class='required'>* </span></label>
+                                                <label class='control-label'>Adjuntar documento:<span class='required'>* </span></label>
                                                 <form method="post" enctype='multipart/form-data' class='form' id='formulario'>
                                                     <input type="file" id="archivosAdicion">
                                                     <input type="hidden" id="Src_FileAdicion" class="form-control" />
@@ -916,7 +916,7 @@ $link = conectar();
                                             </div>
                                         </div>
                                         <div class='col-md-4'>
-                                            <div class='form-actions right"'>
+                                            <div class='right"'>
                                                 <div class="input-group">
                                                     <span class="input-group-btn" id="btn-verDocumentos" style="display: none;">
                                                         <button type="button" id="btn_new_resp" onclick="$.verDocumento();" title="Ver documento" class="btn green-meadow btn-sm">
@@ -935,27 +935,39 @@ $link = conectar();
                                                 <h4 style="margin-left: 10px; font-weight: bold;">Detalles de adición.</h4>
                                             </div>
                                         </div>
+                                        <div class='col-md-3'>
+                                            <div class='form-group'>
+                                                <label class='control-label'>Secretaria:</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
+                                                        <select class="form-control select2" onchange="$.buscarFuente();" data-placeholder="Seleccione..." id="CbSecre" name="options2">
 
-                                        <div class='col-md-6'>
+                                                        </select>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class='col-md-4'>
                                             <div class='form-group' id="From_fuenteAdd">
                                                 <label class='control-label'>Fuente de financiación:</label><span class="required">* </span>
-                                                <select class="form-control select2" onchange="$.buscaSubfinanciacion();" id="CbFuenteFinanciacion" name="options2">
+                                                <select class="form-control select2" data-placeholder="Seleccione..." onchange="$.buscaSubfinanciacion();" id="CbFuenteFinanciacion" name="options2">
 
                                                 </select>
                                             </div>
                                         </div>
 
-                                        <div class='col-md-6'>
+                                        <div class='col-md-5'>
                                             <div class='form-group' id="From_Subfuente">
                                                 <label class='control-label'>Subfuente de financiación:</label><span class="required">* </span>
-                                                <select class='form-control select2' id="subfuente" name="subfuente">
+                                                <select class='form-control select2' data-placeholder="Seleccione..." id="subfuente" name="subfuente">
 
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class='col-md-6'>
+                                        <div  style="display: none;" class='col-md-6'>
                                             <div class='form-group'>
-                                                <label class='control-label'>Gasto:</label>
+                                                <label class='control-label'>Presupuesto:</label>
                                                 <div class="input-group">
                                                     <span class="input-group-btn">
                                                         <select class="form-control" data-placeholder="Seleccione..." id="CbGastos" name="options2">
@@ -974,7 +986,7 @@ $link = conectar();
                                                 <input type='hidden' id='txt_valorDetAdic' class='form-control' />
                                             </div>
                                         </div>
-                                        <div class="col-md-2">
+                                        <div class="col-md-12">
                                             <div class="form-actions right">
                                                 <button type="button" class="btn blue" onclick="$.AddDeltalleAdicionContrato()" id="btn_guardarAdici"><i class="fa fa-plus"></i> Agregar</button>
                                             </div>
@@ -989,7 +1001,7 @@ $link = conectar();
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <h5 style="margin-left: 10px;">Items agregados.</h5>
+                                                <h5 style="margin-left: 14px; font-weight: bold;">Items agregados.</h5>
                                             </div>
                                         </div>
                                         <div class='col-md-12'>
@@ -1002,19 +1014,19 @@ $link = conectar();
                                                                 #
                                                             </td>
                                                             <td>
-                                                                 Fuente de financiación
+                                                                Secretaria
                                                             </td>
                                                             <td>
-                                                                 Subfuente de financiación
+                                                                Fuente de financiación
                                                             </td>
                                                             <td>
-                                                                 Gastos
+                                                                Subfuente de financiación
                                                             </td>
                                                             <td>
-                                                               Valor
+                                                                Valor
                                                             </td>
                                                             <td>
-                                                                 Acción
+                                                                Acción
                                                             </td>
                                                         </tr>
                                                     </thead>
@@ -1068,7 +1080,7 @@ $link = conectar();
                                             <h4 style="margin-left: 10px;">Gastos agregados.</h4>
                                         </div>
                                         <div class="col-md-3">
-                                            <div class="form-actions right">
+                                            <div class="right" style="text-align: end;">
                                                 <button type="button" class="btn green" onclick="$.AddGasto()" id="btn_guardarAdici"><i class="fa fa-plus"></i> Agregar gasto</button>
                                             </div>
                                         </div>
@@ -1109,7 +1121,7 @@ $link = conectar();
                                                         <tr>
                                                             <th colspan='4' style='text-align: right;'>Total gastos:</th>
                                                             <th colspan='1'><label id='gtotalGasto' style='font-weight: bold;'>$ 0,00</label></th>
-                                                            <input type='hidden' name='' id='gtotalGastoVal' />
+                                                            <input type='hidden' name='' value="0" id='gtotalGastoVal' />
                                                         </tr>
                                                     </tfoot>
                                                 </table>
@@ -1158,7 +1170,7 @@ $link = conectar();
                                         </div>
                                         <div class='col-md-8'>
                                             <div class='form-group'>
-                                                <label class='control-label'>Adjuntar documento<span class='required'>* </span></label>
+                                                <label class='control-label'>Adjuntar documento:<span class='required'>* </span></label>
                                                 <form method="post" enctype='multipart/form-data' class='form' id='formulario'>
                                                     <input type="file" id="archivosGasto">
                                                     <input type="hidden" id="Src_FileGasto" class="form-control" />
@@ -1808,6 +1820,36 @@ $link = conectar();
                                                                     <input type='text' id='txt_Url' class='form-control' />
                                                                 </div>
                                                             </div>
+                                                            <div class='col-md-7' id="divproy">
+                                                                <div class='form-group' id="From_Proyect">
+                                                                    <label class='control-label'>Proyecto Asociado:<span class="required">* </span></label>
+                                                                    <select class="form-control select2" id="CbProy" onchange="$.verEstadoProyecto(this.value)" name="options2">
+
+                                                                    </select>
+                                                                    <input type="hidden" value="" id="text_estadoProyecto" />
+                                                                </div>
+                                                            </div>
+                                                            <div class='col-md-3'>
+                                                                <div class='form-group'>
+                                                                    <label class='control-label'>Presupuesto Disponible:</label>
+                                                                    <input type='text' id='txt_VaPresProectoV' value="$ 0,00" class='form-control' disabled />
+                                                                    <input type='hidden' id='txt_VaPresProecto' value="0" class='form-control' />
+
+                                                                </div>
+                                                            </div>
+                                                            <div class='col-md-2' id="divequi">
+                                                                <label class='control-label'>% Equivalente en Proyecto:</label>
+                                                                <div class="input-group ">
+                                                                    <input type='text' id='txt_PorEqui' disabled value='0' class='form-control' />
+                                                                    <span class="input-group-btn">
+                                                                        <button type="button" id="btn_new_resp" onclick="$.UpdPorc();" title="Assignar Porcentaje en Proyecto" class="btn blue">
+                                                                            <i class="fa fa-plus"></i>
+                                                                        </button>
+                                                                    </span>
+
+                                                                </div>
+
+                                                            </div>
                                                             <div class='col-md-12'>
                                                                 <div class='form-group'>
                                                                     <label class='control-label'><b>Valores:</b></label>
@@ -1816,7 +1858,7 @@ $link = conectar();
                                                             <div class='col-md-3' id="divval">
                                                                 <div class='form-group' id="From_Valor">
                                                                     <label class='control-label'>Valor del Contrato:<span class="required">* </span></label>
-                                                                    <input type='text' id='txt_VaCont' onchange="$.AddVFina(this.value, this.id);" value="$ 0,00" class='form-control' onclick="this.select();" />
+                                                                    <input type='text' id='txt_VaCont' onchange="$.AddVFina(this.value, this.id);" value="$ 0,00" class='form-control' onclick="$.validaSelProy(this);" />
                                                                 </div>
                                                             </div>
                                                             <div class='col-md-3'>
@@ -1837,7 +1879,8 @@ $link = conectar();
                                                             <div class='col-md-3'>
                                                                 <div class='form-group'>
                                                                     <label class='control-label'>Valor Final del Contrato:</label>
-                                                                    <input type='text' id='txt_VaFin' value="$ 0,00" class='form-control' onclick="this.select();" onblur="textm(this.value, this.id)" />
+                                                                    <input type='text' id='txt_VaFin' value="$ 0,00" class='form-control' disabled onclick="this.select();" onblur="textm(this.value, this.id)" />
+                                                                    <input type='hidden' id='txt_VaFinVal' value="0" class='form-control' />
 
                                                                 </div>
                                                             </div>
@@ -1848,7 +1891,7 @@ $link = conectar();
                                                                         <input type='text' id='txt_VaEjeV' disabled value="$ 0,00" class='form-control' onclick="this.select();" onblur="textm(this.value, this.id)" />
                                                                         <input type='hidden' id='txt_VaEje' value="" class='form-control' />
                                                                         <span class="input-group-btn">
-                                                                            <button type="button" id="btn_new_resp" onclick="$.NewGastos('1');" title="Agregar gastos" class="btn green-meadow">
+                                                                            <button type="button" id="btn_new_gasto" style="display: none;" onclick="$.NewGastos('1');" title="Agregar gastos" class="btn green-meadow">
                                                                                 <i class="fa fa-pencil-square-o"></i>
                                                                             </button>
                                                                         </span>
@@ -1946,28 +1989,7 @@ $link = conectar();
                                                                     <label class='control-label'><b>Proyecto:</b></label>
                                                                 </div>
                                                             </div>
-                                                            <div class='col-md-12' id="divproy">
-                                                                <div class='form-group' id="From_Proyect">
-                                                                    <label class='control-label'>Proyecto Asociado:<span class="required">* </span></label>
-                                                                    <select class="form-control select2" id="CbProy" onchange="$.verEstadoProyecto(this.value)" name="options2">
-
-                                                                    </select>
-                                                                    <input type="hidden" value="" id="text_estadoProyecto" />
-                                                                </div>
-                                                            </div>
-                                                            <div class='col-md-4' id="divequi">
-                                                                <label class='control-label'>% Equivalente en Proyecto:</label>
-                                                                <div class="input-group ">
-                                                                    <input type='text' id='txt_PorEqui' disabled value='0' class='form-control' />
-                                                                    <span class="input-group-btn">
-                                                                        <button type="button" id="btn_new_resp" onclick="$.UpdPorc();" title="Assignar Porcentaje en Proyecto" class="btn blue">
-                                                                            <i class="fa fa-plus"></i>
-                                                                        </button>
-                                                                    </span>
-
-                                                                </div>
-
-                                                            </div>
+                                                           
                                                             <div class='col-md-3'>
                                                                 <div class='form-group'>
                                                                     <label class='control-label'>% de Avance del Contrato:</label>

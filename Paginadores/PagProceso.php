@@ -8,7 +8,7 @@ $success = 1;
 $error = "";
 $link = conectar();
 $link2 = conectar();
-mysql_set_charset('utf8');
+mysqli_set_charset($link,'utf8');
 $cad = "";
 $cad2 = "";
 $cbp = "";
@@ -22,7 +22,7 @@ $regmos = $_POST["nreg"];
 
 $pag = $_POST["pag"];
 $op = $_POST["pag"];
-$buscar[100];
+$buscar[] =100;
 
 $regemp = 0;
 $pagact = 1;
@@ -61,11 +61,11 @@ if ($busq != "") {
 
     for ($i = 0; $i < count($buscar, 1); $i++) {
         $consulta .= "CONCAT( "
-                . "  codi_proc, "
+                . "  descripcion, "
                 . "  ' ', "
-                . "  nomb_proc, "
+                . "  clase, "
                 . "  ' ', "
-                . "  macropro_proc "
+                . "  objetivo "
                 . ") LIKE '%" . $buscar[$i] . "%' ";
         if (($i) == count($buscar, 1) - 1) {
 
@@ -76,25 +76,25 @@ if ($busq != "") {
     $consulta .= " AND estado='ACTIVO' order by nomb_proc ASC LIMIT " . $regemp . "," . $regmos;
 } else {
 
-    $consulta = "SELECT * FROM procesos WHERE estado='ACTIVO' order by nomb_proc ASC  LIMIT " . $regemp . "," . $regmos;
+    $consulta = "SELECT * FROM procesos WHERE estado='ACTIVO' order by descripcion ASC  LIMIT " . $regemp . "," . $regmos;
 }
 
-//echo $consulta;
-$resultado = mysql_query($consulta, $link);
-if (mysql_num_rows($resultado) > 0) {
 
-    while ($fila = mysql_fetch_array($resultado)) {
+$resultado = mysqli_query($link,$consulta);
+if (mysqli_num_rows($resultado) > 0) {
 
-        $cod = $fila["id_proc"];
+    while ($fila = mysqli_fetch_array($resultado)) {
+
+        $cod = $fila["id"];
         $cad .= "<tr>"
                 . "<td class=\"highlight\">"
-                . $fila["codi_proc"] . " "
+                . $fila["id"] . " "
                 . "</td>"
                 . "<td class=\"highlight\">"
-                . $fila["nomb_proc"] . ""
+                . $fila["descripcion"] . ""
                 . "</td>"
                 . "<td class=\"highlight\">"
-                . $fila["macropro_proc"] . ""
+                . $fila["clase"] . ""
                 . "</td>"
                 . "<td class=\"highlight\">"
                 . "<table>"
@@ -122,10 +122,10 @@ if (mysql_num_rows($resultado) > 0) {
 }
 
 $consulta = "SELECT count(*) as conta FROM procesos WHERE estado='ACTIVO' ";
-$resultado2 = mysql_query($consulta, $link2);
-if (mysql_num_rows($resultado2) > 0) {
+$resultado2 = mysqli_query($link2,$consulta);
+if (mysqli_num_rows($resultado2) > 0) {
 
-    while ($fila = mysql_fetch_array($resultado2)) {
+    while ($fila = mysqli_fetch_array($resultado2)) {
         $contador = intval($fila["conta"]);
     }
 }
@@ -179,5 +179,5 @@ $salida->cbp = $cbp;
 
 echo json_encode($salida);
 
-mysql_close();
+mysqli_close($link);
 ?>
