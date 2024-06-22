@@ -6271,7 +6271,7 @@ FROM
     AND IFNULL(pobl.grupoetnico, '') LIKE '" . $_POST['Grupo'] . "%'
     AND IFNULL(pobl.genero, '') LIKE '" . $_POST['Genero'] . "%'
     AND proy.estado='ACTIVO' AND proy.estado_proyect IN('En Ejecucion','Ejecutado','Priorizado')
-    GROUP BY secretaria, id_proyect";
+    GROUP BY secretaria";
 
         
     $resultado = mysqli_query($link, $consulta);
@@ -6291,7 +6291,7 @@ FROM
                 "dessec" => $fila['secre']
             );
 
-            $consulta = "SELECT   
+            $consulta = "SELECT
             proy.id_proyect idproy,
             proy.cod_proyect codproy,
             proy.nombre_proyect nomb
@@ -6304,7 +6304,6 @@ FROM
             AND IFNULL(pobl.genero, '') LIKE '" . $_POST['Genero'] . "%'
             AND proy.estado='ACTIVO' and bf.secretaria='".$fila['idsec']."' AND proy.estado_proyect IN('En Ejecucion','Ejecutado','Priorizado')
             GROUP BY bf.secretaria, bf.id_proyect";
-
 
             $resultado2 = mysqli_query($link, $consulta);
             if (mysqli_num_rows($resultado2) > 0) {
@@ -6448,16 +6447,13 @@ FROM
     $RawOtrosPro = array(); //creamos un array proyectos
     $OtrProy = trim($OtrProy, ',');
     $consulta = "SELECT 
-    sec.idsecretarias idsec,
-    sec.des_secretarias secre,
+    proy.cod_proyect codproy,
     proy.nombre_proyect nproy,
     proy.estado_proyect estado
   FROM
     proyectos proy 
     LEFT JOIN banco_proyec_pobla pobl 
-      ON proy.id_proyect = pobl.id_proyect 
-    LEFT JOIN secretarias sec 
-      ON proy.secretaria_proyect = sec.idsecretarias 
+      ON proy.id_proyect = pobl.id_proyect    
   WHERE IFNULL(pobl.edad, '') LIKE '" . $_POST['Edad'] . "%'
   AND IFNULL(pobl.grupoetnico, '') LIKE '" . $_POST['Grupo'] . "%'
   AND IFNULL(pobl.genero, '') LIKE '" . $_POST['Genero'] . "%'     
@@ -6469,9 +6465,9 @@ FROM
         while ($filaOP = mysqli_fetch_array($resultadoOP)) {
 
             $RawOtrosPro[] = array(
+                "codproy" => $filaOP['codproy'],
                 "nproy" => $filaOP['nproy'],
-                "secre" => $filaOP['secre'],
-                "estado" => $filaOP['estado']
+                "estado" => $filaOP['estado'],
             );
         }
     }

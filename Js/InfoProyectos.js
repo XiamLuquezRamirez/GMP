@@ -715,19 +715,19 @@ $(document).ready(function () {
             var InfInv = "La Población Asociada";
 
             if (Grupo !== "") {
-                InfInv += " al grupo Étnico " + TextGrupo;
+                InfInv += " al grupo <b>Étnico " + TextGrupo+"</b>";
             } else {
                 InfInv += " a todos los grupos Étnicos, ";
             }
 
             if (Edad !== "") {
-                InfInv += " perteneciente al curso de vida de " + TextEdad;
+                InfInv += " perteneciente al curso de vida de <b>" + TextEdad+"</b>";
             } else {
                 InfInv += " pertenecientes a todos los cursos de vida";
             }
 
             if (Genero !== "") {
-                InfInv += " de género " + TextGenero;
+                InfInv += " de género <b>" + TextGenero+"</b>";
             } else {
                 InfInv += " de todos los géneros.";
             }
@@ -782,9 +782,9 @@ $(document).ready(function () {
                                         + "   </tr>"
                                         + "</thead>"
                                         + "<tbody id='tb_Body_Contratos'>";
-                                if (itemP.Contratos.length > 0) {
-                                    $("#TotProyecto").append("<div class='col-md-12'>NO TIENE RELACIOANADO NINGÚN CONTRATO</>");
-                                    Inv = "NO";
+
+                                if (itemP.Contratos.length == 0) {
+                                    tabC +="<tr><td colspan='5'><div class='col-md-12'>NO TIENE RELACIOANADO NINGÚN CONTRATO</></td></tr>";
                                 } else {
                                     
                                     $.each(itemP.Contratos, function (i, itemC) {
@@ -805,10 +805,11 @@ $(document).ready(function () {
                                         tabC += "<td style='color:" + colesta + "'>" + itemC.estado.replace('Ejecucion', 'Ejecución') + "</td>";
                                         tabC += "<td>" + itemC.porava + "</td></tr>";
                                     });
-                                    tabC += "</tbody>"
-                                            + "</table>";
-                                    $("#TotProyecto").append(tabC);
+                                    
                                 }
+                                tabC += "</tbody>"
+                                     + "</table>";
+                                $("#TotProyecto").append(tabC);
 
                             });
                             if (Inv === "SI") {
@@ -816,8 +817,8 @@ $(document).ready(function () {
 
                                 $("#TotProyecto").append('<h3 style="padding-top: 10px;">Detalles de Inversión.</h3><div class="portlet">'
                                         + '<div class="portlet-body">');
-                                $("#TotProyecto").append('<div class="well">El presupuesto asignado para esta secretaria es de $ ' + number_format2(item.presupuesto, 2, ',', '.') + ', con una \n\
-                           inversión de $ ' + number_format2(item.inv, 2, ",", ".") + ' distribuidos en ' + item.nproy + ' Proyecto(s), que representa el ' + porcinv.toFixed(2) + '% del presupuesto incial, que beneficiarán a ' + item.tpers + ' Personas de ' + InfInv + '</div>');
+                                $("#TotProyecto").append('<div class="well">El presupuesto asignado para esta secretaria es de <b> $ ' + number_format2(item.presupuesto, 2, ',', '.') + ',</b> con una \n\
+                           inversión de <b> $ ' + number_format2(item.inv, 2, ",", ".") + '</b> distribuidos en <b>' + item.nproy + ' Proyecto(s),</b> que representa el <b>' + porcinv.toFixed(2) + '%</b> del presupuesto incial, que beneficiarán a <b>' + item.tpers + ' Personas</b> de ' + InfInv + '</div>');
 
                                 $("#TotProyecto").append('</div></div>');
 
@@ -832,13 +833,10 @@ $(document).ready(function () {
                                 + "<thead>"
                                 + "    <tr>"
                                 + "        <th>"
-                                + "            Número"
+                                + "            Código"
                                 + "        </th>"
                                 + "        <th>"
                                 + "             Proyecto"
-                                + "        </th>"
-                                + "       <th>"
-                                + "            Secretaria"
                                 + "        </th>"
                                 + "       <th>"
                                 + "            Estado"
@@ -861,9 +859,8 @@ $(document).ready(function () {
                                 colesta = "#FDC20D";
                             }
                             tabP += "<tr class='selected'>";
-                            tabP += "<td>" + conP + "</td>";
+                            tabP += "<td>" + itemP.codproy + "</td>";
                             tabP += "<td>" + itemP.nproy + "</td>";
-                            tabP += "<td>" + itemP.secre + "</td>";
                             tabP += "<td style='color:" + colesta + "'>" + itemP.estado.replace('En Ejecucion', 'En Ejecución') + "</td>";
                             conP++;
                         });
@@ -2279,7 +2276,7 @@ $(document).ready(function () {
 
                             $.each(item.proy, function (j, itemP) {
                                 doc.content.push({text: itemP.codproy + ' - ' + itemP.nomproy, fontSize: 11, bold: true, italics: false, margin: [0, 5, 0, 0]});
-                                if (itemP.Contratos === "NO") {
+                                if (itemP.Contratos.length == 0) {
                                     doc.content.push({
                                         text: "NO TIENE RELACIOANADO NINGÚN CONTRATO.",
                                         layout: {
@@ -2301,6 +2298,8 @@ $(document).ready(function () {
                                         margin: [0, 10, 0, 5]
                                     });
                                 } else {
+
+                                    
                                     doc.content.push({text: 'Contratos por Proyecto', fontSize: 10, bold: true, italics: true, margin: [0, 5, 0, 0]},
                                             {
                                                 table: {
@@ -2370,6 +2369,7 @@ $(document).ready(function () {
                                         }
                                         );
                                     });
+
                                 }
 
                             });
@@ -2433,7 +2433,7 @@ $(document).ready(function () {
                                     table: {
                                         widths: ['10%', '65%', '15%', '10%'],
                                         body: [
-                                            [contP, itemP.nproy, itemP.secre, {text: itemP.estado.replace('En Ejecucion', 'En Ejecución'), bold: true, italics: true, color: colesta}]
+                                            [itemP.codproy, itemP.nproy, {text: itemP.estado.replace('En Ejecucion', 'En Ejecución'), bold: true, italics: true, color: colesta}]
                                         ]
                                     },
                                     layout: {
