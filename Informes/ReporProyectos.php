@@ -550,7 +550,7 @@ $link = conectar();
                                                                 <label class='control-label'>Tipo de Reporte:</label>
 
                                                                 <select class='form-control' id="CbTipInf" onchange="$.HabInf(this.value);" name="options2">
-                                                                    <option value=" ">Select...</option>
+                                                                    <option value=" ">Seleccione el reporte a generar.</option>
                                                                     <option value="1">Reporte General de Proyectos por Estados</option>
                                                                     <option value="4">Reporte General de Contratos por Estados</option>
                                                                     <option value="2">Reporte General de Proyectos por Secretarias</option>

@@ -4107,27 +4107,28 @@ ORDER BY id_contrato";
 } else if ($_POST['ope'] == "InfGenSecretaria") {
     $myDat = new stdClass();
 
-    $consulta = "SELECT IFNULL(SUM(valor),'0') totalpre FROM presupuesto_secretarias WHERE id_secretaria='" . $_POST['Secre'] . "'";
+    $consulta = "  SELECT
+    IFNULL((SELECT SUM(ps.valor) FROM presupuesto_secretarias ps WHERE ps.id_secretaria=bf.secretaria),'0') presupuesto,
+    IFNULL((SELECT SUM(valor) FROM banco_proyec_financiacion WHERE secretaria=bf.secretaria),'0') inv
+    FROM  banco_proyec_financiacion bf
+    LEFT JOIN secretarias secr ON secr.idsecretarias = bf.secretaria  
+    WHERE bf.secretaria='" . $_POST['Secre'] . "'
+    GROUP BY bf.secretaria";
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
-            $myDat->totalpre = $fila["totalpre"];
+            $myDat->totalpre = $fila["presupuesto"];
+            $myDat->inv = $fila["inv"];
         }
     }
 
-    $consulta = "SELECT COUNT(*) cant,estado_proyect  FROM (
-   SELECT 
-    COUNT(cod_proyect), cod_proyect,nombre_proyect,estado_proyect
-   FROM  proyectos proy
-   LEFT JOIN proyect_metas proymet
-    ON proy.id_proyect = proymet.cod_proy
-
-  LEFT JOIN secretarias sec
-    ON proy.secretaria_proyect=sec.idsecretarias
-  WHERE IFNULL(proy.secretaria_proyect, '') = '" . $_POST['Secre'] . "'
-  AND proy.estado='ACTIVO'  
-  GROUP BY id_proyect) AS t GROUP BY estado_proyect";
-    //    echo $consulta;
+    $consulta = "  SELECT COUNT(*) cant,estado_proyect FROM (SELECT COUNT(cod_proyect), 
+    cod_proyect,nombre_proyect,estado_proyect FROM proyectos proy 
+    LEFT JOIN proyect_metas proymet ON proy.id_proyect = proymet.cod_proy 
+    LEFT JOIN banco_proyec_financiacion sec ON proy.id_proyect=sec.id_proyect
+    WHERE IFNULL(sec.secretaria, '') = '" . $_POST['Secre'] . "' AND proy.estado='ACTIVO'
+    GROUP BY sec.id_proyect) AS t GROUP BY estado_proyect";
+   //echo $consulta;
     $resultado = mysqli_query($link, $consulta);
     $rawdata = array(); //creamos un array
     if (mysqli_num_rows($resultado) > 0) {
@@ -4145,14 +4146,15 @@ ORDER BY id_contrato";
 
     //////////////CONSULTA DE METAS TRAZADORAS    
 
-    $consulta = "SELECT 
-    proy.id_proyect idproy,  CONCAT(cod_proyect,' - ',nombre_proyect) nombre,  proy.estado_proyect estado
+    $consulta = " SELECT 
+    proy.id_proyect idproy, CONCAT(cod_proyect,' - ',nombre_proyect) nombre,  proy.estado_proyect estado
     FROM
-     proyectos proy 
-     LEFT JOIN proyect_metas pm 
-       ON proy.id_proyect=pm.cod_proy 
-     WHERE proy.secretaria_proyect = '" . $_POST['Secre'] . "' AND proy.estado='ACTIVO' GROUP BY idproy
-     ORDER BY cod_proy";
+    proyectos proy 
+    LEFT JOIN proyect_metas pm 
+    ON proy.id_proyect=pm.cod_proy 
+      LEFT JOIN banco_proyec_financiacion sec ON proy.id_proyect=sec.id_proyect
+    WHERE sec.secretaria = '" . $_POST['Secre'] . "' AND proy.estado='ACTIVO' GROUP BY idproy
+    ORDER BY cod_proy";
 
     //   echo $consulta;
     $RawProyM = array(); //creamos un array
@@ -4161,13 +4163,14 @@ ORDER BY id_contrato";
     if (mysqli_num_rows($resultado) > 0) {
         while ($fila = mysqli_fetch_array($resultado)) {
 
-            $consulta = "SELECT 
+            $consulta = " SELECT 
             desc_met desme
-          FROM
+            FROM
             proyectos proy 
-            RIGHT JOIN proyect_metas pm 
-              ON proy.id_proyect=pm.cod_proy 
-            WHERE proy.secretaria_proyect = '" . $_POST['Secre'] . "' AND proy.estado='ACTIVO' AND proy.id_proyect='" . $fila['idproy'] . "'
+            LEFT JOIN proyect_metas pm 
+            ON proy.id_proyect=pm.cod_proy 
+              LEFT JOIN banco_proyec_financiacion sec ON proy.id_proyect=sec.id_proyect
+            WHERE sec.secretaria = '" . $_POST['Secre'] . "' AND proy.estado='ACTIVO' GROUP BY sec.id_proyect
             ORDER BY cod_proy";
             //            echo $consulta;
             $contMet = 1;
@@ -4198,20 +4201,21 @@ ORDER BY id_contrato";
     /////////CONTRATOS POR PROYECTOS
     $totalInv = 0;
 
-    $consulta = "SELECT 
-  proy.id_proyect idproy,
-  proy.cod_proyect codproy,
-  proy.nombre_proyect nomb,
-  proy.secretaria_proyect,
-  sec.idsecretarias,
-  proy.estado_proyect estado
-FROM
-   proyectos proy   
-  LEFT JOIN secretarias sec 
-    ON proy.secretaria_proyect = sec.idsecretarias 
-WHERE IFNULL(proy.secretaria_proyect, '') = '" . $_POST['Secre'] . "' AND estado='ACTIVO'
-GROUP BY codproy 
-ORDER BY nomb DESC";
+    $consulta = "  SELECT 
+    proy.id_proyect idproy,
+     proy.cod_proyect codproy,
+     proy.nombre_proyect nomb,
+     sec.des_secretarias,
+     sec.idsecretarias,
+     proy.estado_proyect estado
+    FROM
+    proyectos proy 
+      LEFT JOIN banco_proyec_financiacion ffin ON proy.id_proyect=ffin.id_proyect
+        LEFT JOIN secretarias sec 
+       ON ffin.secretaria = sec.idsecretarias 
+    WHERE ffin.secretaria = '" . $_POST['Secre'] . "' AND proy.estado='ACTIVO' GROUP BY ffin.id_proyect
+    ORDER BY proy.cod_proyect
+    ";
     //echo $consulta;
     $proyect = array();
     $Contrat = array();
@@ -4230,7 +4234,7 @@ FROM
     ON contr.idproy_contrato = proy.id_proyect 
  LEFT JOIN secretarias sec
   ON proy.secretaria_proyect=sec.idsecretarias 
-WHERE contr.estcont_contra='Verificado' AND contr.idproy_contrato='" . $fila2['idproy'] . "' 
+WHERE contr.estad_contrato IN ('Ejecucion','Terminado') AND contr.idproy_contrato='" . $fila2['idproy'] . "' 
 AND contr.id_contrato IN
   (SELECT
     MAX(id_contrato)
@@ -4310,20 +4314,17 @@ AND contr.id_contrato IN
                 if (mysqli_num_rows($resultado2) > 0) {
 
                     while ($fila2 = mysqli_fetch_array($resultado2)) {
-                        $consulta = "SELECT 
-  med.*,
-  proy.nombre_proyect nproy,
-  sec.des_secretarias nsecr 
-FROM
-  mediindicador med
-      LEFT JOIN proyectos proy 
-      ON med.proy_ori = proy.id_proyect 
-    LEFT JOIN secretarias sec 
-      ON proy.secretaria_proyect = sec.idsecretarias  WHERE "
-                            . "med.id_meta='" . $fila2['met'] . "' and  med.proy_ori='" . $fila2['proy'] . "' "
+                        $consulta = "SELECT
+                            med.*,
+                            proy.nombre_proyect nproy
+                            FROM
+                            mediindicador med
+                            LEFT JOIN proyectos proy
+                            ON med.proy_ori = proy.id_proyect
+                            WHERE med.id_meta='" . $fila2['met'] . "' and  med.proy_ori='" . $fila2['proy'] . "' "
                             . "AND med.id=(SELECT MAX(id) FROM mediindicador where id_meta='" . $fila2['met'] . "' "
                             . "and  proy_ori='" . $fila2['proy'] . "')";
-                        //                        echo $consulta;
+                        //echo $consulta;
                         $resultado3 = mysqli_query($link, $consulta);
                         if (mysqli_num_rows($resultado3) > 0) {
                             while ($fila3 = mysqli_fetch_array($resultado3)) {
@@ -4354,7 +4355,6 @@ FROM
 
                                 $MedMetProy[] = array(
                                     "nproy" => $fila3['nproy'],
-                                    "nsecr" => $fila3['nsecr'],
                                     "meta" => $fila3['meta'],
                                     "resulindi" => $fila3['resulindi'],
                                     "Cumpl" => $Cumpl
@@ -4383,21 +4383,18 @@ FROM
     echo $myJSONDat;
 } else if ($_POST['ope'] == "InfGenProyEjeCont") {
     $myDat = new stdClass();
-
-
     $cad = "";
+    $consulta = "SELECT secr.idsecretarias idsecr, secr.des_secretarias dessec,
+    IFNULL((SELECT SUM(ps.valor) FROM presupuesto_secretarias ps WHERE ps.id_secretaria=ffin.secretaria),'0') presupuesto,
+    IFNULL((SELECT SUM(valor) FROM banco_proyec_financiacion WHERE secretaria=ffin.secretaria),'0') inv
+    FROM proyectos proy 
+    LEFT JOIN banco_proyec_financiacion ffin ON proy.id_proyect=ffin.id_proyect
+    LEFT JOIN secretarias secr ON ffin.secretaria = secr.idsecretarias   
+    WHERE proy.estado_proyect = 'En Ejecucion' 
+    AND ffin.secretaria LIKE '" . $_POST['Secre'] . "%' 
+    GROUP BY ffin.secretaria";
 
-    $consulta = "SELECT 
-  secr.idsecretarias idsecr,
-  secr.des_secretarias dessec
-FROM
-  proyectos proy 
-  LEFT JOIN secretarias secr 
-    ON proy.secretaria_proyect = secr.idsecretarias 
-WHERE proy.estado_proyect = 'En Ejecucion' 
-  AND proy.secretaria_proyect LIKE '" . $_POST['Secre'] . "%' GROUP BY idsecr";
-
-    //    echo $consulta;
+ // echo $consulta;
 
     $resultado = mysqli_query($link, $consulta);
     if (mysqli_num_rows($resultado) > 0) {
@@ -4406,25 +4403,15 @@ WHERE proy.estado_proyect = 'En Ejecucion'
 
             $totalpre = 0;
 
-            $consultaP = "SELECT SUM(valor) totalpre FROM presupuesto_secretarias WHERE id_secretaria='" . $fila['idsecr'] . "'";
-            $resultadoP = mysqli_query($link, $consultaP);
-            if (mysqli_num_rows($resultadoP) > 0) {
-                while ($filaP = mysqli_fetch_array($resultadoP)) {
-                    $totalpre = $filaP["totalpre"];
-                }
-            }
-
-
-            $consulta = "SELECT 
-  proy.id_proyect idproy,
-  proy.nombre_proyect nomproy,
-  proy.porceEjec_proyect poravan 
-FROM
-  proyectos proy 
-  LEFT JOIN secretarias sec 
-    ON proy.secretaria_proyect = sec.idsecretarias 
-WHERE proy.estado_proyect = 'En Ejecucion' AND proy.secretaria_proyect='" . $fila['idsecr'] . "'
-GROUP BY idproy ";
+             $consulta = " SELECT proy.id_proyect idproy, proy.cod_proyect cod,
+            proy.nombre_proyect nomproy,
+            proy.porceEjec_proyect poravan 
+            FROM proyectos proy 
+            LEFT JOIN banco_proyec_financiacion ffin ON proy.id_proyect=ffin.id_proyect
+            LEFT JOIN secretarias secr ON ffin.secretaria = secr.idsecretarias   
+            WHERE proy.estado_proyect = 'En Ejecucion' 
+            AND ffin.secretaria LIKE '" . $fila['idsecr'] . "%' 
+            GROUP BY idproy";
 
             $totalInv = 0;
             $resultado2 = mysqli_query($link, $consulta);
@@ -4432,7 +4419,7 @@ GROUP BY idproy ";
                 while ($fila2 = mysqli_fetch_array($resultado2)) {
                     $Cont = "";
 
-                    $cad .= "<div class='col-md-12 text-justify ' ><blockquote><strong><em><h5>" . $fila2['nomproy'] . "(<label style='color: green;'>" . $fila2['poravan'] . " Completado</label>)</h5></em> </strong></blockquote></div>";
+                    $cad .= "<div class='col-md-12 text-justify ' ><blockquote><strong><em><h5>" .$fila2['cod']." - ". $fila2['nomproy'] . "(<label style='color: green;'>" . $fila2['poravan'] . " Completado</label>)</h5></em> </strong></blockquote></div>";
 
                     $consulta = "SELECT 
                     contr.num_contrato numcont, contr.obj_contrato obj, 
@@ -4443,11 +4430,9 @@ GROUP BY idproy ";
                      contratos contr 
                      LEFT JOIN proyectos proy 
                        ON contr.idproy_contrato = proy.id_proyect 
-                    LEFT JOIN secretarias sec
-                     ON proy.secretaria_proyect=sec.idsecretarias
                     LEFT JOIN contratistas conttas 
                     ON contr.idcontrati_contrato=conttas.id_contratis
-                   WHERE contr.estcont_contra='Verificado'
+                   WHERE contr.estad_contrato IN ('Ejecucion','Terminado')
                    AND contr.idproy_contrato = '" . $fila2['idproy'] . "'
                    AND contr.id_contrato IN
                      (SELECT
@@ -4501,7 +4486,7 @@ GROUP BY idproy ";
                             }
 
                             $Cont .= "<td>" . $fila3["porava"] . "</td></tr>";
-                            $totalInv = $totalInv + $fila3["total"];
+                         //   $totalInv = $totalInv + $fila3["total"];
                         }
                     } else {
                         $Cont .= "<tr ><td colspan='6'>Este Proyecto no Tiene ningún Contrato Asignado</td></tr>";
@@ -4510,10 +4495,11 @@ GROUP BY idproy ";
                     $cad .= $Cont;
                 }
             }
-            $porcinv = ($totalInv * 100) / $totalpre;
+         
+            $porcinv = ($fila['inv'] * 100) / $fila['presupuesto'];
 
-            $cad .= "DEL PRESUPUESTO ASIGNADO DE $ " . number_format($totalpre, 2, ",", ".") . " A LA " . $fila['dessec'] . " SE HAN "
-                . "GASTADO UN TOTAL DE $ " . number_format($totalInv, 2, ",", ".") . " QUE EQUIVALE A UN " . round($porcinv, 2) . "% DEL PRESUPUESTO DE LA SECRETARIA.";
+            $cad .= "DEL PRESUPUESTO ASIGNADO DE $ " . number_format($fila['presupuesto'], 2, ",", ".") . " A LA " . $fila['dessec'] . " SE HAN "
+                . "GASTADO UN TOTAL DE $ " . number_format($fila['inv'], 2, ",", ".") . " QUE EQUIVALE A UN " . round($porcinv, 2) . "% DEL PRESUPUESTO DE LA SECRETARIA.";
         }
     } else {
         $cad .= "  <div class='col-md-12' ><h4>NO EXISTEN PROYECTOS RELACIONADOS A ESTOS PARAMETROS DE BUSQUEDA </h4></div>";
@@ -4532,38 +4518,27 @@ GROUP BY idproy ";
     $consulta = "TRUNCATE TABLE aux_inf_atra_sup";
     mysqli_query($link, $consulta);
 
-    $consulta = "SELECT * FROM (SELECT 
-sec.des_secretarias dsec, sec.idsecretarias idsec
-FROM
-  contratos contr 
-  LEFT JOIN proyectos proy 
-    ON contr.idproy_contrato = proy.id_proyect 
- LEFT JOIN secretarias sec
-  ON proy.secretaria_proyect=sec.idsecretarias
-WHERE  IFNULL(proy.secretaria_proyect, '') LIKE '" . $_POST['Secre'] . "%'  AND estad_contrato='Suspendido' 
-AND contr.id_contrato IN
-  (SELECT
-    MAX(id_contrato)
-  FROM
-    contratos    
-  GROUP BY num_contrato) 
- UNION ALL
- SELECT 
-sec.des_secretarias dsec, sec.idsecretarias idsec
-FROM
-  contratos contr 
-  LEFT JOIN proyectos proy 
-    ON contr.idproy_contrato = proy.id_proyect 
- LEFT JOIN secretarias sec
-  ON proy.secretaria_proyect=sec.idsecretarias
-WHERE  IFNULL(proy.secretaria_proyect, '') LIKE '" . $_POST['Secre'] . "%' AND estad_contrato='Ejecucion'  
-AND contr.id_contrato IN
-  (SELECT
-    MAX(id_contrato)
-  FROM
-    contratos
-    WHERE DATE(ffin_contrato) < DATE_FORMAT(DATE(NOW()), '%Y-%m-%d')  
-  GROUP BY num_contrato)) AS t GROUP BY idsec";
+    $consulta = "SELECT * FROM (SELECT sec.des_secretarias dsec, sec.idsecretarias idsec 
+    FROM contratos contr LEFT JOIN proyectos proy ON contr.idproy_contrato = proy.id_proyect 
+      LEFT JOIN  banco_proyec_financiacion ffin ON ffin.id_proyect = proy.id_proyect
+    LEFT JOIN secretarias sec ON ffin.secretaria=sec.idsecretarias 
+    WHERE IFNULL(proy.secretaria_proyect, '') 
+    LIKE '" . $_POST['Secre'] . "%' AND estad_contrato='Suspendido' 
+    AND contr.id_contrato IN (SELECT MAX(id_contrato) FROM contratos GROUP BY num_contrato)     
+    UNION ALL    
+    SELECT sec.des_secretarias dsec, sec.idsecretarias idsec
+    FROM contratos contr 
+    LEFT JOIN proyectos proy ON contr.idproy_contrato = proy.id_proyect 
+      LEFT JOIN  banco_proyec_financiacion ffin ON ffin.id_proyect = proy.id_proyect
+    LEFT JOIN secretarias sec ON ffin.secretaria=sec.idsecretarias 
+    WHERE IFNULL(proy.secretaria_proyect, '') LIKE '" . $_POST['Secre'] . "%' 
+    AND estad_contrato='Ejecucion' 
+    AND contr.id_contrato IN (SELECT MAX(id_contrato) 
+    FROM contratos WHERE DATE(ffin_contrato) < DATE_FORMAT(DATE(NOW()), '%Y-%m-%d') 
+    GROUP BY num_contrato)) AS t 
+    GROUP BY idsec";
+
+  //echo $consulta;
 
     $Auxse1 = "";
     $Auxtip1 = "";
@@ -4576,16 +4551,26 @@ AND contr.id_contrato IN
             $cad .= '<b><h3>' . ucwords(strtolower($fila["dsec"])) . '</h3></b>';
             $cad .= "<div id='chartdivSecre" . $is . "' style=' width: 100%; height: 400px;' class='chart'></div>";
 
-            $totalpre = 0;
+            $totalPre = 0;
+            $totalInv = 0;
 
-            $consultaP = "SELECT SUM(valor) totalpre FROM presupuesto_secretarias WHERE id_secretaria='" . $fila['idsec'] . "'";
+            $consultaP = "  SELECT
+            IFNULL((SELECT SUM(ps.valor) FROM presupuesto_secretarias ps WHERE ps.id_secretaria=bf.secretaria),'0') presupuesto,
+            IFNULL((SELECT SUM(valor) FROM banco_proyec_financiacion WHERE secretaria=bf.secretaria),'0') inv
+            FROM  banco_proyec_financiacion bf
+            LEFT JOIN secretarias secr ON secr.idsecretarias = bf.secretaria  
+            WHERE bf.secretaria='" . $fila['idsec'] . "'
+            group by bf.secretaria";
 
             $resultadoP = mysqli_query($link, $consultaP);
             if (mysqli_num_rows($resultadoP) > 0) {
                 while ($filaP = mysqli_fetch_array($resultadoP)) {
-                    $totalpre = $filaP["totalpre"];
+                    $totalPre = $filaP["presupuesto"];
+                //    $totalInv = $filaP["inv"];
                 }
             }
+
+
 
 
 
@@ -4595,8 +4580,8 @@ AND contr.id_contrato IN
                   contratos contr 
                   LEFT JOIN proyectos proy 
                     ON contr.idproy_contrato = proy.id_proyect 
-                 LEFT JOIN secretarias sec
-                  ON proy.secretaria_proyect=sec.idsecretarias
+                    LEFT JOIN  banco_proyec_financiacion ffin ON ffin.id_proyect = proy.id_proyect
+                    LEFT JOIN secretarias sec ON ffin.secretaria=sec.idsecretarias 
                 WHERE  IFNULL(proy.secretaria_proyect, '') LIKE '" . $_POST['Secre'] . "%'  AND estad_contrato='Suspendido' 
                 AND contr.id_contrato IN
                   (SELECT
@@ -4611,8 +4596,8 @@ AND contr.id_contrato IN
                   contratos contr 
                   LEFT JOIN proyectos proy 
                     ON contr.idproy_contrato = proy.id_proyect 
-                 LEFT JOIN secretarias sec
-                  ON proy.secretaria_proyect=sec.idsecretarias
+                    LEFT JOIN  banco_proyec_financiacion ffin ON ffin.id_proyect = proy.id_proyect
+                    LEFT JOIN secretarias sec ON ffin.secretaria=sec.idsecretarias 
                 WHERE  IFNULL(proy.secretaria_proyect, '') LIKE '" . $_POST['Secre'] . "%' AND estad_contrato='Ejecucion'  
                 AND contr.id_contrato IN
                   (SELECT
@@ -4621,10 +4606,10 @@ AND contr.id_contrato IN
                     contratos
                     WHERE DATE(ffin_contrato) < DATE_FORMAT(DATE(NOW()), '%Y-%m-%d')  
                   GROUP BY num_contrato)) AS t WHERE idsec='" . $fila['idsec'] . "'  GROUP BY tipc";
-            $resultado2 = mysqli_query($link, $consulta);
-            $totalInv = 0;
-            $ncontAtr = 0;
-            $ncontSus = 0;
+                $resultado2 = mysqli_query($link, $consulta);
+                $totalInv = 0;
+                $ncontAtr = 0;
+                $ncontSus = 0;
 
 
             $contAtrSup = "";
@@ -4632,14 +4617,14 @@ AND contr.id_contrato IN
                 $Cont = "";
                 $cad .= '<b><h4 style="font-style: italic;">Contratos ' . ucwords(strtolower($fila2["tipc"])) . '</h4></b>';
                 $consulta = "SELECT * FROM (SELECT 
-                            'SUSPENDIDOS' tipc, sec.des_secretarias dsec, contr.num_contrato ncont, contr.obj_contrato obj,
+                            'SUSPENDIDOS' tipc, sec.des_secretarias dsec, contr.num_contrato ncont, contr.obj_contrato obj,contr.ffin_contrato ffin,
                             contr.porav_contrato pava, contr.vfin_contrato valorcont, contr.observacion justi, cttas.nom_contratis contta, sec.idsecretarias idsec
                             FROM
                               contratos contr 
                               LEFT JOIN proyectos proy 
                                 ON contr.idproy_contrato = proy.id_proyect 
-                             LEFT JOIN secretarias sec
-                              ON proy.secretaria_proyect=sec.idsecretarias
+                                LEFT JOIN  banco_proyec_financiacion ffin ON ffin.id_proyect = proy.id_proyect
+                                LEFT JOIN secretarias sec ON ffin.secretaria=sec.idsecretarias 
                               LEFT JOIN contratistas cttas
                               ON contr.idcontrati_contrato=cttas.id_contratis
                             WHERE  IFNULL(proy.secretaria_proyect, '') LIKE '" . $_POST['Secre'] . "%'  AND estad_contrato='Suspendido' 
@@ -4651,15 +4636,15 @@ AND contr.id_contrato IN
                               GROUP BY num_contrato) 
                              UNION ALL
                              SELECT 
-                            'ATRASADOS' tipc, sec.des_secretarias dsec, contr.num_contrato ncont, contr.obj_contrato obj,
+                            'ATRASADOS' tipc, sec.des_secretarias dsec, contr.num_contrato ncont, contr.obj_contrato obj, contr.ffin_contrato ffin,
                             contr.porav_contrato pava, contr.vfin_contrato valorcont, 
                             CASE WHEN just.justificacion=NULL THEN 'SIN INFORME JUSTIFICACIÓN DE ATRASO' ELSE just.justificacion END justi, cttas.nom_contratis contta,sec.idsecretarias idsec
                             FROM
                               contratos contr 
                               LEFT JOIN proyectos proy 
                                 ON contr.idproy_contrato = proy.id_proyect 
-                             LEFT JOIN secretarias sec
-                              ON proy.secretaria_proyect=sec.idsecretarias
+                                LEFT JOIN  banco_proyec_financiacion ffin ON ffin.id_proyect = proy.id_proyect
+                                LEFT JOIN secretarias sec ON ffin.secretaria=sec.idsecretarias 
                                LEFT JOIN justif_atraso_cont just ON contr.id_contrato=just.contrato
                                  LEFT JOIN contratistas cttas
                               ON contr.idcontrati_contrato=cttas.id_contratis
@@ -4690,6 +4675,9 @@ AND contr.id_contrato IN
                     "              <b> Valor Contrato</b>\n" .
                     "          </td>\n" .
                     "          <td>\n" .
+                    "              <b> Fecha finalización</b>\n" .
+                    "          </td>\n" .
+                    "          <td>\n" .
                     "              <b> % de Avance</b>\n" .
                     "          </td>\n" .
                     "          <td>\n" .
@@ -4712,12 +4700,11 @@ AND contr.id_contrato IN
                     $Cont .= "<td>" . $fila3["obj"] . "</td>";
                     $Cont .= "<td>" . $fila3["contta"] . "</td>";
                     $Cont .= "<td>$ " . number_format($fila3["valorcont"], 2, ",", ".") . "</td>";
+                    $Cont .= "<td>" . $fila3["ffin"] . "</td>";
                     $Cont .= "<td>" . $fila3["pava"] . "</td>";
                     $Cont .= "<td>" . $fila3["justi"] . "</td></tr>";
                     $totalInv = $totalInv + $fila3["valorcont"];
                 }
-
-
 
                 $Cont .= " </tbody></table>";
                 $cad .= $Cont;
@@ -4732,8 +4719,8 @@ AND contr.id_contrato IN
               contratos contr 
               LEFT JOIN proyectos proy 
                 ON contr.idproy_contrato = proy.id_proyect 
-              LEFT JOIN secretarias sec 
-                ON proy.secretaria_proyect = sec.idsecretarias 
+                LEFT JOIN  banco_proyec_financiacion ffin ON ffin.id_proyect = proy.id_proyect
+                LEFT JOIN secretarias sec ON ffin.secretaria=sec.idsecretarias 
               LEFT JOIN contratistas conttas 
                 ON contr.idcontrati_contrato = conttas.id_contratis 
             WHERE contr.estcont_contra = 'Verificado' AND proy.secretaria_proyect='" . $fila['idsec'] . "'
@@ -4770,10 +4757,10 @@ AND contr.id_contrato IN
 
 
 
-            $porcinv = ($totalInv * 100) / $totalpre;
+            $porcinv = ($totalInv * 100) / $totalPre;
 
             $cad .= "<h6 style='font-style: italic;'>LA " . $fila['dsec'] . " POSEE " . $ncontAtr . " CONTRATO ATRASADO(S) Y " . $ncontSus . " SUSPENDIDO(S) LO CUAL REPRESENTAN "
-                . "EL <b>" . round($porcinv, 2) . "%</b> ($ " . number_format($totalInv, 2, ",", ".") . ") DEL PRESUPUESTO GENERAL ($ " . number_format($totalpre, 2, ",", ".") . ")</h6>";
+                . "EL <b>" . round($porcinv, 2) . "%</b> ($ " . number_format($totalInv, 2, ",", ".") . ") DEL PRESUPUESTO GENERAL ($ " . number_format($totalPre, 2, ",", ".") . ")</h6>";
             unset($RawCon);
             $is++;
         }
@@ -4790,15 +4777,15 @@ AND contr.id_contrato IN
 
     $cad = "<div class='col-md-12 text-center' ><h3>INFORME GENERAL DE PROYECTOS EN EJECUCIÓN</h3></div>";
 
-    $consulta = "SELECT 
-  secr.idsecretarias idsecr,
-  secr.des_secretarias dessec
-FROM
-  proyectos proy 
-  LEFT JOIN secretarias secr 
-    ON proy.secretaria_proyect = secr.idsecretarias 
-WHERE proy.estado_proyect = 'En Ejecucion' 
-  AND proy.secretaria_proyect LIKE '" . $_POST['Secre'] . "%' GROUP BY idsecr";
+    $consulta = "SELECT secr.idsecretarias idsecr, secr.des_secretarias dessec,
+    IFNULL((SELECT SUM(ps.valor) FROM presupuesto_secretarias ps WHERE ps.id_secretaria=ffin.secretaria),'0') presupuesto,
+    IFNULL((SELECT SUM(valor) FROM banco_proyec_financiacion WHERE secretaria=ffin.secretaria),'0') inv
+    FROM proyectos proy 
+    LEFT JOIN banco_proyec_financiacion ffin ON proy.id_proyect=ffin.id_proyect
+    LEFT JOIN secretarias secr ON ffin.secretaria = secr.idsecretarias   
+    WHERE proy.estado_proyect = 'En Ejecucion' 
+    AND ffin.secretaria LIKE '" . $_POST['Secre'] . "%' 
+    GROUP BY ffin.secretaria";
 
     $RawSec = array(); //creamos un array
     $RawPro = array(1000); //creamos un array
@@ -4813,26 +4800,15 @@ WHERE proy.estado_proyect = 'En Ejecucion'
                 "dessec" => $fila['dessec']
             );
 
-            $totalpre = 0;
-
-            $consultaP = "SELECT SUM(valor) totalpre FROM presupuesto_secretarias WHERE id_secretaria='" . $fila['idsecr'] . "'";
-            $resultadoP = mysqli_query($link, $consultaP);
-            if (mysqli_num_rows($resultadoP) > 0) {
-                while ($filaP = mysqli_fetch_array($resultadoP)) {
-                    $totalpre = $filaP["totalpre"];
-                }
-            }
-
-            $consulta = "SELECT 
-            proy.id_proyect idproy,
+            $consulta = "SELECT proy.id_proyect idproy, proy.cod_proyect cod,
             proy.nombre_proyect nomproy,
             proy.porceEjec_proyect poravan 
-          FROM
-            proyectos proy 
-            LEFT JOIN secretarias sec 
-              ON proy.secretaria_proyect = sec.idsecretarias 
-          WHERE proy.estado_proyect = 'En Ejecucion' AND proy.secretaria_proyect='" . $fila['idsecr'] . "'
-          GROUP BY idproy ";
+            FROM proyectos proy 
+            LEFT JOIN banco_proyec_financiacion ffin ON proy.id_proyect=ffin.id_proyect
+            LEFT JOIN secretarias secr ON ffin.secretaria = secr.idsecretarias   
+            WHERE proy.estado_proyect = 'En Ejecucion' 
+            AND ffin.secretaria LIKE '" . $fila['idsecr'] . "%' 
+            GROUP BY idproy";
             //            echo $consulta;
             $totalInv = 0;
             $resultado2 = mysqli_query($link, $consulta);
@@ -4849,11 +4825,9 @@ WHERE proy.estado_proyect = 'En Ejecucion'
                      contratos contr 
                      LEFT JOIN proyectos proy 
                        ON contr.idproy_contrato = proy.id_proyect 
-                    LEFT JOIN secretarias sec
-                     ON proy.secretaria_proyect=sec.idsecretarias
-                    LEFT JOIN contratistas conttas 
+                   LEFT JOIN contratistas conttas 
                     ON contr.idcontrati_contrato=conttas.id_contratis
-                   WHERE contr.estcont_contra='Verificado'
+                   WHERE contr.estad_contrato IN ('Ejecucion','Terminado')
                    AND contr.idproy_contrato = '" . $fila2['idproy'] . "'
                    AND contr.id_contrato IN
                      (SELECT
@@ -4873,8 +4847,7 @@ WHERE proy.estado_proyect = 'En Ejecucion'
                                 "estado" => $fila3["estado"],
                                 "porava" => $fila3["porava"]
                             );
-
-                            $totalInv = $totalInv + $fila3["total"];
+                     
                         }
                     } else {
                         $RawCon[] = array(
@@ -4889,10 +4862,10 @@ WHERE proy.estado_proyect = 'En Ejecucion'
                     unset($RawCon);
                     $ip++;
 
-                    $porcinv = ($totalInv * 100) / $totalpre;
+                    $porcinv = ($fila['inv'] * 100) / $fila['presupuesto'];
 
-                    $ResInv = "DEL PRESUPUESTO ASIGNADO DE $ " . number_format($totalpre, 2, ",", ".") . " A LA " . $fila['dessec'] . " SE HAN "
-                        . "GASTADO UN TOTAL DE $ " . number_format($totalInv, 2, ",", ".") . " QUE EQUIVALE A UN " . round($porcinv, 2) . "% DEL PRESUPUESTO DE LA SECRETARIA.";
+                    $ResInv = "DEL PRESUPUESTO ASIGNADO DE $ " . number_format($fila['presupuesto'], 2, ",", ".") . " A LA " . $fila['dessec'] . " SE HAN "
+                    . "GASTADO UN TOTAL DE $ " . number_format($fila['inv'], 2, ",", ".") . " QUE EQUIVALE A UN " . round($porcinv, 2) . "% DEL PRESUPUESTO DE LA SECRETARIA.";
 
 
                     $RawSec[$is] = array(
@@ -6262,7 +6235,7 @@ FROM
     $consulta = "SELECT bf.id_proyect,secr.des_secretarias secre,secr.idsecretarias idsec,   
     IFNULL(SUM(pobl.personas),'0') tpers,
     IFNULL((SELECT SUM(ps.valor) FROM presupuesto_secretarias ps WHERE ps.id_secretaria=bf.secretaria),'0') presupuesto,
-    IFNULL((SELECT SUM(valor) FROM banco_proyec_financiacion WHERE secretaria=bf.secretaria),'0') inv   
+    IFNULL((SELECT SUM(valor) FROM banco_proyec_financiacion WHERE secretaria=bf.secretaria),'0') inv
     FROM  banco_proyec_financiacion bf
     LEFT JOIN secretarias secr ON secr.idsecretarias = bf.secretaria
     LEFT JOIN proyectos proy ON bf.id_proyect=proy.id_proyect
@@ -6273,7 +6246,6 @@ FROM
     AND proy.estado='ACTIVO' AND proy.estado_proyect IN('En Ejecucion','Ejecutado','Priorizado')
     GROUP BY secretaria";
 
-        
     $resultado = mysqli_query($link, $consulta);
 
     $RawSec = array(); //creamos un array
@@ -6335,7 +6307,7 @@ FROM
                         contratos
                         WHERE estad_contrato IN('Ejecucion','Terminado') 
                       GROUP BY num_contrato)GROUP BY num_contrato ORDER BY total DESC";
-                                   
+                    
                      $resultado3 = mysqli_query($link, $consulta);
                      $RawCon=[];
                      if (mysqli_num_rows($resultado3) > 0) {
@@ -8271,24 +8243,22 @@ GROUP BY estado ";
     $Tab_Indicad = "";
     $i = 0;
     $cad = "";
-    $consulta = "SELECT 
-proy.cod_proyect proy, COUNT(proy.cod_proyect) cant,proy.id_proyect idproy, proy.nombre_proyect nomproy
-FROM
-  contratos contr 
-  LEFT JOIN proyectos proy 
-    ON contr.idproy_contrato = proy.id_proyect 
- LEFT JOIN secretarias sec
-  ON proy.secretaria_proyect=sec.idsecretarias
- LEFT JOIN contratistas conttas 
- ON contr.idcontrati_contrato=conttas.id_contratis
-WHERE contr.estcont_contra='Verificado'
-AND IFNULL(proy.secretaria_proyect, '') LIKE '" . $_POST["Secre"] . "%'
-AND contr.id_contrato IN
-  (SELECT
-    MAX(id_contrato)
-  FROM
-    contratos   
-  GROUP BY num_contrato) GROUP BY proy.cod_proyect";
+    $consulta = "select t.proy, t.cant, t.nomproy,t.idproy from(
+        SELECT 
+        proy.cod_proyect proy, count(*) cant, proy.id_proyect idproy, proy.nombre_proyect nomproy, ffin.secretaria
+        FROM
+          contratos contr 
+          LEFT JOIN proyectos proy 
+            ON contr.idproy_contrato = proy.id_proyect 
+          left join  banco_proyec_financiacion ffin on ffin.id_proyect = proy.id_proyect
+        WHERE contr.estad_contrato IN ('Ejecucion','Terminado')
+        and IFNULL(ffin.secretaria, '') LIKE '" . $_POST["Secre"] . "%'
+        AND contr.id_contrato IN
+          (SELECT
+            MAX(id_contrato)
+          FROM
+            contratos   
+          GROUP BY num_contrato) group by ffin.secretaria, proy.cod_proyect) as t group by t.proy";
 
     //   echo $consulta;
     $resultado = mysqli_query($link, $consulta);

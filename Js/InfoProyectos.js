@@ -162,6 +162,8 @@ $(document).ready(function () {
                 $('#DivContratos').hide();
                 $('#DivProyectos').hide();
                 $('#DivMapsCal').hide();
+                $('#GrafSecret').hide();
+                $('#GrafProy').hide();
 
                 var datos = {
                     ope: "CargEjes"
@@ -508,7 +510,7 @@ $(document).ready(function () {
                 $('#GrafMapsCal').hide();
                 $.Graficar2();
             } else if (op === "3") {
-                $('#GrafMetas').show();
+              
                 $('#GrafProy').hide();
                 $('#GrafSecret').hide();
                 $('#GrafProy').hide();
@@ -517,7 +519,7 @@ $(document).ready(function () {
                 $('#GrafContEvalCont').hide();
                 $('#GrafGenCont').hide();
                 $('#GrafGenProy').hide();
-                $('#GrafProyEje').hide();
+                $('#GrafProyEje').hide();              
                 $('#GrafMapsCal').hide();
                 $.Graficar3();
             } else if (op === "4") {
@@ -924,9 +926,8 @@ $(document).ready(function () {
                     var parsecr = TextSecre.split(" - ");
                     if(data['totalpre'] == 0){
                         SubTit = "La Secretaria de " + parsecr[1].toLowerCase() + ", no cuenta con un Presupuesto inicial";
-
                     }else{
-                    SubTit = "La Secretaria de " + parsecr[1].toLowerCase() + ", Cuenta con un Presupuesto inicial de " + '$ ' + number_format2(data['totalpre'], 2, ',', '.');
+                        SubTit = "La Secretaria de " + parsecr[1].toLowerCase() + ", Cuenta con un Presupuesto inicial de " + '$ ' + number_format2(data['totalpre'], 2, ',', '.');
                     }
                    
                     if (data.rawdata.length > 0) {
@@ -1049,9 +1050,9 @@ $(document).ready(function () {
 
                     });
 
-                    porcinv = (data['totalInv'] * 100) / data['totalpre'];
+                    porcinv = (data['inv'] * 100) / data['totalpre'];
                     if(data['totalpre'] != 0){
-                        $("#DetInvSecretaria").html("Del Presupuesto asignado de $ " + number_format2(data['totalpre'], 2, ',', '.') + " a la " + parsecr[1].toLowerCase() + " Evidencia una inversión de $ " + number_format2(data['totalInv'], 2, ',', '.') + ". Que representa el " + porcinv.toFixed(2) + "% del Presupuesto Inicial");
+                        $("#DetInvSecretaria").html("Del Presupuesto asignado de $ " + number_format2(data['totalpre'], 2, ',', '.') + " a la " + parsecr[1].toLowerCase() + " Evidencia una inversión de $ " + number_format2(data['inv'], 2, ',', '.') + ". Que representa el " + porcinv.toFixed(2) + "% del Presupuesto Inicial");
 
                     }
 
@@ -1074,22 +1075,24 @@ $(document).ready(function () {
 
             $("#TMetasProy").html("");
 
-            if (CbProg === " ") {
+            if (CbProg == " ") {
                 CbProg = "";
             }
-            if (CbSubProg === " ") {
+            if (CbSubProg == " ") {
                 CbSubProg = "";
             }
 
-            if (CbEjes === " ") {
+            if (CbEjes == " ") {
                 $.Alert("#msg", "Por Favor seleccione el Eje...", "warning", "warning");
                 return;
             }
 
-            if (CbTipMeta === " ") {
+            if (CbTipMeta == " ") {
                 $.Alert("#msg", "Por Favor seleccione el Tipo de Meta...", "warning", "warning");
                 return;
             }
+
+            $('#GrafMetas').show();
 
             var datos = {
                 CbEjes: CbEjes,
@@ -1100,8 +1103,11 @@ $(document).ready(function () {
             };
             var SubTit = "";
             $("#TitInfoMetas").html(TextTipRepor);
+            let nivel1 = document.getElementById("nivel1").textContent;
+                let nivel2 = document.getElementById("nivel2").textContent;
+                let nivel3 = document.getElementById("nivel3").textContent;
 
-            $("#TitDetMeta").html("<b>EJE:</b> " + TextEjes + "<br><b>PROGRAMA:</b> " + TextProg + "<br><b>SUBPROGRAMA:</b> " + TextSubProg);
+            $("#TitDetMeta").html("<b>"+nivel1+"</b> " + TextEjes + "<br><b>"+nivel2+"</b> " + TextProg + "<br><b>"+nivel3+"</b> " + TextSubProg);
 
             var TMetas = "<table class='table table-striped table-hover table-bordered '>"
                     + "<thead>"
@@ -1140,15 +1146,13 @@ $(document).ready(function () {
                             TMetas += "<td>" + itemM.Meta + "</td>";
                             TMetas += "<td>" + itemM.Cumplimiento + "%</td></tr>";
                             ContM++;
+                            if (itemM.DetMetProy.length > 0) {
 
                             var TPMeta = "<table class='table table-striped table-hover table-bordered '>"
                                     + "<thead>"
                                     + "    <tr>"
                                     + "        <th>"
                                     + "            Proyecto"
-                                    + "        </th>"
-                                    + "        <th>"
-                                    + "             Secretaria"
                                     + "        </th>"
                                     + "       <th>"
                                     + "             Meta de Proyecto"
@@ -1163,13 +1167,12 @@ $(document).ready(function () {
                                     + "</thead>"
                                     + "<tbody id='tb_Body_TMetas'>";
 
-                            if (itemM.DetMetProy.length > 0) {
+                           
                                 $("#TMetasProy").append("<div class='col-md-12'><h3>" + itemM.DesMet + "</h3><label style='font-style: italic;  font-size: 20px'>(Meta: " + itemM.Meta + ")</label></div>");
 
                                 $.each(itemM.DetMetProy, function (i, itemP) {
                                     TPMeta += "<tr class='selected'>";
                                     TPMeta += "<td>" + itemP.nproy + "</td>";
-                                    TPMeta += "<td>" + itemP.nsecr + "</td>";
                                     TPMeta += "<td>" + itemP.meta + "</td>";
                                     TPMeta += "<td>" + itemP.resulindi + "</td>";
                                     TPMeta += "<td>" + itemP.Cumpl + "%</td></tr>";
@@ -1177,17 +1180,12 @@ $(document).ready(function () {
                                 TPMeta += "</tbody>";
                                 TPMeta += "<tfoot>";
                                 TPMeta += " <tr>";
-                                TPMeta += " <th colspan='4' style='text-align: right;'>Total:</th>";
+                                TPMeta += " <th colspan='3' style='text-align: right;'>Total:</th>";
                                 TPMeta += "  <th colspan='1'><label id='gtotal' style='font-weight: bold;'>" + itemM.Cumplimiento + "%</label></th>";
                                 TPMeta += " </tr>";
                                 TPMeta += " </tfoot>"
                                         + "</table>";
 
-                            } else {
-                                TPMeta += "<tr class='selected'>";
-                                TPMeta += "<td COLSPAN='5'>No se ha realizado una medición para esta Meta.</td></tr>";
-                                TPMeta += "</tbody>";
-                                +"</table>";
                             }
 
                             $("#TMetasProy").append(TPMeta);
@@ -2385,9 +2383,9 @@ $(document).ready(function () {
                             doc.content.push({text: 'Otros Proyectos', fontSize: 10, bold: true, italics: true, margin: [0, 10, 0, 0]},
                                     {
                                         table: {
-                                            widths: ['10%', '65%', '15%', '10%'],
+                                            widths: ['10%', '90%', '10%'],
                                             body: [
-                                                ['#', 'Proyecto', 'Secretaria', 'Estado']
+                                                ['#', 'Proyecto',  'Estado']
 
                                             ]
                                         },
@@ -2524,8 +2522,8 @@ $(document).ready(function () {
                         
                         }else{
                             SubTit = "La " + parsecr[1].toLowerCase() + ", Cuenta con un Presupuesto inicial de " + '$ ' + number_format2(data['totalpre'], 2, ',', '.');
-                            porcinv = (data['totalInv'] * 100) / data['totalpre'];
-                            Resum = "Del Presupuesto asignado de $ " + number_format2(data['totalpre'], 2, ',', '.') + " a la " + parsecr[1].toLowerCase() + " Evidencia una inversión de $ " + number_format2(data['totalInv'], 2, ',', '.') + ". Que representa el " + Math.round(porcinv) + "% del Presupuesto Inicial";
+                            porcinv = (data['inv'] * 100) / data['totalpre'];
+                            Resum = "Del Presupuesto asignado de $ " + number_format2(data['totalpre'], 2, ',', '.') + " a la " + parsecr[1].toLowerCase() + " Evidencia una inversión de $ " + number_format2(data['inv'], 2, ',', '.') + ". Que representa el " + Math.round(porcinv) + "% del Presupuesto Inicial";
     
                         }
                         
@@ -3087,9 +3085,13 @@ $(document).ready(function () {
                     ope: "InfGenMetas"
                 };
 
-                doc.content.push({text: [{text: "Eje: ", fontSize: 10, bold: true, margin: [0, 10, 0, 0]}, {text: TextEjes, fontSize: 10, bold: false, italics: true, margin: [0, 5, 0, 0]}]});
-                doc.content.push({text: [{text: "Programa: ", fontSize: 10, bold: true, margin: [0, 10, 0, 0]}, {text: TextProg, fontSize: 10, bold: false, italics: true, margin: [0, 5, 0, 0]}]});
-                doc.content.push({text: [{text: "SubPrograma: ", fontSize: 10, bold: true, margin: [0, 10, 0, 0]}, {text: TextSubProg, fontSize: 10, bold: false, italics: true, margin: [0, 5, 0, 0]}]});
+                let nivel1 = document.getElementById("nivel1").textContent;
+                let nivel2 = document.getElementById("nivel2").textContent;
+                let nivel3 = document.getElementById("nivel3").textContent;
+
+                doc.content.push({text: [{text: nivel1+" ", fontSize: 10, bold: true, margin: [0, 10, 0, 0]}, {text: TextEjes, fontSize: 10, bold: false, italics: true, margin: [0, 5, 0, 0]}]});
+                doc.content.push({text: [{text: nivel2+" ", fontSize: 10, bold: true, margin: [0, 10, 0, 0]}, {text: TextProg, fontSize: 10, bold: false, italics: true, margin: [0, 5, 0, 0]}]});
+                doc.content.push({text: [{text: nivel3+" ", fontSize: 10, bold: true, margin: [0, 10, 0, 0]}, {text: TextSubProg, fontSize: 10, bold: false, italics: true, margin: [0, 5, 0, 0]}]});
 
                 doc.content.push({
                     text: 'Listado de Metas ', fontSize: 13, bold: false, italics: false, margin: [0, 7, 0, 0]});
@@ -3133,16 +3135,12 @@ $(document).ready(function () {
                     success: function (data) {
                         var ContM = 1;
                         if (data.ResumMetas.length > 0) {
-
                             $.each(data.ResumMetas, function (y, item3) {
-
                                 doc.content.push({
-
                                     table: {
                                         widths: ['5%', '55%', '25%', '15%'],
                                         body: [
                                             [ContM, item3.DesMet, item3.Meta, item3.Cumplimiento + '%']
-
                                         ]
                                     },
                                     layout: {
@@ -3197,9 +3195,10 @@ $(document).ready(function () {
 
 
                         doc.content.push({
-                            text: 'Detalles de Medición Metas ', fontSize: 13, bold: false, italics: false, margin: [0, 7, 0, 0]});
+                            text: 'Detalles de Medición de metas realizadas', fontSize: 13, bold: false, italics: false, margin: [0, 7, 0, 0]});
                         if (data.ResumMetas.length > 0) {
                             $.each(data.ResumMetas, function (y, item) {
+                                if (item.DetMetProy.length > 0) {
 //                            doc.content.push(
 //                                    [{text: item.DesMet, fontSize: 13, bold: false, italics: false, margin: [0, 7, 0, 5]}, {text: ' (' + item.Meta + ')', fontSize: 13, bold: false, italics: true, margin: [0, 7, 0, 0]}]);
                                 doc.content.push({text: [{text: item.DesMet, fontSize: 12, bold: true, margin: [10, 20, 0, 10]}, {text: '(Meta: ' + item.Meta + ')', fontSize: 10, bold: false, italics: true, margin: [0, 5, 0, 0]}]});
@@ -3207,9 +3206,9 @@ $(document).ready(function () {
                                 doc.content.push(
                                         {
                                             table: {
-                                                widths: ['45%', '20%', '10%', '10%', '15%'],
+                                                widths: ['65%', '10%', '10%', '15%'],
                                                 body: [
-                                                    ['Nombre del Proyecto', 'Secretaria', 'Meta de Proyecto', 'Resultado Medición', ' % Cumplimiento']
+                                                    ['Nombre del Proyecto', 'Meta de Proyecto', 'Resultado Medición', ' % Cumplimiento']
 
                                                 ]
                                             },
@@ -3234,15 +3233,15 @@ $(document).ready(function () {
                                         }
                                 );
 
-                                if (item.DetMetProy.length > 0) {
+                          
                                     $.each(item.DetMetProy, function (i, itemP) {
 
                                         doc.content.push({
 
                                             table: {
-                                                widths: ['45%', '20%', '10%', '10%', '15%'],
+                                                widths: ['65%', '10%', '10%', '15%'],
                                                 body: [
-                                                    [itemP.nproy, itemP.nsecr, itemP.meta, itemP.resulindi, itemP.Cumpl + '%']
+                                                    [itemP.nproy,  itemP.meta, itemP.resulindi, itemP.Cumpl + '%']
 
                                                 ]
                                             },
@@ -3293,74 +3292,9 @@ $(document).ready(function () {
                                         fillColor: '#f2f2f2',
                                         margin: [0, 0, 0, 15]
                                     });
-
-
-                                } else {
-
-                                    doc.content.push({
-
-                                        table: {
-                                            widths: ['45%', '20%', '10%', '10%', '15%'],
-                                            body: [
-                                                [{text: 'No se ha realizado una medición para esta Meta.', style: 'tableHeader', colSpan: 5, fontSize: 9, alignment: 'center'}]
-
-                                            ]
-                                        },
-                                        layout: {
-                                            hLineWidth: function (i, node) {
-                                                return 0.3; // Grosor de la línea horizontal
-                                            },
-                                            vLineWidth: function (i, node) {
-                                                return 0.3; // Grosor de la línea vertical
-                                            },
-                                            hLineColor: function (i, node) {
-                                                return '#000000'; // Color de la línea horizontal
-                                            },
-                                            vLineColor: function (i, node) {
-                                                return '#000000'; // Color de la línea vertical
-                                            }
-                                        },
-                                        fontSize: 8,
-                                        bold: true,
-                                        margin: [0, 0, 0, 15]
-                                    });
                                 }
-
-
                             });
-                        } else {
-
-                            doc.content.push({
-
-                                table: {
-                                    widths: ['45%', '20%', '10%', '10%', '15%'],
-                                    body: [
-                                        [{text: 'No se ha realizado una medición para esta Meta.', style: 'tableHeader', colSpan: 5, fontSize: 9, alignment: 'center'}]
-                                    ]
-                                },
-                                layout: {
-                                    hLineWidth: function (i, node) {
-                                        return 0.3; // Grosor de la línea horizontal
-                                    },
-                                    vLineWidth: function (i, node) {
-                                        return 0.3; // Grosor de la línea vertical
-                                    },
-                                    hLineColor: function (i, node) {
-                                        return '#000000'; // Color de la línea horizontal
-                                    },
-                                    vLineColor: function (i, node) {
-                                        return '#000000'; // Color de la línea vertical
-                                    }
-                                },
-                                fontSize: 8,
-                                bold: true,
-                                margin: [0, 0, 0, 15]
-                            });
-
                         }
-
-
-
                     }
                 });
 

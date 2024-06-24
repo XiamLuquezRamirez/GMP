@@ -530,7 +530,7 @@ $link = conectar();
                     <div class="portlet box blue-soft">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-angle-right"></i>Reportes de Proyectos.
+                                <i class="fa fa-angle-right"></i>Informes de Proyectos.
                             </div>
                             <div class="tools">
                                 <a href="javascript:;" class="collapse"></a>
@@ -551,7 +551,7 @@ $link = conectar();
                                                                 <label  class='control-label'>Tipo de Informe:</label>
 
                                                                 <select class='form-control' id="CbTipInf" onchange="$.HabInf(this.value);" name="options2">
-                                                                    <option value=" ">Select...</option>
+                                                                    <option value=" ">Seleccione el informe a generar...</option>
                                                                     <option value="1">Informe General por Población Especifica</option>
                                                                     <option value="2">Informe General por Secretarias</option>
                                                                     <option value="3">Informe General de Metas</option>
@@ -673,10 +673,11 @@ $link = conectar();
                                                         </div>
 
                                                     </div >
+                                                   
                                                     <div class="row" id="DivTipMeta" style="display: none;">
                                                         <div class='col-md-5'>
                                                             <div class='form-group' id="From_Eje">
-                                                                <label class='control-label'>Eje:<span class="required">* </span></label>
+                                                                <label id="nivel1" class='control-label'><?php echo $_SESSION['nivel1']; ?>:<span class="required">* </span></label>
                                                                 <select class="form-control select2" data-placeholder="Seleccione..." onchange="$.CargEstrategia(this.value);"  id="CbEjes" name="options2">
 
                                                                 </select>
@@ -685,7 +686,7 @@ $link = conectar();
 
                                                         <div class='col-md-7'>
                                                             <div class='form-group' id="From_Est">
-                                                                <label class='control-label'>Programa:</label>
+                                                                <label id="nivel2"  class='control-label'><?php echo $_SESSION['nivel2']; ?>:</label>
                                                                 <select class="form-control select2" disabled data-placeholder="Seleccione..." onchange="$.CargProgramas(this.value);" id="CbEtrategias" name="options2">
 
                                                                 </select>
@@ -694,7 +695,7 @@ $link = conectar();
                                                         </div>
                                                         <div class='col-md-9'>
                                                             <div class='form-group' id="From_Pro">
-                                                                <label class='control-label'>SubPrograma:</label>
+                                                                <label id="nivel3"  class='control-label'><?php echo $_SESSION['nivel3']; ?>:</label>
                                                                 <select class="form-control select2" disabled data-placeholder="Seleccione..."  id="CbProgramas" name="options2">
 
                                                                 </select>
@@ -825,7 +826,7 @@ $link = conectar();
                                                                    
                                                                 </div>
                                                                 <div class='col-md-12'>
-                                                                     <h4><b>Detalles de Medición Metas</b></h4>
+                                                                     <h4><b>Detalles de Medición de metas realizadas</b></h4>
                                                                     <div id="TMetasProy"></div>
                                                                 </div>
                                                                 
