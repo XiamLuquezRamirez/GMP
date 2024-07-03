@@ -660,14 +660,24 @@ $link = conectar();
                         </div>
                         <!-- END PAGE CONTENT-->
 
-                        <div id="cargando" class="modal fade" tabindex="-1" data-width="150">
-                            <div class="modal-footer">
-                                <div class="progress progress-striped active">
-                                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <div id="cargando" class="loader-spinner" style="display: none;">
+        <img src="../Img/gmp.gif" width="150" />
+        <div class="loader">
+            <p class="text">
+                <span class="letter letter1">c</span>
+                <span class="letter letter2">a</span>
+                <span class="letter letter3">r</span>
+                <span class="letter letter4">g</span>
+                <span class="letter letter5">a</span>
+                <span class="letter letter6">n</span>
+                <span class="letter letter7">d</span>
+                <span class="letter letter8">o</span>
+                <span class="letter letter9">.</span>
+                <span class="letter letter10">.</span>
+                <span class="letter letter11">.</span>
+            </p>
+        </div>
+    </div>
 
                     </div>
                 </div>

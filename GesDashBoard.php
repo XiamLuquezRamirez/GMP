@@ -116,7 +116,6 @@ WHERE proy.estado_proyect IN ('En Ejecucion','Ejecutado')";
 
   $myDat->RawUbiProy = $RawUbiProy;
 
-
   /////PRESUPUESTO
   if($_POST["CbSec"] != ""){
     $Consulta = "SELECT SUM(valor) presu FROM presupuesto_secretarias WHERE id_secretaria =".$_POST["CbSec"]."  GROUP BY id_secretaria";
@@ -125,8 +124,6 @@ WHERE proy.estado_proyect IN ('En Ejecucion','Ejecutado')";
 
   }
 
-
-
   $resultado = mysqli_query($link, $Consulta);
   if (mysqli_num_rows($resultado) > 0) {
     while ($fila = mysqli_fetch_array($resultado)) {
@@ -134,24 +131,20 @@ WHERE proy.estado_proyect IN ('En Ejecucion','Ejecutado')";
     }
   }
 
-
   ///PRESUPUESTO CON CDP
   $TotProyPriori = 0;
-  $consulta = "SELECT proy.id_proyect FROM proyectos proy 
-   LEFT JOIN banco_proyec_presupuesto pres 
-    ON proy.id_proyect = pres.id_proyect 
-    LEFT JOIN proyect_metas proymet 
-    ON proy.id_proyect = proymet.cod_proy 
-  LEFT JOIN metas met 
-    ON proymet.id_meta = met.id_meta 
-  LEFT JOIN ejes eje 
-    ON met.ideje_metas = eje.ID 
-    LEFT JOIN banco_proyec_financiacion finan
-    ON proy.id_proyect = finan.id_proyect
-  WHERE proy.estado='ACTIVO' and comp_pres='si' and estado_proyect='En Ejecucion'";
+  $consulta = "SELECT ifnull(sum(finan.valor),0) total FROM proyectos proy 
+  LEFT JOIN banco_proyec_financiacion finan ON proy.id_proyect = finan.id_proyect 
+  LEFT JOIN proyect_metas proymet ON proy.id_proyect = proymet.cod_proy 
+  LEFT JOIN metas met ON proymet.id_meta = met.id_meta 
+  LEFT JOIN ejes eje ON met.ideje_metas = eje.ID 
+  WHERE proy.estado='ACTIVO' and comp_pres='si' 
+  and estado_proyect='En Ejecucion' ";
+
+  //echo $consulta;
 
   if ($_POST["CbSec"] != "") {
-    $consulta .= " AND IFNULL(proy.secretaria_proyect, '') = '" . $_POST["CbSec"] . "'";
+    $consulta .= " AND IFNULL(finan.secretaria, '') = '" . $_POST["CbSec"] . "'";
   }
   if ($_POST["CbEje"] != "") {
     $consulta .= "AND IFNULL(eje.ID, '') = '" . $_POST["CbEje"] . "'";
@@ -162,109 +155,34 @@ WHERE proy.estado_proyect IN ('En Ejecucion','Ejecutado')";
   if ($_POST["CbFin"] != "") {
     $consulta .= "AND IFNULL(finan.origen, '') = '" . $_POST["CbFin"] . "'";
   }
-  $consulta .= " GROUP BY proy.id_proyect";
+  $consulta .= " GROUP BY finan.id_proyect";
 
-  $resultado = mysqli_query($link, $consulta);
+   $resultado = mysqli_query($link, $consulta);
 
   if (mysqli_num_rows($resultado) > 0) {
     while ($fila = mysqli_fetch_array($resultado)) {
-      $Consulta = "SELECT 
-            SUM(pproy.total) total
-           FROM
-             proyectos proy 
-             LEFT JOIN banco_proyec_presupuesto pproy
-             ON proy.id_proyect=pproy.id_proyect 
-           WHERE  proy.id_proyect='" . $fila['id_proyect'] . "'
-           GROUP BY proy.id_proyect";
-
-
-      $resultadoVP = mysqli_query($link, $Consulta);
-      if (mysqli_num_rows($resultadoVP) > 0) {
-        while ($filaVP = mysqli_fetch_array($resultadoVP)) {
-          $TotProyPriori = $TotProyPriori + $filaVP['total'];
-        }
-      }
+          $TotProyPriori += $fila['total'];
     }
   }
 
   $myDat->TotProyPriori = $TotProyPriori;
 
 
-
-  ///PROYECTOS EN EJECUCION
-
-  $TotProyEjecucion = 0;
-  $consulta = "SELECT proy.id_proyect FROM proyectos proy 
-   LEFT JOIN banco_proyec_presupuesto pres 
-    ON proy.id_proyect = pres.id_proyect 
-    LEFT JOIN proyect_metas proymet 
-    ON proy.id_proyect = proymet.cod_proy 
-  LEFT JOIN metas met 
-    ON proymet.id_meta = met.id_meta 
-  LEFT JOIN ejes eje 
-    ON met.ideje_metas = eje.ID 
-    LEFT JOIN banco_proyec_financiacion finan
-    ON proy.id_proyect = finan.id_proyect
-  WHERE proy.estado='ACTIVO' and estado_proyect='Ejecutados'";
-
-  if ($_POST["CbSec"] != "") {
-    $consulta .= " AND IFNULL(proy.secretaria_proyect, '') = '" . $_POST["CbSec"] . "'";
-  }
-  if ($_POST["CbEje"] != "") {
-    $consulta .= "AND IFNULL(eje.ID, '') = '" . $_POST["CbEje"] . "'";
-  }
-  if ($_POST["CbVig"] != "") {
-    $consulta .= " AND IFNULL(proy.vigenc_proyect, '') = '" . $_POST["CbVig"] . "'";
-  }
-  if ($_POST["CbFin"] != "") {
-    $consulta .= "AND IFNULL(finan.origen, '') = '" . $_POST["CbFin"] . "'";
-  }
-  $consulta .= " GROUP BY proy.id_proyect";
-
-  $resultado = mysqli_query($link, $consulta);
-
-  if (mysqli_num_rows($resultado) > 0) {
-    while ($fila = mysqli_fetch_array($resultado)) {
-      $Consulta = "SELECT 
-            SUM(pproy.total) total
-           FROM
-             proyectos proy 
-             LEFT JOIN banco_proyec_presupuesto pproy
-             ON proy.id_proyect=pproy.id_proyect 
-           WHERE  proy.id_proyect='" . $fila['id_proyect'] . "'
-           GROUP BY proy.id_proyect";
-
-
-      $resultadoVP = mysqli_query($link, $Consulta);
-      if (mysqli_num_rows($resultadoVP) > 0) {
-        while ($filaVP = mysqli_fetch_array($resultadoVP)) {
-          $TotProyEjecucion = $TotProyEjecucion + $filaVP['total'];
-        }
-      }
-    }
-  }
-
-  $myDat->TotProyEjecucion = $TotProyEjecucion;
-
-
-
   ///CONSULTAR VALOR PROYECTOS EJECUTADOS
   $TotProyEjecutado = 0;
-  $consulta = "SELECT proy.id_proyect FROM proyectos proy 
-  LEFT JOIN banco_proyec_presupuesto pres 
-   ON proy.id_proyect = pres.id_proyect 
-   LEFT JOIN proyect_metas proymet 
-   ON proy.id_proyect = proymet.cod_proy 
- LEFT JOIN metas met 
-   ON proymet.id_meta = met.id_meta 
- LEFT JOIN ejes eje 
-   ON met.ideje_metas = eje.ID 
-   LEFT JOIN banco_proyec_financiacion finan
-   ON proy.id_proyect = finan.id_proyect
- WHERE proy.estado='ACTIVO' and estado_proyect='Ejecutado'";
+  $consulta = "SELECT IFNULL(sum(finan.valor),0) valor FROM proyectos proy 
+  LEFT JOIN banco_proyec_financiacion finan
+  ON proy.id_proyect = finan.id_proyect
+  LEFT JOIN proyect_metas proymet 
+  ON proy.id_proyect = proymet.cod_proy 
+LEFT JOIN metas met 
+  ON proymet.id_meta = met.id_meta 
+LEFT JOIN ejes eje 
+  ON met.ideje_metas = eje.ID 
+WHERE proy.estado='ACTIVO' and estado_proyect='Ejecutado'";
 
   if ($_POST["CbSec"] != "") {
-    $consulta .= " AND IFNULL(proy.secretaria_proyect, '') = '" . $_POST["CbSec"] . "'";
+    $consulta .= " AND IFNULL(finan.secretaria, '') = '" . $_POST["CbSec"] . "'";
   }
   if ($_POST["CbEje"] != "") {
     $consulta .= "AND IFNULL(eje.ID, '') = '" . $_POST["CbEje"] . "'";
@@ -275,26 +193,12 @@ WHERE proy.estado_proyect IN ('En Ejecucion','Ejecutado')";
   if ($_POST["CbFin"] != "") {
     $consulta .= "AND IFNULL(finan.origen, '') = '" . $_POST["CbFin"] . "'";
   }
-  $consulta .= " GROUP BY proy.id_proyect";
 
 
   $resultado = mysqli_query($link, $consulta);
   if (mysqli_num_rows($resultado) > 0) {
     while ($filaPR = mysqli_fetch_array($resultado)) {
-      $Consulta = "SELECT
-            SUM(pproy.total) total
-           FROM
-             proyectos proy
-             LEFT JOIN banco_proyec_presupuesto pproy
-             ON proy.id_proyect=pproy.id_proyect 
-           WHERE  proy.id_proyect='" . $filaPR['id_proyect'] . "'
-           GROUP BY proy.id_proyect";
-      $resultadoVP = mysqli_query($link, $Consulta);
-      if (mysqli_num_rows($resultadoVP) > 0) {
-        while ($filaVP = mysqli_fetch_array($resultadoVP)) {
-          $TotProyEjecutado +=  $filaVP['total'];
-        }
-      }
+          $TotProyEjecutado +=  $filaPR['valor'];
     }
   }
 
@@ -302,23 +206,23 @@ WHERE proy.estado_proyect IN ('En Ejecucion','Ejecutado')";
 
   ///PRESUPUESTO GASTADO EN EJECUCION
   $Consulta = "SELECT IFNULL(SUM(vejec),0) veje FROM(
-SELECT
-    contr.veje_contrato vejec
-  FROM
-    proyectos proy
-    LEFT JOIN contratos contr
-    ON proy.id_proyect=contr.idproy_contrato
-    LEFT JOIN proyect_metas proymet
-      ON proy.id_proyect = proymet.cod_proy
-    LEFT JOIN metas met
-      ON proymet.id_meta = met.id_meta
-    LEFT JOIN ejes eje
-      ON met.ideje_metas = eje.ID
-    LEFT JOIN presupuesto_secretarias pc
-      ON proy.secretaria_proyect = pc.id_secretaria
-  WHERE proy.estado = 'ACTIVO' AND proy.estado_proyect='En Ejecucion' AND contr.estad_contrato IN ('Ejecucion','Ejecutado')";
+    SELECT
+        contr.veje_contrato vejec
+      FROM
+        proyectos proy
+        LEFT JOIN contratos contr
+        ON proy.id_proyect=contr.idproy_contrato
+        LEFT JOIN proyect_metas proymet
+          ON proy.id_proyect = proymet.cod_proy
+        LEFT JOIN metas met
+          ON proymet.id_meta = met.id_meta
+        LEFT JOIN ejes eje
+          ON met.ideje_metas = eje.ID
+        LEFT JOIN banco_proyec_financiacion finan
+       ON proy.id_proyect = finan.id_proyect
+  WHERE proy.estado = 'ACTIVO' AND proy.estado_proyect='En Ejecucion' AND contr.estad_contrato IN ('Ejecucion','Terminado')";
   if ($_POST["CbSec"] != "") {
-    $Consulta .= " AND IFNULL(proy.secretaria_proyect, '') = '" . $_POST["CbSec"] . "'";
+    $Consulta .= " AND IFNULL(finan.secretaria, '') = '" . $_POST["CbSec"] . "'";
   }
   if ($_POST["CbEje"] != "") {
     $Consulta .= "AND IFNULL(eje.ID, '') = '" . $_POST["CbEje"] . "'";
@@ -327,13 +231,13 @@ SELECT
     $Consulta .= " AND IFNULL(proy.vigenc_proyect, '') = '" . $_POST["CbVig"] . "'";
   }
   if ($_POST["CbFin"] != "") {
-    $Consulta .= "AND IFNULL(pc.id_fuente, '') = '" . $_POST["CbFin"] . "'";
+    $Consulta .= "AND IFNULL(finan.origen, '') = '" . $_POST["CbFin"] . "'";
   }
   $Consulta .= "AND contr.id_contrato IN
   (SELECT
     MAX(id_contrato)
   FROM
-    contratos WHERE estad_contrato='Ejecucion'
+    contratos WHERE contr.estad_contrato IN ('Ejecucion','Terminado')
   GROUP BY num_contrato)
   GROUP BY contr.num_contrato) AS t";
 
@@ -402,8 +306,6 @@ SELECT
     }
   }
   $myDat->PresSecret = $rawdata;
-
-
 
   ///////////////////ESTADO DE PROYECTOS
 

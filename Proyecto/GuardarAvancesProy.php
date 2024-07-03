@@ -35,6 +35,8 @@ if (!file_exists($carpetaDest)) {
 }
 for ($i = 1; $i <= $Tam_Img; $i++) {
     $consulta2 = "";
+    $carpetaOrigen = 'GaleriaProyecto/';
+    $carpetaDest = 'GaleriaProyecto/' . $_SESSION['ses_complog'] . '/' . $cod_pr . '/';
     $parimg = explode("//", $_POST['idImg' . $i]);
 
     $consulta2 = "INSERT INTO proyecto_galeria VALUES(null,'" . $_POST['idproy'] . "','" . $parimg[0] . "','" . $parimg[1] . "','" . $cod_pr . "','" . $parimg[2] . "','" . $parimg[3] . "')";
@@ -45,26 +47,29 @@ for ($i = 1; $i <= $Tam_Img; $i++) {
         $error = 8;
     }
 
-    //echo $carpetaOrigen . $parimg[1];
+   
+   
     if (file_exists($carpetaOrigen . $parimg[1])) {
-
-        if (file_exists($carpetaDest) || @mkdir($carpetaDest)) {
-
-            $carpetaOrigen = $carpetaOrigen . $parimg[1];
-            $carpetaDest = $carpetaDest . $parimg[1];
-            chmod($carpetaOrigen, 0777);
+        if (!file_exists($carpetaDest)) {
+                  @mkdir($carpetaDest);
+        }       
+      
+        $carpetaOrigen = $carpetaOrigen . $parimg[1];
+        $carpetaDest = $carpetaDest . $parimg[1];
+        chmod($carpetaOrigen, 0777);
 
 //                mkdir($carpetaOrigen, 0644, true);
-            if (!@copy($carpetaOrigen, $carpetaDest)) {
-                $errors = error_get_last();
-                echo "COPY ERROR: " . $errors['type'];
-                echo "<br />\n" . $errors['message'];
-            } else {
-                chmod($carpetaDest, '0644');
-                chmod($carpetaOrigen, 0777);
-                unlink($carpetaOrigen);
-            }
-        }
+     
+         if (!@copy($carpetaOrigen, $carpetaDest)) {
+             $errors = error_get_last();
+         echo "COPY ERROR: " . $errors['type'];
+             echo "<br />\n" . $errors['message'];
+        } else {
+             chmod($carpetaDest, '0644');
+             chmod($carpetaOrigen, 0777);
+             unlink($carpetaOrigen);
+         }
+        
     }
 }
 

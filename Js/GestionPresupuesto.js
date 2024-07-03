@@ -86,8 +86,29 @@ $(document).ready(function () {
           keyboard: false,
         });
         $.buscarSubfuente();
+        $("#txt_valorSubVis").val("$ 0,00");
+        $("#txt_valorSub").val("0");
       }
     },
+       buscarSubfuente: function () {
+            var datos = {
+              ope: "buscarSubfuentePre",
+              cod: $("#fuente").val(),
+            };
+      
+            $.ajax({
+              type: "POST",
+              url: "../All.php",
+              data: datos,
+              dataType: "json",
+              success: function (data) {
+                $("#subfuente").html(data["subfi"]);
+              },
+              error: function (error_messages) {
+                alert("HA OCURRIDO UN ERROR");
+              },
+            });
+          },
     guardarSubfuente: function () {
 
       let subfuentes = document.getElementsByClassName("filasSubfuentes");

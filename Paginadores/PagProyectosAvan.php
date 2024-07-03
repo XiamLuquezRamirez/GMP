@@ -162,7 +162,7 @@ if ($contador > $regmos) {
     }
 
     $cad2 = $cad2 . "</select></td>";
-    if ($pagact < $div-1) {
+    if ($pagact < $div) {
         $cad2 = $cad2 . "<td><input type='button' style=\"width: 70px;\" class=\"btn blue btn-outline\" value=' > ' onclick=\"$.paginador('" . $pagsig . "','../paginador_centros');\" style='padding: 4px 4px 4px 4px' />";
         $cad2 = $cad2 . "<td><input type='button' style=\"width: 70px;\" class=\"btn blue btn-outline\" value=' >> ' onclick=\"$.paginador('" . $div . "','../paginador_centros');\"  style='padding: 4px 4px 4px 4px' /><input type='hidden' id='txttotal' value='" . $div . "' />"
                 . "<input type='hidden' id='codter' name='codter' value='' /></td>";

@@ -326,6 +326,7 @@ $(document).ready(function () {
                     $("#txt_VaAdiV").val('$ ' + number_format2(data['vadic_contrato'], 2, ',', '.'));
                     $("#txt_VaAdi").val(data['vadic_contrato']);
                     $("#txt_VaFin").val('$ ' + number_format2(data['vfin_contrato'], 2, ',', '.'));
+                    $("#txt_VaFinVal").val(data['vfin_contrato']);
                     $("#txt_VaEje").val(data['veje_contrato']);
                     $("#txt_VaEjeV").val('$ ' + number_format2(data['veje_contrato'], 2, ',', '.'));
                     $("#txt_Fpago").val(data['forpag_contrato']);
@@ -514,6 +515,7 @@ $(document).ready(function () {
                     $("#txt_VaAdiV").val('$ ' + number_format2(data['vadic_contrato'], 2, ',', '.'));
                     $("#txt_VaAdi").val(data['vadic_contrato']);
                     $("#txt_VaFin").val('$ ' + number_format2(data['vfin_contrato'], 2, ',', '.'));
+                    $("#txt_VaFinVal").val(data['vfin_contrato']);
                     $("#txt_VaEje").val(data['veje_contrato']);
                     $("#txt_VaEjeV").val('$ ' + number_format2(data['veje_contrato'], 2, ',', '.'));
                     $("#txt_Fpago").val(data['forpag_contrato']);
@@ -787,7 +789,13 @@ $(document).ready(function () {
                 $('#TitMoti').html("Motivo de Liquidación");
                 $('#TitAdjArc').html("Adjuntar Documento de Liquidación");
                 $("#novedad").val("Liquidacion");
-
+            } else if (val === "Ejecucion") {
+                
+                $('#btn_new_gasto').show();
+                $('#Div_CamEst').hide();
+                $("#Src_FileEstad").val("");
+                $("#novedad").val("");
+                $("#Text_Motivo").val("");
             } else {
                 $('#Div_CamEst').hide();
                 $("#Src_FileEstad").val("");
@@ -1008,9 +1016,12 @@ $(document).ready(function () {
                     url: "../All.php",
                     data: datos,
                     dataType: 'JSON',
+                    async: false,
                     success: function (data) {
                         $("#txt_Avance").val(data['porce']);
                         $("#CbEstado").selectpicker("val", data['estado']);
+
+
                     },
                     error: function (error_messages) {
                         alert('HA OCURRIDO UN ERROR');
@@ -1029,11 +1040,17 @@ $(document).ready(function () {
                     type: "POST",
                     url: "../All.php",
                     data: datos,
+                    async: false,
                     dataType: 'JSON',
                     success: function (data) {
                         $("#text_estadoProyecto").val(data['estado']);
                         $("#txt_VaPresProecto").val(data['pptoAsig']);
                         $("#txt_VaPresProectoV").val(formatCurrency(data['pptoAsig'], "es-CO", "COP"));
+                        
+                        let presDisp = parseFloat(data['ptoal']) - parseFloat(data['pptoAsig']);
+                      
+                        $("#txt_VaPresProecto").val(presDisp);
+                        $("#txt_VaPresProectoV").val(formatCurrency(presDisp, "es-CO", "COP"));
                     },
                     error: function (error_messages) {
                         alert('HA OCURRIDO UN ERROR');
@@ -1921,7 +1938,7 @@ $(document).ready(function () {
             vtotal = parseFloat(VaCon) + parseFloat(VaAdi);
 
             $("#txt_VaFin").val('$ ' + number_format2(vtotal, 2, ',', '.'));
-            
+            $("#txt_VaFinVal").val(vtotal);
         },
         AddVFina: function (value, id) {
 
@@ -1932,7 +1949,15 @@ $(document).ready(function () {
             vtotal = parseFloat(VaCon) + parseFloat(VaAdi);
 
 
+            if(vtotal > parseFloat($("#txt_VaPresProecto").val()) ) {
+                $.Alert("#msg", "El valor del contrato supero el valor del presupuesto disponible del proyecto relacionado. Verifique...", "warning", 'warning');
+                $("#txt_VaCont").val("$ 0,00");
+                return;
+            }
+            
             $("#txt_VaFin").val('$ ' + number_format2(vtotal, 2, ',', '.'));
+            $("#txt_VaFinVal").val(vtotal);
+
             textm(value, id);
         },
        
@@ -2369,7 +2394,7 @@ $(document).ready(function () {
         },
         validaSelProy: function(element){
             element.select();
-            console.log($("#CbProy").val());
+            
             if($("#CbProy").val() == " "){
                     $.Alert("#msg", "Por Favor seleccione el proyecto asociado...", "warning", "warning");
                     $("#From_Proyect").addClass("has-error");
@@ -2388,8 +2413,7 @@ $(document).ready(function () {
                         $("#From_Proyect").removeClass("has-error");
                     },3000);
                     return;
-                }
-                
+                }                
             }
         },
         QuitarGasto: function(id){
@@ -3604,6 +3628,7 @@ $(document).ready(function () {
         $("#txt_VaAdiV").val("$ 0,00");
         $("#txt_VaAdi").val("0");
         $("#txt_VaFin").val("$ 0,00");
+        $("#txt_VaFinVal").val("0");
         $("#txt_VaEjeV").val("$ 0,00");
         $("#txt_VaEje").val("0");
         $("#txt_Fpago").val("");
@@ -3759,8 +3784,9 @@ $(document).ready(function () {
             $("#CbInter").select2("val", " ");
             $("#txt_VaCont").val("$ 0,00");
             $("#txt_VaAdiV").val("$ 0,00");
-            $("#txt_VaAdi").val("");
+            $("#txt_VaAdi").val("0");
             $("#txt_VaFin").val("$ 0,00");
+            $("#txt_VaFinVal").val("0");
             $("#txt_VaEje").val("0");
             $("#txt_VaEjeV").val("$ 0,00");
             $("#txt_Fpago").val("");

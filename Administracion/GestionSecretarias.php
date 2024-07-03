@@ -63,6 +63,9 @@ $link = conectar();
     <link href="../Css/Layouts/layout/css/layout.min.css" rel="stylesheet" type="text/css" />
     <link href="../Css/Layouts/layout/css/themes/light2.css" rel="stylesheet" type="text/css" id="style_color" />
     <link href="../Css/Layouts/layout/css/custom.min.css" rel="stylesheet" type="text/css" />
+    
+    <link href=" https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css " rel="stylesheet">
+
     <!-- END THEME LAYOUT STYLES -->
     <link rel="shortcut icon" href="../Img/favicon.ico" />
     <script src="../Js/accounting.min.js" type="text/javascript"></script>
@@ -70,7 +73,43 @@ $link = conectar();
     <script src="../Js/GestionSecre.js" type="text/javascript"></script>
     <script src="../Js/funciones_generales.js" type="text/javascript"></script>
     <script src="../Js/Fuentes.js" type="text/javascript"></script>
+    <script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js "></script>
+    <style>
+        /* Estilo personalizado para asegurarse de que el z-index sea alto */
+        .swal2-container {
+            z-index: 10052 !important;
+        }
 
+        div:where(.swal2-container).swal2-center>.swal2-popup {
+
+            border-radius: 5px !important;
+        }
+
+        div:where(.swal2-icon).swal2-warning.swal2-icon-show {
+            border-radius: 50% !important;
+        }
+
+        div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
+            border-radius: 5px !important;
+        }
+
+        .opciones {
+            display: flex;
+            flex-direction: column;
+            margin: 5px;
+        }
+
+        .opciones a {
+            margin-bottom: 3px;
+            transition: all .5s ease;
+        }
+
+        .opciones a:hover {
+            transform: translateX(3px);
+        }
+
+      
+    </style>
 </head>
 <!-- END HEAD -->
 
@@ -392,7 +431,7 @@ $link = conectar();
                                                                             <div class='form-group col-md-6' id="From_Fuente">
                                                                                 <input type='hidden' id='id_secretaria' name='id_secretaria' value='0'>
                                                                                 <label class='control-label' for="fuente">Fuente:<span class="required">* </span></label>
-                                                                                <select class='form-control select2 clasesCombos' onchange="$.cargarSubfuente()" id="fuente" name="fuente">
+                                                                                <select class='form-control select2 clasesCombos' onchange="$.buscarSubfuentes()" id="fuente" name="fuente">
                                                                                     <option value=' '>Seleccione...</option>
                                                                                     <?php
                                                                                     $link = conectar();
@@ -408,7 +447,7 @@ $link = conectar();
                                                                             <div class='col-md-6' id="From_Subfuente">
                                                                                 <div class='form-group' id="From_Subfuente">
                                                                                     <label class='control-label'>Subfuente de financiación:</label><span class="required">* </span>
-                                                                                    <select class='form-control select2' id="subfuente" name="subfuente">
+                                                                                    <select class='form-control select2' onchange="$.verfDisponibilidadBolsa();" data-placeholder="Seleccione..." id="subfuente" name="subfuente">
 
                                                                                     </select>
                                                                                 </div>
@@ -422,7 +461,15 @@ $link = conectar();
                                                                             <div class='col-md-4'>
                                                                                 <div class='form-group' id="From_Valor">
                                                                                     <label class='control-label'>Valor:<span class="required">* </span></label>
-                                                                                    <input type='text' id='valor' onkeypress="return check(event)" value="" class='form-control' onclick="this.select();" style='text-align:right;' />
+                                                                                    <input type='text' id='valor'  value="" class='form-control' onchange="$.cambioFormato(this.id);" onclick="this.select()" value="$ 0,00" style='text-align:right;' />
+                                                                                <input type='hidden' id='valorSF' value="0" />
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class='col-md-4'>
+                                                                                <div class='form-group' id="From_ValorPre">
+                                                                                    <label class='control-label'>Disponibilidad en la bolsa:</label>
+                                                                                    <input type='text' id='valorDispo' disabled  value="" class='form-control' value="$ 0,00" style='text-align:right;' />
+                                                                               
                                                                                 </div>
                                                                             </div>
                                                                             <div class='col-md-1'>

@@ -188,20 +188,28 @@ $(document).ready(function () {
                         $("#vpregat").html(number_format2(PresGastado, 2, ',', '.'));
                        
                         //PRESUPUESTO NO AFECTADO
-                        PresNoAfect = PresInicial - (PresComprom+data.PresEjecutado);
+                        PresNoAfect = PresInicial - (PresGastado);
                         
                         $("#vprenafec").html(number_format2(PresNoAfect, 2, ',', '.'));
 
                              //PRESUPUESTO EJECUTADO
-                        PresGasComp = PresComprom - parseFloat(data.TotContEje);
+                            
+                        PresGasComp = parseFloat(data.TotContEje);
+                        
                         $("#vpreCompGast").html(number_format2(PresGasComp, 2, ',', '.'));
 
                         ///CALCULAR PORCENTAJES
                         var ppcomp = (PresComprom * 100) / PresInicial;
                         var pgasta = (PresGastado * 100) / PresInicial;
                         var pnafec = (PresNoAfect * 100) / PresInicial;
+                     
                         var pgasco = (PresGasComp * 100) / PresComprom;
-                        
+                        if (isNaN(pgasco)) {
+                            pgasco = 0;
+                        }
+
+                        debugger;
+                       
                         setTimeout(function () {
                             var valor1 = (Number(ppcomp.toFixed(3)) * 360) / 100;
 
@@ -211,7 +219,7 @@ $(document).ready(function () {
                             $.llenarCirculos(ValorFinal, "#prec1", activeBorder, valor1, "#39B4CC");
                         }, 800);
 
-                         setTimeout(function () {                           
+                         setTimeout(function () {
                             var valor2 = (Number(pgasta.toFixed(2)) * 360) / 100;
                             var activeBorder = $("#activeBorder2");
                             conGlobal = 0;

@@ -5,6 +5,7 @@ $(document).ready(function () {
     $("#menu_op_secre").addClass("active");
     var Op_Validar = [];
     var Op_Vali = "Ok"
+    var respBolsa = {};
 
     $.extend({
         Secre: function () {
@@ -32,26 +33,31 @@ $(document).ready(function () {
                 }
             });
         },
-        cargarSubfuente: function () {
-            var datos = {
-              ope: "buscarSubfuente",
-              cod: $("#fuente").val(),
-            };
-      
-            $.ajax({
-              type: "POST",
-              url: "../All.php",
-              data: datos,
-              dataType: "json",
-              success: function (data) {
-                $("#subfuente").html(data["subfi"]);
-              },
-              error: function (error_messages) {
-                alert("HA OCURRIDO UN ERROR");
-              },
-            });
+        buscarSubfuentes: function () {
+            
+            if($("#fuente").val() != " "){
+                var datos = {
+                    ope: "buscarSubfuentePre",
+                    cod: $("#fuente").val(),
+                  };
+
+                  $.ajax({
+                    type: "POST",
+                    url: "../All.php",
+                    data: datos,
+                    dataType: "json",
+                    success: function (data) {
+                      $("#subfuente").html(data["subfi"]);
+                    },
+                    error: function (error_messages) {
+                      alert("HA OCURRIDO UN ERROR");
+                    },
+                  });
+            }
+             
+            
           },
-        busqDepen: function (val) {
+         busqDepen: function (val) {
 
 
             var datos = {
@@ -112,7 +118,7 @@ $(document).ready(function () {
                 }
             });
             $("#responsive").modal({backdrop: 'static', keyboard: false});
-            $('#mopc').show();
+            $('#mopc').show();  
 
             $("#txt_Cod").prop('disabled', false);
             $("#txt_Desc").prop('disabled', false);
@@ -122,25 +128,7 @@ $(document).ready(function () {
 
 
         },
-        buscarSubfuente: function () {
-            var datos = {
-              ope: "buscarSubfuente",
-              cod: $("#fuente").val(),
-            };
-      
-            $.ajax({
-              type: "POST",
-              url: "../All.php",
-              data: datos,
-              dataType: "json",
-              success: function (data) {
-                $("#subfuente").html(data["subfi"]);
-              },
-              error: function (error_messages) {
-                alert("HA OCURRIDO UN ERROR");
-              },
-            });
-          },
+       
         VerSecre: function (cod) {
 
             var datos = {
@@ -531,12 +519,76 @@ $(document).ready(function () {
                 }
             });
 
+        },
+        cambioFormato: function (id) {
+            var numero = $("#" + id).val();
+            $("#valorSF").val(numero);
+            var formatoMoneda = formatCurrency(numero, "es-CO", "COP");
+            $("#" + id).val(formatoMoneda);
+          },
+          verfDisponibilidadBolsa: function (){
+            let fuente = document.getElementById('fuente').value;
+            let subFuente = document.getElementById('subfuente').value;
+            if(subFuente != " "){
+            var datos = {
+                ope: "verificarBolsaFinanciacionPres",
+                fuente: fuente,
+                subFuente: subFuente
+            }
+    
+            $.ajax({
+                type: "POST",
+                url: "../All.php",
+                data: datos,
+                dataType: "JSON",
+                async: false,
+                success: function(data){    
+                   respBolsa = data;
+                   $("#valorDispo").val(formatCurrency(data.disponible, "es-CO", "COP"));
+                   if(data.disponible <= 0){
+                    $.Alert("#msgAgrePre", "Esta bolsa no tiene disponibilidad, verifique...", "warning", "warning");
+                    $("#subfuente").select2("val"," ");
+                    return;    
+                   }
+                },
+                error: function(error_messages){
+                    alert("HA OCURRIDO UN ERROR");
+                }
+            });
         }
+        
+    },
+    validarPresBolsa: function(fuente, subFuente,valor){
+      
+        let valorTotalActual = 0;
+        const elements = document.querySelectorAll('[name="valor[]"]');       
+        const elementsFuente = document.querySelectorAll('[name="txtid_fuente[]"]');       
+        const elementsSubfuente = document.querySelectorAll('[name="txtid_subfuente[]"]');       
+        elements.forEach((element, index) => {
+          if(elementsFuente[index] == fuente && elementsSubfuente[index] == subFuente){
+          valorTotalActual += parseInt(element.value);
+          }
+        });
+    
+        valorFin = parseFloat(valorTotalActual) + parseFloat(valor);
+
+        let respuesta = false
+
+        if(valorFin > respBolsa.disponible){
+            $.Alert("#msgAgrePre", "La bolsa de financiación seleccionada, supera la disponibilidad del presupuesto asignado que es: " + formatCurrency(respBolsa.disponible, "es-CO", "COP"),"warning", "warning");
+        }else{
+            respuesta = true;
+        }
+
+        return respuesta;
+       
+    }
 
     });
     //======FUNCIONES========\\
     $.Secre();
     $.Responsables();
+
 
     $("#archivos").on("change", function () {
         /* Limpiar vista previa */
@@ -638,6 +690,14 @@ $(document).ready(function () {
 
 
     });
+
+    function formatCurrency(number, locale, currencySymbol) {
+        return new Intl.NumberFormat(locale, {
+          style: "currency",
+          currency: currencySymbol,
+          minimumFractionDigits: 2,
+        }).format(number);
+      }
 
     //BOTON GUARDAR-
     $("#btn_guardar").on("click", function () {

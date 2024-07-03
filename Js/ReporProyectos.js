@@ -11,6 +11,7 @@ $(document).ready(function () {
     var selected;
     var types = [];
     var mapa, mapa1, latitud, longitud;
+    var marcadores = [];
     $.extend({
 
         CargaTodContr: function () {
@@ -138,6 +139,7 @@ $(document).ready(function () {
 
         },
         localizame1: function () {
+            $.eliminarMarcadores();
             if (navigator.geolocation) { /* Si el navegador tiene geolocalizacion */
                 navigator.geolocation.getCurrentPosition($.coordenadas);
             } else {
@@ -157,33 +159,51 @@ $(document).ready(function () {
             mapa = new google.maps.Map($("#map_canvas").get(0), myOptions); /*Creamos el mapa y lo situamos en su capa */
 
             var coorMarcador = new google.maps.LatLng(latitud, longitud);
-            /Un nuevo punto con nuestras coordenadas para el marcador (flecha) */
+       
 
-            var marcador = new google.maps.Marker({
-                /*Creamos un marcador*/
+            var marcador = new google.maps.Marker({               
                 animation: google.maps.Animation.DROP,
                 position: coorMarcador, /*Lo situamos en nuestro punto */
                 map: mapa, /* Lo vinculamos a nuestro mapa */
-                icon: '../Img/Marker_1.png'
+                icon: {
+                    url: '../Img/Marker_1.png', // Ruta del icono
+                    scaledSize: new google.maps.Size(20, 20) // Ajusta el tamaño del icono (ancho, alto)
+                  }
             });
+
+      
+
+     
+
             var Info = "<div>"
                     + "<div class='modal-header'>"
-                    + "<h4 class='modal-title'>Mi Ubicacion</h4>"
+                    + "<h4 class='modal-title'>Mi Ubicación</h4>"
                     + "</div>"
                     + "<div class='modal-body'>"
                     + "<div class='row'>"
                     + "</div>"
                     + "</div>"
                     + "</div>";
+
             var infowindow = new google.maps.InfoWindow({
                 content: Info
             });
             google.maps.event.addListener(marcador, 'click', function () {
                 infowindow.open(mapa, marcador);
             });
+
+
+        },
+        eliminarMarcadores: function (){
+            console.log(marcadores);
+            for (var i = 0; i < marcadores.length; i++) {
+                marcadores[i].setMap(null);
+              }
+              // Limpia el array de marcadores
+              marcadores = [];
         },
         Colocar_Marcador: function (mapa, latitud, longitud,
-                codproy, nproy, secret, tipo, eje, comp, prog, esta) {
+                codproy, nproy, tipo,secret, eje, comp, prog, esta) {
 
 //            var latlon = new google.maps.LatLng(latitud, longitud); /* Creamos un punto con nuestras coordenadas */
 //            var myOptions = {
@@ -194,15 +214,28 @@ $(document).ready(function () {
 //            mapa = new google.maps.Map($("#map_canvas").get(0), myOptions); /*Creamos el mapa y lo situamos en su capa */
 
             var coorMarcador = new google.maps.LatLng(latitud, longitud);
-            /Un nuevo punto con nuestras coordenadas para el marcador (flecha) */
+           let icon;
+            if(esta== "Ejecutado"){
+                icon = "../Img/ejecutados.png";
+            }else if(esta== "Priorizado"){
+                icon = "../Img/priorizado.png";
+            }else{
+                icon = "../Img/ejecutados.png";
+            }
 
             var marcador = new google.maps.Marker({
                 /*Creamos un marcador*/
                 animation: google.maps.Animation.DROP,
                 position: coorMarcador, /*Lo situamos en nuestro punto */
                 map: mapa, /* Lo vinculamos a nuestro mapa */
-                icon: '../Img/Marker_1.png'
+                icon: {
+                    url: icon, // Ruta del icono
+                    scaledSize: new google.maps.Size(50, 50) // Ajusta el tamaño del icono (ancho, alto)
+                  }
             });
+
+            marcadores.push(marcador);
+            
             var Info = "<div>"
                     + "<div class='modal-header'>"
                     + "<h4 class='modal-title'>Datos Del Proyecto</h4>"
@@ -227,7 +260,7 @@ $(document).ready(function () {
                     + "</div>"
                     + "<div class='col-md-12'>"
                     + "<div class='form-group'>"
-                    + "<p style='margin: 0px 0'><b>Eje Estrategico:</b></p>"
+                    + "<p style='margin: 0px 0'><b>"+document.getElementById("nivel1").textContent+":</b></p>"
                     + "<div class='input-icon right'>"
                     + "<label class='control-label'>" + eje + "</label>"
                     + "</div>"
@@ -244,6 +277,7 @@ $(document).ready(function () {
                     + "</div>"
                     + "</div>"
                     + "</div>";
+
             var infowindow = new google.maps.InfoWindow({
                 content: Info
             });
@@ -271,8 +305,7 @@ $(document).ready(function () {
                     for (i = 0; i <= data['Tam'] - 1; i++) {
                         $.Colocar_Marcador(mapa, data['lat_' + i], data['long_' + i],
                                 data['codproy_' + i], data['nproy_' + i], data['tip_' + i], data['sec_' + i],
-                                data['neje_' + i], data['ncomp_' + i], data['nprog_' + i], data['estad_' + i]
-                                );
+                                data['neje_' + i], data['ncomp_' + i], data['nprog_' + i], data['estad_' + i]);
                     }
                 },
                 error: function (error_messages) {
@@ -299,8 +332,11 @@ $(document).ready(function () {
                 $.Graficar5();
             } else if (op === "G") {
                 $('#GeoProy').show();
+                $('#ListProy').hide();
                 $('#GrafProy').hide();
+                $('#botonesExcel').hide();
                 $.MostrarMap();
+                $.eliminarMarcadores();
             } else if (op === " ") {
                 $.Alert("#msg", "Por Favor Seleccione un tipo de informe...", "warning", 'warning');
                 return;
@@ -737,12 +773,8 @@ $(document).ready(function () {
                             var count = 0;
                             // add items
                             $.each(itemSec.Estados, function (l, itemEst) {
-
-
-                                count++;
-//                        
+                                count++;//                        
                                 tempArray.push({category: itemSec.Secretarias + "_" + itemEst.Estados, realName: itemEst.Estados, value: itemEst.Cant, provider: itemSec.Secretarias})
-
                             });
                             // ordenar matriz temporal
                             tempArray.sort(function (a, b) {
@@ -754,6 +786,7 @@ $(document).ready(function () {
                                     return 0;
                                 }
                             })
+                        
 
 
                             am4core.array.each(tempArray, function (item) {
@@ -793,9 +826,6 @@ $(document).ready(function () {
 
 // procesar datos y prepararlo para el gráfico
 
-
-
-// last tick
             var range = categoryAxis.axisRanges.create();
             range.category = chart.data[chart.data.length - 1].category;
             range.label.disabled = true;
@@ -871,13 +901,17 @@ $(document).ready(function () {
             });
         },
         MostContratos: function (val) {
-            alert(val);
+           
             $('#btn_volver2').show();
             var TipInf = $("#CbTipInf").val();
             var Estado = val;
 
             var datos = {
                 Estad: Estado.replace('Ejecución', 'Ejecucion'),
+                CbSecr: trimAll($("#CbSecre").val()),
+                CbEje: trimAll($("#CbEje").val()),
+                CbComp: trimAll($("#CbComp").val()),
+                CbProg: trimAll($("#CbProg").val()),
                 ope: "GrafContratos"
             };
             $.ajax({

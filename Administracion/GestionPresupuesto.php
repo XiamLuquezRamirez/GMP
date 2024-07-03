@@ -86,7 +86,7 @@ include("../Plantilla/head.php");
                     <div class="modal-body">
                         <div class="row">
                             <div class='portlet-body form'>
-                                <form class="form" method="post" id="formGuardarNivel" action="../PlanDesarrollo/GuardarNiveles.php">
+                            <form class="form" method="post" id="formGuardarPresupuesto" action="../Administracion/GuardarRubroPresup.php">
                                     <div class='form-body'>
                                         <div class="row">
                                             <div class="col-md-3">
@@ -310,7 +310,7 @@ include("../Plantilla/head.php");
 
                                                 <div class='row'>
                                                     <div class='col-md-12'>
-                                                        <div id="sample_1_filter" class="dataTables_filter">
+                                                        <div id="sample_1_filter" class="dataTables_filter mb-2">
                                                             <label>
                                                                 Busqueda:
                                                                 <input class="form-control input-small input-inline" onkeypress="$.Presupuesto(this.value);" onchange="$.Presupuesto(this.value);" id="busq_centro" type="search" placeholder="" aria-controls="sample_1">
@@ -365,6 +365,24 @@ include("../Plantilla/head.php");
                 </div>
             </div>
         </div>
+        <div id="cargando" class="loader-spinner" style="display: none;">
+        <img src="../Img/gmp.gif" width="150" />
+        <div class="loader">
+            <p class="text">
+                <span class="letter letter1">c</span>
+                <span class="letter letter2">a</span>
+                <span class="letter letter3">r</span>
+                <span class="letter letter4">g</span>
+                <span class="letter letter5">a</span>
+                <span class="letter letter6">n</span>
+                <span class="letter letter7">d</span>
+                <span class="letter letter8">o</span>
+                <span class="letter letter9">.</span>
+                <span class="letter letter10">.</span>
+                <span class="letter letter11">.</span>
+            </p>
+        </div>
+    </div>
 
         <?php include('../Plantilla/Footer.php'); ?>
 </body>

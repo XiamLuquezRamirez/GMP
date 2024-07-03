@@ -85,28 +85,38 @@ if ($busq != "") {
     $busq = str_replace("+", " ", $busq);
     $buscar = explode(" ", $busq);
 
-    $consulta = "SELECT * FROM proyectos WHERE ";
+    $consulta = "SELECT proy.id_proyect, proy.fec_crea_proyect, proy.cod_proyect, proy.nombre_proyect, proy.dtipol_proyec,proy.estado_proyect, proy.porceEjec_proyect,
+    ifnull((SELECT GROUP_CONCAT(DISTINCT secr.des_secretarias SEPARATOR ', ') 
+   FROM banco_proyec_financiacion bff 
+   LEFT JOIN secretarias secr ON secr.idsecretarias = bff.secretaria 
+   WHERE bff.id_proyect = proy.id_proyect),'NO ASIGNADA') AS secre 
+     FROM proyectos proy  WHERE ";
 
     for ($i = 0; $i < count($buscar, 1); $i++) {
         $consulta .= "CONCAT( "
-            . " cod_proyect, "
+            . " proy.cod_proyect, "
             . "  ' ', "
-            . " nombre_proyect, "
+            . " proy.nombre_proyect, "
             . "  ' ', "
-            . " dsecretar_proyect, "
-            . "  ' ', "
-            . " estado_proyect"
+            . " proy.estado_proyect"
             . ") LIKE '%" . $buscar[$i] . "%' ";
         if (($i) == count($buscar, 1) - 1) {
         } else {
             $consulta .= " AND ";
         }
     }
-    $consulta .= " AND estado='ACTIVO' order by nombre_proyect ASC LIMIT " . $regemp . "," . $regmos;
+    $consulta .= " AND proy.estado='ACTIVO' order by proy.nombre_proyect ASC LIMIT " . $regemp . "," . $regmos;
 } else {
-    $consulta = "SELECT * FROM proyectos WHERE  estado='ACTIVO' order by nombre_proyect ASC  LIMIT " . $regemp . "," . $regmos;
+    $consulta = "SELECT proy.id_proyect, proy.fec_crea_proyect, proy.cod_proyect, proy.nombre_proyect, proy.dtipol_proyec,proy.estado_proyect, proy.porceEjec_proyect,
+    ifnull((SELECT GROUP_CONCAT(DISTINCT secr.des_secretarias SEPARATOR ', ') 
+   FROM banco_proyec_financiacion bff 
+   LEFT JOIN secretarias secr ON secr.idsecretarias = bff.secretaria 
+   WHERE bff.id_proyect = proy.id_proyect),'NO ASIGNADA') AS secre 
+     FROM proyectos proy  WHERE proy.estado='ACTIVO' order by proy.nombre_proyect ASC  LIMIT " . $regemp . "," . $regmos;
     //    $consulta = "SELECT * FROM proyectos WHERE id_proyect IN(".$finalpro.") AND estado='ACTIVO' order by nombre_proyect ASC  LIMIT " . $regemp . "," . $regmos;
 }
+
+//echo $consulta;
 
 $resultado = mysqli_query($link, $consulta);
 $contador = 0;
@@ -148,25 +158,25 @@ if (mysqli_num_rows($resultado) > 0) {
         }
 
         $cad .= "<tr >"
-            . "<td class=\"highlight \" style='vertical-align: middle; font-size: x-small;
+            . "<td class=\"highlight \" style='vertical-align: middle; font-size: small;
                 line-height: 1.3em;'>"
             . $fila["cod_proyect"] . " "
             . "</td>"
-            . "<td class=\"highlight \" style='vertical-align: middle; font-size: x-small;
+            . "<td class=\"highlight \" style='vertical-align: middle; font-size: small;
                 line-height: 1.3em;'>"
             . $fila["nombre_proyect"] . "" . ""
             . "</td>"
-            . "<td class=\"highlight \" style='vertical-align: middle; font-size: x-small;
+            . "<td class=\"highlight \" style='vertical-align: middle; font-size: small;
                 line-height: 1.3em;'>"
             . $fila["fec_crea_proyect"] . ""
             . "</td>"
-            . "<td class=\"highlight \" style='vertical-align: middle; font-size: x-small;
+            . "<td class=\"highlight \" style='vertical-align: middle; font-size: small;
                 line-height: 1.3em;'>"
             . $fila["dtipol_proyec"] . ""
             . "</td>"
-            . "<td class=\"highlight \" style='vertical-align: middle; font-size: x-small;
+            . "<td class=\"highlight \" style='vertical-align: middle; font-size: small;
                 line-height: 1.3em;'>"
-            . $fila["dsecretar_proyect"] . ""
+            . $fila["secre"] . ""
             . "</td>"
             . "<td class=\"highlight \" style='vertical-align: middle; margin-botton: 0px'>";
 
@@ -234,7 +244,6 @@ $cad .= "</tbody>"
     }
 
    
-    
     $blopri = "0";
     $bloseg = "0";
     

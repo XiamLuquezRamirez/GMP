@@ -11,9 +11,9 @@ $ruta = 'GaleriaProyecto/'; //Decalaramos una variable con la ruta en donde alma
 
 $mensage = ''; //Declaramos una variable mensaje quue almacenara el resultado de las operaciones.
 
+
 foreach ($_FILES as $key) { //Iteramos el arreglo de archivos
     $prefijo = substr(md5(uniqid(rand())), 0, 6);
-
     if ($key['error'] == UPLOAD_ERR_OK) {//Si el archivo se paso correctamente Ccontinuamos
         $NombreOriginal = $key['name']; //Obtenemos el nombre original del archivo
         $tipo = $key['type']; //Obtenemos el nombre original del archivo

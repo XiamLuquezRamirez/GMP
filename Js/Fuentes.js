@@ -1,4 +1,6 @@
+let verBolsa = {};
 $(document).ready(function () {
+    
     $(".clasesCombos").selectpicker();
     $("#fecha").datepicker({
         format: 'yyyy-mm-dd',
@@ -19,6 +21,11 @@ $(document).ready(function () {
         $("#valor").val("");
         $("#From_Valor").removeClass("has-error");
         $("#msgAgrePre").html("");
+        $("#valorDispo").val("");
+
+        $("#fuente").select2("val", " ");
+        $("#subfuente").html("");
+
         var datos = {
             id_secretaria: id_secretaria,
             OPCION: 'CONSULTAR'
@@ -32,9 +39,7 @@ $(document).ready(function () {
                 $("#detalle_presupuestar").html("");
                 if (data.TIENE === 1) {
                     for (var i = 1; i <= data.tam; i++) {
-                        
-                        agregar(data.presupuestar.IDSP[i], data.presupuestar.IDSECRE[i], data.presupuestar.IDFUENTE[i],data.presupuestar.IDSUBFUENTE[i], data.presupuestar.FUENTE[i],data.presupuestar.SUBFUENTE[i], data.presupuestar.FECHA[i], data.presupuestar.VALOR[i]);
-                   
+                        agregar(data.presupuestar.IDSP[i], data.presupuestar.IDSECRE[i], data.presupuestar.IDFUENTE[i],data.presupuestar.IDSUBFUENTE[i], data.presupuestar.FUENTE[i],data.presupuestar.SUBFUENTE[i], data.presupuestar.FECHA[i], data.presupuestar.VALOR[i], data.presupuestar.VALOR[i]);
                     }
                 } else {
                     $("#detalle_presupuestar").html("");
@@ -81,7 +86,7 @@ $(document).ready(function () {
                 $("#detalle_presupuestar").html("");
                 if (data.TIENE === 1) {
                     for (var i = 1; i <= data.tam; i++) {
-                        agregar(data.presupuestar.IDSP[i], data.presupuestar.IDSECRE[i], data.presupuestar.IDFUENTE[i],data.presupuestar.IDSUBFUENTE[i], data.presupuestar.FUENTE[i],  data.presupuestar.SUBFUENTE[i], data.presupuestar.FECHA[i], data.presupuestar.VALOR[i]);
+                        agregar(data.presupuestar.IDSP[i], data.presupuestar.IDSECRE[i], data.presupuestar.IDFUENTE[i],data.presupuestar.IDSUBFUENTE[i], data.presupuestar.FUENTE[i],  data.presupuestar.SUBFUENTE[i], data.presupuestar.FECHA[i], data.presupuestar.VALOR[i], data.presupuestar.VALOR[i]);
                     }
                 } else {
                     $("#detalle_presupuestar").html("");
@@ -105,13 +110,7 @@ $(document).ready(function () {
         });
     }
 
-    $("#valor").on({
-        change: function (e) {
-            var num = accounting.formatMoney($(this).val(), "$", 2, ",", ".");
-            // var num = new Intl.NumberFormat('es-CO').format($(this).val());
-            $(this).val(num);
-        }
-    });
+
 
     $(".btnAgregar").on({
         click: function (e) {
@@ -190,11 +189,47 @@ $(document).ready(function () {
             var subfuente = $('#subfuente option:selected').html();
             var fecha = $("#fecha").val();
             var valor = $("#valor").val();
+            var valorSF = $("#valorSF").val();
             $("#fecha,#valor").val("");
-            agregar(id, id_secre, id_fue,id_subfue, fuente,subfuente, fecha, valor);
+
+            let respVal = $.validarPresBolsa(id_fue, id_subfue, valorSF);
+
+            if(respVal){
+                agregar(id, id_secre, id_fue,id_subfue, fuente,subfuente, fecha, valor,valorSF);
+            }
+
+            
         }
     });
-    function agregar(id, id_secre, id_fue,id_subfue, fuente, subfuente, fecha, valor) {
+
+    function verifDisponibilidad(CbOriFinancia,CbOriSubfinancia,valorFin){
+        var datos = {
+            ope: "verificarBolsaFinanciacionPres",
+            fin: CbOriFinancia,
+            subfin: CbOriSubfinancia,
+            valor: valorFin
+          };
+    
+          $.ajax({
+            type: "POST",
+            url: "../All.php",
+            data: datos,
+            dataType: "JSON",
+            async: false,
+            success: function (data) {
+              verBolsa = data;
+            },
+            error: function (error_messages) {
+              alert("HA OCURRIDO UN ERROR");
+            },
+          });
+    }
+
+  
+
+
+
+    function agregar(id, id_secre, id_fue,id_subfue, fuente, subfuente, fecha, valor,valorSF) {
         var campo = "";
         campo += "<tr data-id='" + id + "'>";
         campo += "<td>";
@@ -211,7 +246,7 @@ $(document).ready(function () {
         campo += "<input type='text' class='form-control' readonly name='txtfecha[]' id='txtfecha' style='background-color:white;' value='" + fecha + "'>";
         campo += "</td>";
         campo += "<td>";
-        campo += "<input type='text' class='form-control' readonly name='txtvalor[]' id='txtvalor' style='background-color:white;text-align:right;' value='" + valor + "'>";
+        campo += "<input type='hidden' name='valor[]' value='" + valorSF + "'' /><input type='text' class='form-control' readonly name='txtvalor[]' id='txtvalor' style='background-color:white;text-align:right;' value='" + valor + "'>";
         campo += "</td>";
         campo += "<td style='text-align:center;'>";
         campo += "<a href='javascript:void(0);' class='btn btn-danger btn-sm btnEliminar' title='Eliminar' ><i class='fa fa-trash-o'></i></a>";
@@ -219,7 +254,9 @@ $(document).ready(function () {
         campo += "</tr>";
         $("#detalle_presupuestar").append(campo);
         recorrerTabla($("#detalle_presupuestar"));
+
     }
+
     function agregar2(fuente, valor,subfuente) {
         var campo = "";
         campo += "<tr>";
@@ -237,17 +274,29 @@ $(document).ready(function () {
     }
     $("#detalle_presupuestar").on("click", '.btnEliminar', function (e) {
         e.preventDefault();
-        if (confirm("\xbfEsta seguro de realizar la operaci\xf3n?")) {
+        Swal.fire({
+            title: "¿Estás seguro de eliminar este registro?",
+            text: "¡No podrás revertir esto!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "¡Sí, eliminar!",
+          }).then((result) => {
+            if (result.isConfirmed) {
             var fila = $(this).parents('tr');
             var id = fila.data('id');
-            
+
+            console.log(this);
+
             if (id !== 0) {
                 $(this).closest('tr').remove();
-            } else {
-
             }
+
             recorrerTabla($("#detalle_presupuestar"));
-        }
+            }
+        });   
+        
     });
     
     $("#btnGuardar").on({
@@ -267,11 +316,19 @@ $(document).ready(function () {
                 url: "../Administracion/GuardarPresupuestar.php",
                 data: datos,
                 success: function (data) {
-                    if ($.trim(data) === "bien") {
+                   
+                    if ($.trim(data) == "bien") {
+                        
                         $.Alert("#msgAgrePre", "Datos Guardados Exitosamente...", "success", "check");
+                       
                         $("#fecha").val("");
                         $("#valor").val("");
+                        $("#valorDispo").val("");
+                        $.Secre();
+                        setTimeout(function () {
                         listar();
+                        },2000)
+                        
                     } else {
                         alert('Datos no guardados');
                     }
@@ -288,17 +345,21 @@ $(document).ready(function () {
         var filas = tabla.find("tr");
         for (var i = 0; i < filas.length; i++) {
             var celdas = $(filas[i]).find("td");
-        
             var valor = $($(celdas[3]).children("input")[0]).val();
-          
-            valor = accounting.unformat("$ " + valor);
-            suma = suma + valor;
+            suma += parseFloat(valor);
         }
-        suma = accounting.formatMoney(suma, "$", 2, ",", ".");
-       
-        $("#txtTotal").val(suma);
+
+        $("#txtTotal").val(formatCurrency(suma, "es-CO", "COP"));
         return true;
     }
+
+    function formatCurrency(number, locale, currencySymbol) {
+        return new Intl.NumberFormat(locale, {
+          style: "currency",
+          currency: currencySymbol,
+          minimumFractionDigits: 2,
+        }).format(number);
+      }
 
     function recorrerTabla2(tabla) {
         var suma = 0;
@@ -334,7 +395,7 @@ $(document).ready(function () {
             
             var valo = $($(celdas[3]).children("input")[0]).val();
             valo = accounting.formatMoney(valo, "$", 2, ",", ".");
-            $($(celdas[3]).children("input")[0]).val(valo);
+            $($(celdas[3]).children("input")[1]).val(valo);
         }
         return true;
     }

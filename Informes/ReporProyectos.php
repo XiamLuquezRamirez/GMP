@@ -553,8 +553,8 @@ $link = conectar();
                                                                     <option value=" ">Seleccione el reporte a generar.</option>
                                                                     <option value="1">Reporte General de Proyectos por Estados</option>
                                                                     <option value="4">Reporte General de Contratos por Estados</option>
-                                                                    <option value="2">Reporte General de Proyectos por Secretarias</option>
-                                                                    <option value="3">Reporte General de Proyectos por Ejes</option>
+                                                                    <!-- <option value="2">Reporte General de Proyectos por Secretarias</option>
+                                                                    <option value="3">Reporte General de Proyectos por Ejes</option> -->
                                                                     <option value="5">Reporte de Gestión de Proyectos</option>
                                                                     <option value="C">Reporte de proyectos por Contratos</option>
                                                                     <option value="G">Cosultar Mapa Geoferrencial de Proyectos</option>
@@ -576,7 +576,7 @@ $link = conectar();
 
                                                         <div class='col-md-6'>
                                                             <div class='form-group' >
-                                                                <label class='control-label'>Ejes:</label>
+                                                                <label id="nivel1" class='control-label'><?php echo $_SESSION['nivel1']; ?>:</label>
                                                                 <select class="form-control select2" disabled  id="CbEje" onchange="$.CargCompone(this.value);"  name="options2">
 
                                                                 </select>
@@ -585,7 +585,7 @@ $link = conectar();
 
                                                         <div class='col-md-6'>
                                                             <div class='form-group' >
-                                                                <label class='control-label'>Programa:</label>
+                                                                <label class='control-label'><?php echo $_SESSION['nivel2']; ?>:</label>
                                                                 <select class="form-control select2" disabled="" onchange="$.CargProg(this.value);"  id="CbComp"  name="options2">
                                                                     <option value=' '>Todos...</option>
                                                                 </select>
@@ -593,7 +593,7 @@ $link = conectar();
                                                         </div>
                                                         <div class='col-md-6'>
                                                             <div class='form-group' >
-                                                                <label class='control-label'>SubPrograma:</label>
+                                                                <label class='control-label'><?php echo $_SESSION['nivel3']; ?>:</label>
                                                                 <select class="form-control select2" disabled="" id="CbProg"  name="options2">
                                                                     <option value=' '>Todos...</option>
                                                                 </select>

@@ -65,12 +65,10 @@ if (isset($_POST["bus"]) && $_POST["bus"] !== null && $_POST["bus"] !== "") {
    LEFT JOIN fuentes fuent ON pre.fuente = fuent.id
   WHERE pre.estado='ACTIVO' order by pre.periodo_ini DESC";
 }
-
+$vtotal=0;
 //echo $consulta;
 $resultado = mysqli_query($link,$consulta);
 if (mysqli_num_rows($resultado) > 0) {
-
-    $vtotal=0;
 
     while ($fila = mysqli_fetch_array($resultado)) {
 

@@ -728,7 +728,7 @@ $link = conectar();
                                         </li>
                                         <li id="tab_pp9">
                                             <a href="#tab_9" data-toggle="tab"> Financiación </a>
-                                        </li> 
+                                        </li>
                                         <li id="tab_pp11">
                                             <a href="#tab_11" data-toggle="tab"> Ingresos </a>
                                         </li>
@@ -2027,9 +2027,9 @@ $link = conectar();
                                                                     <label class='control-label'>Secretaria:</label>
                                                                     <div class="input-group">
                                                                         <span class="input-group-btn">
-                                                                        <select class="form-control select2" onchange="$.buscarFuente();" data-placeholder="Seleccione..." id="CbSecre" name="options2">
+                                                                            <select class="form-control select2" onchange="$.buscarFuente();" data-placeholder="Seleccione..." id="CbSecre" name="options2">
 
-                                                                        </select>
+                                                                            </select>
                                                                         </span>
                                                                     </div>
                                                                 </div>
@@ -2061,18 +2061,18 @@ $link = conectar();
                                                                 <div class='form-group'>
                                                                     <label class='control-label'>Valor:</label>
                                                                     <input type='hidden' id='txt_FinanciaTotal' value="0" class='form-control' />
-                                                                    <input type='text' id='txt_cosFinVi' value="$ 0,00" class='form-control'  onclick="this.select();" value="$ 0,00" onkeyup="restrictInput(event);" onchange="$.cambioFormato(this.id,'txt_cosFin');" />
+                                                                    <input type='text' id='txt_cosFinVi' value="$ 0,00" class='form-control' onclick="this.select();" value="$ 0,00" onkeyup="restrictInput(event);" onchange="$.cambioFormato(this.id,'txt_cosFin');" />
                                                                     <input type='hidden' id='txt_cosFin' value="" class='form-control' />
 
                                                                 </div>
                                                             </div>
                                                             <div class='col-md-5'>
-                                                               
+
                                                             </div>
                                                             <div class='col-md-4'>
                                                                 <div class='form-group'>
                                                                     <label class='control-label'>Presupuesto asignado al proyecto:</label>
-                                                                    <input type='text' disabled id='txt_PresProyV' value="$ 0,00" class='form-control'onclick="this.select();" value="$ 0,00" />
+                                                                    <input type='text' disabled id='txt_PresProyV' value="$ 0,00" class='form-control' onclick="this.select();" value="$ 0,00" />
                                                                     <input type='hidden' id='txt_PresProy' value="" class='form-control' />
 
                                                                 </div>
@@ -2095,16 +2095,16 @@ $link = conectar();
                                                                         <thead>
                                                                             <tr style="font-weight: bold;">
                                                                                 <td>
-                                                                                   #
+                                                                                    #
                                                                                 </td>
                                                                                 <td>
-                                                                                   Secretaria
+                                                                                    Secretaria
                                                                                 </td>
                                                                                 <td>
-                                                                                   Origen de la fuente Financiación
+                                                                                    Origen de la fuente Financiación
                                                                                 </td>
                                                                                 <td>
-                                                                                Subfuente de financiación
+                                                                                    Subfuente de financiación
                                                                                 </td>
                                                                                 <td>
                                                                                     Valor
@@ -2653,17 +2653,27 @@ $link = conectar();
                     </div>
                 </div>
                 <!-- END PAGE CONTENT-->
-
-                <div id="cargando" class="modal fade" tabindex="-1" data-width="150">
-                    <div class="modal-footer">
-                        <div class="progress progress-striped active">
-                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
+        </div>
+
+    </div>
+
+    <div id="cargando" class="loader-spinner" style="display: none;">
+        <img src="../Img/gmp.gif" width="150" />
+        <div class="loader">
+            <p class="text">
+                <span class="letter letter1">c</span>
+                <span class="letter letter2">a</span>
+                <span class="letter letter3">r</span>
+                <span class="letter letter4">g</span>
+                <span class="letter letter5">a</span>
+                <span class="letter letter6">n</span>
+                <span class="letter letter7">d</span>
+                <span class="letter letter8">o</span>
+                <span class="letter letter9">.</span>
+                <span class="letter letter10">.</span>
+                <span class="letter letter11">.</span>
+            </p>
         </div>
     </div>
 

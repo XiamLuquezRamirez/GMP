@@ -334,11 +334,9 @@ $(document).ready(function () {
           $("#CbVige").val(data["vigenc_proyect"]);
           $("#CbEstado").selectpicker("val", data["estado_proyect"]);
 
-          if (
-            data["estado_proyect"] == "Priorizado" ||
+          if (data["estado_proyect"] == "Priorizado" ||
             data["estado_proyect"] == "En Ejecucion" ||
-            data["estado_proyect"] == "Ejecutado"
-          ) {
+            data["estado_proyect"] == "Ejecutado") {
             $("#div-presupuesto").show();
           } else {
             $("#div-presupuesto").hide();
@@ -354,7 +352,7 @@ $(document).ready(function () {
           $("#txt_vigenc").val(data["vigenc_proyeaso"]);
           $("#txt_estaProye").val(data["estado_proyeaso"]);
 
-          $("#txt_estaProye").val(data["comp_pres"]);
+          //$("#txt_estaProye").val(data["comp_pres"]);
           if (data["comp_pres"] === "si") {
             $("#sel1ComPre").prop("checked", true);
           } else {
@@ -436,6 +434,12 @@ $(document).ready(function () {
 
           $("#tb_Usuarios").html(data["Tab_Usu"]);
           $("#contUsua").val(data["contUsu"]);
+        },
+        beforeSend: function () {
+          $("#cargando").modal("show");
+        },
+        complete: function () {
+          $("#cargando").modal("hide");
         },
         error: function (error_messages) {
           alert("HA OCURRIDO UN ERROR");
@@ -3728,18 +3732,22 @@ $(document).ready(function () {
         cod: $("#CbOriFinancia").val(),
       };
 
-      $.ajax({
-        type: "POST",
-        url: "../All.php",
-        data: datos,
-        dataType: "json",
-        success: function (data) {
-          $("#subfuente").html(data["subfi"]);
-        },
-        error: function (error_messages) {
-          alert("HA OCURRIDO UN ERROR");
-        },
-      });
+      if(datos.cod != " ") {
+        $.ajax({
+          type: "POST",
+          url: "../All.php",
+          data: datos,
+          dataType: "json",
+          success: function (data) {
+            $("#subfuente").html(data["subfi"]);
+          },
+          error: function (error_messages) {
+            alert("HA OCURRIDO UN ERROR");
+          },
+        });
+      }
+
+ 
     },
     UploadCompPre: function () {
       var archivos = document.getElementById("archivosComp"); //Creamos un objeto con el elemento que contiene los archivos: el campo input file, que tiene el id = 'archivos'
@@ -4642,6 +4650,12 @@ $(document).ready(function () {
           $("#btn_nuevo").prop("disabled", false);
           $("#btn_guardar").prop("disabled", true);
         }
+      },
+      beforeSend: function () {
+        $("#cargando").modal("show");
+      },
+      complete: function () {
+        $("#cargando").modal("hide");
       },
       error: function (error_messages) {
         alert("HA OCURRIDO UN ERROR");

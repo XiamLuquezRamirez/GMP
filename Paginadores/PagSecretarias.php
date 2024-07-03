@@ -65,9 +65,7 @@ if ($busq != "") {
         $consulta .= "CONCAT( "
                 . "  sec.cod_secretarias, "
                 . "  ' ', "
-                . "  sec.des_secretarias, "
-                . "  ' ', "
-                . "  resp.nom_responsable "
+                . "  sec.des_secretarias "
                 . ") LIKE '%" . $buscar[$i] . "%' ";
         if (($i) == count($buscar, 1) - 1) {
             
@@ -106,7 +104,7 @@ if (mysqli_num_rows($resultado) > 0) {
                 . "<table>"
                 . "<tr>";
         $cad .= "<td>"
-                . "<a href='javascript:;' class='btn default btn-xs green btnPresupuestar' data-id='" . $fila["idsecretarias"] . "' data-nombre='" . $fila["des_secretarias"] . "'>" .
+                . "<a href='javascript:;' class='btn default btn-xs green  btnPresupuestar' data-id='" . $fila["idsecretarias"] . "' data-nombre='" . $fila["des_secretarias"] . "'>" .
                 "<i class='fa fa-edit'></i> Presupuestar"
                 . "</a>"
                 . "</td>";

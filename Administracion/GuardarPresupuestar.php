@@ -99,17 +99,19 @@ if ($_REQUEST["OPCION"] == "GUARDAR") {
     $qc = mysqli_query($link, $consulta);
     
     foreach ($_REQUEST["txtid"] as $key => $val) {
-        if ($_REQUEST["txtid"] == "0") {
+        if ($_REQUEST["txtid"][$key] == "0") {
             $sql = "INSERT INTO presupuesto_secretarias VALUES(
                 null,'" . $_REQUEST["txtid_fuente"][$key] . "','" . $_REQUEST["txtid_secretaria"][$key] . "',
-                '" . $_REQUEST["txtvalor"][$key] . "','" . $_REQUEST["txtfecha"][$key] . "','ACTIVO','" . $_REQUEST["txtid_subfuente"][$key] . "'
+                '" . $_REQUEST["valor"][$key] . "','" . $_REQUEST["txtfecha"][$key] . "','ACTIVO','" . $_REQUEST["txtid_subfuente"][$key] . "'
             )";
+         
         } else {
             $sql = "REPLACE INTO presupuesto_secretarias VALUES(
                 '" . $_REQUEST["txtid"][$key] . "','" . $_REQUEST["txtid_fuente"][$key] . "','" . $_REQUEST["txtid_secretaria"][$key] . "',
-                '" . $_REQUEST["txtvalor"][$key] . "','" . $_REQUEST["txtfecha"][$key] . "','ACTIVO','" . $_REQUEST["txtid_subfuente"][$key] . "'
+                '" . $_REQUEST["valor"][$key] . "','" . $_REQUEST["txtfecha"][$key] . "','ACTIVO','" . $_REQUEST["txtid_subfuente"][$key] . "'
             )";
         }
+         
         $qc = mysqli_query($link, $sql);
     }
     if (($qc == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {

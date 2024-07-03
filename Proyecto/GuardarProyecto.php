@@ -748,7 +748,7 @@ if ($_POST['acc'] == "1") {
             $parLoca = explode("//", $_POST["Dat_Localiza"][$key]);
 
             $consulta2 = "INSERT INTO ubic_proyect VALUES(null,'" . $id_Proy . "','" . $parLoca[0] . "','" . $parLoca[1] . "','" . $parLoca[2] . "','" . $parLoca[3] . "','" . $parLoca[4] . "','" . $parLoca[5] . "')";
-            //echo $consulta2;
+            
             $qc2 = mysqli_query($link, $consulta2);
             if (($qc2 == false) || (mysqli_affected_rows($link) == -1) || mysqli_errno($link) != 0) {
                 $success = 0;

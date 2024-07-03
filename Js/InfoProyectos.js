@@ -1413,170 +1413,175 @@ $(document).ready(function () {
                 data: datos,
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.RawCtta.length > 0) {
-                        $.each(data.RawCtta, function (i, item) {
-                            $("#ContEvalCont").append("<div class='col-md-12' ><h3>CONTRATISTA - " + item.nombCtta + "</h3></div>");
-                            $.each(item.Eval, function (j, item2) {
-                                $("#ContEvalCont").append("<div class='col-md-12'><h4>EVALUACIÓN DE CONTRATO - " + item2.ncont + "</h4></div>");
-                                $("#ContEvalCont").append("<div class='col-md-9'><b>Objeto:</b><br> " + item2.obj + "</div><div class='col-md-3'><b>Valor:</b><br> " + item2.valor + "</div>");
-                                $("#ContEvalCont").append("<div class='col-md-9'><b>Proyecto:</b><br> " + item2.nproy + "</div><div class='col-md-3'><b>Secretaria:</b><br> " + item2.secret + "</div>");
-                                $("#ContEvalCont").append("<div class='col-md-5'><b>Fecha de Evaluación:</b><br> " + item2.fecha + "</div><br>");
-                                $("#ContEvalCont").append("<div class='col-md-7'><b>Calificación Obtenida:</b><br> " + item2.PuntTo + "</div><br>");
-                                $("#ContEvalCont").append("<div class='col-md-12'><h4>CRITERIOS DE EVALUACIÓN</h4></div>");
-                                $("#ContEvalCont").append("<div class='col-md-12'>");
-
-                                $("#ContEvalCont").append("<div class='portlet'>"
-                                        + "<div class='portlet-title'>"
-                                        + "	<div class='caption'><i class='icon-reorder'></i>1. Criterios Cumplimiento Y Oportunidad <label style='font-style: italic'> (Puntaje: " + item2.PuntCO + ")</label> - <label style='font-style: italic'> (% Equivalente: " + item2.PorCO + "%)</label></div>"
-                                        + "</div>"
-                                        + "<div class='portlet-body'>"
-                                        + "	<h4>Analisis.</h4>"
-                                        + "	<blockquote style='font-size:14px'>"
-                                        + "		<p>" + item2.analisis_cumpli + "</p>"
-                                        + "	</blockquote>"
-                                        + "</div>"
-                                        + "</div>");
-                                $("#ContEvalCont").append("<div class='portlet'>"
-                                        + "<div class='portlet-title'>"
-                                        + "	<div class='caption'><i class='icon-reorder'></i>2. Criterios En La Ejecución Del Contrato <label style='font-style: italic'> (Puntaje: " + item2.PuntCE + ")</label> - <label style='font-style: italic'> (% Equivalente: " + item2.PorCE + "%)</label></div>"
-                                        + "</div>"
-                                        + "<div class='portlet-body'>"
-                                        + "	<h4>Analisis.</h4>"
-                                        + "	<blockquote style='font-size:14px'>"
-                                        + "		<p>" + item2.analisis_ejec + "</p>"
-                                        + "	</blockquote>"
-                                        + "</div>"
-                                        + "</div>");
-                                $("#ContEvalCont").append("<div class='portlet'>"
-                                        + "<div class='portlet-title'>"
-                                        + "	<div class='caption'><i class='icon-reorder'></i>3. Criterios De Calidad<label style='font-style: italic'> (Puntaje: " + item2.PuntCC + ")</label> - <label style='font-style: italic'> (% Equivalente: " + item2.PorCC + "%)</label></div>"
-                                        + "</div>"
-                                        + "<div class='portlet-body'>"
-                                        + "	<h4>Analisis.</h4>"
-                                        + "	<blockquote style='font-size:14px'>"
-                                        + "		<p>" + item2.analisis_calidad + "</p>"
-                                        + "	</blockquote>"
-                                        + "</div>"
-                                        + "</div>");
-                                $("#ContEvalCont").append("</div>");
-
-                                $("#ContEvalCont").append("<div class='col-md-12'><h4>FORTALEZAS Y DEBILIDADES DE LA EVALUACIÓN</h4></div>");
-                                if (item2.ContF > 0) {
+                    if(data.respuesta== "noEval"){
+                        $("#ContEvalCont").append("<div class='col-md-12' style='text-align: center;'><h3>NO SE HA REALIZADO NINGUNA EVALUACIÓN DE CONTRATATISTA.</h3></div>");
+                    }else{
+                        if (data.RawCtta.length > 0) {
+                            $.each(data.RawCtta, function (i, item) {
+                                $("#ContEvalCont").append("<div class='col-md-12' ><h3>CONTRATISTA - " + item.nombCtta + "</h3></div>");
+                                $.each(item.Eval, function (j, item2) {
+                                    $("#ContEvalCont").append("<div class='col-md-12'><h4>EVALUACIÓN DE CONTRATO - " + item2.ncont + "</h4></div>");
+                                    $("#ContEvalCont").append("<div class='col-md-9'><b>Objeto:</b><br> " + item2.obj + "</div><div class='col-md-3'><b>Valor:</b><br> " + item2.valor + "</div>");
+                                    $("#ContEvalCont").append("<div class='col-md-9'><b>Proyecto:</b><br> " + item2.nproy + "</div><div class='col-md-3'><b>Secretaria:</b><br> " + item2.secret + "</div>");
+                                    $("#ContEvalCont").append("<div class='col-md-5'><b>Fecha de Evaluación:</b><br> " + item2.fecha + "</div><br>");
+                                    $("#ContEvalCont").append("<div class='col-md-7'><b>Calificación Obtenida:</b><br> " + item2.PuntTo + "</div><br>");
+                                    $("#ContEvalCont").append("<div class='col-md-12'><h4>CRITERIOS DE EVALUACIÓN</h4></div>");
                                     $("#ContEvalCont").append("<div class='col-md-12'>");
+    
                                     $("#ContEvalCont").append("<div class='portlet'>"
                                             + "<div class='portlet-title'>"
-                                            + "	<div class='caption'><i class='icon-reorder'></i>Fortalezas</div>"
+                                            + "	<div class='caption'><i class='icon-reorder'></i>1. Criterios Cumplimiento Y Oportunidad <label style='font-style: italic'> (Puntaje: " + item2.PuntCO + ")</label> - <label style='font-style: italic'> (% Equivalente: " + item2.PorCO + "%)</label></div>"
                                             + "</div>"
-                                            + "<div class='portlet-body'>");
-
-                                    $.each(item2.CritFort, function (j, item3) {
-                                        $("#ContEvalCont").append("<blockquote style='font-size:14px'>"
-                                                + "		<p>" + item3.criterioF + " (<label style='font-style: italic; font-weight: bold'>Puntaje: " + item3.puntF + "</label>)</p>"
-                                                + "	</blockquote>");
-                                    });
-
-
-                                    $("#ContEvalCont").append("</div>"
+                                            + "<div class='portlet-body'>"
+                                            + "	<h4>Analisis.</h4>"
+                                            + "	<blockquote style='font-size:14px'>"
+                                            + "		<p>" + item2.analisis_cumpli + "</p>"
+                                            + "	</blockquote>"
+                                            + "</div>"
                                             + "</div>");
-
-                                    $("#ContEvalCont").append("</div>");
-                                }
-                                if (item2.ContD > 0) {
-
-                                    $("#ContEvalCont").append("<div class='col-md-12'>");
                                     $("#ContEvalCont").append("<div class='portlet'>"
                                             + "<div class='portlet-title'>"
-                                            + "	<div class='caption'><i class='icon-reorder'></i>Debilidades y Oportunidad de Mejora</div>"
+                                            + "	<div class='caption'><i class='icon-reorder'></i>2. Criterios En La Ejecución Del Contrato <label style='font-style: italic'> (Puntaje: " + item2.PuntCE + ")</label> - <label style='font-style: italic'> (% Equivalente: " + item2.PorCE + "%)</label></div>"
                                             + "</div>"
-                                            + "<div class='portlet-body'>");
-
-                                    $.each(item2.CritDebi, function (j, item3) {
-                                        $("#ContEvalCont").append("<blockquote style='font-size:14px'>"
-                                                + "		<p>" + item3.criterioD + " (<label style='font-style: italic; font-weight: bold'>Puntaje: " + item3.puntD + "</label>)</p>"
-                                                + "	</blockquote>");
-                                    });
-
-
-                                    $("#ContEvalCont").append("</div>"
+                                            + "<div class='portlet-body'>"
+                                            + "	<h4>Analisis.</h4>"
+                                            + "	<blockquote style='font-size:14px'>"
+                                            + "		<p>" + item2.analisis_ejec + "</p>"
+                                            + "	</blockquote>"
+                                            + "</div>"
                                             + "</div>");
-
+                                    $("#ContEvalCont").append("<div class='portlet'>"
+                                            + "<div class='portlet-title'>"
+                                            + "	<div class='caption'><i class='icon-reorder'></i>3. Criterios De Calidad<label style='font-style: italic'> (Puntaje: " + item2.PuntCC + ")</label> - <label style='font-style: italic'> (% Equivalente: " + item2.PorCC + "%)</label></div>"
+                                            + "</div>"
+                                            + "<div class='portlet-body'>"
+                                            + "	<h4>Analisis.</h4>"
+                                            + "	<blockquote style='font-size:14px'>"
+                                            + "		<p>" + item2.analisis_calidad + "</p>"
+                                            + "	</blockquote>"
+                                            + "</div>"
+                                            + "</div>");
                                     $("#ContEvalCont").append("</div>");
-                                }
-
-
-                            });
-
-
-                            if (data.RawOtEv.length > 0) {
-                                $("#ContEvalCont").append("<div class='col-md-12'><h4>OTRAS EVALUACIONES</h4></div>");
-
-                                var TBOTEVAL = "<table class='table table-striped table-hover table-bordered '>"
-                                        + "<thead>"
-                                        + "    <tr>"
-                                        + "        <th>"
-                                        + "           Fecha "
-                                        + "        </th>"
-                                        + "        <th>"
-                                        + "             Criterios Cumplimiento Y Oportunidad"
-                                        + "        </th>"
-                                        + "       <th>"
-                                        + "             Criterios En La Ejecución Del Contrato"
-                                        + "        </th>"
-                                        + "       <th>"
-                                        + "           Criterios De Calidad "
-                                        + "        </th>"
-                                        + "       <th>"
-                                        + "          Calificación Total "
-                                        + "        </th>"
-                                        + "   </tr>"
-                                        + "</thead>"
-                                        + "<tbody id='tb_Body_TMetas'>";
-                                $.each(data.RawOtEv, function (i2, itemH) {
-                                    TBOTEVAL += "<tr class='selected'>";
-                                    TBOTEVAL += "<td>" + itemH.freeva + "</td>";
-                                    TBOTEVAL += "<td>" + itemH.PuntCO + "</td>";
-                                    TBOTEVAL += "<td>" + itemH.PuntCE + "</td>";
-                                    TBOTEVAL += "<td>" + itemH.PuntCC + "</td>";
-                                    TBOTEVAL += "<td>" + itemH.PuntTo + "</td></tr>";
-                                });
-
-                                TBOTEVAL += "</tbody>"
-                                        + "</table>";
-                            }
-                            $("#ContEvalCont").append(TBOTEVAL);
-
-                            if (item.ContC > 0) {
-                                $("#ContEvalCont").append("<div class='col-md-12'><h4>HISTORIAL DE CONTRATOS</h4></div>");
-                                $("#ContEvalCont").append("<div class='portlet'>"
-
-                                        + "<div class='portlet-body'>");
-                                var colesta = "";
-                                $.each(item.HisCont, function (j, itemH) {
-                                    var colesta = "";
-                                    if (itemH.estad_contrato === "Ejecucion") {
-                                        colesta = "#2ED26E";
-                                    } else if (itemH.estad_contrato === "Terminado") {
-                                        colesta = "#387EFC";
-                                    } else if (itemH.estad_contrato === "Suspendido") {
-                                        colesta = "#EA4359";
-                                    } else if (itemH.estad_contrato === "Liquidado") {
-                                        colesta = "#FDC20D";
+    
+                                    $("#ContEvalCont").append("<div class='col-md-12'><h4>FORTALEZAS Y DEBILIDADES DE LA EVALUACIÓN</h4></div>");
+                                    if (item2.ContF > 0) {
+                                        $("#ContEvalCont").append("<div class='col-md-12'>");
+                                        $("#ContEvalCont").append("<div class='portlet'>"
+                                                + "<div class='portlet-title'>"
+                                                + "	<div class='caption'><i class='icon-reorder'></i>Fortalezas</div>"
+                                                + "</div>"
+                                                + "<div class='portlet-body'>");
+    
+                                        $.each(item2.CritFort, function (j, item3) {
+                                            $("#ContEvalCont").append("<blockquote style='font-size:14px'>"
+                                                    + "		<p>" + item3.criterioF + " (<label style='font-style: italic; font-weight: bold'>Puntaje: " + item3.puntF + "</label>)</p>"
+                                                    + "	</blockquote>");
+                                        });
+    
+    
+                                        $("#ContEvalCont").append("</div>"
+                                                + "</div>");
+    
+                                        $("#ContEvalCont").append("</div>");
                                     }
-
-                                    $("#ContEvalCont").append("<blockquote style='font-size:14px'>"
-                                            + "		<p>" + itemH.num_contrato + ' - ' + itemH.obj_contrato + " (<label style='font-style: italic; font-weight: bold;color:" + colesta + "'>" + itemH.estad_contrato + "</label>)</p>"
-                                            + "	</blockquote>");
+                                    if (item2.ContD > 0) {
+    
+                                        $("#ContEvalCont").append("<div class='col-md-12'>");
+                                        $("#ContEvalCont").append("<div class='portlet'>"
+                                                + "<div class='portlet-title'>"
+                                                + "	<div class='caption'><i class='icon-reorder'></i>Debilidades y Oportunidad de Mejora</div>"
+                                                + "</div>"
+                                                + "<div class='portlet-body'>");
+    
+                                        $.each(item2.CritDebi, function (j, item3) {
+                                            $("#ContEvalCont").append("<blockquote style='font-size:14px'>"
+                                                    + "		<p>" + item3.criterioD + " (<label style='font-style: italic; font-weight: bold'>Puntaje: " + item3.puntD + "</label>)</p>"
+                                                    + "	</blockquote>");
+                                        });
+    
+    
+                                        $("#ContEvalCont").append("</div>"
+                                                + "</div>");
+    
+                                        $("#ContEvalCont").append("</div>");
+                                    }
+    
+    
                                 });
-                                $("#ContEvalCont").append("</div>"
-                                        + "</div>");
-
-                            }
-                        });
-
-
-                    } else {
-                        $("#ContEvalCont").append("<div class='col-md-12' style='text-align: center;'><h3>NO EXISTE NINGUNA EVALUACIÓN RELACIONADA A ESTOS PARÁMETROS.</h3></div>");
+    
+    
+                                if (data.RawOtEv.length > 0) {
+                                    $("#ContEvalCont").append("<div class='col-md-12'><h4>OTRAS EVALUACIONES</h4></div>");
+    
+                                    var TBOTEVAL = "<table class='table table-striped table-hover table-bordered '>"
+                                            + "<thead>"
+                                            + "    <tr>"
+                                            + "        <th>"
+                                            + "           Fecha "
+                                            + "        </th>"
+                                            + "        <th>"
+                                            + "             Criterios Cumplimiento Y Oportunidad"
+                                            + "        </th>"
+                                            + "       <th>"
+                                            + "             Criterios En La Ejecución Del Contrato"
+                                            + "        </th>"
+                                            + "       <th>"
+                                            + "           Criterios De Calidad "
+                                            + "        </th>"
+                                            + "       <th>"
+                                            + "          Calificación Total "
+                                            + "        </th>"
+                                            + "   </tr>"
+                                            + "</thead>"
+                                            + "<tbody id='tb_Body_TMetas'>";
+                                    $.each(data.RawOtEv, function (i2, itemH) {
+                                        TBOTEVAL += "<tr class='selected'>";
+                                        TBOTEVAL += "<td>" + itemH.freeva + "</td>";
+                                        TBOTEVAL += "<td>" + itemH.PuntCO + "</td>";
+                                        TBOTEVAL += "<td>" + itemH.PuntCE + "</td>";
+                                        TBOTEVAL += "<td>" + itemH.PuntCC + "</td>";
+                                        TBOTEVAL += "<td>" + itemH.PuntTo + "</td></tr>";
+                                    });
+    
+                                    TBOTEVAL += "</tbody>"
+                                            + "</table>";
+                                }
+                                $("#ContEvalCont").append(TBOTEVAL);
+    
+                                if (item.ContC > 0) {
+                                    $("#ContEvalCont").append("<div class='col-md-12'><h4>HISTORIAL DE CONTRATOS</h4></div>");
+                                    $("#ContEvalCont").append("<div class='portlet'>"
+    
+                                            + "<div class='portlet-body'>");
+                                    var colesta = "";
+                                    $.each(item.HisCont, function (j, itemH) {
+                                        var colesta = "";
+                                        if (itemH.estad_contrato === "Ejecucion") {
+                                            colesta = "#2ED26E";
+                                        } else if (itemH.estad_contrato === "Terminado") {
+                                            colesta = "#387EFC";
+                                        } else if (itemH.estad_contrato === "Suspendido") {
+                                            colesta = "#EA4359";
+                                        } else if (itemH.estad_contrato === "Liquidado") {
+                                            colesta = "#FDC20D";
+                                        }
+    
+                                        $("#ContEvalCont").append("<blockquote style='font-size:14px'>"
+                                                + "		<p>" + itemH.num_contrato + ' - ' + itemH.obj_contrato + " (<label style='font-style: italic; font-weight: bold;color:" + colesta + "'>" + itemH.estad_contrato + "</label>)</p>"
+                                                + "	</blockquote>");
+                                    });
+                                    $("#ContEvalCont").append("</div>"
+                                            + "</div>");
+    
+                                }
+                            });
+    
+    
+                        } else {
+                            $("#ContEvalCont").append("<div class='col-md-12' style='text-align: center;'><h3>NO EXISTE NINGUNA EVALUACIÓN RELACIONADA A ESTOS PARÁMETROS.</h3></div>");
+                        }
                     }
+                   
 
                 }});
 
@@ -1726,9 +1731,10 @@ $(document).ready(function () {
                         $("#ContGenProy").append("<div class='col-md-12'><h4>HISTORIAL DE MEDICIÓN INDICADORES.</h4></div>");
 
                         if (item.MedIn.length > 0) {
+                            var k = 1;
                             $.each(item.MedIn, function (j, itemInd) {
                                 $("#ContGenProy").append("<div class='col-md-12'><label style='font-size: 16px; text-transform: capitalize; font-weight: bold;'>Indicador: " + itemInd.nombInd + "</label></div>");
-                                var k = 1;
+                          
                                 $.each(itemInd.Metas, function (j, itemMet) {
 
                                     $("#ContGenProy").append("<div class='col-md-12'><label style='font-size: 14px; text-transform: capitalize; font-weight: bold; padding-top: 15px;'>Meta: " + itemMet.nombmet + "</label></div>");
@@ -2954,9 +2960,9 @@ $(document).ready(function () {
                                 doc.content.push(
                                         {
                                             table: {
-                                                widths: ['8%', '40%', '15%', '10%', '7%', '20%'],
+                                                widths: ['5%', '30%', '15%', '13%','10%', '7%', '20%'],
                                                 body: [
-                                                    ['Número', 'Objeto del Contrato', 'Contratista', 'Valor', '% de Avance', 'Justificación']
+                                                    ['No.', 'Objeto del Contrato', 'Contratista', 'Valor','Fecha finalización' ,'% de Avance', 'Justificación']
 
                                                 ]
                                             },
@@ -2986,9 +2992,9 @@ $(document).ready(function () {
                                     doc.content.push({
 
                                         table: {
-                                            widths: ['8%', '40%', '15%', '10%', '7%', '20%'],
+                                            widths: ['5%', '30%', '15%', '13%', '10%','7%', '20%'],
                                             body: [
-                                                [item3.numcont, item3.obj, item3.descontita, item3.total, item3.porava, item3.justi]
+                                                [item3.numcont, item3.obj, item3.descontita, item3.total,item3.ffin, item3.porava, item3.justi]
 
                                             ]
                                         },

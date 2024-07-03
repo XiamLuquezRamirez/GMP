@@ -95,7 +95,7 @@ function initialize3() {
     
     if (jQuery('#lat').val() != '' && jQuery('#long').val() != '') {
       latLng = new google.maps.LatLng(lat, lng);
-    } else {
+    } else  {
       latLng = new google.maps.LatLng(4.623389416100528, -74.0281466875);
     }
 
