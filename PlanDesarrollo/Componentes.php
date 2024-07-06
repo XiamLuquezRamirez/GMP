@@ -70,7 +70,7 @@ $link = conectar();
 <!-- END HEAD -->
 
 <!-- BEGIN BODY -->
-
+<input type="hidden" id="conse" value="<?php echo $_SESSION['nivel2'] ?>" />
 <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white page-footer-fixed page-sidebar-fixed">
     <div class="page-header navbar navbar-fixed-top">
         <div class="page-header-inner ">

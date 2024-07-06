@@ -318,10 +318,10 @@ $(document).ready(function () {
         },
         conse: function () {
 
-
+            let conse = document.getElementById("conse").value;
             var datos = {
                 ope: "ConConsecutivo",
-                tco: "EJES"
+                tco: conse
             };
 
             $.ajax({
@@ -332,7 +332,7 @@ $(document).ready(function () {
                 success: function (data) {
                     if (data['flag'] === "n") {
                         $("#responsive").modal('toggle');
-                        $.Alert("#msg2", "No se Puede Realizar la Operación... No se creado un Consecutivo para los Ejes. Verifique...", "warning", 'warning');
+                        $.Alert("#msg2", "No se Puede Realizar la Operación... No se creado un Consecutivo para "+conse+". Verifique...", "warning", 'warning');
                     } else {
                         $("#txt_Cod").val(data['StrAct']);
                         $("#cons").val(data['cons']);

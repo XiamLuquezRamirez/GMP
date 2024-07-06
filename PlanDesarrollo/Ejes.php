@@ -70,6 +70,7 @@ $link = conectar();
     <!-- END HEAD -->
 
     <!-- BEGIN BODY -->
+    <input type="hidden" id="conse" value="<?php echo $_SESSION['nivel1'] ?>" />
     <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white page-footer-fixed page-sidebar-fixed">
         <div class="page-header navbar navbar-fixed-top">
             <div class="page-header-inner ">
@@ -119,7 +120,7 @@ $link = conectar();
                     <h3 class="page-title"> </h3>
 
 
-                    <div id="ventanaImg" class="modal fade" tabindex="-1" data-width="760">
+                    <div id="ventanaImg" class="modal fade"  tabindex="-1" data-width="760">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                             <h4 class="modal-title" id='titformi'></h4>

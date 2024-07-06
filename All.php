@@ -3785,9 +3785,38 @@ WHERE
 
     $myJSONDat = json_encode($myDat);
     echo $myJSONDat;
+} else if ($_POST['ope'] == "buscProyectoSubfinanciacion") {
+
+    $myDat = new stdClass();
+    $rawdata = array(); //creamos un array
+    $consulta = "select proy.cod_proyect, proy.nombre_proyect, sum(fina.valor) total, fina.suborigen,
+    IFNULL((SELECT SUM(total) FROM banco_proyec_presupuesto WHERE id_proyect=fina.id_proyect),'0') pres,
+    proy.estado_proyect estado, proy.porceEjec_proyect peje
+      from banco_proyec_financiacion fina
+    left join  proyectos proy on fina.id_proyect=proy.id_proyect
+    where fina.suborigen = '".$_POST['idFu']."'
+    group by proy.id_proyect";
+    //echo $consulta;
+    $resultado = mysqli_query($link, $consulta);
+    if (mysqli_num_rows($resultado) > 0) {
+        while ($fila = mysqli_fetch_array($resultado)) {
+            $rawdata[] = array(
+                "cod_proyect" => $fila['cod_proyect'],
+                "nombre_proyect" =>$fila['nombre_proyect'],
+                "totalInv" => $fila['total'],
+                "presProy" => $fila['pres'],
+                "estado" => $fila['estado'],
+                "peje" => $fila['peje']
+            );
+        }
+    }
+
+    $myDat->proyectos = $rawdata;
+
+    echo json_encode($myDat);
 } else if ($_POST['ope'] == "GrafDetPresupuesto") {
     $myDat = new stdClass();
-    $consulta = "SELECT SUM(dp.valor) valor, subf.descripcion descr  FROM detalle_presupuesto dp LEFT JOIN subfinanciacion subf ON dp.subfuente=subf.id
+    $consulta = "SELECT SUM(dp.valor) valor, subf.descripcion descr, subf.id idfue  FROM detalle_presupuesto dp LEFT JOIN subfinanciacion subf ON dp.subfuente=subf.id
     WHERE dp.presupuesto = '" . $_POST['idPre'] . "' GROUP BY dp.subfuente";
 
 
@@ -3798,10 +3827,12 @@ WHERE
         while ($fila = mysqli_fetch_array($resultado1)) {
             $codpro = $fila['descr'];
             $valor = $fila['valor'];
+            $subFu = $fila['idfue'];
 
             $rawdata[] = array(
                 "Cate" => $codpro,
-                "cant" => $valor
+                "cant" => $valor,
+                "subFu" => $subFu
             );
         }
         $myDat->detPresupuesto = $rawdata;
@@ -8777,7 +8808,7 @@ FROM
     WHERE  proy.id_proyect=".$_POST["cod"]." AND proy.comp_pres='si'";
       $resultado = mysqli_query($link, $consulta);
       if (mysqli_num_rows($resultado) > 0) {
-          while ($fila = mysqli_fetch_array($resultado)) {
+        while ($fila = mysqli_fetch_array($resultado)) {
               $myDat->estado = $fila["estado_proyect"];
               $myDat->porce = $fila["porceEjec_proyect"];
               $myDat->ptoal = $fila["ptoal"];
@@ -8867,16 +8898,16 @@ FROM
     } else {
         $Contr = "<option value=' '>Seleccione...</option>";
         $consulta = "SELECT 
-id_contrato,num_contrato,LEFT(obj_contrato,200) obj
-FROM
-  contratos contr 
-WHERE contr.estcont_contra='Verificado' 
-AND contr.id_contrato IN
-  (SELECT
-    MAX(id_contrato)
-  FROM
-    contratos
-  GROUP BY num_contrato) GROUP BY num_contrato ORDER BY obj DESC";
+        id_contrato,num_contrato,LEFT(obj_contrato,200) obj
+        FROM
+        contratos contr 
+        WHERE contr.estcont_contra='Verificado' 
+        AND contr.id_contrato IN
+        (SELECT
+        MAX(id_contrato)
+        FROM
+        contratos
+        GROUP BY num_contrato) GROUP BY num_contrato ORDER BY obj DESC";
         $resultado = mysqli_query($link, $consulta);
         if (mysqli_num_rows($resultado) > 0) {
             while ($fila = mysqli_fetch_array($resultado)) {

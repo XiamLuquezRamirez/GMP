@@ -2,6 +2,7 @@ $(document).ready(function () {
     var mapa, mapa1, latitud, longitud;
     var conGlobal = 0;
     let grafiPresupuestoGlobalData = [];
+    var marcadores = [];
 
    
     $.extend({
@@ -83,7 +84,7 @@ $(document).ready(function () {
             longitud = position.coords.longitude; /*Guardamos nuestra longitud*/
             var latlon = new google.maps.LatLng(latitud, longitud); /* Creamos un punto con nuestras coordenadas */
             var myOptions = {
-                zoom: 13,
+                zoom: 9,
                 center: latlon, /* Definimos la posicion del mapa con el punto */
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             }; /*Configuramos una serie de opciones como el zoom del mapa y el tipo.*/
@@ -172,7 +173,7 @@ $(document).ready(function () {
                         $.each(data.RawUbiProy, function (i, itemUbi) {
 
                             $.Colocar_Marcador(mapa, itemUbi.lat, itemUbi.logi,
-                                    itemUbi.codproy, itemUbi.nproy, itemUbi.tip, itemUbi.sec,
+                                    itemUbi.codproy, itemUbi.nproy, itemUbi.sec, itemUbi.tipo,
                                     itemUbi.neje, itemUbi.ncomp, itemUbi.nprog, itemUbi.estad);
                         });
                         //PRESUPUESTO INICIAL
@@ -188,7 +189,7 @@ $(document).ready(function () {
                         $("#vpregat").html(number_format2(PresGastado, 2, ',', '.'));
                        
                         //PRESUPUESTO NO AFECTADO
-                        PresNoAfect = PresInicial - (PresGastado);
+                        PresNoAfect = PresInicial - (PresComprom);
                         
                         $("#vprenafec").html(number_format2(PresNoAfect, 2, ',', '.'));
 
@@ -197,7 +198,7 @@ $(document).ready(function () {
                         PresGasComp = parseFloat(data.TotContEje);
                         
                         $("#vpreCompGast").html(number_format2(PresGasComp, 2, ',', '.'));
-
+                       
                         ///CALCULAR PORCENTAJES
                         var ppcomp = (PresComprom * 100) / PresInicial;
                         var pgasta = (PresGastado * 100) / PresInicial;
@@ -208,14 +209,13 @@ $(document).ready(function () {
                             pgasco = 0;
                         }
 
-                        debugger;
-                       
                         setTimeout(function () {
                             var valor1 = (Number(ppcomp.toFixed(3)) * 360) / 100;
 
                             var activeBorder = $("#activeBorder1");
                             conGlobal = 0;
                             ValorFinal = ppcomp.toFixed(3);
+                            console.log(ppcomp);
                             $.llenarCirculos(ValorFinal, "#prec1", activeBorder, valor1, "#39B4CC");
                         }, 800);
 
@@ -232,6 +232,7 @@ $(document).ready(function () {
                             var activeBorder = $("#activeBorder3");
                             conGlobal = 0;
                             ValorFinal = pnafec.toFixed(3);
+                            console.log(pnafec);
                             $.llenarCirculos(ValorFinal, "#prec3", activeBorder, valor3, "#1ec854");
                         }, 800);
 
@@ -250,30 +251,59 @@ $(document).ready(function () {
                         });
                         var ContSecr = '';
 
-                        
+                        //GRAFIA DE SECRETARIAS 
 
-                        $.each(PreSecr, function (i, itemPre) {
-                            var colores = ['success', 'info', 'warning', 'danger'];
-                            var color = colores[Math.floor(Math.random() * colores.length)];
-                            let colorFont = "#333";
-                            if(itemPre.PorGat>25){
-                                colorFont = "#fff";
+                        am4core.ready(function() {
+                            // Themes begin
+                            am4core.useTheme(am4themes_animated);
+                            // Themes end
+                
+                            // Create chart instance
+                            var chart = am4core.create("grafiSecretarias", am4charts.XYChart);
+                
+                            // Add data
+                            chart.data =  data.PresSecret;
+
+                                         
+                            // Create axes
+                            var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+                            categoryAxis.dataFields.category = "secretaria";
+                            categoryAxis.renderer.grid.template.location = 0;
+                            categoryAxis.renderer.labels.template.rotation = 290;
+                            categoryAxis.renderer.labels.template.horizontalCenter = "right";
+                            categoryAxis.renderer.labels.template.verticalCenter = "middle";
+                            categoryAxis.renderer.labels.template.wrap = true;
+                            categoryAxis.renderer.labels.template.maxWidth = 120;
+                            categoryAxis.renderer.labels.template.fontSize = 10;
+
+                            var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                            valueAxis.renderer.minWidth = 20;
+                
+                            // Create series
+                            function createSeries(field, name, color, labelOffset) {
+                                var series = chart.series.push(new am4charts.ColumnSeries());
+                                series.dataFields.valueY = field;
+                                series.dataFields.categoryX = "secretaria";
+                                series.name = name;
+                                series.columns.template.tooltipText = "{name}: [bold]{valueY}[/]";
+                                series.stacked = true;
+                                series.columns.template.fill = color;
+                
+                                // var bullet = series.bullets.push(new am4charts.LabelBullet());
+                                // bullet.label.text = "{valueY}";
+                                // bullet.label.fill = am4core.color("#ffffff");
+                                // bullet.label.dy = 10;
+                                // bullet.label.dx = labelOffset || 0; // Offset for labels
                             }
-                            ContSecr += ' <div class="row">'
-                                    + '     <div class="col-md-7">'
-                                    + '         <label>' + $.capitalizeWords(itemPre.Desc) + '</label>'
-                                    + '     </div>'
-                                    + '     <div class="col-md-5">'
-                                    + '         <div class="progress progress-striped  active">'
-                                    + '           <div  class="progress-bar progress-bar-' + color + ' active" role="progressbar" aria-valuenow="40" aria-valuemin="0" title="'+itemPre.PorGat+'%" aria-valuemax="100" style="color: '+colorFont+'; width: ' + itemPre.PorGat + '%">' + itemPre.PorGat + '%</div>'
-                                    + '         </div>'
-                                    + '     </div>'
-                                    + ' </div>';
+                
+                            createSeries("asignado", "Asignado");
+                            createSeries("comprometido", "Comprometido");
+                            createSeries("gastado", "Gastado");
+                
+                            // Add legend
+                            chart.legend = new am4charts.Legend();
+                
                         });
-
-                        $("#LisSecr").html(ContSecr);
-
-
                         /////////PROYECTOS POR ESTADOS
 
 
@@ -299,8 +329,7 @@ $(document).ready(function () {
 
                         //DETALLE DE PRESUPUESTO TOTAL
                         grafiPresupuestoGlobalData = data.presupuesto;
-                      $.graficaPresupeusto();
-                
+                      $.graficaPresupeusto();                
 
                         ////////////////PRESUPUESTO COMPROMETIDO VS PRESUPUESTO GASTATO
 
@@ -367,7 +396,7 @@ $(document).ready(function () {
             function am4themes_myTheme(target) { 
                 if (target instanceof am4core.ColorSet) { 
                     target.list = [ 
-                        am4core.color("#e83e8c") 
+                        am4core.color("#6362F6") 
                     ]; 
                 } 
             } 
@@ -402,7 +431,7 @@ $(document).ready(function () {
                             "align": "center" // Alinea el texto en el centro horizontalmente
                         },
                         "slices": {
-                            "tooltipHTML": '<b>{category}: {value}</b><br><a id="{idp}" style="color:#ffffff" onclick="$.MostDetPresupuesto(this.id)">Ver detalle</a>'
+                            "tooltipHTML": '<b>{category}: {value}</b><br><a id="{idp}" style="color:#ffffff" onclick="$.MostDetPresupuesto(this.id)">Ver Subfuente de financiación</a>'
                         },
                     }]
             }, "PresuDist", "PieChart3D");
@@ -443,7 +472,8 @@ $(document).ready(function () {
                                     "type": "PieSeries3D",
                                     "dataFields": {
                                         "value": "cant",
-                                        "category": "Cate"
+                                        "category": "Cate",
+                                        "subFu": "subFu",
                                     },
                                     "tooltip": {
                                         "keepTargetHover": true,
@@ -458,7 +488,7 @@ $(document).ready(function () {
                                         "align": "center" // Alinea el texto en el centro horizontalmente
                                     },
                                     "slices": {
-                                        "tooltipHTML": '<b>{category}: \n {value}</b><br><a id="{category}" style="color:#ffffff" onclick="$.MostDetaProyecto(this.id)">Ver Detalle</a>'
+                                        "tooltipHTML": '<b>{category}: \n {value}</b><br><a id="{subFu}" style="color:#ffffff" onclick="$.MostDetaProyecto(this.id)">Ver Proyectos asociados</a>'
                                     },
                                 }]
                         }, "PresuDist", "PieChart3D");
@@ -468,6 +498,51 @@ $(document).ready(function () {
                         alert('HA OCURRIDO UN ERROR');
                     }
                 });
+        },
+        MostDetaProyecto: function (id) {
+            let datos = {
+                ope: "buscProyectoSubfinanciacion",
+                idFu: id
+            }
+
+            document.getElementById("PresuDist").style.display = 'none';
+            document.getElementById("listProyectos").style.display = 'block';
+            document.getElementById("btn_informe").style.display = 'none';
+            document.getElementById("btn_informeList").style.display = 'inline';
+
+            let tr_proyectos = '';
+
+            $.ajax({
+                async: false,
+                type: "POST",
+                url: "All.php",
+                data: datos,
+                dataType: 'JSON',
+                success: function (data) {
+                if(data.proyectos.length > 0) {
+                    data.proyectos.forEach(element => {
+                        tr_proyectos+='<tr>'
+                        +'<td class="highlight" style="font-size: 10px;">'+element.cod_proyect+'</td>'
+                        +'<td class="highlight" style="font-size: 10px;">'+element.nombre_proyect+'</td>'
+                        +'<td class="highlight" style="font-size: 10px;">'+formatCurrency(element.presProy, "es-CO", "COP")+'</td>'
+                        +'<td class="highlight" style="font-size: 10px;">'+formatCurrency(element.totalInv, "es-CO", "COP")+'</td>'
+                        +'<td class="highlight" style="font-size: 10px;">'+element.estado+'</td>'
+                        +'<td class="highlight" style="font-size: 10px;">'+element.peje+'</td>'
+                        +'</tr>';
+                    });
+                   
+                 document.getElementById('td_proyectos').innerHTML = tr_proyectos;
+
+                }else{
+                    document.getElementById('td_proyectos').innerHTML = "<tr><td colspan='6' style='text-align: center;font-weight: bold;'>NO TIENE PROYECTOS RELACIONADOS</td></tr>"
+                }
+                },
+                error: function (error_messages) {
+                    alert('HA OCURRIDO UN ERROR');
+                }
+            });
+
+
         },
         capitalizeWords: function (secre) {
             return secre.toLowerCase().replace(/\b\w/g, function(char) {
@@ -503,28 +578,39 @@ $(document).ready(function () {
                 return;
             }
         },
-
+        VolverGraf: function(){
+            document.getElementById("listProyectos").style.display = 'none';
+            document.getElementById("PresuDist").style.display = 'block';
+            document.getElementById("btn_informeList").style.display = 'none';
+            document.getElementById("btn_informe").style.display = 'inline';
+            document.getElementById("td_proyectos").innerHTML = ""
+        },
         Colocar_Marcador: function (mapa, latitud, longitud,
                 codproy, nproy, secret, tipo, eje, comp, prog, esta) {
 
-
-//            var latlon = new google.maps.LatLng(latitud, longitud); /* Creamos un punto con nuestras coordenadas */
-//            var myOptions = {
-//                zoom: 17,
-//                center: latlon, /* Definimos la posicion del mapa con el punto */
-//                mapTypeId: google.maps.MapTypeId.ROADMAP
-//            };/*Configuramos una serie de opciones como el zoom del mapa y el tipo.*/
-//            mapa = new google.maps.Map($("#map_canvas").get(0), myOptions); /*Creamos el mapa y lo situamos en su capa */
-
-            var coorMarcador = new google.maps.LatLng(latitud, longitud);
-
-            var marcador = new google.maps.Marker({
-                /*Creamos un marcador*/
-                animation: google.maps.Animation.DROP,
-                position: coorMarcador, /*Lo situamos en nuestro punto */
-                map: mapa, /* Lo vinculamos a nuestro mapa */
-                icon: 'Img/Marker_1.png'
-            });
+                    var coorMarcador = new google.maps.LatLng(latitud, longitud);
+                    let icon;
+                     if(esta== "Ejecutado"){
+                         icon = "Img/ejecutados.png";
+                     }else if(esta== "Priorizado"){
+                         icon = "Img/priorizado.png";
+                     }else{
+                         icon = "Img/ejecutados.png";
+                     }
+         
+                     var marcador = new google.maps.Marker({
+                         /*Creamos un marcador*/
+                         animation: google.maps.Animation.DROP,
+                         position: coorMarcador, /*Lo situamos en nuestro punto */
+                         map: mapa, /* Lo vinculamos a nuestro mapa */
+                         icon: {
+                             url: icon, // Ruta del icono
+                             scaledSize: new google.maps.Size(30, 30) // Ajusta el tamaño del icono (ancho, alto)
+                           }
+                     });
+         
+                     marcadores.push(marcador);
+            
             var Info = "<div>"
                     + "<div class='modal-header'  style='padding-top: 3px; padding-bottom: 3px;'>"
                     + "<h4 class='modal-title'>Datos Del Proyecto</h4>"
@@ -580,6 +666,14 @@ $(document).ready(function () {
     $.CargarPara();
 //    $.CargarInf("T");
 
+function formatCurrency(number, locale, currencySymbol) {
+    return new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency: currencySymbol,
+      minimumFractionDigits: 2,
+    }).format(number);
+  }
+
     $("#btn_login").on("click", function () {
         $.Login();
     });
@@ -622,8 +716,5 @@ $(document).ready(function () {
     $("#btn_audito").on("click", function () {
         window.location.href = 'Administracion/Auditoria.php';
     });
-
-
-
 
 });

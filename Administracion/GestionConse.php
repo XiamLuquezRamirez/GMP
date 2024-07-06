@@ -150,13 +150,13 @@ $link = conectar();
                                                     <label class='control-label'>Grupo:</label><span class="required">* </span>
                                                     <select class='form-control' onchange="$.ValGrupo(this.value)" id="CbGrupo" name="options2">
                                                         <option value=" ">Select...</option>
-                                                        <option value="DIMENSIONES">DIMENSIONES</option>
-                                                        <option value="EJES">EJES</option>
-                                                        <option value="PROGRAMAS">PROGRAMAS</option>
-                                                        <option value="SUBPROGRAMAS">SUBPROGRAMAS</option>
-                                                        <option value="METAS">METAS</option>
-                                                        <option value="PROYECTOS">PROYECTOS</option>
-                                                        <option value="INDICADORES">INDICADORES</option>
+                                                        <option style="display: none;" value="DIMENSIONES">DIMENSIONES</option>
+                                                        <option value="<?php echo $_SESSION['nivel1'] ?>"><?php echo $_SESSION['nivel1'] ?></option>
+                                                        <option value="<?php echo $_SESSION['nivel2'] ?>"><?php echo $_SESSION['nivel2'] ?></option>
+                                                        <option value="<?php echo $_SESSION['nivel3'] ?>"><?php echo $_SESSION['nivel3'] ?></option>
+                                                        <option value="METAS">Metas</option>
+                                                        <option value="PROYECTOS">Proyectos</option>
+                                                        <option value="INDICADORES">Indicadores</option>
 
                                                     </select>
                                                 </div>

@@ -1964,15 +1964,16 @@ $(document).ready(function () {
         updateporc: function (id) {
             var Toporc = 0;
             $("input[name='PorCont[]']").each(function (indice, elemento) {
-                Toporc = Toporc + parseInt($(elemento).val());
+                Toporc = Toporc + parseFloat($(elemento).val());
             });
 
             var contrato = $("#" + id).attr("data-id");
             var parid = id.split("_");
             $("#Porc" + parid[2]).val(contrato + "//" + $("#" + id).val());
 
+
             if (Toporc > 100 || Toporc < 100) {
-                $.Alert("#msgPorc", "El Porcentaje Total no debe ser Mayor ni  a 100%...", "warning");
+                $.Alert("#msgPorc", "La desitrubución de porcentaje entre los contratos debe ser igual a 100%...", "warning", "warning");
                 $("#btn_guardarAnio").prop('disabled', true);
                 return;
             } else {
@@ -3621,6 +3622,7 @@ $(document).ready(function () {
         $("#txt_Cod").val("");
         $("#CbTiplog").select2("val", " ");
         $("#txt_Nomb").val("");
+
         $("#CbContratis").select2("val", " ");
         $("#CbSuper").select2("val", " ");
         $("#CbInter").select2("val", " ");

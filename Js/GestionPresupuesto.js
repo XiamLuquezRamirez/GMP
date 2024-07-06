@@ -34,6 +34,11 @@ $(document).ready(function () {
       };
 
       console.log(datos);
+      
+      $.ajax({
+        type: "POST",
+        url: 
+      })
 
       $.ajax({
         type: "POST",

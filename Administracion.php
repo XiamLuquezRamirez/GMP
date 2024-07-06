@@ -493,21 +493,17 @@ include "Conectar.php";
                                                                 <div class="desc" style='text-align:center;font-weight:bold;font-size:12px;margin-top: 10px;'>% Presupuesto comp. ejecutado<br>(<i class='fa fa-dollar'></i> <label id="vpreCompGast"></label>)</div>
                                                             </div>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-
-
-
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-5">
+                                        <div class="col-md-12">
                                             <div class='portlet box blue'>
                                                 <div class='portlet-title'>
                                                     <div class='caption'>
-                                                        <i class='fa fa-angle-right'></i>Presupuesto Comprometido por Secretarias
+                                                        <i class='fa fa-angle-right'></i>Presupuesto por Secretarias
                                                     </div>
                                                     <div class='tools'>
                                                         <a href='javascript:;' class='collapse'></a>
@@ -516,17 +512,14 @@ include "Conectar.php";
                                                 <div class='portlet-body form'>
                                                     <div class='form-body'>
                                                         <div class="row">
-                                                            <div class='form-body' id='LisSecr' style="height: 67vh; max-height: 67vh; overflow: auto;">
+                                                            <div class='form-body' id='grafiSecretarias' style="height: 67vh; max-height: 67vh; overflow: auto;">
                                                             </div>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             </div>
-
-
                                         </div>
-                                        <div class="col-md-7">
+                                        <div class="col-md-12">
                                             <div class='portlet box red'>
                                                 <div class='portlet-title'>
                                                     <div class='caption'>
@@ -545,16 +538,13 @@ include "Conectar.php";
                                                                 </div>
                                                             </div>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             </div>
-
-
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-5">
+                                        <div class="col-md-12">
                                             <div class='portlet box red-intense'>
                                                 <div class='portlet-title'>
                                                     <div class='caption'>
@@ -577,11 +567,9 @@ include "Conectar.php";
                                                     </div>
                                                 </div>
                                             </div>
-
-
                                         </div>
 
-                                        <div class="col-md-7">
+                                        <div class="col-md-12">
                                             <div class='portlet box red-intense'>
                                                 <div class='portlet-title'>
                                                     <div class='caption'>
@@ -598,27 +586,36 @@ include "Conectar.php";
                                                                 <div id='PresuDist' style="width: 100%;  height: 55vh;max-height: 55vh;">
 
                                                                 </div>
+                                                                <div id="listProyectos" style="display: none;">
+                                                                    <table class="table table-bordered table-striped table-hover table-condensed flip-content" role="grid">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Código</th>
+                                                                                <th>Proyecto</th>
+                                                                                <th>Valor proyecto</th>
+                                                                                <th>Valor aportado subfuente</th>
+                                                                                <th>Estado</th>
+                                                                                <th>Porcentaje Ejecutado</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody id="td_proyectos">                                                                     <tbody>
+                                                                            
+                                                                        </tbody>
+                                                                    </table>
+
+                                                                </div>
                                                                 <div class="form-actions right" style="display: none;" id="btn_volver2">
                                                                     <button type="button" class="btn btn-info btn-sm" onclick="$.VolverGrafAnte();" id="btn_informe"><i class="fa fa-reply"></i> Volver</button>
+                                                                    <button type="button" style="display: none;" class="btn btn-info btn-sm" onclick="$.VolverGraf();" id="btn_informeList"><i class="fa fa-reply"></i> Volver</button>
                                                                 </div>
                                                             </div>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             </div>
-
-
                                         </div>
-
                                     </div>
-
-
                                 </div>
-
-
-
-
                             </div>
                             <div class="tab-pane" id="tab_2">
                                 <p>Plan de Desarrollo</p>
@@ -674,7 +671,7 @@ include "Conectar.php";
                         </div>
                         <div class='col-md-6'>
                             <div class='form-group' style="margin-bottom:0px;">
-                                <label class='control-label'><?php  echo  $_SESSION['nivel1']; ?>:</label>
+                                <label class='control-label'><?php echo  $_SESSION['nivel1']; ?>:</label>
                                 <select class="form-control select2" id="CbEje" name="options2">
 
                                 </select>
@@ -688,8 +685,6 @@ include "Conectar.php";
                                 </select>
                             </div>
                         </div>
-
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" onclick="$.BuscarDashBoard();" data-dismiss="modal" class="btn blue btn-sm">
@@ -708,7 +703,6 @@ include "Conectar.php";
     </div>
 
     <!-- Inicio Ventana DashBoard -->
-
 
     <?php echo $_SESSION['Footer']; ?>
 

@@ -53,34 +53,33 @@ if ($Ope == "CargParaDashboard") {
   $myDat = new stdClass();
   $RawUbiProy = array(); //Datos Ubicacion
   ///CONSULTAR UBICACIÓN 
-  $consulta = "SELECT 
+  $consulta = "select 
   proy.cod_proyect codproy,
   proy.nombre_proyect nproy,
   proy.dtipol_proyec tip,
-  proy.dsecretar_proyect sec,
+  (SELECT GROUP_CONCAT(DISTINCT secr.des_secretarias SEPARATOR ', ') 
+FROM banco_proyec_financiacion bff 
+LEFT JOIN secretarias secr ON secr.idsecretarias = bff.secretaria 
+WHERE bff.id_proyect = proy.id_proyect) AS sec,
   proy.estado_proyect estad,
-  ubi.lat_ubic lat,
-  ubi.long_ubi logi,
+  IFNULL(up.lat_ubic,'NO') lat,
+  up.long_ubi logi,
   eje.NOMBRE neje,
   comp.NOMBRE ncomp,
   prog.NOMBRE nprog
-  
-FROM
-  proyectos proy 
-  INNER JOIN ubic_proyect ubi 
-    ON proy.id_proyect = ubi.proyect_ubi 
-  LEFT JOIN proyect_metas proymet 
-    ON proy.id_proyect = proymet.cod_proy 
-  LEFT JOIN metas met 
-    ON proymet.id_meta = met.id_meta 
-  LEFT JOIN ejes eje 
+ from banco_proyec_financiacion ffi 
+left join proyectos proy on proy.id_proyect = ffi.id_proyect
+left join ubic_proyect up on proy.id_proyect=up.proyect_ubi
+LEFT JOIN proyect_metas proymet
+    ON proy.id_proyect = proymet.cod_proy
+  LEFT JOIN metas met
+    ON proymet.id_meta = met.id_meta
+  LEFT JOIN ejes eje
     ON met.ideje_metas = eje.ID
-      LEFT JOIN componente comp
+  LEFT JOIN componente comp
     ON met.idcomp_metas = comp.ID
   LEFT JOIN programas prog
     ON met.idprog_metas = prog.ID
-    LEFT JOIN  presupuesto_secretarias pc
-    ON proy.secretaria_proyect=pc.id_secretaria
 WHERE proy.estado_proyect IN ('En Ejecucion','Ejecutado')";
   if ($_POST["CbSec"] != "") {
     $consulta .= " AND IFNULL(proy.secretaria_proyect, '') = '" . $_POST["CbSec"] . "'";
@@ -91,11 +90,9 @@ WHERE proy.estado_proyect IN ('En Ejecucion','Ejecutado')";
   if ($_POST["CbVig"] != "") {
     $consulta .= " AND IFNULL(proy.vigenc_proyect, '') = '" . $_POST["CbVig"] . "'";
   }
-  if ($_POST["CbFin"] != "") {
-    $consulta .= "AND IFNULL(pc.id_fuente, '') = '" . $_POST["CbFin"] . "'";
-  }
 
-  $consulta .= " GROUP BY codproy";
+
+  $consulta .= " group by ffi.id_proyect, up.lat_ubic, up.long_ubi";
   $resultado = mysqli_query($link, $consulta);
   if (mysqli_num_rows($resultado) > 0) {
     while ($filaOP = mysqli_fetch_array($resultado)) {
@@ -108,8 +105,7 @@ WHERE proy.estado_proyect IN ('En Ejecucion','Ejecutado')";
         "sec" => $filaOP['sec'],
         "neje" => $filaOP['neje'],
         "ncomp" => $filaOP['ncomp'],
-        "nprog" => $filaOP['nprog'],
-        "estad" => $filaOP['estad']
+        "nprog" => $filaOP['nprog']
       );
     }
   }
@@ -249,25 +245,20 @@ WHERE proy.estado='ACTIVO' and estado_proyect='Ejecutado'";
   }
 
   ///////////CONSULTAR PRESUPUESTO SECRETARIA
-  $Consulta = "select
-  pre.id_secretaria idsec,
-  sec.des_secretarias descr,
-  sum(valor) valor
-  from
-  presupuesto_secretarias pre
-  left join secretarias sec
-    on pre.id_secretaria = sec.idsecretarias
-    where pre.estado='ACTIVO'";
+  $Consulta = "select sec.idsecretarias idsec, sec.des_secretarias descr, sum(valor) pasig,
+  IFNULL((SELECT SUM(valor) FROM banco_proyec_financiacion WHERE secretaria=ps.id_secretaria),'0') comp from presupuesto_secretarias ps 
+  left join secretarias sec on ps.id_secretaria=sec.idsecretarias
+  where ps.estado='ACTIVO' ";
   if ($_POST["CbSec"] != "") {
-    $Consulta .= " AND IFNULL(sec.idsecretarias, '') = '" . $_POST["CbSec"] . "'";
+    $Consulta .= " AND IFNULL(ps.id_secretaria, '') = '" . $_POST["CbSec"] . "'";
   }
   if ($_POST["CbVig"] != "") {
-    $Consulta .= " AND IFNULL(YEAR(pre.fecha), '') = '" . $_POST["CbVig"] . "'";
+    $Consulta .= " AND IFNULL(YEAR(ps.fecha), '') = '" . $_POST["CbVig"] . "'";
   }
   if ($_POST["CbFin"] != "") {
-    $Consulta .= "AND IFNULL(pre.id_fuente, '') = '" . $_POST["CbFin"] . "'";
+    $Consulta .= "AND IFNULL(ps.id_fuente, '') = '" . $_POST["CbFin"] . "'";
   }
-  $Consulta .= " GROUP BY pre.id_secretaria";
+  $Consulta .= " GROUP BY ps.id_secretaria";
   $rawdata = array(); //creamos un array
 
   $resultado = mysqli_query($link, $Consulta);
@@ -275,33 +266,47 @@ WHERE proy.estado='ACTIVO' and estado_proyect='Ejecutado'";
     while ($fila = mysqli_fetch_array($resultado)) {
       $IdSec = $fila['idsec'];
       $Desc = $fila['descr'];
-      $Val = $fila['valor'];
+      $pAsig = $fila['pasig'];
+      $pComp = $fila['comp'];
 
-      $consultaPRoy = "select sec,sum(totgast) tcomp from(
-        select
-          proy.secretaria_proyect sec, ifnull(sum(preproy.total),0) totgast
-        from
-          proyectos proy
-          left join  banco_proyec_presupuesto preproy
-          on proy.id_proyect=preproy.id_proyect
-        where proy.secretaria_proyect = '" . $IdSec . "' and comp_pres='si' and proy.estado='ACTIVO'
-          and estado_proyect='En Ejecucion'
-          group by preproy.id_proyect) t group by sec";
+      $Consulta = "SELECT IFNULL(SUM(vejec),0) veje FROM(
+        SELECT
+            contr.veje_contrato vejec
+          FROM
+            proyectos proy
+            LEFT JOIN contratos contr
+            ON proy.id_proyect=contr.idproy_contrato
+            LEFT JOIN proyect_metas proymet
+              ON proy.id_proyect = proymet.cod_proy
+            LEFT JOIN metas met
+              ON proymet.id_meta = met.id_meta
+            LEFT JOIN ejes eje
+              ON met.ideje_metas = eje.ID
+            LEFT JOIN banco_proyec_financiacion finan
+           ON proy.id_proyect = finan.id_proyect
+      WHERE proy.estado = 'ACTIVO' AND proy.estado_proyect='En Ejecucion' 
+      AND contr.estad_contrato IN ('Ejecucion','Terminado')  
+      AND IFNULL(finan.secretaria, '') = '" . $IdSec . "'";     
+      $Consulta .= "AND contr.id_contrato IN
+      (SELECT
+        MAX(id_contrato)
+      FROM
+        contratos WHERE contr.estad_contrato IN ('Ejecucion','Terminado')
+      GROUP BY num_contrato)
+      GROUP BY contr.num_contrato) AS t";
       $valComp = 0;
-      $resultadoComp = mysqli_query($link, $consultaPRoy);
+      $resultadoComp = mysqli_query($link, $Consulta);
       if (mysqli_num_rows($resultadoComp) > 0) {
         while ($filaComp = mysqli_fetch_array($resultadoComp)) {
-          $valComp = $filaComp['tcomp'];
+          $valEjec = $filaComp['veje'];
         }
       }
-
-      $PorGat = ($valComp / $Val) * 100;
-
+     
       $rawdata[] = array(
-        "Desc" => $Desc,
-        "Val" => $Val,
-        "valComp" => $valComp,
-        "PorGat" => round($PorGat, 2)
+        "secretaria" => $Desc,
+        "asignado" => $pAsig,
+        "comprometido" => $pComp,
+        "gastado" => $valEjec
       );
     }
   }

@@ -52,8 +52,6 @@ function initialize() {
     //función que actualiza los input del formulario con las nuevas latitudes
     //Estos campos suelen ser hidden
     updatePosition(latLng);
-
-
 }
 function initialize2() {
 
