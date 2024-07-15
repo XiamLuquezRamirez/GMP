@@ -19,7 +19,7 @@ if ($_POST['acc'] == "1") {
         $success = 0;
         $error = 3;
     }
-    $consulta1 = "UPDATE consecutivos SET actual='" . $_POST['cons'] . "' WHERE grupo='EJES'";
+    $consulta1 = "UPDATE consecutivos SET actual='" . $_POST['cons'] . "' WHERE grupo='".$_POST['conse'] ."'";
 } else if ($_POST['acc'] == "2") {
     $consulta = "UPDATE ejes SET CODIGO='" . $_POST['cod'] . "',NOMBRE='" . $_POST['des'] . "',"
             . "OBSERVACIONES='" . $_POST['obs'] . "',IMG='" . $_POST['url'] . "',DIMENSION='" . $_POST['dime'] . "' WHERE ID='" . $_POST['id'] . "'";

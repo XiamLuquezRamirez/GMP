@@ -170,7 +170,7 @@ $link = conectar();
                                             </div>
                                             <div class='col-md-2'>
                                                 <div class='form-group'>
-                                                    <label class='control-label'>N.  D&iacute;gitos</label>
+                                                    <label class='control-label'>No.  D&iacute;gitos</label>
                                                     <select class='form-control' id="Cbdigi" onchange="$.estruct();" name="options2">
                                                         <option value="1">1</option>
                                                         <option value="2">2</option>

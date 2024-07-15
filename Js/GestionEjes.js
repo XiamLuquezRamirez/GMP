@@ -527,8 +527,8 @@ $(document).ready(function () {
             url: $("#Src_File").val(),
             acc: $("#acc").val(),
             cons: $("#cons").val(),
+            conse: $("#conse").val(),
             id: $("#txt_id").val()
-
         };
 
         $.ajax({
@@ -549,6 +549,12 @@ $(document).ready(function () {
 
                 }
             },
+            beforeSend: function () {
+                $("#cargando").modal("show");
+              },
+              complete: function () {
+                $("#cargando").modal("hide");
+              },
             error: function (error_messages) {
                 alert('HA OCURRIDO UN ERROR');
             }

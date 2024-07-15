@@ -59,7 +59,7 @@ $link = conectar();
         <link href="../Css/Layouts/layout/css/layout.min.css" rel="stylesheet" type="text/css"/>
         <link href="../Css/Layouts/layout/css/themes/light2.css" rel="stylesheet" type="text/css" id="style_color" />
         <link href="../Css/Layouts/layout/css/custom.min.css" rel="stylesheet" type="text/css"/>
-        <!-- END THEME LAYOUT STYLES -->
+    <!-- END THEME LAYOUT STYLES -->
         <link rel="shortcut icon" href="../Img/favicon.ico" />
 
         <script src="../Js/jquery-3.1.1.min.js" type="text/javascript"></script>

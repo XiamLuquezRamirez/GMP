@@ -101,6 +101,7 @@ $(document).ready(function() {
             $("#CbGrupo").prop('disabled', false);
             $("#txt_Desc").prop('disabled', false);
             $("#txt_ini").prop('disabled', false);
+            $("#Cbdigi").prop('disabled', false);
             $("#txt_act").prop('disabled', false);
             $("#CbVige").prop('disabled', false);
             $("#txt_obser").prop('disabled', false);

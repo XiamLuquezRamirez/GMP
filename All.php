@@ -574,6 +574,7 @@ FROM
     if ($act > $cons) {
         $cons = $act;
     }
+
     $cons += 1;
 
     if ($vig == "SI") {
@@ -584,7 +585,6 @@ FROM
     $myDat->StrAct = $StrAct;
     $myDat->cons = $cons;
     $myDat->flag = $flag;
-
 
     $myJSONDat = json_encode($myDat);
 

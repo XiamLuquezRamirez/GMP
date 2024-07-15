@@ -4224,6 +4224,12 @@ $(document).ready(function () {
                     $("#btn_guardar").prop('disabled', true);
                 }
             },
+            beforeSend: function () {
+                $("#cargando").modal("show");
+              },
+              complete: function () {
+                $("#cargando").modal("hide");
+              },
             error: function (error_messages) {
                 alert('HA OCURRIDO UN ERROR');
             }

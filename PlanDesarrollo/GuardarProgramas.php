@@ -22,7 +22,7 @@ if ($_POST['acc'] == "1") {
         $success = 0;
         $error = 3;
     }
-    $consulta1 = "UPDATE consecutivos SET actual='" . $_POST['cons'] . "' WHERE grupo='PROGRAMAS'";
+    $consulta1 = "UPDATE consecutivos SET actual='" . $_POST['cons'] . "' WHERE grupo='".$_POST['conse'] ."'";
     
 } else if ($_POST['acc'] == "2") {
     $consulta = "UPDATE programas SET CODIGO='" . $_POST['cod'] . "',ID_EJE='" . $_POST['idej'] . "',"
