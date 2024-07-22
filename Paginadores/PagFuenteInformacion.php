@@ -39,13 +39,12 @@ $cad = "<table class=\"table table-bordered table-striped table-hover table-cond
         . "<thead>"
         . "<tr>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> #"
+        . " No."
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Descripción"
+        . " Descripción"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Acci&oacute;n"
         . "</th>"
         . "</tr>"
         . "</thead>"
@@ -90,29 +89,21 @@ if (mysqli_num_rows($resultado) > 0) {
                 . $fila["nombre"] . ""
                 . "</td>"
                 . "<td class=\"highlight\">"
-                . "<table>"
-                . "<tr>";
+                . "<div class='opciones'>";
         if ($_SESSION['GesParMDep'] == "s") {
-            $cad .= "<td>"
-                    . "<a  onclick=\"$.editFuente('" . $cod . "')\"  class=\"btn default btn-xs purple\">" .
+            $cad .= "<a  onclick=\"$.editFuente('" . $cod . "')\"  class=\"btn default btn-xs purple\">" .
                     "<i class='fa fa-edit'></i> Editar "
-                    . "</a>"
-                    . "</td>";
+                    . "</a>";
         }
-        $cad .= "<td>"
-                . "<a onclick=\"$.VerFuente('" . $cod . "')\" class='btn default btn-xs blue'>" .
+        $cad .= "<a onclick=\"$.VerFuente('" . $cod . "')\" class='btn default btn-xs blue'>" .
                 "<i class='fa fa-search'></i> Ver "
-                . "</a>"
-                . "</td>";
+                . "</a>";
         if ($_SESSION['GesParEDep'] == "s") {
-            $cad .= "<td>"
-                    . "<a onclick=\"$.deletFuente('" . $cod . "')\" class='btn default btn-xs red'>" .
+            $cad .= "<a onclick=\"$.deletFuente('" . $cod . "')\" class='btn default btn-xs red'>" .
                     "<i class='fa fa-trash-o'></i> Eliminar "
-                    . "</a>"
-                    . "</td>";
+                    . "</a>";
         }
-        $cad .= "</tr>"
-                . "</table>"
+        $cad .= "</div>"
                 . "</td>"
                 . "</tr>";
     }

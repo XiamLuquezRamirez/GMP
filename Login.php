@@ -868,14 +868,13 @@ Mostrar Contratos</a>
 							</a>
 							<ul class='sub-menu'>
 								<li id='menu_p_proy_ind_des'>
-									<a href='Indicadores/HojaVidaIndicador.php'><i class='fa fa-file-text-o'></i>Descripción</a>
+									<a href='HojaDeVidaIndicadores/'><i class='fa fa-file-text-o'></i>Descripción</a>
 								</li>
 								<li id='menu_p_proy_ind_Medi'>
-										<a href='Indicadores/MedirIndicadorProyectos.php'><i class='fa fa-file-text-o'></i>Medición</a>
-
-								</li>
+									<a href='MedirIndicadores/'><i class='fa fa-file-text-o'></i>Medición</a>
+                                </li>
 								<li id='menu_p_proy_ind_Eva' >
-                                                                   <a href='Indicadores/EvaluarIndicadorProyecto.php'><i class='fa fa-file-text-o'></i>Evaluación y Acciones</a>
+                                                                   <a href='EvaluarIndicadores/'><i class='fa fa-file-text-o'></i>Evaluación y Acciones</a>
 								</li>
 
 							</ul>
@@ -1231,14 +1230,14 @@ Mostrar Contratos</a>
 							</a>
 							<ul class='sub-menu'>
 								<li id='menu_p_proy_ind_des'>
-									<a href='../Indicadores/HojaVidaIndicador.php'><i class='fa fa-file-text-o'></i>Descripción</a>
+									<a href='../HojaDeVidaIndicadores/'><i class='fa fa-file-text-o'></i>Descripción</a>
 								</li>
 								<li id='menu_p_proy_ind_Medi'>
-										<a href='../Indicadores/MedirIndicadorProyectos.php'><i class='fa fa-file-text-o'></i>Medición</a>
+										<a href='../MedirIndicadores/'><i class='fa fa-file-text-o'></i>Medición</a>
 
 								</li>
 								<li id='menu_p_proy_ind_Eva'>
-                                                                   <a href='../Indicadores/EvaluarIndicadorProyecto.php'><i class='fa fa-file-text-o'></i>Evaluación y Acciones</a>
+                                                                   <a href='../EvaluarIndicadores/'><i class='fa fa-file-text-o'></i>Evaluación y Acciones</a>
 								</li>
 
 							</ul>

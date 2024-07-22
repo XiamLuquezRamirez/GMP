@@ -679,31 +679,39 @@ $(document).ready(function () {
 
         },
         deletContr: function (cod) {
-            if (confirm("\xbfEsta seguro de realizar la operaci\xf3n?")) {
-
-                var datos = {
-                    acc: "3",
-                    cod: cod
-                };
-
-                $.ajax({
-                    type: "POST",
-                    url: "../Proyecto/GuardarContrato.php",
-                    data: datos,
-                    success: function (data) {
-                        var pares = data.split("/");
-                        if (trimAll(pares[0]) === "bien") {
-                            $.Alert("#msg2", "Operación Realizada Exitosamente...", "success", "check");
-                            $.Contratos();
-                        } else if (trimAll(pares[0]) === "nobien") {
-                            $.Alert("#msg2", "No se Puede Eliminar un Contrato con Avances...", "warning", "warning");
+            Swal.fire({
+                title: "¿Estás seguro de eliminar este registro?",
+                text: "¡No podrás revertir esto!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "¡Sí, eliminar!",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    var datos = {
+                        acc: "3",
+                        cod: cod
+                    };
+    
+                    $.ajax({
+                        type: "POST",
+                        url: "../Proyecto/GuardarContrato.php",
+                        data: datos,
+                        success: function (data) {
+                            var pares = data.split("/");
+                            if (trimAll(pares[0]) === "bien") {
+                                $.Alert("#msg2", "Operación Realizada Exitosamente...", "success", "check");
+                                $.Contratos();
+                            } else if (trimAll(pares[0]) === "nobien") {
+                                $.Alert("#msg2", "No se Puede Eliminar un Contrato con Avances...", "warning", "warning");
+                            }
+                        },
+                        error: function (error_messages) {
+                            alert('HA OCURRIDO UN ERROR');
                         }
-                    },
-                    error: function (error_messages) {
-                        alert('HA OCURRIDO UN ERROR');
-                    }
-                });
-            }
+                    });
+                }});
         },
         deletHistContr: function (cod) {
             if (confirm("\xbfEsta seguro de realizar la operaci\xf3n?")) {

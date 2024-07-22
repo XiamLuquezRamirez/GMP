@@ -63,6 +63,52 @@ $link = conectar();
                 width: 100%;
                 height: 500px;
             }
+               /* Estilo personalizado para asegurarse de que el z-index sea alto */
+         .swal2-container {
+            z-index: 10052 !important;
+        }
+
+        div:where(.swal2-container).swal2-center>.swal2-popup {
+
+            border-radius: 5px !important;
+        }
+
+        div:where(.swal2-icon).swal2-warning.swal2-icon-show {
+            border-radius: 50% !important;
+        }
+
+        div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
+            border-radius: 5px !important;
+        }
+        div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
+            border-radius: 5px !important;
+        }
+
+        .opciones {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+        }
+
+        .opciones a {
+            margin-bottom: 3px;
+            transition: all .5s ease;
+        }
+
+        .opciones a:hover {
+            transform: translateX(3px);
+        }
+
+        thead {
+            background-color: #f9f9f9;
+            /* Fondo del encabezado */
+            position: sticky;
+            /* Posición pegajosa */
+            top: 0;
+            /* Fijo en la parte superior */
+            z-index: 1;
+            /* Asegurarse de que el encabezado esté por encima del contenido */
+        } 
         </style>
 
         <link rel="shortcut icon" href="../Img/favicon.ico" />
@@ -149,7 +195,7 @@ $link = conectar();
                                                                 <div class='form-group'>
                                                                     <label>
                                                                         Busqueda:
-                                                                        <input class="form-control input-small input-inline" onkeypress="$.busqIndicador(this.value);" onchange="$.busqIndicador(this.value);" id="busq_centro" type="search" placeholder="" aria-controls="sample_1">
+                                                                        <input class="form-control input-large input-inline" onkeypress="$.busqIndicador(this.value);" onchange="$.busqIndicador(this.value);" id="busq_centro" type="search" placeholder="" aria-controls="sample_1">
                                                                     </label>
 
                                                                 </div>

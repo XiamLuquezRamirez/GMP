@@ -161,29 +161,38 @@ $(document).ready(function() {
             return n >= 0 ? zeros : "-" + zeros;
         },
         deletConse: function(cod) {
-            if (confirm("\xbfEsta seguro de realizar la operaci\xf3n?")) {
-
-                var datos = {
-                    acc: "3",
-                    cod: cod
-                };
-
-                $.ajax({
-                    type: "POST",
-                    url: "../Administracion/GuardarConse.php",
-                    data: datos,
-                    success: function(data) {
-                        alert(data);
-                        if (trimAll(data) === "bien") {
-                            $.Alert("#msg2", "Datos Guardados Exitosamente...", "success", "check");
-                            $.conse();
+            Swal.fire({
+                title: "¿Estás seguro de eliminar este registro?",
+                text: "¡No podrás revertir esto!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "¡Sí, eliminar!",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    var datos = {
+                        acc: "3",
+                        cod: cod
+                    };
+    
+                    $.ajax({
+                        type: "POST",
+                        url: "../Administracion/GuardarConse.php",
+                        data: datos,
+                        success: function(data) {
+                            alert(data);
+                            if (trimAll(data) === "bien") {
+                                $.Alert("#msg2", "Datos Guardados Exitosamente...", "success", "check");
+                                $.conse();
+                            }
+                        },
+                        error: function(error_messages) {
+                            alert('HA OCURRIDO UN ERROR');
                         }
-                    },
-                    error: function(error_messages) {
-                        alert('HA OCURRIDO UN ERROR');
-                    }
-                });
-            }
+                    });
+                }});
+            
         },
         ValGrupo: function(grup) {
 

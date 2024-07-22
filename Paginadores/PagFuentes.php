@@ -43,7 +43,6 @@ $cad = "<table class=\"table table-bordered table-striped table-hover table-cond
     . " Descripción"
     . "</th>"
     . "<th>"
-    . " Acci&oacute;n"
     . "</th>"
     . "</tr>"
     . "</thead>"

@@ -2,7 +2,7 @@ $(document).ready(function () {
   $(".clasesCombos").selectpicker();
   $("#home").removeClass("start active open");
   $("#menu_op").addClass("start active open");
-  $("#menu_op_secre").addClass("active");
+  $("#menu_op_ffina").addClass("active");
   var Op_Validar = [];
   var Dat_Subfuente = [];
   var trelementoSel;
@@ -428,38 +428,49 @@ $(document).ready(function () {
   $("#tab_Fuen").on("click", ".btnEliminar", function (e) {
     e.preventDefault();
     var fila = $(this).parents("tr");
-    if (confirm("\xbfEsta seguro de realizar la operaci\xf3n?")) {
-      opcion = "ELIMINAR";
-      var datos = {
-        id: fila.data("id"),
-        opcion: opcion,
-      };
-      $.ajax({
-        type: "POST",
-        url: "../Administracion/GuardarFuentes.php",
-        data: datos,
-        success: function (data) {
-          if (data === "bien") {
-            $.Alert(
-              "#msg2",
-              "Operación Realizada Exitosamente...",
-              "success",
-              "check"
-            );
-            $.Fuentes();
-          } else if (data === "nbien") {
-            $.Alert(
-              "#msg2",
-              "Esta Fuente no se puede Eliminar",
-              "warning",
-              "warning"
-            );
-          }
-        },
-        error: function (error_messages) {
-          alert("HA OCURRIDO UN ERROR");
-        },
-      });
-    }
+    Swal.fire({
+      title: "¿Estás seguro de eliminar este registro?",
+      text: "¡No podrás revertir esto!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "¡Sí, eliminar!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        opcion = "ELIMINAR";
+        var datos = {
+          id: fila.data("id"),
+          opcion: opcion,
+        };
+        $.ajax({
+          type: "POST",
+          url: "../Administracion/GuardarFuentes.php",
+          data: datos,
+          success: function (data) {
+            if (data === "bien") {
+              $.Alert(
+                "#msg2",
+                "Operación Realizada Exitosamente...",
+                "success",
+                "check"
+              );
+              $.Fuentes();
+            } else if (data === "nbien") {
+              $.Alert(
+                "#msg2",
+                "Esta Fuente no se puede Eliminar",
+                "warning",
+                "warning"
+              );
+            }
+          },
+          error: function (error_messages) {
+            alert("HA OCURRIDO UN ERROR");
+          },
+        });
+      }});
+    
+    
   });
 });

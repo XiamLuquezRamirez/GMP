@@ -12,6 +12,11 @@ RewriteRule ^Plan_de_Desarrollo/$ PlanDesarrollo/AdminPlanDesarrollo.php [L]
 RewriteRule ^MetasProducto/$ PlanDesarrollo/Metas_Productos.php [L]
 RewriteRule ^ParametrizacionPlanDesarrollo/$ PlanDesarrollo/Pramatrizar.php [L]
 
+#Indicadores
+RewriteRule ^HojaDeVidaIndicadores/$ Indicadores/HojaVidaIndicador.php [L]
+RewriteRule ^MedirIndicadores/$ Indicadores/MedirIndicadorProyectos.php [L]
+RewriteRule ^EvaluarIndicadores/$ Indicadores/EvaluarIndicadorProyecto.php [L]
+
 #Proyectos
 RewriteRule ^Proyectos/$ Proyecto/Proyectos.php [L]
 RewriteRule ^Contratos/$ Proyecto/Contratos.php [L]

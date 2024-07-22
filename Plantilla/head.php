@@ -43,4 +43,55 @@
     <script src="../Js/GestionPresupuesto.js" type="text/javascript"></script>
     <script src="../Js/funciones_generales.js" type="text/javascript"></script>
     <script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js "></script>
+
+    <style>
+             /* Estilo personalizado para asegurarse de que el z-index sea alto */
+        .swal2-container {
+            z-index: 10052 !important;
+        }
+
+        div:where(.swal2-container).swal2-center>.swal2-popup {
+
+            border-radius: 5px !important;
+        }
+
+        div:where(.swal2-icon).swal2-warning.swal2-icon-show {
+            border-radius: 50% !important;
+        }
+
+        div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
+            border-radius: 5px !important;
+        }
+
+        div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
+            border-radius: 5px !important;
+        }
+
+        
+        .opciones {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+        }
+
+        .opciones a {
+            margin-bottom: 3px;
+            transition: all .5s ease;
+        }
+
+        .opciones a:hover {
+            transform: translateX(3px);
+        }
+
+        thead {
+            background-color: #f9f9f9;
+            /* Fondo del encabezado */
+            position: sticky;
+            /* Posición pegajosa */
+            top: 0;
+            /* Fijo en la parte superior */
+            z-index: 1;
+            /* Asegurarse de que el encabezado esté por encima del contenido */
+        }
+    </style>
 </head>

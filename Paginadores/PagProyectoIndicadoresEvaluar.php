@@ -50,7 +50,6 @@ $cad = "<table class=\"table table-striped table-bordered table-advance table-ho
         . "<i></i> <b>Responsable</b>"
         . "</th>"
         . "<th>"
-        . "<i></i> <b>Acci&oacute;n</b>"
         . "</th>"
         . "</tr>"
         . "</thead>"
@@ -209,7 +208,7 @@ for ($i = 0; $i < sizeof($meta); $i++) {
     $cad .= "<td style='vertical-align: middle;color: #000;'>" . ucwords(strtolower($meta[$i])) . "</td>";
     $cad .= "<td style='vertical-align: middle;'>" . $Resu[$i] . "</td>";
     $cad .= "<td style='vertical-align: middle;color: #000;'>" . ucwords(strtolower($Resp[$i])) . "</td>";
-    $cad .= "<td style='vertical-align:middle'>";
+    $cad .= "<td style='vertical-align:middle'><div class='opciones'>";
     if ($PlaM[$i] == "NO") {
         $cad .= "<a onclick=\"$.EvalIndiProy('" . $IdMe[$i] . "')\" title='Aplicar Plan de Mejora' class='btn default btn-xs blue'>"
                 . "<i class='fa fa-check'></i> Establecer Plan de Mejora </a>";
@@ -217,7 +216,7 @@ for ($i = 0; $i < sizeof($meta); $i++) {
         $cad .= "<a onclick=\"$.EvalIndiProyEdit('" . $IdMe[$i] . "')\" title='Aplicar Plan de Mejora' class='btn default btn-xs green'>"
                 . "<i class='fa fa-check'></i> Editar Plan de Mejora </a>";
     }
-    $cad .= "</td>";
+    $cad .= "</div></td>";
     $cad .= "</tr>";
 }
 

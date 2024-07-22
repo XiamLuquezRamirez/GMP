@@ -38,16 +38,15 @@ $cad = "<table class=\"table table-bordered table-striped table-hover table-cond
         . "<thead>"
         . "<tr>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Código"
+        . "Código"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Nombre"
+        . "Nombre"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Presupuesto"
+        . "Presupuesto"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Acci&oacute;n"
         . "</th>"
         . "</tr>"
         . "</thead>"
@@ -86,9 +85,6 @@ $contador = 0;
 if (mysqli_num_rows($resultado) > 0) {
 
     while ($fila = mysqli_fetch_array($resultado)) {
-
-
-
         $cod = $fila["idsecretarias"];
         $cad .= "<tr>"
                 . "<td class=\"highlight\">"
@@ -101,41 +97,29 @@ if (mysqli_num_rows($resultado) > 0) {
                 . number_format($fila["pres"], 2, ",", ".")  . ""
                 . "</td>"
                 . "<td class=\"highlight\">"
-                . "<table>"
-                . "<tr>";
-        $cad .= "<td>"
-                . "<a href='javascript:;' class='btn default btn-xs green  btnPresupuestar' data-id='" . $fila["idsecretarias"] . "' data-nombre='" . $fila["des_secretarias"] . "'>" .
+                . "<div class='opciones'>";
+        $cad .= "<a href='javascript:;' class='btn default btn-xs green  btnPresupuestar' data-id='" . $fila["idsecretarias"] . "' data-nombre='" . $fila["des_secretarias"] . "'>" .
                 "<i class='fa fa-edit'></i> Presupuestar"
-                . "</a>"
-                . "</td>";
+                . "</a>";
 
-        $cad .= "<td>"
-                . "<a  onclick=\"$.Procesos('" . $cod . "')\"  class=\"btn default btn-xs yellow-gold\">" .
+        $cad .= "<a  onclick=\"$.Procesos('" . $cod . "')\"  class=\"btn default btn-xs yellow-gold\">" .
                 "<i class='fa fa-sitemap'></i> Procesos "
-                . "</a>"
-                . "</td>";
+                . "</a>";
         if ($_SESSION['GesParMSec'] == "s") {
-            $cad .= "<td>"
-                    . "<a  onclick=\"$.editSecre('" . $cod . "')\"  class=\"btn default btn-xs purple\">" .
+            $cad .= "<a  onclick=\"$.editSecre('" . $cod . "')\"  class=\"btn default btn-xs purple\">" .
                     "<i class='fa fa-edit'></i> Editar "
-                    . "</a>"
-                    . "</td>";
+                    . "</a>";
         }
-        $cad .= "<td>"
-                . "<a onclick=\"$.VerSecre('" . $cod . "')\" class='btn default btn-xs blue'>" .
+        $cad .= "<a onclick=\"$.VerSecre('" . $cod . "')\" class='btn default btn-xs blue'>" .
                 "<i class='fa fa-search'></i> Ver "
-                . "</a>"
-                . "</td>";
+                . "</a>";
         if ($_SESSION['GesParESec'] == "s") {
-            $cad .= "<td>"
-                    . "<a onclick=\"$.deletSecre('" . $cod . "')\" class='btn default btn-xs red'>" .
+            $cad .= "<a onclick=\"$.deletSecre('" . $cod . "')\" class='btn default btn-xs red'>" .
                     "<i class='fa fa-trash-o'></i> Eliminar "
-                    . "</a>"
-                    . "</td>";
+                    . "</a>";
         }
-        $cad .= "</tr>"
-                . "</table>"
-                . "</td>"
+        $cad .= "</div>"
+                ."</td>"
                 . "</tr>";
     }
 }

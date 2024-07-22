@@ -39,16 +39,15 @@ $cad = "<table class=\"table table-bordered table-striped table-hover table-cond
         . "<thead>"
         . "<tr>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Identificacion"
+        . " Identificación"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Nombre"
+        . "Nombre"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Representante"
+        . "Representante"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Acci&oacute;n"
         . "</th>"
         . "</tr>"
         . "</thead>"
@@ -66,9 +65,7 @@ if ($busq != "") {
         $consulta .= "CONCAT( "
                 . "  ident_contratis, "
                 . "  ' ', "
-                . "  nom_contratis, "
-                . "  ' ', "
-                . "  nomrpr_contratis "
+                . "  nom_contratis"
                 . ") LIKE '%" . $buscar[$i] . "%' ";
         if (($i) == count($buscar, 1) - 1) {
             
@@ -100,29 +97,21 @@ if (mysqli_num_rows($resultado) > 0) {
                 . $fila["nomrpr_contratis"] . ""
                 . "</td>"
                 . "<td class=\"highlight\">"
-                . "<table>"
-                . "<tr>";
+                . "<div class='opciones'>";
         if ($_SESSION['GesParMCon'] == "s") {
-            $cad .= "<td>"
-                    . "<a  onclick=\"$.editContra('" . $cod . "')\"  class=\"btn default btn-xs purple\">" .
+            $cad .= "<a  onclick=\"$.editContra('" . $cod . "')\"  class=\"btn default btn-xs purple\">" .
                     "<i class='fa fa-edit'></i> Editar "
-                    . "</a>"
-                    . "</td>";
+                    . "</a>";
         }
-        $cad .= "<td>"
-                . "<a onclick=\"$.VerContra('" . $cod . "')\" class='btn default btn-xs blue'>" .
+        $cad .= "<a onclick=\"$.VerContra('" . $cod . "')\" class='btn default btn-xs blue'>" .
                 "<i class='fa fa-search'></i> Ver "
-                . "</a>"
-                . "</td>";
+                . "</a>";
         if ($_SESSION['GesParECon'] == "s") {
-            $cad .= "<td>"
-                    . "<a onclick=\"$.deletContra('" . $cod . "')\" class='btn default btn-xs red'>" .
+            $cad .= "<a onclick=\"$.deletContra('" . $cod . "')\" class='btn default btn-xs red'>" .
                     "<i class='fa fa-trash-o'></i> Eliminar "
-                    . "</a>"
-                    . "</td>";
+                    . "</a>";
         }
-        $cad .= "</tr>"
-                . "</table>"
+        $cad .= "</div>"
                 . "</td>"
                 . "</tr>";
     }

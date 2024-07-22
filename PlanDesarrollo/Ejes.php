@@ -59,6 +59,8 @@ $link = conectar();
         <link href="../Css/Layouts/layout/css/layout.min.css" rel="stylesheet" type="text/css"/>
         <link href="../Css/Layouts/layout/css/themes/light2.css" rel="stylesheet" type="text/css" id="style_color" />
         <link href="../Css/Layouts/layout/css/custom.min.css" rel="stylesheet" type="text/css"/>
+        <link href=" https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css " rel="stylesheet">
+
     <!-- END THEME LAYOUT STYLES -->
         <link rel="shortcut icon" href="../Img/favicon.ico" />
 
@@ -66,6 +68,56 @@ $link = conectar();
         <script src="../Js/GestionEjes.js" type="text/javascript"></script>
         <script src="../Js/funciones_generales.js" type="text/javascript"></script>
         <script src="../Js/tableToExcel.js" type="text/javascript"></script>
+        <script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js "></script>
+        <style>
+        /* Estilo personalizado para asegurarse de que el z-index sea alto */
+        .swal2-container {
+            z-index: 10052 !important;
+        }
+
+        div:where(.swal2-container).swal2-center>.swal2-popup {
+
+            border-radius: 5px !important;
+        }
+
+        div:where(.swal2-icon).swal2-warning.swal2-icon-show {
+            border-radius: 50% !important;
+        }
+
+        div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
+            border-radius: 5px !important;
+        }
+        div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
+            border-radius: 5px !important;
+        }
+
+        .opciones {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+        }
+
+        .opciones a {
+            margin-bottom: 3px;
+            transition: all .5s ease;
+        }
+
+        .opciones a:hover {
+            transform: translateX(3px);
+        }
+
+        thead {
+            background-color: #f9f9f9;
+            /* Fondo del encabezado */
+            position: sticky;
+            /* Posición pegajosa */
+            top: 0;
+            /* Fijo en la parte superior */
+            z-index: 1;
+            /* Asegurarse de que el encabezado esté por encima del contenido */
+        }
+      
+    </style>
     </head>
     <!-- END HEAD -->
 
@@ -197,7 +249,7 @@ $link = conectar();
                                                     <textarea id="txt_obser" rows="2"  class='form-control' style="width: 100%"></textarea>
                                                 </div>
                                             </div>
-                                            <div class="col-md-9">
+                                            <div class="col-md-9" style="display: none;">
                                                 <div class="form-group" id="From_Arch">
                                                     <label class="control-label">Imagen:</label>
                                                     <form enctype="multipart/form-data" class="form" id="form">
@@ -268,7 +320,7 @@ $link = conectar();
                                                             <div id="sample_1_filter" class="dataTables_filter">
                                                                 <label>
                                                                     Busqueda:
-                                                                    <input class="form-control input-small input-inline" onkeyup="$.busqResponsa(this.value);" id="busq_ejes" type="search" placeholder="" aria-controls="sample_1">
+                                                                    <input class="form-control input-large input-inline" onkeyup="$.busqResponsa(this.value);" id="busq_ejes" type="search" placeholder="" aria-controls="sample_1">
                                                                 </label>
                                                                 <div style="float: right;">
                                                                     <div class="btn-group dropup">

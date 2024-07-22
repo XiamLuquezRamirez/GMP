@@ -7,7 +7,6 @@ $(document).ready(function () {
   let valTotalPresupuesto = 0;
   let Dat_Subfuente = [];
 
-
   $("#CbPeriodoI,#CbPeriodoF").datepicker({
     autoclose: true,
     format: " yyyy",
@@ -30,15 +29,8 @@ $(document).ready(function () {
   $.extend({
     Presupuesto: function (val) {
       var datos = {
-        bus: val,
+        bus: val
       };
-
-      console.log(datos);
-      
-      $.ajax({
-        type: "POST",
-        url: 
-      })
 
       $.ajax({
         type: "POST",
@@ -95,30 +87,28 @@ $(document).ready(function () {
         $("#txt_valorSub").val("0");
       }
     },
-       buscarSubfuente: function () {
-            var datos = {
-              ope: "buscarSubfuentePre",
-              cod: $("#fuente").val(),
-            };
-      
-            $.ajax({
-              type: "POST",
-              url: "../All.php",
-              data: datos,
-              dataType: "json",
-              success: function (data) {
-                $("#subfuente").html(data["subfi"]);
-              },
-              error: function (error_messages) {
-                alert("HA OCURRIDO UN ERROR");
-              },
-            });
-          },
-    guardarSubfuente: function () {
+    buscarSubfuente: function () {
+      var datos = {
+        ope: "buscarSubfuentePre",
+        cod: $("#fuente").val(),
+      };
 
+      $.ajax({
+        type: "POST",
+        url: "../All.php",
+        data: datos,
+        dataType: "json",
+        success: function (data) {
+          $("#subfuente").html(data["subfi"]);
+        },
+        error: function (error_messages) {
+          alert("HA OCURRIDO UN ERROR");
+        },
+      });
+    },
+    guardarSubfuente: function () {
       let subfuentes = document.getElementsByClassName("filasSubfuentes");
       if (subfuentes.length > 0) {
-       
         $("#responsiveSubfinanciacion").modal("toggle");
         $("#responsive").modal({
           backdrop: "static",
@@ -213,28 +203,34 @@ $(document).ready(function () {
 
       // Reordenar los números de las filas
       $("#td_subfuentes tr").each(function () {
-          $(this).find("td").eq(0).text(num);
-          $(this).attr("id", "filaSubfuente" + num);
-          $(this).find("a").each(function() {
-              $(this).attr("data-fila", num);
+        $(this).find("td").eq(0).text(num);
+        $(this).attr("id", "filaSubfuente" + num);
+        $(this)
+          .find("a")
+          .each(function () {
+            $(this).attr("data-fila", num);
           });
-          $(this).find("input").each(function() {
-              $(this).attr("id", "idSubfuente" + num);
+        $(this)
+          .find("input")
+          .each(function () {
+            $(this).attr("id", "idSubfuente" + num);
           });
-          num++;
+        num++;
       });
     },
     EditarSubfuente: function (element) {
       $("#opbSub").val("editar");
       trelementoSel = element.getAttribute("data-fila");
       let idSubfuente = element.getAttribute("data-id");
-      let paraSubfuente = $("#idSubfuente" + trelementoSel).val().split("//");
-      
+      let paraSubfuente = $("#idSubfuente" + trelementoSel)
+        .val()
+        .split("//");
+
       var selectElement = document.getElementById("subfuente");
       selectElement.value = paraSubfuente[0];
       var event = new Event("change", { bubbles: true });
       selectElement.dispatchEvent(event);
-     
+
       $("#txt_valorSubVis").val(
         formatCurrency(paraSubfuente[1], "es-CO", "COP")
       );
@@ -328,11 +324,10 @@ $(document).ready(function () {
 
           ///cargar detalles
 
-          $("#tb_Subfuente").html(data['Tab_Subfuente']);
-          $("#contSubfuentes").val(data['contSubfuentes']);
+          $("#tb_Subfuente").html(data["Tab_Subfuente"]);
+          $("#contSubfuentes").val(data["contSubfuentes"]);
 
-          valTotalPresupuesto = data['valorTotalDet'];
-
+          valTotalPresupuesto = data["valorTotalDet"];
         },
         error: function (error_messages) {
           alert("HA OCURRIDO UN ERROR");
@@ -380,6 +375,7 @@ $(document).ready(function () {
         confirmButtonText: "¡Sí, eliminar!",
       }).then((result) => {
         if (result.isConfirmed) {
+          
           var datos = {
             acc: "3",
             id: cod,
@@ -406,7 +402,7 @@ $(document).ready(function () {
         }
       });
     },
-  
+
     Validar: function () {
       var Id = "",
         Value = "";
@@ -543,17 +539,20 @@ $(document).ready(function () {
     var url = form.attr("action");
     var token = $("#token").val();
     $("#idtoken").remove();
-    form.append("<input type='hidden' id='idtoken' name='_token'  value='" + token + "'>"
+    form.append(
+      "<input type='hidden' id='idtoken' name='_token'  value='" + token + "'>"
     );
 
     Dat_Subfuente = [];
     $.Dta_Subfuentes();
 
-    form.append("<input type='hidden' id='Dat_Subfuente' name='Dat_Subfuente' value='" + JSON.stringify(Dat_Subfuente) + "'>");
+    form.append(
+      "<input type='hidden' id='Dat_Subfuente' name='Dat_Subfuente' value='" +
+        JSON.stringify(Dat_Subfuente) +
+        "'>"
+    );
     var url = form.attr("action");
     var datos = form.serialize();
-
-      
 
     $.ajax({
       type: "POST",
@@ -561,7 +560,6 @@ $(document).ready(function () {
       data: datos,
       success: function (data) {
         if (trimAll(data) === "bien") {
-         
           $.Alert(
             "#msg",
             "Datos Guardados Exitosamente...",

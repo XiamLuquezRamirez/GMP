@@ -433,6 +433,24 @@ FROM
 
     $myJSONDat = json_encode($myDat);
     echo $myJSONDat;
+} else if ($_POST['ope'] == "buscarNivelesSel") {
+
+    $myDat = new stdClass();
+
+
+    $consulta = "select * from nombre_niveles_plan_desarrollo";
+    //echo $consulta;
+    $resultado = mysqli_query($link, $consulta);
+    if (mysqli_num_rows($resultado) > 0) {
+        while ($fila = mysqli_fetch_array($resultado)) {
+            $myDat->nivel1 = $fila['nivel1'];
+            $myDat->nivel2 = $fila['nivel2'];
+            $myDat->nivel3 = $fila['nivel3'];
+        }
+    }
+
+    $myJSONDat = json_encode($myDat);
+    echo $myJSONDat;
 } else if ($_POST['ope'] == "BusqEdperfil") {
 
     $myDat = new stdClass();

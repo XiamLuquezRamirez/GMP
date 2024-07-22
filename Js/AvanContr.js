@@ -336,32 +336,40 @@ $(document).ready(function() {
             });
         },
         QuitarImg: function(id_fila) {
-            if (confirm("\xbfEsta seguro de realizar la operaci\xf3n?")) {
-                var datos = {
-                    ope: "DelImgCont",
-                    cod: $("#id_proy").val(),
-                    fil: id_fila
-
-                };
-                $.ajax({
-                    type: "POST",
-                    url: "../All.php",
-                    data: datos,
-                    success: function(data) {
-                        if (data === "bien") {
-                            $.Alert("#msg", "Operación Realizada Exitosamente...", "success", "check");
-                            $.AddAvann($("#id_proy").val());
+            Swal.fire({
+                title: "¿Estás seguro de eliminar este registro?",
+                text: "¡No podrás revertir esto!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "¡Sí, eliminar!",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    var datos = {
+                        ope: "DelImgCont",
+                        cod: $("#id_proy").val(),
+                        fil: id_fila
+    
+                    };
+                    $.ajax({
+                        type: "POST",
+                        url: "../All.php",
+                        data: datos,
+                        success: function(data) {
+                            if (data === "bien") {
+                                $.Alert("#msg", "Operación Realizada Exitosamente...", "success", "check");
+                                $.AddAvann($("#id_proy").val());
+                            }
+                        },
+                        beforeSend: function() {
+                            $('#cargando').modal('show');
+                        },
+                        complete: function() {
+                            $('#cargando').modal('hide');
                         }
-                    },
-                    beforeSend: function() {
-                        $('#cargando').modal('show');
-                    },
-                    complete: function() {
-                        $('#cargando').modal('hide');
-                    }
-                });
-            }
-
+                    });
+                }}); 
         },
         VerImg: function(img) {
             $("#contenedor img").attr("src", "");

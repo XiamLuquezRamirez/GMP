@@ -53,7 +53,6 @@ $cad = "<table class=\"table table-bordered table-striped table-condensed table 
         . "<i ></i> <b>Estado</b>"
         . "</th>"
         . "<th>"
-        . "<i ></i> <b>Acci&oacute;n</b>"
         . "</th>"
         . "</tr>"
         . "</thead>"
@@ -147,19 +146,15 @@ if (mysqli_num_rows($resultado) > 0) {
                 . "<td class=\"highlight\">"
                 . $fila["descontrati_contrato"] . ""
                 . "</td>"
-                . "<td class=\"highlight\">"
+                . "<td style='vertical-align:middle' class=\"highlight\">"
                 . str_replace('Ejecucion', 'Ejecución', $fila["estad_contrato"]) . ""
                 . "</td>"
-                . "<td class=\"highlight\">"
-                . "<table>"
-                . "<tr>";
-        $cad .= "<td>"
+                . "<td style='vertical-align:middle' class=\"highlight\">"
+                . "<div class='opciones'>"
                 . "<a  onclick=\"$.AddAvann('" . $fila["num_contrato"] . "')\" class='btn default btn-xs purple'>" .
                 "<i class='fa fa-plus'></i>  Avances"
                 . "</a>"
-                . "</td>";
-        $cad .= "</tr>"
-                . "</table>"
+                . "</div>"
                 . "</td>"
                 . "</tr>";
     }

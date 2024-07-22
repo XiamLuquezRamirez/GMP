@@ -81,10 +81,10 @@ $(document).ready(function () {
                     $('#Src_File').val(data['IMG']);
                     $("#Cbx_Dime").val(data["DIMENSION"]).change();
 
-                    if (data['IMG'] !== "") {
-                        $('#MostImg').show();
-                        $("#contenedor img").attr("src", "../PlanDesarrollo/" + data['IMG']);
-                    }
+                    // if (data['IMG'] !== "") {
+                    //     $('#MostImg').show();
+                    //     $("#contenedor img").attr("src", "../PlanDesarrollo/" + data['IMG']);
+                    // }
                     $('#txt_id').val(cod);
 
                 },
@@ -120,10 +120,10 @@ $(document).ready(function () {
                     $('#txt_obser').val(data['OBSERVACION']);
                     $('#Src_File').val(data['IMG']);
                     $("#Cbx_Dime").val(data["DIMENSION"]).change();
-                    if (data['IMG'] !== "") {
-                        $('#MostImg').show();
-                        $("#contenedor img").attr("src", "../PlanDesarrollo/" + data['IMG']);
-                    }
+                    // if (data['IMG'] !== "") {
+                    //     $('#MostImg').show();
+                    //     $("#contenedor img").attr("src", "../PlanDesarrollo/" + data['IMG']);
+                    // }
                     $('#txt_id').val(cod);
 
                 },
@@ -145,30 +145,38 @@ $(document).ready(function () {
 
         },
         deletEjes: function (cod) {
-            if (confirm("\xbfEsta seguro de realizar la operaci\xf3n?")) {
-
-                var datos = {
-                    acc: "3",
-                    cod: cod
-                };
-
-                $.ajax({
-                    type: "POST",
-                    url: "../PlanDesarrollo/GuardarEjes.php",
-                    data: datos,
-                    success: function (data) {
-                        if (data === "bien") {
-                            $.Alert("#msg2", "Operación Realizada Exitosamente...", "success", 'check');
-                            $.ejes();
-                        } else if (data === "nobien") {
-                            $.Alert("#msg2", "No se Puede Realizar la Operación... Existen Componentes relacionados con este Eje.", "warning", 'warning');
+            Swal.fire({
+                title: "¿Estás seguro de eliminar este registro?",
+                text: "¡No podrás revertir esto!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "¡Sí, eliminar!",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    var datos = {
+                        acc: "3",
+                        cod: cod
+                    };
+    
+                    $.ajax({
+                        type: "POST",
+                        url: "../PlanDesarrollo/GuardarEjes.php",
+                        data: datos,
+                        success: function (data) {
+                            if (data === "bien") {
+                                $.Alert("#msg2", "Operación Realizada Exitosamente...", "success", 'check');
+                                $.ejes();
+                            } else if (data === "nobien") {
+                                $.Alert("#msg2", "No se Puede Realizar la Operación... Existen Componentes relacionados con este Eje.", "warning", 'warning');
+                            }
+                        },
+                        error: function (error_messages) {
+                            alert('HA OCURRIDO UN ERROR');
                         }
-                    },
-                    error: function (error_messages) {
-                        alert('HA OCURRIDO UN ERROR');
-                    }
-                });
-            }
+                    });
+                }});
         },
         paginador: function (pag) {
 

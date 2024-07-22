@@ -27,7 +27,7 @@ $link = conectar();
 
 <head>
     <meta charset="utf-8" />
-    <title> Parametrizar nieves del plan de desarrollo | GMP - Gestor Monitoreo Público</title>
+    <title> Parametrizar niveles del plan de desarrollo | GMP - Gestor Monitoreo Público</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <meta content="" name="description" />
@@ -298,7 +298,6 @@ $link = conectar();
                         data: datos,
                         dataType: 'JSON',
                         success: function(data) {
-                            console.log(data.nivel1);
                             $("#CbN1").html(data.nivel1);
                             $("#CbN2").html(data.nivel2);
                             $("#CbN3").html(data.nivel3);
@@ -307,7 +306,33 @@ $link = conectar();
                             alert('HA OCURRIDO UN ERROR');
                         }
                     });
+
+                $.nivelSel();
+
                 },
+
+                nivelSel: function() {
+                    let datos = {
+                        ope: "buscarNivelesSel"
+                    }
+
+                    $.ajax({
+                        async: false,
+                        type: "POST",
+                        url: "../All.php",
+                        data: datos,
+                        dataType: 'JSON',
+                        success: function(data) {
+                            $("#CbN1").select2("val", data.nivel1);
+                            $("#CbN2").select2("val", data.nivel2);
+                            $("#CbN3").select2("val", data.nivel3);
+                        },
+                        error: function(error_messages) {
+                            alert('HA OCURRIDO UN ERROR');
+                        }
+                    });
+                },
+
                 NewNivel: function(nivel) {
                     $("#nivelSel").val(nivel);
                     $("#ventanaNiveles").modal({
@@ -443,6 +468,7 @@ $link = conectar();
             });
 
             $.cargarNiveles();
+
 
         });
     </script>

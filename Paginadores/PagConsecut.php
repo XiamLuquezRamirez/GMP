@@ -39,22 +39,21 @@ $cad = "<table class=\"table table-striped table-bordered table-hover dataTable 
         . "<thead>"
         . "<tr>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Estructura"
+        . " Estructura"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Descripcion"
+        . " Descripcion"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Grupo"
+        . " Grupo"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Inicio"
+        . " Inicio"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Actual"
+        . " Actual"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Accion"
         . "</th>"
         . "</tr>"
         . "</thead>"
@@ -110,26 +109,18 @@ if (mysqli_num_rows($resultado) > 0) {
                 . $fila["actual"] . ""
                 . "</td>"
                 . "<td class=\"highlight\">"
-                . "<table>"
-                . "<tr>";
+                . "<div class='opciones'>";
         if ($_SESSION['GesParMCsc'] == "s") {
-            $cad .= "<td>"
-                    . "<a  onclick=\"$.editConse('" . $cod . "')\"  class=\"btn default btn-xs blue\">"
-                    . "<i class=\"fa fa-edit\"></i> Editar</a>"
-                    . "</td>";
+            $cad .= "<a  onclick=\"$.editConse('" . $cod . "')\"  class=\"btn default btn-xs blue\">"
+                    . "<i class=\"fa fa-edit\"></i> Editar</a>";
         }
-        $cad .= "<td>"
-                . "<a   onclick=\"$.VerConse('" . $cod . "')\"  class=\"btn default btn-xs blue\">"
-                . "<i class=\"fa fa-search\"></i> Ver</a>"
-                . "</td>";
+        $cad .= "<a   onclick=\"$.VerConse('" . $cod . "')\"  class=\"btn default btn-xs blue\">"
+                . "<i class=\"fa fa-search\"></i> Ver</a>";
         if ($_SESSION['GesParECsc'] == "s") {
-            $cad .= "<td>"
-                    . "<a onclick=\"$.deletConse('" . $cod . "')\" class=\"btn default btn-xs red\">"
-                    . "<i class=\"fa fa-trash-o\"></i> Eliminar</a>"
-                    . "</td>";
+            $cad .= "<a onclick=\"$.deletConse('" . $cod . "')\" class=\"btn default btn-xs red\">"
+                    . "<i class=\"fa fa-trash-o\"></i> Eliminar</a>";
         }
-        $cad .= "</tr>"
-                . "</table>"
+        $cad .= "</div>"
                 . "</td>"
                 . "</tr>";
     }

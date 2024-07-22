@@ -39,16 +39,15 @@ $cad = "<table class=\"table table-bordered table-striped table-hover table-cond
         . "<thead>"
         . "<tr>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Código"
+        . " Código"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Nombre"
+        . " Nombre"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Correo"
+        . "Correo"
         . "</th>"
-        . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Acci&oacute;n"
+        . "<th>"  
         . "</th>"
         . "</tr>"
         . "</thead>"
@@ -97,31 +96,23 @@ if (mysqli_num_rows($resultado) > 0) {
                 . "<td class=\"highlight\">"
                 . $fila["correo_dependencia"] . ""
                 . "</td>"
-                . "<td class=\"highlight\">"
-                . "<table>"
-                . "<tr>";
+                . "<td class=\"highlight\">";
         if ($_SESSION['GesParMDep'] == "s") {
-            $cad .= "<td>"
+            $cad .= "<div class='opciones'>"
                     . "<a  onclick=\"$.editDepen('" . $cod . "')\"  class=\"btn default btn-xs purple\">" .
                     "<i class='fa fa-edit'></i> Editar "
-                    . "</a>"
-                    . "</td>";
+                    . "</a>";
         }
-        $cad .= "<td>"
-                . "<a onclick=\"$.VerDepen('" . $cod . "')\" class='btn default btn-xs blue'>" .
+        $cad .=  "<a onclick=\"$.VerDepen('" . $cod . "')\" class='btn default btn-xs blue'>" .
                 "<i class='fa fa-search'></i> Ver "
-                . "</a>"
-                . "</td>";
+                . "</a>";
         if ($_SESSION['GesParEDep'] == "s") {
-            $cad .= "<td>"
-                    . "<a onclick=\"$.deletDepen('" . $cod . "')\" class='btn default btn-xs red'>" .
+            $cad .= "<a onclick=\"$.deletDepen('" . $cod . "')\" class='btn default btn-xs red'>" .
                     "<i class='fa fa-trash-o'></i> Eliminar "
                     . "</a>"
-                    . "</td>";
+                    . "</div>";
         }
-        $cad .= "</tr>"
-                . "</table>"
-                . "</td>"
+        $cad .= "</td>"
                 . "</tr>";
     }
 }

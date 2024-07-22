@@ -39,16 +39,15 @@ $cad = "<table class=\"table table-bordered table-striped table-hover table-cond
         . "<thead>"
         . "<tr>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Código"
+        . "Código"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Descripción"
+        . "Descripción"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> ". $_SESSION['nivel1']
+        . "". $_SESSION['nivel1']
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Acci&oacute;n"
         . "</th>"
         . "</tr>"
         . "</thead>"
@@ -99,32 +98,24 @@ if (mysqli_num_rows($resultado) > 0) {
                 . $fila["nomej"] . ""
                 . "</td>"
                 . "<td class=\"highlight\">"
-                . "<table>"
-                . "<tr>";
-        if ($_SESSION['GesPlaMCo'] == "s") {
-            $cad .= "<td>"
-                    . "<a  onclick=\"$.editEstr('" . $cod . "')\" class='btn default btn-xs purple'>" .
-                    "<i class='fa fa-edit'></i> Editar "
-                    . "</a>"
-                    . "</td>";
-        }
+                . "<div class='opciones'>";
+                if ($_SESSION['GesPlaMCo'] == "s") {
+                    $cad .= "<a  onclick=\"$.editEstr('" . $cod . "')\" class='btn default btn-xs purple'>" .
+                            "<i class='fa fa-edit'></i> Editar "
+                            . "</a>";
+                }
 
-        $cad .= "<td>"
-                . "<a onclick=\"$.VerEstr('" . $cod . "')\" class='btn default btn-xs blue'>" .
-                "<i class='fa fa-search'></i> Ver "
-                . "</a>"
-                . "</td>";
+            $cad .= "<a onclick=\"$.VerEstr('" . $cod . "')\" class='btn default btn-xs blue'>" .
+                    "<i class='fa fa-search'></i> Ver "
+                    . "</a>";
 
-        if ($_SESSION['GesPlaECo'] == "s") {
-            $cad .= "<td>"
-                    . "<a onclick=\"$.deletEstr('" . $cod . "')\" class='btn default btn-xs red'>" .
-                    "<i class='fa fa-trash-o'></i> Eliminar "
-                    . "</a>"
-                    . "</td>";
-        }
+                if ($_SESSION['GesPlaECo'] == "s") {
+                    $cad .= "<a onclick=\"$.deletEstr('" . $cod . "')\" class='btn default btn-xs red'>" .
+                            "<i class='fa fa-trash-o'></i> Eliminar "
+                            . "</a>";
+                }
 
-        $cad .= "</tr>"
-                . "</table>"
+        $cad .= "</div>"
                 . "</td>"
                 . "</tr>";
     }

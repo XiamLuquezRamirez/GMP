@@ -39,16 +39,15 @@ $cad = "<table class=\"table table-bordered table-striped table-hover table-cond
         . "<thead>"
         . "<tr>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Identificación"
+        . "Identificación"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Nombre"
+        . " Nombre"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Email"
+        . " Email"
         . "</th>"
-        . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Acci&oacute;n"
+        . "<th>"       
         . "</th>"
         . "</tr>"
         . "</thead>"
@@ -99,31 +98,23 @@ if (mysqli_num_rows($resultado) > 0) {
                 . $fila["correo_supervisores"] . ""
                 . "</td>"
                 . "<td class=\"highlight\">"
-                . "<table>"
-                . "<tr>";
+                . "<div class='opciones'>";
 
         if ($_SESSION['GesParMSup'] == "s") {
-            $cad .= "<td>"
-                    . "<a  onclick=\"$.editSuperv('" . $cod . "')\"  class=\"btn default btn-xs purple\">" .
+            $cad .= "<a  onclick=\"$.editSuperv('" . $cod . "')\"  class=\"btn default btn-xs purple\">" .
                     "<i class='fa fa-edit'></i> Editar "
-                    . "</a>"
-                    . "</td>";
+                    . "</a>";
         }
-        $cad .= "<td>"
-                . "<a onclick=\"$.VerSuperv('" . $cod . "')\" class='btn default btn-xs blue'>" .
+        $cad .= "<a onclick=\"$.VerSuperv('" . $cod . "')\" class='btn default btn-xs blue'>" .
                 "<i class='fa fa-search'></i> Ver "
-                . "</a>"
-                . "</td>";
+                . "</a>";
 
         if ($_SESSION['GesParESup'] == "s") {
-            $cad .= "<td>"
-                    . "<a onclick=\"$.deletSuperv('" . $cod . "')\" class='btn default btn-xs red'>" .
+            $cad .= "<a onclick=\"$.deletSuperv('" . $cod . "')\" class='btn default btn-xs red'>" .
                     "<i class='fa fa-trash-o'></i> Eliminar "
-                    . "</a>"
-                    . "</td>";
+                    . "</a>";
         }
-        $cad .= "</tr>"
-                . "</table>"
+        $cad .= "</div>"
                 . "</td>"
                 . "</tr>";
     }

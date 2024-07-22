@@ -38,25 +38,24 @@ $cad = "<table class=\"table table-bordered table-striped table-hover table-cond
         . "<thead>"
         . "<tr>"
         . "<th>"
-        . "<i></i> <b>Código</b>"
+        . " <b>Código</b>"
         . "</th>"
         . "<th>"
-        . "<i ></i> <b>Descripción</b>"
+        . "<b>Descripción</b>"
         . "</th>"
         . "<th>"
         . "<i ></i> <b>Base</b>"
         . "</th>"
         . "<th>"
-        . "<i ></i> <b>Meta</b>"
+        . " <b>Meta</b>"
         . "</th>"
         . "<th>"
-        . "<i ></i> <b>".$_SESSION['nivel2']."</b>"
+        . " <b>".$_SESSION['nivel2']."</b>"
         . "</th>"
         . "<th>"
-        . "<i></i> <b>Responsable</b>"
+        . " <b>Responsable</b>"
         . "</th>"
         . "<th>"
-        . "<i></i> <b>Acci&oacute;n</b>"
         . "</th>"
         . "</tr>"
         . "</thead>"
@@ -134,29 +133,21 @@ if (mysqli_num_rows($resultado) > 0) {
                 . trim($resp, ', ') . ""
                 . "</td>"
                 . "<td class=\"highlight\">"
-                . "<table>"
-                . "<tr>";
+                . "<div class='opciones'>";
         if ($_SESSION['GesPlaMMe'] == "s") {
-            $cad .= "<td>"
-                    . "<a  onclick=\"$.editMet('" . $cod . "')\" class='btn default btn-xs purple'>" .
+            $cad .= "<a  onclick=\"$.editMet('" . $cod . "')\" class='btn default btn-xs purple'>" .
                     "<i class='fa fa-edit'></i> Editar "
-                    . "</a>"
-                    . "</td>";
+                    . "</a>";
         }
-        $cad .= "<td>"
-                . "<a onclick=\"$.VerMet('" . $cod . "')\" class='btn default btn-xs blue'>" .
+        $cad .= "<a onclick=\"$.VerMet('" . $cod . "')\" class='btn default btn-xs blue'>" .
                 "<i class='fa fa-search'></i> Ver "
-                . "</a>"
-                . "</td>";
+                . "</a>";
         if ($_SESSION['GesPlaEMe'] == "s") {
-            $cad .= "<td>"
-                    . "<a onclick=\"$.deletMet('" . $cod . "')\" class='btn default btn-xs red'>" .
+            $cad .= "<a onclick=\"$.deletMet('" . $cod . "')\" class='btn default btn-xs red'>" .
                     "<i class='fa fa-trash-o'></i> Eliminar "
-                    . "</a>"
-                    . "</td>";
+                    . "</a>";
         }
-        $cad .= "</tr>"
-                . "</table>"
+        $cad .= "</div>"
                 . "</td>"
                 . "</tr>";
     }

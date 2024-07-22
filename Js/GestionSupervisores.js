@@ -135,30 +135,38 @@ $(document).ready(function() {
         },
         deletSuperv: function(cod) {
 
-            if (confirm("\xbfEsta seguro de realizar la operaci\xf3n?")) {
-
-                var datos = {
-                    acc: "3",
-                    cod: cod
-                };
-
-                $.ajax({
-                    type: "POST",
-                    url: "../Administracion/GuardarSupervisor.php",
-                    data: datos,
-                    success: function(data) {
-                        if (data === "bien") {
-                            $.Alert("#msg2", "Operación Realizada Exitosamente...", "success", "check");
-                            $.superv();
-                        } else if (data === "nbien") {
-                            $.Alert("#msg2", "Este Supervisor no se puede Eliminar, Se encuentra relacionado a un Contrato", "warning", "warning");
+            Swal.fire({
+                title: "¿Estás seguro de eliminar este registro?",
+                text: "¡No podrás revertir esto!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "¡Sí, eliminar!",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                    var datos = {
+                        acc: "3",
+                        cod: cod
+                    };
+    
+                    $.ajax({
+                        type: "POST",
+                        url: "../Administracion/GuardarSupervisor.php",
+                        data: datos,
+                        success: function(data) {
+                            if (data === "bien") {
+                                $.Alert("#msg2", "Operación   Realizada Exitosamente...", "success", "check");
+                                $.superv();
+                            } else if (data === "nbien") {
+                                $.Alert("#msg2", "Este Supervisor no se puede Eliminar, Se encuentra relacionado a un Contrato", "warning", "warning");
+                            }
+                        },
+                        error: function(error_messages) {
+                            alert('HA OCURRIDO UN ERROR');
                         }
-                    },
-                    error: function(error_messages) {
-                        alert('HA OCURRIDO UN ERROR');
-                    }
-                });
-            }
+                    });
+                }});            
         },
         paginador: function(pag) {
 

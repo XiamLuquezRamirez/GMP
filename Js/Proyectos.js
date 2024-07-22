@@ -599,40 +599,52 @@ $(document).ready(function () {
         );
     },
     deletProy: function (cod) {
-      if (confirm("\xbfEsta seguro de realizar la operaci\xf3n?")) {
-        var datos = {
-          acc: "3",
-          cod: cod,
-        };
+      Swal.fire({
+        title: "¿Estás seguro de eliminar este registro?",
+        text: "¡No podrás revertir esto!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "¡Sí, eliminar!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          var datos = {
+            acc: "3",
+            cod: cod,
+          };
+  
+          $.ajax({
+            type: "POST",
+            url: "../Proyecto/GuardarProyecto.php",
+            data: datos,
+            success: function (data) {
+              var pares = data.split("/");
+              if (trimAll(pares[0]) === "bien") {
+                $.Alert(
+                  "#msg2",
+                  "Operación Realizada Exitosamente...",
+                  "success",
+                  "check"
+                );
+                $.Proyectos();
+              } else if (trimAll(pares[0]) === "nobien") {
+                $.Alert(
+                  "#msg2",
+                  "Este Proyecto esta asociado a un Contrato, Verifique...",
+                  "warning",
+                  "warning"
+                );
+              }
+            },
+            error: function (error_messages) {
+              alert("HA OCURRIDO UN ERROR");
+            },
+          });
+        }});
 
-        $.ajax({
-          type: "POST",
-          url: "../Proyecto/GuardarProyecto.php",
-          data: datos,
-          success: function (data) {
-            var pares = data.split("/");
-            if (trimAll(pares[0]) === "bien") {
-              $.Alert(
-                "#msg2",
-                "Operación Realizada Exitosamente...",
-                "success",
-                "check"
-              );
-              $.Proyectos();
-            } else if (trimAll(pares[0]) === "nobien") {
-              $.Alert(
-                "#msg2",
-                "Este Proyecto esta asociado a un Contrato, Verifique...",
-                "warning",
-                "warning"
-              );
-            }
-          },
-          error: function (error_messages) {
-            alert("HA OCURRIDO UN ERROR");
-          },
-        });
-      }
+       
+      
     },
     paginador: function (pag, servel) {
       var datos = {

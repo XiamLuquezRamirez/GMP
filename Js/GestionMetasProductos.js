@@ -11,7 +11,7 @@ $(document).ready(function () {
                 ope: "ConConsecutivo",
                 tco: "METAS_PRODUCTOS"
             };
-            $.ajax({
+        $.ajax({
                 type: "POST",
                 url: "../All.php",
                 data: datos,
@@ -383,31 +383,40 @@ $(document).ready(function () {
     $('#tab_PlanAccion').on("click", ".btnEliminar", function (e) {
         e.preventDefault();
         var fila = $(this).parents('tr');
-        if (confirm("\xbfEsta seguro de realizar la operaci\xf3n?")) {
-            opcion = "ELIMINAR";
-            var datos = {
-                id: fila.data('id'),
-                OPCION: opcion
-            };
-            $.ajax({
-                type: "POST",
-                url: "../PlanDesarrollo/Metas_Pro.php",
-                data: datos,
-                dataType: 'JSON',
-                success: function (data) {
-                    if (data === 1) {
-                        $.Alert("#msg2", "Operación Realizada Exitosamente...", "success", "check");
-                        $.Metas();
-                    } else if (data === "nbien") {
-                        $.Alert("#msg2", "Esta Fuente no se puede Eliminar", "warning", "warning");
+        Swal.fire({
+            title: "¿Estás seguro de eliminar este registro?",
+            text: "¡No podrás revertir esto!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "¡Sí, eliminar!",
+          }).then((result) => {
+            if (result.isConfirmed) {
+                opcion = "ELIMINAR";
+                var datos = {
+                    id: fila.data('id'),
+                    OPCION: opcion
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "../PlanDesarrollo/Metas_Pro.php",
+                    data: datos,
+                    dataType: 'JSON',
+                    success: function (data) {
+                        if (data === 1) {
+                            $.Alert("#msg2", "Operación Realizada Exitosamente...", "success", "check");
+                            $.Metas();
+                        } else if (data === "nbien") {
+                            $.Alert("#msg2", "Esta Fuente no se puede Eliminar", "warning", "warning");
+                        }
+                    },
+                    error: function (error_messages) {
+                        alert('HA OCURRIDO UN ERROR');
                     }
-                },
-                error: function (error_messages) {
-                    alert('HA OCURRIDO UN ERROR');
-                }
-            });
-        }
-    });
+                });
+            }});
+         });
     $("#btn_cancelar").on("click", function () {
         if (confirm("\xbfEsta seguro de Cancelar la operaci\xf3n?")) {
             $("#id").val("0");

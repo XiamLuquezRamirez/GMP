@@ -193,32 +193,25 @@ if (mysqli_num_rows($resultado) > 0) {
             . $EstPro . ""
             . "</td>"
             . "<td class=\"highlight \" style='vertical-align: middle;'>"
-            . "<table>"
-            . "<tr>";
+            . "<div class='opciones'>";
+            
         if ($_SESSION['GesProyMPr'] == "s") {
-            $cad .= "<td>"
-                . "<a  onclick=\"$.editProy('" . $cod . "')\" class='btn default btn-xs purple'>" .
+            $cad .= "<a  onclick=\"$.editProy('" . $cod . "')\" class='btn default btn-xs purple'>" .
                 "<i class='fa fa-edit'></i> Editar "
-                . "</a>"
-                . "</td>";
+                . "</a>";
         }
 
-        $cad .= "<td>"
-            . "<a onclick=\"$.VerProy('" . $cod . "')\" class='btn default btn-xs blue'>" .
+        $cad .= "<a onclick=\"$.VerProy('" . $cod . "')\" class='btn default btn-xs blue'>" .
             "<i class='fa fa-search'></i> Ver "
-            . "</a>"
-            . "</td>";
+            . "</a>";
 
         if ($_SESSION['GesProyEPr'] == "s") {
-            $cad .= "<td>"
-                . "<a onclick=\"$.deletProy('" . $cod . "')\" class='btn default btn-xs red'>" .
+            $cad .= "<a onclick=\"$.deletProy('" . $cod . "')\" class='btn default btn-xs red'>" .
                 "<i class='fa fa-trash-o'></i> Eliminar "
-                . "</a>"
-                . "</td>";
+                . "</a>";
         }
 
-        $cad .= "</tr>"
-            . "</table>"
+        $cad .= "</div>"
             . "</td>"
             . "</tr>";
     }

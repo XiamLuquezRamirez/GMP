@@ -23,16 +23,15 @@ $cad = "<table class=\"table table-bordered table-striped table-hover table-cond
         . "<thead>"
         . "<tr>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Fuente de financiación"
+        . "Fuente de financiación"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Periodo"
+        . "Periodo"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Valor"
+        . " Valor"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Acci&oacute;n"
         . "</th>"
         . "</tr>"
         . "</thead>"
@@ -84,29 +83,21 @@ if (mysqli_num_rows($resultado) > 0) {
                 . number_format($fila["valor"], 2, ",", "."). ""
                 . "</td>"
                 . "<td class=\"highlight\">"
-                . "<table>"
-                . "<tr>";
+                . "<div class='opciones'>";
         if ($_SESSION['GesParMRes'] == "s") {
-            $cad .= "<td>"
-                    . "<a  onclick=\"$.editPresupuesto('" . $cod . "')\"  class=\"btn default btn-xs purple\">" .
+            $cad .= "<a  onclick=\"$.editPresupuesto('" . $cod . "')\"  class=\"btn default btn-xs purple\">" .
                     "<i class='fa fa-edit'></i> Editar "
-                    . "</a>"
-                    . "</td>";
+                    . "</a>";
         }
-        $cad .= "<td>"
-                . "<a onclick=\"$.VerPresupuesto('" . $cod . "')\" class='btn default btn-xs blue'>" .
+        $cad .= "<a onclick=\"$.VerPresupuesto('" . $cod . "')\" class='btn default btn-xs blue'>" .
                 "<i class='fa fa-search'></i> Ver "
-                . "</a>"
-                . "</td>";
+                . "</a>";
         if ($_SESSION['GesParERes'] == "s") {
-            $cad .= "<td>"
-                    . "<a onclick=\"$.deletPresupuesto('" . $cod . "')\" class='btn default btn-xs red'>" .
+            $cad .= "<a onclick=\"$.deletPresupuesto('" . $cod . "')\" class='btn default btn-xs red'>" .
                     "<i class='fa fa-trash-o'></i> Eliminar "
-                    . "</a>"
-                    . "</td>";
+                    . "</a>";
         }
-        $cad .= "</tr>"
-                . "</table>"
+        $cad .= "</div>"
                 . "</td>"
                 . "</tr>";
 

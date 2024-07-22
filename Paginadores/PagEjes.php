@@ -36,16 +36,15 @@ $cad = "<table id='testTable' class=\"table table-bordered table-striped table-h
         . "<thead>"
         . "<tr>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Código"
+        . "Código"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Descripción"
+        . " Descripción"
         . "</th>"
         . "<th style='display: none;'>"
-        . "<i class=\"fa fa-angle-right\"></i> Dimensión"
+        . "Dimensión"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Acci&oacute;n"
         . "</th>"
         . "</tr>"
         . "</thead>"
@@ -93,7 +92,7 @@ if (mysqli_num_rows($resultado) > 0) {
                 . "<td style='display: none;' class=\"highlight\">"
                 . $fila["descripcion"] . ""
                 . "</td>"
-                . "<td class=\"highlight\">";
+                . "<td class=\"highlight\"><div class='opciones'>";
         if ($_SESSION['GesPlaMEj'] == "s") {
             $cad .= "<a  onclick=\"$.editEjes('" . $cod . "')\"  class=\"btn default btn-xs purple\">"
                     . "<i class=\"fa fa-edit\"></i> Editar</a>";
@@ -105,7 +104,7 @@ if (mysqli_num_rows($resultado) > 0) {
                     . "<i class=\"fa fa-trash-o\"></i> Eliminar</a>";
         }
 
-        $cad .= "</td>"
+        $cad .= "</div></td>"
                 . "</tr>";
     }
 }

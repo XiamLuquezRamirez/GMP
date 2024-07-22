@@ -60,6 +60,8 @@ $link = conectar();
     <link href="../Css/Layouts/layout/css/layout.min.css" rel="stylesheet" type="text/css" />
     <link href="../Css/Layouts/layout/css/themes/light2.css" rel="stylesheet" type="text/css" id="style_color" />
     <link href="../Css/Layouts/layout/css/custom.min.css" rel="stylesheet" type="text/css" />
+    <link href=" https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css " rel="stylesheet">
+
     <!-- END THEME LAYOUT STYLES -->
     <link rel="shortcut icon" href="../Img/favicon.ico" />
 
@@ -67,8 +69,57 @@ $link = conectar();
     <script src="../Js/GestionMetas.js" type="text/javascript"></script>
     <script src="../Js/funciones_generales.js" type="text/javascript"></script>
 
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCZ_FNKVfd7vx76ykD4XbVjATqK5sVp8AQ&sensor=false">
-    </script>
+    <script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.all.min.js "></script>
+        <style>
+        /* Estilo personalizado para asegurarse de que el z-index sea alto */
+        .swal2-container {
+            z-index: 10052 !important;
+        }
+
+        div:where(.swal2-container).swal2-center>.swal2-popup {
+
+            border-radius: 5px !important;
+        }
+
+        div:where(.swal2-icon).swal2-warning.swal2-icon-show {
+            border-radius: 50% !important;
+        }
+
+        div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
+            border-radius: 5px !important;
+        }
+        div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
+            border-radius: 5px !important;
+        }
+
+        .opciones {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+        }
+
+        .opciones a {
+            margin-bottom: 3px;
+            transition: all .5s ease;
+        }
+
+        .opciones a:hover {
+            transform: translateX(3px);
+        }
+
+        thead {
+            background-color: #f9f9f9;
+            /* Fondo del encabezado */
+            position: sticky;
+            /* Posición pegajosa */
+            top: 0;
+            /* Fijo en la parte superior */
+            z-index: 1;
+            /* Asegurarse de que el encabezado esté por encima del contenido */
+        }
+      
+    </style>
+    
 </head>
 <!-- END HEAD -->
 
@@ -233,10 +284,8 @@ $link = conectar();
                             <button type="button" class="btn green" id="btn_guardarF"><i class="fa fa-save"></i> Guardar</button>
                             <button type="button" class="btn purple" disabled id="btn_nuevoF"><i class="fa fa-file-o"></i> Nuevo</button>
                             <button type="button" data-dismiss="modal" class="btn yellow-casablanca"><i class="fa fa-close"></i> Cerrar</button>
-
                         </div>
                     </div>
-
                 </div>
                 <!-- Fin Ventana fuentes -->
 
@@ -245,8 +294,6 @@ $link = conectar();
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                         <h4 class="modal-title" id='titformi'>Selección Actividades </h4>
-
-
                     </div>
                     <div class="modal-body">
                         <div class="row">
@@ -259,7 +306,7 @@ $link = conectar();
                                             <div id="sample_1_filter" class="dataTables_filter">
                                                 <label>
                                                     Busqueda:
-                                                    <input class="form-control input-small input-inline" onkeypress="$.busqActi(this.value);" onchange="$.busqActi(this.value);" id="busq_terce" type="search" placeholder="" aria-controls="sample_1">
+                                                    <input class="form-control input-large input-inline" onkeypress="$.busqActi(this.value);" onchange="$.busqActi(this.value);" id="busq_terce" type="search" placeholder="" aria-controls="sample_1">
                                                 </label>
                                             </div>
                                             <div class="table-scrollable">
@@ -271,17 +318,10 @@ $link = conectar();
                                     </div>
                                     <h4 class='form-section'></h4>
                                 </div>
-
                             </div>
                         </div>
                     </div>
-
                 </div>
-
-
-
-
-
                 <!-- BEGIN PAGE CONTENT-->
                 <ul class="nav nav-tabs">
                     <li class="active" id="tab_01_pp">

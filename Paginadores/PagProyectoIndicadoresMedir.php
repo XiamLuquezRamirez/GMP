@@ -39,16 +39,15 @@ $cad = "<table class=\"table table-striped table-bordered table-advance table-ho
         . "<i></i> #"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Código"
+        . "<b>Código</b>"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Proyecto"
+        . " <b>Proyecto</b>"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Secretaria"
+        . " <b>Secretaria</b>"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Acci&oacute;n"
         . "</th>"
         . "</tr>"
         . "</thead>"
@@ -91,7 +90,10 @@ $consulta = "SELECT
   proy.id_proyect id,
   proy.cod_proyect cod,
   proy.nombre_proyect nom,
-  sec.des_secretarias secret  
+  ifnull((SELECT GROUP_CONCAT(DISTINCT secr.des_secretarias SEPARATOR ', ') 
+   FROM banco_proyec_financiacion bff 
+   LEFT JOIN secretarias secr ON secr.idsecretarias = bff.secretaria 
+   WHERE bff.id_proyect = proy.id_proyect),'NO ASIGNADA') AS secre 
 FROM
   proyectos proy 
   LEFT JOIN secretarias sec
@@ -120,18 +122,14 @@ if (mysqli_num_rows($resultado) > 0) {
                 . $fila["nom"] . ""
                 . "</td>"
                 . "<td class=\"highlight\">"
-                . $fila["secret"] . ""
+                . $fila["secre"] . ""
                 . "</td>"
-                . "<td class=\"highlight\">"
-                . "<table>"
-                . "<tr>"
-                . "<td>"
+                . "<td style='vertical-align:middle' class=\"highlight\">"
+                . "<div class='opciones'>"
                 . "<a onclick=\"$.VerIndiProy('" . $cod . "')\" class='btn default btn-xs blue'>"
                 . "<i class='fa fa-search'></i> Ver "
                 . "</a>"
-                . "</td>"
-                . "</tr>"
-                . "</table>"
+                . "</div>"
                 . "</td>"
                 . "</tr>";
     }

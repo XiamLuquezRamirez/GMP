@@ -50,7 +50,6 @@ $cad = "<table class=\"table table-bordered table-striped table-hover table-cond
     . "<i></i> <b>Responsable</b>"
     . "</th>"
     . "<th>"
-    . "<i></i> <b>Acci&oacute;n</b>"
     . "</th>"
     . "</tr>"
     . "</thead>"
@@ -157,12 +156,12 @@ if (mysqli_num_rows($resultado) > 0) {
             . $fila["OBJMETPRO"] . ""
             . "</td>"
             . "<td class=\"highlight\">"
-            . $fila["CODSUB"] . " -- ". $fila["SUBPRO"] 
+            . $fila["CODSUB"] . " -- ". $fila["SUBPRO"]
             . "</td>"
             . "<td class=\"highlight\">"
             . trim($resp, ', ') . ""
             . "</td>"
-            . "<td class=\"highlight\">";
+            . "<td class=\"highlight\"><div class='opciones'>";
         if ($_SESSION['GesParMSec'] == "s") {
             $cad .= "<a class=\"btn default btn-xs purple btnEditar\">" .
                 "<i class='fa fa-edit'></i> Editar "
@@ -173,7 +172,7 @@ if (mysqli_num_rows($resultado) > 0) {
                 "<i class='fa fa-trash-o'></i> Eliminar "
                 . "</a>";
         }
-        $cad .= "</td>"
+        $cad .= "</div></td>"
             . "</tr>";
         $k++;
     }

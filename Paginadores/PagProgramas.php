@@ -39,19 +39,18 @@ $cad = "<table class=\"table table-striped table-bordered table-hover dataTable 
         . "<thead>"
         . "<tr>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Código"
+        . "Código"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> Descripción"
+        . "Descripción"
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> ". $_SESSION['nivel1']
+        . "". $_SESSION['nivel1']
         . "</th>"
         . "<th>"
-        . "<i class=\"fa fa-angle-right\"></i> ". $_SESSION['nivel2']
+        . "". $_SESSION['nivel2']
         . "</th>"
         . "<th>"
-        . "<i></i> Acci&oacute;n"
         . "</th>"
         . "</tr>"
         . "</thead>"
@@ -130,31 +129,23 @@ if (mysqli_num_rows($resultado) > 0) {
                 . $fila["nomestr"] . ""
                 . "</td>"
                 . "<td>"
-                . "<table>"
-                . "<tr>";
+                . "<div class='opciones'>";
         if ($_SESSION['GesPlaMPr'] == "s") {
-            $cad .= "<td>"
-                    . "<a  onclick=\"$.editProg('" . $cod . "')\" class='btn default btn-xs purple'>" .
+            $cad .= "<a  onclick=\"$.editProg('" . $cod . "')\" class='btn default btn-xs purple'>" .
                     "<i class='fa fa-edit'></i> Editar "
-                    . "</a>"
-                    . "</td>";
+                    . "</a>";
         }
 
-        $cad .= "<td>"
-                . "<a onclick=\"$.VerProg('" . $cod . "')\" class='btn default btn-xs blue'>" .
+        $cad .= "<a onclick=\"$.VerProg('" . $cod . "')\" class='btn default btn-xs blue'>" .
                 "<i class='fa fa-search'></i> Ver "
-                . "</a>"
-                . "</td>";
+                . "</a>";
 
         if ($_SESSION['GesPlaEPr'] == "s") {
-            $cad .= "<td>"
-                    . "<a onclick=\"$.deletProg('" . $cod . "')\" class='btn default btn-xs red'>" .
+            $cad .= "<a onclick=\"$.deletProg('" . $cod . "')\" class='btn default btn-xs red'>" .
                     "<i class='fa fa-trash-o'></i> Eliminar "
-                    . "</a>"
-                    . "</td>";
+                    . "</a>";
         }
-        $cad .= "</tr>"
-                . "</table>"
+        $cad .= "</div>"
                 . "</td>"
                 . "</tr>";
     }

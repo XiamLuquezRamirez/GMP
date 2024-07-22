@@ -47,7 +47,6 @@ $cad = "<table class=\"table table-bordered table-striped table-hover table-cond
         . "<i ></i> <b>Secretaria</b>"
         . "</th>"
         . "<th>"
-        . "<i ></i> <b>Acci&oacute;n</b>"
         . "</th>"
         . "</tr>"
         . "</thead>"
@@ -59,17 +58,20 @@ if ($busq != "") {
     $busq = str_replace("+", " ", $busq);
     $buscar = explode(" ", $busq);
 
-    $consulta = "SELECT * FROM proyectos WHERE ";
+    $consulta = "SELECT proy.cod_proyect,proy.id_proyect,proy.nombre_proyect,proy.estado_proyect,
+      ifnull((SELECT GROUP_CONCAT(DISTINCT secr.des_secretarias SEPARATOR ', ') 
+   FROM banco_proyec_financiacion bff 
+   LEFT JOIN secretarias secr ON secr.idsecretarias = bff.secretaria 
+   WHERE bff.id_proyect = proy.id_proyect),'NO ASIGNADA') AS secre 
+      FROM proyectos proy WHERE ";
 
     for ($i = 0; $i < count($buscar, 1); $i++) {
         $consulta .= "CONCAT( "
-                . " cod_proyect, "
+                . " proy.cod_proyect, "
                 . "  ' ', "
-                . " nombre_proyect"
+                . " proy.nombre_proyect"
                 . "  ' ', "
-                . " dsecretar_proyect, "
-                . "  ' ', "
-                . " estado_proyect"
+                . " proy.estado_proyect"
                 . ") LIKE '%" . $buscar[$i] . "%' ";
         if (($i) == count($buscar, 1) - 1) {
             
@@ -77,10 +79,14 @@ if ($busq != "") {
             $consulta .= " AND ";
         }
     }
-    $consulta .= " AND estado='ACTIVO' order by nombre_proyect ASC LIMIT " . $regemp . "," . $regmos;
+    $consulta .= " AND proy.estado='ACTIVO' order by proy.nombre_proyect ASC LIMIT " . $regemp . "," . $regmos;
 } else {
 
-    $consulta = "SELECT * FROM proyectos WHERE estado='ACTIVO' order by nombre_proyect ASC  LIMIT " . $regemp . "," . $regmos;
+    $consulta = "SELECT  proy.cod_proyect,proy.id_proyect,proy.nombre_proyect,proy.estado_proyect,
+    ifnull((SELECT GROUP_CONCAT(DISTINCT secr.des_secretarias SEPARATOR ', ') 
+ FROM banco_proyec_financiacion bff 
+ LEFT JOIN secretarias secr ON secr.idsecretarias = bff.secretaria 
+ WHERE bff.id_proyect = proy.id_proyect),'NO ASIGNADA') AS secre  FROM proyectos proy WHERE proy.estado='ACTIVO' order by proy.nombre_proyect ASC  LIMIT " . $regemp . "," . $regmos;
 }
 
 //echo $consulta;
@@ -99,18 +105,14 @@ if (mysqli_num_rows($resultado) > 0) {
                 . $fila["nombre_proyect"] . "" . ""
                 . "</td>"
                 . "<td class=\"highlight\">"
-                . $fila["dsecretar_proyect"] . ""
+                . $fila["secre"] . ""
                 . "</td>"
-                . "<td class=\"highlight\">"
-                . "<table>"
-                . "<tr>"
-                . "<td>"
+                . "<td style='vertical-align:middle' class=\"highlight\">"
+                . "<div class='opciones'>"
                 . "<a onclick=\"$.AddAvann('" . $cod . "')\" class='btn default btn-xs blue'>" .
-                "<i class='fa fa-plus'></i> Avances"
+                "<i class='fa fa-plus'></i> Agregar avances"
                 . "</a>"
-                . "</td>"
-                . "</tr>"
-                . "</table>"
+                . "</div>"
                 . "</td>"
                 . "</tr>";
     }
